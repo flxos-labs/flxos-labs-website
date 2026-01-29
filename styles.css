@@ -1,7 +1,7 @@
 /* FlxOS Labs - Professional Design System */
 
 :root {
-    /* Colors */
+    /* Colors - Dark Theme (Default) */
     --primary: #6366f1;
     --primary-dark: #4f46e5;
     --secondary: #06b6d4;
@@ -30,6 +30,32 @@
     --radius-sm: 8px;
     --radius-md: 12px;
     --radius-lg: 20px;
+}
+
+/* Light Mode Theme */
+[data-theme="light"] {
+    --bg-dark: #ffffff;
+    --bg-darker: #f8fafc;
+    --bg-card: rgba(255, 255, 255, 0.9);
+    --bg-glass: rgba(255, 255, 255, 0.8);
+
+    --text-main: #0f172a;
+    --text-muted: #64748b;
+    --text-highlight: #1e293b;
+
+    --border: rgba(15, 23, 42, 0.1);
+    --border-hover: rgba(15, 23, 42, 0.2);
+
+    --gradient-glow: radial-gradient(circle at center, rgba(99, 102, 241, 0.08) 0%, transparent 70%);
+}
+
+/* Smooth theme transition */
+html {
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body {
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 * {
@@ -235,9 +261,71 @@ ul {
     display: none;
     background: none;
     border: none;
-    color: white;
+    color: var(--text-main);
     font-size: 1.5rem;
     cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.mobile-menu-btn.active {
+    transform: rotate(90deg);
+}
+
+/* Theme Toggle */
+#themeToggle {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border);
+    color: var(--text-main);
+    padding: 8px 12px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1.1rem;
+}
+
+#themeToggle:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: var(--primary);
+}
+
+/* GitHub Stats */
+.github-stats {
+    display: flex;
+    gap: 24px;
+    margin-top: 32px;
+    flex-wrap: wrap;
+}
+
+.stat-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    transition: all 0.3s ease;
+}
+
+.stat-item:hover {
+    border-color: var(--primary);
+    transform: translateY(-2px);
+}
+
+.stat-item i {
+    color: var(--primary);
+    font-size: 1.2rem;
+}
+
+.stat-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-highlight);
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    color: var(--text-muted);
 }
 
 /* Hero Section */
@@ -669,11 +757,41 @@ footer {
 
 @media (max-width: 768px) {
     .nav-links {
-        display: none;
+        position: fixed;
+        top: var(--nav-height);
+        right: -100%;
+        width: 280px;
+        height: calc(100vh - var(--nav-height));
+        background: var(--bg-glass);
+        backdrop-filter: blur(20px);
+        border-left: 1px solid var(--border);
+        flex-direction: column;
+        padding: 40px 24px;
+        gap: 24px;
+        transition: right 0.3s ease;
+        z-index: 999;
+    }
+
+    .nav-links.active {
+        right: 0;
+    }
+
+    .nav-links a {
+        font-size: 1.1rem;
+        padding: 12px 0;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .github-link {
+        justify-content: center;
     }
 
     .mobile-menu-btn {
         display: block;
+    }
+
+    body.menu-open {
+        overflow: hidden;
     }
 
     .hero {
@@ -694,5 +812,9 @@ footer {
 
     .tech-item i {
         font-size: 2.5rem;
+    }
+
+    .github-stats {
+        justify-content: center;
     }
 }
