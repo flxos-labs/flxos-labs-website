@@ -40,6 +40,9 @@
                 <a href="/">Home</a>
                 <a href="/docs" class="active">Documentation</a>
                 <a href="/about">About</a>
+                <button id="themeToggle" aria-label="Toggle theme">
+                    <i class="fas fa-sun"></i>
+                </button>
                 <a href="https://github.com/flxos-labs/flxos" target="_blank" class="github-link">
                     <i class="fab fa-github"></i> GitHub
                 </a>
@@ -51,6 +54,13 @@
         <div class="container docs-container">
             <!-- Sidebar Navigation -->
             <aside class="docs-sidebar">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="docSearch" placeholder="Search documentation..." />
+                    <button id="clearSearch" class="clear-btn" style="display: none;">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
                 <div class="sidebar-section">
                     <h4>Getting Started</h4>
                     <ul>

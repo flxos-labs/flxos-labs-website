@@ -1,6 +1,89 @@
 // Documentation Page JavaScript
 
 document.addEventListener('DOMContentLoaded', () => {
+    // Documentation Search
+    const searchInput = document.getElementById('docSearch');
+    const clearBtn = document.getElementById('clearSearch');
+    const docSections = document.querySelectorAll('.doc-section');
+
+    if (searchInput) {
+        // Focus search with '/' key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === '/' && document.activeElement !== searchInput) {
+                e.preventDefault();
+                searchInput.focus();
+            }
+            if (e.key === 'Escape' && document.activeElement === searchInput) {
+                searchInput.blur();
+                clearSearch();
+            }
+        });
+
+        searchInput.addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase().trim();
+
+            if (query) {
+                clearBtn.style.display = 'block';
+                filterSections(query);
+            } else {
+                clearBtn.style.display = 'none';
+                clearSearch();
+            }
+        });
+
+        if (clearBtn) {
+            clearBtn.addEventListener('click', () => {
+                searchInput.value = '';
+                clearBtn.style.display = 'none';
+                clearSearch();
+                searchInput.focus();
+            });
+        }
+    }
+
+    function filterSections(query) {
+        let hasResults = false;
+
+        docSections.forEach(section => {
+            const heading = section.querySelector('h2');
+            const content = section.textContent.toLowerCase();
+
+            if (content.includes(query)) {
+                section.style.display = 'block';
+                section.classList.add('search-highlight');
+                hasResults = true;
+            } else {
+                section.style.display = 'none';
+                section.classList.remove('search-highlight');
+            }
+        });
+
+        // Show "no results" message if needed
+        showNoResults(!hasResults);
+    }
+
+    function clearSearch() {
+        docSections.forEach(section => {
+            section.style.display = 'block';
+            section.classList.remove('search-highlight');
+        });
+        showNoResults(false);
+    }
+
+    function showNoResults(show) {
+        let noResultsMsg = document.getElementById('noResults');
+
+        if (show && !noResultsMsg) {
+            noResultsMsg = document.createElement('div');
+            noResultsMsg.id = 'noResults';
+            noResultsMsg.className = 'no-results';
+            noResultsMsg.innerHTML = '<i class="fas fa-search"></i><p>No results found. Try a different search term.</p>';
+            document.querySelector('.docs-content').prepend(noResultsMsg);
+        } else if (!show && noResultsMsg) {
+            noResultsMsg.remove();
+        }
+    }
+
     // Copy functionality for all code blocks
     const copyButtons = document.querySelectorAll('.copy-btn');
 
