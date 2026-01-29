@@ -40,6 +40,8 @@
     border-radius: var(--radius-md);
     padding: 24px;
     backdrop-filter: blur(10px);
+    /* Ensure minimum touch targets */
+    min-height: 44px;
 }
 
 /* Search Box */
@@ -160,6 +162,10 @@
     border-radius: 6px;
     transition: all 0.2s ease;
     font-size: 0.95rem;
+    /* Touch-friendly targets */
+    min-height: 40px;
+    display: flex;
+    align-items: center;
 }
 
 .sidebar-section ul li a:hover {
@@ -469,24 +475,60 @@
 @media (max-width: 1024px) {
     .docs-container {
         grid-template-columns: 1fr;
+        gap: 40px;
     }
 
     .docs-sidebar {
         position: relative;
         top: 0;
+        max-height: 400px;
+        overflow-y: auto;
     }
 }
 
 @media (max-width: 768px) {
+    .docs-page {
+        padding: 80px 0 40px;
+    }
+
     .docs-content h1 {
-        font-size: 2.2rem;
+        font-size: clamp(1.875rem, 5vw, 2.2rem);
     }
 
     .doc-section h2 {
-        font-size: 1.5rem;
+        font-size: clamp(1.375rem, 4vw, 1.5rem);
     }
 
     .step {
         flex-direction: column;
+        gap: 16px;
+    }
+
+    .module-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .search-box input {
+        font-size: 16px;
+        /* Prevent zoom on iOS */
+    }
+}
+
+@media (max-width: 640px) {
+    .docs-container {
+        gap: 32px;
+    }
+
+    .breadcrumb {
+        font-size: 0.85rem;
+        gap: 8px;
+    }
+
+    .docs-sidebar {
+        padding: 16px;
+    }
+
+    .doc-section {
+        margin-bottom: 48px;
     }
 }

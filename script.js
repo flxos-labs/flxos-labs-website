@@ -36,16 +36,27 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Mobile Menu Toggle
+    // Mobile Menu Toggle with enhanced accessibility
     const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
     const navLinks = document.querySelector('.nav-links');
 
     if (mobileMenuBtn && navLinks) {
         mobileMenuBtn.addEventListener('click', (e) => {
             e.stopPropagation();
-            navLinks.classList.toggle('active');
+            const isActive = navLinks.classList.toggle('active');
             mobileMenuBtn.classList.toggle('active');
             document.body.classList.toggle('menu-open');
+
+            // Update ARIA attributes
+            mobileMenuBtn.setAttribute('aria-expanded', isActive);
+
+            // Focus first link when menu opens
+            if (isActive) {
+                const firstLink = navLinks.querySelector('a');
+                if (firstLink) {
+                    setTimeout(() => firstLink.focus(), 100);
+                }
+            }
         });
 
         // Close menu when clicking outside
@@ -54,6 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 navLinks.classList.remove('active');
                 mobileMenuBtn.classList.remove('active');
                 document.body.classList.remove('menu-open');
+                mobileMenuBtn.setAttribute('aria-expanded', 'false');
             }
         });
 
@@ -63,16 +75,40 @@ document.addEventListener('DOMContentLoaded', () => {
                 navLinks.classList.remove('active');
                 mobileMenuBtn.classList.remove('active');
                 document.body.classList.remove('menu-open');
+                mobileMenuBtn.setAttribute('aria-expanded', 'false');
             });
+        });
+
+        // Close menu with Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && navLinks.classList.contains('active')) {
+                navLinks.classList.remove('active');
+                mobileMenuBtn.classList.remove('active');
+                document.body.classList.remove('menu-open');
+                mobileMenuBtn.setAttribute('aria-expanded', 'false');
+                mobileMenuBtn.focus();
+            }
         });
     }
 
-    // GitHub Stats
+    // GitHub Stats with retry logic
     fetchGitHubStats();
 
-    async function fetchGitHubStats() {
+    async function fetchGitHubStats(retries = 3) {
         try {
-            const response = await fetch('https://api.github.com/repos/flxos-labs/flxos');
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 5000);
+
+            const response = await fetch('https://api.github.com/repos/flxos-labs/flxos', {
+                signal: controller.signal
+            });
+
+            clearTimeout(timeoutId);
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
             const data = await response.json();
 
             const starsElement = document.getElementById('github-stars');
@@ -84,6 +120,19 @@ document.addEventListener('DOMContentLoaded', () => {
             if (watchersElement) animateCounter(watchersElement, data.watchers_count);
         } catch (error) {
             console.error('Failed to fetch GitHub stats:', error);
+
+            // Retry logic
+            if (retries > 0 && error.name !== 'AbortError') {
+                console.log(`Retrying... (${retries} attempts left)`);
+                setTimeout(() => fetchGitHubStats(retries - 1), 2000);
+            } else {
+                // Show fallback values
+                const elements = ['github-stars', 'github-forks', 'github-watchers'];
+                elements.forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.textContent = '--';
+                });
+            }
         }
     }
 
@@ -128,7 +177,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Navbar Scroll Effect
+    // Navbar Scroll Effect with passive listener
     const navbar = document.querySelector('.navbar');
 
     window.addEventListener('scroll', () => {
@@ -137,7 +186,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             navbar.classList.remove('scrolled');
         }
-    });
+    }, { passive: true });
 
     // Smooth Scrolling for Anchor Links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -166,32 +215,38 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Cursor Glow Effect
+    // Cursor Glow Effect - Only on desktop with fine pointer
     const cursorGlow = document.querySelector('.cursor-glow');
-    let mouseX = 0;
-    let mouseY = 0;
-    let cursorX = 0;
-    let cursorY = 0;
 
-    document.addEventListener('mousemove', (e) => {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
-    });
+    // Check if device has fine pointer (mouse) capability
+    const hasFinePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
-    function animateCursor() {
-        const dx = mouseX - cursorX;
-        const dy = mouseY - cursorY;
+    if (cursorGlow && hasFinePointer) {
+        let mouseX = 0;
+        let mouseY = 0;
+        let cursorX = 0;
+        let cursorY = 0;
 
-        cursorX += dx * 0.1;
-        cursorY += dy * 0.1;
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        }, { passive: true });
 
-        cursorGlow.style.top = `${cursorY}px`;
-        cursorGlow.style.left = `${cursorX}px`;
+        function animateCursor() {
+            const dx = mouseX - cursorX;
+            const dy = mouseY - cursorY;
 
-        requestAnimationFrame(animateCursor);
+            cursorX += dx * 0.1;
+            cursorY += dy * 0.1;
+
+            cursorGlow.style.top = `${cursorY}px`;
+            cursorGlow.style.left = `${cursorX}px`;
+
+            requestAnimationFrame(animateCursor);
+        }
+
+        animateCursor();
     }
-
-    animateCursor();
 
     // Intersection Observer for Scroll Animations
     const observerOptions = {
