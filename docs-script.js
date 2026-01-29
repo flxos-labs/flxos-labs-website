@@ -7,6 +7,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const docSections = document.querySelectorAll('.doc-section');
 
     if (searchInput) {
+        // Debounce function for search performance
+        let debounceTimeout;
+        function debounce(func, delay) {
+            return function (...args) {
+                clearTimeout(debounceTimeout);
+                debounceTimeout = setTimeout(() => func.apply(this, args), delay);
+            };
+        }
+
         // Focus search with '/' key
         document.addEventListener('keydown', (e) => {
             if (e.key === '/' && document.activeElement !== searchInput) {
@@ -19,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        searchInput.addEventListener('input', (e) => {
+        searchInput.addEventListener('input', debounce((e) => {
             const query = e.target.value.toLowerCase().trim();
 
             if (query) {
@@ -29,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 clearBtn.style.display = 'none';
                 clearSearch();
             }
-        });
+        }, 150)); // 150ms debounce delay
 
         if (clearBtn) {
             clearBtn.addEventListener('click', () => {
@@ -144,9 +153,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Only add scroll listener if sidebar exists
+    // Only add scroll listener if sidebar exists with passive option
     if (sidebarLinks.length > 0) {
-        window.addEventListener('scroll', highlightActiveSection);
+        window.addEventListener('scroll', highlightActiveSection, { passive: true });
         highlightActiveSection(); // Run once on load
     }
 
