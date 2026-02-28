@@ -1,167 +1,305 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FlxOS - Next-Gen Operating System for ESP32</title>
-    <meta name="description" content="FlxOS is a modular, profile-driven operating system for ESP32 devices providing a rich GUI, hardware abstraction, and powerful out-of-the-box applications.">
-    <meta name="theme-color" content="#0d1117">
-    
-    <!-- Open Graph Meta Tags for social sharing -->
-    <meta property="og:title" content="FlxOS - Next-Gen Operating System for ESP32">
-    <meta property="og:description" content="A modular, profile-driven OS for ESP32 devices built on ESP-IDF and LVGL.">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>FlxOS - High-Performance Embedded Environment</title>
+    <meta name="description"
+        content="FlxOS is a high-performance, feature-rich embedded environment designed for ESP32 microcontrollers, integrating ESP-IDF and LVGL for a desktop-like experience.">
+
+    <!-- Theme Color -->
+    <meta name="theme-color" content="#6366f1" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+
+    <!-- Open Graph / Social Media -->
     <meta property="og:type" content="website">
-    
-    <!-- Google Fonts: Cabinet Grotesk for headings, Inter for body -->
+    <meta property="og:url" content="https://flxos-labs.github.io/">
+    <meta property="og:title" content="FlxOS - High-Performance Embedded Environment">
+    <meta property="og:description"
+        content="FlxOS is a high-performance, feature-rich embedded environment designed for ESP32 microcontrollers, integrating ESP-IDF and LVGL for a desktop-like experience.">
+    <meta property="og:image" content="https://flxos-labs.github.io/og-image.png">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="FlxOS - High-Performance Embedded Environment">
+    <meta name="twitter:description"
+        content="FlxOS is a high-performance, feature-rich embedded environment designed for ESP32 microcontrollers.">
+    <meta name="twitter:image" content="https://flxos-labs.github.io/og-image.png">
+
+    <!-- Preconnect for Performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
-    
-    <!-- CSS and JS -->
-    <link rel="stylesheet" href="css/styles.css">
-    <script src="js/main.js" defer></script>
-</head>
-<body>
-    <!-- Background Animation Layer -->
-    <div class="bg-layer">
-        <div class="glow-orb orb-1"></div>
-        <div class="glow-orb orb-2"></div>
-        <div class="grid-overlay"></div>
-    </div>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="dns-prefetch" href="https://api.github.com">
 
-    <!-- Navigation -->
-    <nav class="navbar glass">
-        <div class="nav-container">
-            <a href="#" class="brand">
-                <img src="assets/logo.svg" alt="FlxOS Logo" class="brand-logo">
+    <!-- Fonts with optimized loading -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+            rel="stylesheet">
+    </noscript>
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%236366f1'/><text x='50' y='70' font-family='sans-serif' font-size='60' font-weight='bold' fill='white' text-anchor='middle'>F</text></svg>">
+</head>
+
+<body>
+    <!-- Skip to main content for accessibility -->
+    <a href="#main-content" class="skip-to-main">Skip to main content</a>
+
+    <div class="cursor-glow"></div>
+
+    <nav class="navbar" role="navigation" aria-label="Main navigation">
+        <div class="container nav-container">
+            <a href="#" class="logo">
+                <div class="logo-icon"></div>
+                <span>FlxOS</span>
             </a>
-            <ul class="nav-links">
-                <li><a href="#features">Features</a></li>
-                <li><a href="#hardware">Supported Hardware</a></li>
-                <li><a href="https://github.com/flxos-labs/flxos">GitHub</a></li>
-            </ul>
+            <div class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#tech-stack">Tech Stack</a>
+                <a href="#get-started">Get Started</a>
+                <a href="/docs">Docs</a>
+                <a href="/about">About</a>
+                <button id="themeToggle" aria-label="Toggle theme">
+                    <i class="fas fa-sun"></i>
+                </button>
+                <a href="https://github.com/flxos-labs/flxos" target="_blank" class="github-link">
+                    <i class="fab fa-github"></i> GitHub
+                </a>
+            </div>
+            <button class="mobile-menu-btn" aria-label="Toggle menu">
+                <i class="fas fa-bars"></i>
+            </button>
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <header class="hero">
-        <div class="container hero-content fade-in-up">
-            <div class="badge">v1.0.0 Now Available</div>
-            <h1 class="hero-title">The Operating System for<br><span class="gradient-text">Connected Devices</span></h1>
-            <p class="hero-subtitle">A modular, profile-driven OS for the ESP32 family. Built on ESP-IDF and LVGL to deliver rich graphical interfaces and robust performance natively.</p>
-            <div class="hero-actions">
-                <a href="https://github.com/flxos-labs/flxos" class="btn btn-primary">
-                    <svg class="icon" viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
-                    View Source
-                </a>
-                <a href="#quickstart" class="btn btn-secondary">Quick Start</a>
-            </div>
-        </div>
-        
-        <!-- Terminal Simulation Window in Hero -->
-        <div class="hero-visual fade-in-up delay-1">
-            <div class="terminal-window glass-panel">
-                <div class="terminal-header">
-                    <div class="controls">
-                        <span class="control close"></span>
-                        <span class="control minimize"></span>
-                        <span class="control maximize"></span>
+    <main id="main-content">
+        <!-- Hero Section -->
+        <section class="hero" aria-labelledby="hero-title">
+            <div class="container hero-container">
+                <div class="hero-content">
+                    <div class="badge" role="status">v1.0.0 Alpha</div>
+                    <h1 id="hero-title">Embedded Desktop Experience for <span class="gradient-text">ESP32</span></h1>
+                    <p class="hero-subtitle">
+                        Integrates the robustness of ESP-IDF with the visual capabilities of LVGL to deliver a
+                        responsive, feature-rich environment on embedded hardware.
+                    </p>
+                    <div class="hero-cta">
+                        <a href="#get-started" class="btn btn-primary">
+                            <span>Get Started</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                        <a href="https://github.com/flxos-labs/flxos" target="_blank" class="btn btn-secondary">
+                            <i class="fab fa-github"></i>
+                            <span>View Source</span>
+                        </a>
                     </div>
-                    <div class="title">flxos-build</div>
+                    <div class="github-stats">
+                        <div class="stat-item">
+                            <i class="fas fa-star"></i>
+                            <div>
+                                <div class="stat-value" id="github-stars">--</div>
+                                <div class="stat-label">Stars</div>
+                            </div>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-code-branch"></i>
+                            <div>
+                                <div class="stat-value" id="github-forks">--</div>
+                                <div class="stat-label">Forks</div>
+                            </div>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-eye"></i>
+                            <div>
+                                <div class="stat-value" id="github-watchers">--</div>
+                                <div class="stat-label">Watchers</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="terminal-body">
-                    <pre><code class="prompt">$ git clone --recurse-submodules https://github.com/flxos-labs/flxos.git</code></pre>
-                    <pre><code class="prompt">$ cd flxos</code></pre>
-                    <pre><code class="prompt">$ python flxos.py select esp32s3-ili9341-xpt</code></pre>
-                    <pre><code class="output">✓ Profile esp32s3-ili9341-xpt selected successfully.</code></pre>
-                    <pre><code class="prompt">$ python flxos.py build && python flxos.py flash</code></pre>
-                    <pre><code class="output animate-typing">Building FlxOS... Flashing... Done.</code></pre>
-                    <span class="cursor"></span>
+                <div class="hero-visual">
+                    <div class="code-window">
+                        <div class="window-header">
+                            <div class="dots">
+                                <span class="dot red"></span>
+                                <span class="dot yellow"></span>
+                                <span class="dot green"></span>
+                            </div>
+                            <span class="title">terminal — flxos</span>
+                        </div>
+                        <div class="window-content">
+                            <div class="code-line"><span class="prompt">$</span> git clone
+                                https://github.com/flxos-labs/flxos.git</div>
+                            <div class="code-line"><span class="prompt">$</span> cd flxos</div>
+                            <div class="code-line"><span class="prompt">$</span> idf.py set-target esp32</div>
+                            <div class="code-line"><span class="prompt">$</span> idf.py build flash monitor</div>
+                            <div class="code-line output">Executing action: all (generate_info, check_build_system, app)
+                            </div>
+                            <div class="code-line output">Running ninja in directory /build</div>
+                            <div class="code-line output success">Successfully created esp32 image.</div>
+                            <div class="code-line output success highlight">Welcome to FlxOS v1.0.0</div>
+                            <div class="cursor"></div>
+                        </div>
+                    </div>
+                    <div class="visual-bg-glow"></div>
                 </div>
             </div>
-        </div>
-    </header>
+        </section>
 
-    <!-- Features Section -->
-    <section id="features" class="features section">
-        <div class="container">
-            <h2 class="section-title text-center block-reveal">Beyond a bootloader.</h2>
-            <p class="section-description text-center blur-reveal">FlxOS provides everything needed to build modern appliance interfaces and smart devices in record time.</p>
-            
-            <div class="bento-grid">
-                <!-- Large Feature Card -->
-                <div class="bento-card large glass-panel reveal-up">
-                    <div class="card-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+        <!-- Features Section -->
+        <section id="features" class="features">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Advanced Capabilities</h2>
+                    <p>Built for performance, scalability, and visual excellence.</p>
+                </div>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="icon-box">
+                            <i class="fas fa-layer-group"></i>
+                        </div>
+                        <h3>Advanced GUI Engine</h3>
+                        <p>Built on LVGL 9 and LovyanGFX for hardware-accelerated graphics and smooth 60FPS frame rates.
+                        </p>
                     </div>
-                    <h3>Rich Graphical Interfaces</h3>
-                    <p>Powered by LVGL and LovyanGFX, FlxOS renders gorgeous, hardware-accelerated themes and smooth 60fps animations across almost any display.</p>
-                    <div class="card-visual ui-preview"></div>
-                </div>
-                
-                <div class="bento-card span-col glass-panel reveal-up delay-1">
-                     <div class="card-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><line x1="10" y1="9" x2="8" y2="9"></line></svg>
+                    <div class="feature-card">
+                        <div class="icon-box">
+                            <i class="fas fa-puzzle-piece"></i>
+                        </div>
+                        <h3>Modular Architecture</h3>
+                        <p>Scalable application system allowing for easy addition of new capabilities in
+                            <code>core/apps</code>.
+                        </p>
                     </div>
-                    <h3>Write Once, Run Anywhere</h3>
-                    <p>A declarative profile system abstracts hardware. Swap from an ESP32-C3 to an S3 with a single command.</p>
-                </div>
-                
-                <div class="bento-card glass-panel reveal-up delay-2">
-                     <div class="card-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><rect x="9" y="9" width="6" height="6"></rect><line x1="9" y1="1" x2="9" y2="4"></line><line x1="15" y1="1" x2="15" y2="4"></line><line x1="9" y1="20" x2="9" y2="23"></line><line x1="15" y1="20" x2="15" y2="23"></line><line x1="20" y1="9" x2="23" y2="9"></line><line x1="20" y1="14" x2="23" y2="14"></line><line x1="1" y1="9" x2="4" y2="9"></line><line x1="1" y1="14" x2="4" y2="14"></line></svg>
+                    <div class="feature-card">
+                        <div class="icon-box">
+                            <i class="fas fa-microchip"></i>
+                        </div>
+                        <h3>System Management</h3>
+                        <p>Centralized hardware abstraction and resource management for optimal performance.</p>
                     </div>
-                    <h3>Modular Kernel Architecture</h3>
-                    <p>Clean separation of Core, Kernel, UI, and Hardware layers allows for incredible flexibility.</p>
-                </div>
-
-                 <div class="bento-card glass-panel reveal-up">
-                    <div class="card-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+                    <div class="feature-card">
+                        <div class="icon-box">
+                            <i class="fas fa-wifi"></i>
+                        </div>
+                        <h3>Robust Connectivity</h3>
+                        <p>Integrated Wi-Fi and network stack handling for powerful IoT capabilities and remote
+                            management.</p>
                     </div>
-                    <h3>Built-in Applications</h3>
-                    <p>Ships with File Manager, System Settings, Text Editor, and Image Viewer out-of-the-box.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Hardware Ecosystem Section -->
-    <section id="hardware" class="hardware section">
-        <div class="container">
-            <h2 class="section-title text-center">Unmatched Compatibility.</h2>
-            <div class="chip-scroller">
-                <div class="chip">ESP32</div>
-                <div class="chip outline">ESP32-S2</div>
-                <div class="chip accent">ESP32-S3</div>
-                <div class="chip">ESP32-C3</div>
-                <div class="chip outline">ESP32-C6</div>
-                <div class="chip">ESP32-H2</div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="footer border-top">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-brand">
-                    <img src="assets/logo.svg" alt="FlxOS" width="120">
-                    <p>Built with precision for the connected future.</p>
-                </div>
-                <div class="footer-links">
-                    <div class="link-col">
-                        <h4>Project</h4>
-                        <a href="https://github.com/flxos-labs/flxos">GitHub Hub</a>
-                        <a href="https://github.com/flxos-labs/flxos/releases">Releases</a>
-                        <a href="https://github.com/flxos-labs/flxos/blob/main/LICENSE">License (AGPL-3.0)</a>
+                    <div class="feature-card">
+                        <div class="icon-box">
+                            <i class="fas fa-tasks"></i>
+                        </div>
+                        <h3>True Multitasking</h3>
+                        <p>FreeRTOS-based task scheduling for efficient parallel processing of background services and
+                            UI.</p>
                     </div>
                 </div>
             </div>
-            <div class="footer-bottom text-center">
-                <p>&copy; 2026 FlxOS Labs. All rights reserved.</p>
+        </section>
+
+        <!-- Tech Stack -->
+        <section id="tech-stack" class="tech-stack">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Powered By</h2>
+                    <p>Built on industry-standard technologies for reliability and performance.</p>
+                </div>
+                <div class="tech-grid">
+                    <div class="tech-item">
+                        <i class="fas fa-microchip"></i>
+                        <span>ESP-IDF</span>
+                    </div>
+                    <div class="tech-item">
+                        <i class="fas fa-desktop"></i>
+                        <span>LVGL 9</span>
+                    </div>
+                    <div class="tech-item">
+                        <i class="fas fa-cogs"></i>
+                        <span>FreeRTOS</span>
+                    </div>
+                    <div class="tech-item">
+                        <i class="fab fa-cuttlefish"></i>
+                        <span>C++ 17</span>
+                    </div>
+                    <div class="tech-item">
+                        <i class="fas fa-hammer"></i>
+                        <span>CMake</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Get Started -->
+        <section id="get-started" class="get-started">
+            <div class="container">
+                <div class="start-content">
+                    <div class="start-text">
+                        <h2>Ready to Build?</h2>
+                        <p>Get your environment set up and start developing with FlxOS in minutes.</p>
+                        <div class="prereqs">
+                            <h4>Prerequisites</h4>
+                            <ul>
+                                <li><i class="fas fa-check"></i> ESP-IDF v5.x</li>
+                                <li><i class="fas fa-check"></i> CMake 3.16+</li>
+                                <li><i class="fas fa-check"></i> Ninja Build System</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="code-block-wrapper">
+                        <div class="code-header">
+                            <span>Quick Start</span>
+                            <button class="copy-btn" id="copyBtn">
+                                <i class="far fa-copy"></i>
+                            </button>
+                        </div>
+                        <pre><code id="installCode"># Clone the repository
+git clone --recursive https://github.com/flxos-labs/flxos.git
+cd flxos
+
+# Set up environment
+. $HOME/esp/esp-idf/export.sh
+
+# Configure and build
+idf.py set-target esp32
+idf.py build flash monitor</code></pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container footer-container">
+            <div class="footer-brand">
+                <div class="logo-icon small"></div>
+                <span>FlxOS Labs</span>
+            </div>
+            <div class="footer-links">
+                <a href="https://github.com/flxos-labs/flxos" target="_blank">GitHub</a>
+                <a href="https://github.com/flxos-labs/flxos/issues" target="_blank">Issues</a>
+                <a href="https://github.com/flxos-labs/flxos/blob/main/LICENSE" target="_blank">License</a>
+            </div>
+            <div class="copyright">
+                &copy; <span id="year"></span> FlxOS Labs. Released under MIT License.
             </div>
         </div>
     </footer>
+
+    <script src="script.js" defer></script>
 </body>
+
 </html>
