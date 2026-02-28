@@ -91,10 +91,9 @@
             <div class="container hero-container">
                 <div class="hero-content">
                     <div class="badge" role="status">v1.0.0 Alpha</div>
-                    <h1 id="hero-title">Embedded Desktop Experience for <span class="gradient-text">ESP32</span></h1>
+                    <h1 id="hero-title">Modular Operating System for <span class="gradient-text">ESP32</span></h1>
                     <p class="hero-subtitle">
-                        Integrates the robustness of ESP-IDF with the visual capabilities of LVGL to deliver a
-                        responsive, feature-rich environment on embedded hardware.
+                        Built on ESP-IDF, LVGL, and LovyanGFX. A complete application framework with a graphical user interface, modular hardware abstraction, and a powerful profile-based build system.
                     </p>
                     <div class="hero-cta">
                         <a href="#get-started" class="btn btn-primary">
@@ -141,16 +140,14 @@
                             <span class="title">terminal — flxos</span>
                         </div>
                         <div class="window-content">
-                            <div class="code-line"><span class="prompt">$</span> git clone
-                                https://github.com/flxos-labs/flxos.git</div>
+                            <div class="code-line"><span class="prompt">$</span> git clone --recurse-submodules https://github.com/flxos-labs/flxos.git</div>
                             <div class="code-line"><span class="prompt">$</span> cd flxos</div>
-                            <div class="code-line"><span class="prompt">$</span> idf.py set-target esp32</div>
-                            <div class="code-line"><span class="prompt">$</span> idf.py build flash monitor</div>
-                            <div class="code-line output">Executing action: all (generate_info, check_build_system, app)
-                            </div>
-                            <div class="code-line output">Running ninja in directory /build</div>
-                            <div class="code-line output success">Successfully created esp32 image.</div>
-                            <div class="code-line output success highlight">Welcome to FlxOS v1.0.0</div>
+                            <div class="code-line"><span class="prompt">$</span> python flxos.py select esp32s3-ili9341</div>
+                            <div class="code-line"><span class="prompt">$</span> python flxos.py build</div>
+                            <div class="code-line output">Selecting profile 'esp32s3-ili9341'...</div>
+                            <div class="code-line output">Generating hardware initialization code...</div>
+                            <div class="code-line output success">Build completed successfully.</div>
+                            <div class="code-line output success highlight">FlxOS ready for flashing!</div>
                             <div class="cursor"></div>
                         </div>
                     </div>
@@ -171,8 +168,16 @@
                         <div class="icon-box">
                             <i class="fas fa-layer-group"></i>
                         </div>
-                        <h3>Advanced GUI Engine</h3>
-                        <p>Built on LVGL 9 and LovyanGFX for hardware-accelerated graphics and smooth 60FPS frame rates.
+                        <h3>Rich GUI & Apps</h3>
+                        <p>LVGL-powered touch UI with theming. Built-in apps including Calendar, File Manager, Image Viewer, and Settings.
+                        </p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="icon-box">
+                            <i class="fas fa-microchip"></i>
+                        </div>
+                        <h3>Multi-Board Support</h3>
+                        <p>Profile system for hardware-specific builds supporting ESP32, ESP32-S2, ESP32-S3, ESP32-C3, ESP32-C6, ESP32-H2, and ESP32-P4.
                         </p>
                     </div>
                     <div class="feature-card">
@@ -180,32 +185,23 @@
                             <i class="fas fa-puzzle-piece"></i>
                         </div>
                         <h3>Modular Architecture</h3>
-                        <p>Scalable application system allowing for easy addition of new capabilities in
-                            <code>core/apps</code>.
+                        <p>Clean separation of Core, Kernel, UI, and Hardware layers for optimal performance and maintainability.
                         </p>
                     </div>
                     <div class="feature-card">
                         <div class="icon-box">
-                            <i class="fas fa-microchip"></i>
+                            <i class="fas fa-bolt"></i>
                         </div>
-                        <h3>System Management</h3>
-                        <p>Centralized hardware abstraction and resource management for optimal performance.</p>
+                        <h3>One-Command Builds</h3>
+                        <p>Powerful `flxos.py` CLI handles profile selection, target switching, building, flashing, and releasing automatically.
+                        </p>
                     </div>
                     <div class="feature-card">
                         <div class="icon-box">
-                            <i class="fas fa-wifi"></i>
+                            <i class="fas fa-desktop"></i>
                         </div>
-                        <h3>Robust Connectivity</h3>
-                        <p>Integrated Wi-Fi and network stack handling for powerful IoT capabilities and remote
-                            management.</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="icon-box">
-                            <i class="fas fa-tasks"></i>
-                        </div>
-                        <h3>True Multitasking</h3>
-                        <p>FreeRTOS-based task scheduling for efficient parallel processing of background services and
-                            UI.</p>
+                        <h3>Display-Agnostic</h3>
+                        <p>LovyanGFX backend supports ILI9341, ST7789, and many more display controllers, plus a headless mode for embedded server use cases.</p>
                     </div>
                 </div>
             </div>
@@ -225,15 +221,15 @@
                     </div>
                     <div class="tech-item">
                         <i class="fas fa-desktop"></i>
-                        <span>LVGL 9</span>
+                        <span>LVGL</span>
                     </div>
                     <div class="tech-item">
-                        <i class="fas fa-cogs"></i>
-                        <span>FreeRTOS</span>
+                        <i class="fas fa-tv"></i>
+                        <span>LovyanGFX</span>
                     </div>
                     <div class="tech-item">
-                        <i class="fab fa-cuttlefish"></i>
-                        <span>C++ 17</span>
+                        <i class="fab fa-python"></i>
+                        <span>Python 3 & CLI</span>
                     </div>
                     <div class="tech-item">
                         <i class="fas fa-hammer"></i>
@@ -253,9 +249,9 @@
                         <div class="prereqs">
                             <h4>Prerequisites</h4>
                             <ul>
-                                <li><i class="fas fa-check"></i> ESP-IDF v5.x</li>
+                                <li><i class="fas fa-check"></i> ESP-IDF v5.5+</li>
+                                <li><i class="fas fa-check"></i> Python 3.10+</li>
                                 <li><i class="fas fa-check"></i> CMake 3.16+</li>
-                                <li><i class="fas fa-check"></i> Ninja Build System</li>
                             </ul>
                         </div>
                     </div>
@@ -267,15 +263,19 @@
                             </button>
                         </div>
                         <pre><code id="installCode"># Clone the repository
-git clone --recursive https://github.com/flxos-labs/flxos.git
+git clone --recurse-submodules https://github.com/flxos-labs/flxos.git
 cd flxos
 
 # Set up environment
-. $HOME/esp/esp-idf/export.sh
+source $IDF_PATH/export.sh
 
-# Configure and build
-idf.py set-target esp32
-idf.py build flash monitor</code></pre>
+# List and select a profile
+python flxos.py list
+python flxos.py select esp32s3-ili9341-xpt
+
+# Build and flash
+python flxos.py build
+python flxos.py flash --port /dev/ttyUSB0</code></pre>
                     </div>
                 </div>
             </div>
