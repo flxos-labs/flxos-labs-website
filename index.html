@@ -1,31 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FlxOS - Next-Gen Operating System for ESP32</title>
-    <meta name="description"
-        content="FlxOS is a modular, profile-driven operating system for ESP32 devices providing a rich GUI, hardware abstraction, and powerful out-of-the-box applications.">
+    <meta name="description" content="FlxOS is a modular, profile-driven operating system for ESP32 devices providing a rich GUI, hardware abstraction, and powerful out-of-the-box applications.">
     <meta name="theme-color" content="#0d1117">
-
+    
     <!-- Open Graph Meta Tags for social sharing -->
     <meta property="og:title" content="FlxOS - Next-Gen Operating System for ESP32">
     <meta property="og:description" content="A modular, profile-driven OS for ESP32 devices built on ESP-IDF and LVGL.">
     <meta property="og:type" content="website">
-
+    
     <!-- Google Fonts: Cabinet Grotesk for headings, Inter for body -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@400;600;800&display=swap"
-        rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    
     <!-- CSS and JS -->
     <link rel="stylesheet" href="css/styles.css">
     <script src="js/main.js" defer></script>
 </head>
-
 <body>
     <!-- Background Animation Layer -->
     <div class="bg-layer">
@@ -40,11 +35,6 @@
             <a href="#" class="brand">
                 <img src="assets/logo.svg" alt="FlxOS Logo" class="brand-logo">
             </a>
-            <button class="mobile-toggle" aria-label="Toggle Menu">
-                <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none">
-                    <path d="M3 12h18M3 6h18M3 18h18"></path>
-                </svg>
-            </button>
             <ul class="nav-links">
                 <li><a href="#features">Features</a></li>
                 <li><a href="#hardware">Supported Hardware</a></li>
@@ -58,22 +48,16 @@
         <div class="container hero-content fade-in-up">
             <div class="badge">v1.0.0 Now Available</div>
             <h1 class="hero-title">The Operating System for<br><span class="gradient-text">Connected Devices</span></h1>
-            <p class="hero-subtitle">A modular, profile-driven OS for the ESP32 family. Built on ESP-IDF and LVGL to
-                deliver rich graphical interfaces and robust performance natively.</p>
+            <p class="hero-subtitle">A modular, profile-driven OS for the ESP32 family. Built on ESP-IDF and LVGL to deliver rich graphical interfaces and robust performance natively.</p>
             <div class="hero-actions">
                 <a href="https://github.com/flxos-labs/flxos" class="btn btn-primary">
-                    <svg class="icon" viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2"
-                        fill="none" stroke-linecap="round" stroke-linejoin="round">
-                        <path
-                            d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
-                        </path>
-                    </svg>
+                    <svg class="icon" viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
                     View Source
                 </a>
                 <a href="#quickstart" class="btn btn-secondary">Quick Start</a>
             </div>
         </div>
-
+        
         <!-- Terminal Simulation Window in Hero -->
         <div class="hero-visual fade-in-up delay-1">
             <div class="terminal-window glass-panel">
@@ -102,70 +86,38 @@
     <section id="features" class="features section">
         <div class="container">
             <h2 class="section-title text-center block-reveal">Beyond a bootloader.</h2>
-            <p class="section-description text-center blur-reveal">FlxOS provides everything needed to build modern
-                appliance interfaces and smart devices in record time.</p>
-
+            <p class="section-description text-center blur-reveal">FlxOS provides everything needed to build modern appliance interfaces and smart devices in record time.</p>
+            
             <div class="bento-grid">
                 <!-- Large Feature Card -->
                 <div class="bento-card large glass-panel reveal-up">
                     <div class="card-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                            stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
-                            <line x1="8" y1="21" x2="16" y2="21"></line>
-                            <line x1="12" y1="17" x2="12" y2="21"></line>
-                        </svg>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
                     </div>
                     <h3>Rich Graphical Interfaces</h3>
-                    <p>Powered by LVGL and LovyanGFX, FlxOS renders gorgeous, hardware-accelerated themes and smooth
-                        60fps animations across almost any display.</p>
+                    <p>Powered by LVGL and LovyanGFX, FlxOS renders gorgeous, hardware-accelerated themes and smooth 60fps animations across almost any display.</p>
                     <div class="card-visual ui-preview"></div>
                 </div>
-
+                
                 <div class="bento-card span-col glass-panel reveal-up delay-1">
-                    <div class="card-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                            stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path>
-                            <polyline points="14 2 14 8 20 8"></polyline>
-                            <line x1="16" y1="13" x2="8" y2="13"></line>
-                            <line x1="16" y1="17" x2="8" y2="17"></line>
-                            <line x1="10" y1="9" x2="8" y2="9"></line>
-                        </svg>
+                     <div class="card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><line x1="10" y1="9" x2="8" y2="9"></line></svg>
                     </div>
                     <h3>Write Once, Run Anywhere</h3>
-                    <p>A declarative profile system abstracts hardware. Swap from an ESP32-C3 to an S3 with a single
-                        command.</p>
+                    <p>A declarative profile system abstracts hardware. Swap from an ESP32-C3 to an S3 with a single command.</p>
                 </div>
-
+                
                 <div class="bento-card glass-panel reveal-up delay-2">
-                    <div class="card-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                            stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect>
-                            <rect x="9" y="9" width="6" height="6"></rect>
-                            <line x1="9" y1="1" x2="9" y2="4"></line>
-                            <line x1="15" y1="1" x2="15" y2="4"></line>
-                            <line x1="9" y1="20" x2="9" y2="23"></line>
-                            <line x1="15" y1="20" x2="15" y2="23"></line>
-                            <line x1="20" y1="9" x2="23" y2="9"></line>
-                            <line x1="20" y1="14" x2="23" y2="14"></line>
-                            <line x1="1" y1="9" x2="4" y2="9"></line>
-                            <line x1="1" y1="14" x2="4" y2="14"></line>
-                        </svg>
+                     <div class="card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><rect x="9" y="9" width="6" height="6"></rect><line x1="9" y1="1" x2="9" y2="4"></line><line x1="15" y1="1" x2="15" y2="4"></line><line x1="9" y1="20" x2="9" y2="23"></line><line x1="15" y1="20" x2="15" y2="23"></line><line x1="20" y1="9" x2="23" y2="9"></line><line x1="20" y1="14" x2="23" y2="14"></line><line x1="1" y1="9" x2="4" y2="9"></line><line x1="1" y1="14" x2="4" y2="14"></line></svg>
                     </div>
                     <h3>Modular Kernel Architecture</h3>
                     <p>Clean separation of Core, Kernel, UI, and Hardware layers allows for incredible flexibility.</p>
                 </div>
 
-                <div class="bento-card glass-panel reveal-up">
+                 <div class="bento-card glass-panel reveal-up">
                     <div class="card-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                            stroke-linecap="round" stroke-linejoin="round">
-                            <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
-                            <polyline points="2 17 12 22 22 17"></polyline>
-                            <polyline points="2 12 12 17 22 12"></polyline>
-                        </svg>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
                     </div>
                     <h3>Built-in Applications</h3>
                     <p>Ships with File Manager, System Settings, Text Editor, and Image Viewer out-of-the-box.</p>
@@ -212,5 +164,4 @@
         </div>
     </footer>
 </body>
-
 </html>
