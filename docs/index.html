@@ -118,7 +118,7 @@
                                 <i class="far fa-copy"></i>
                             </button>
                         </div>
-                        <pre><code id="install-code-1">git clone --recursive https://github.com/flxos-labs/flxos.git
+                        <pre><code id="install-code-1">git clone --recurse-submodules https://github.com/flxos-labs/flxos.git
 cd flxos</code></pre>
                     </div>
                 </section>
@@ -153,24 +153,13 @@ python flxos.py select esp32s3-ili9341-xpt</code></pre>
                         <div class="step">
                             <div class="step-number">3</div>
                             <div class="step-content">
-                                <h3>Generate Code and Configure</h3>
-                                <div class="code-block-wrapper">
-                                    <pre><code>python flxos.py validate
-python flxos.py hwgen</code></pre>
-                                </div>
-                                <p class="note"><i class="fas fa-info-circle"></i> Profiles are defined via YAML files
-                                    in the Plugins directory.</p>
-                            </div>
-                        </div>
-
-                        <div class="step">
-                            <div class="step-number">4</div>
-                            <div class="step-content">
                                 <h3>Build and flash</h3>
                                 <div class="code-block-wrapper">
                                     <pre><code>python flxos.py build
 python flxos.py flash --port /dev/ttyUSB0</code></pre>
                                 </div>
+                                <p class="note"><i class="fas fa-info-circle"></i> Profiles are defined via YAML files
+                                    in the Profiles directory.</p>
                             </div>
                         </div>
                     </div>
@@ -211,7 +200,7 @@ python flxos.py flash --port /dev/ttyUSB0</code></pre>
                     <div class="architecture-diagram">
                         <div class="arch-layer">
                             <h4>Application Layer</h4>
-                            <p>Settings, Files, Browser, Terminal</p>
+                            <p>Settings, Files, Text Editor, Tools</p>
                         </div>
                         <div class="arch-arrow">↓</div>
                         <div class="arch-layer">
@@ -242,7 +231,7 @@ python flxos.py flash --port /dev/ttyUSB0</code></pre>
 
                     <div class="code-block-wrapper">
                         <pre><code>flxos/
-├── Applications/    # User-facing apps (calendar, files, settings)
+├── Applications/    # User-facing apps (calendar, files, text editor, settings, ...)
 ├── Apps/            # App framework and lifecycle management
 ├── Buildscripts/    # CMake modules, profile loader, HW code generator
 ├── Connectivity/    # WiFi, networking modules
@@ -282,7 +271,8 @@ python flxos.py flash --port /dev/ttyUSB0</code></pre>
                         </div>
                         <div class="module-card">
                             <h4>Applications</h4>
-                            <p>Built-in apps: Calendar, Files, Settings, System Info.</p>
+                            <p>Built-in apps: Calendar, Files, Image Viewer, Text Editor, Settings, System Info, and
+                                more.</p>
                             <code>Applications/</code>
                         </div>
                     </div>
@@ -432,7 +422,7 @@ public:
                 <a href="https://github.com/flxos-labs/flxos/blob/main/LICENSE" target="_blank">License</a>
             </div>
             <div class="copyright">
-                &copy; <span id="year"></span> FlxOS Labs. Released under MIT License.
+                &copy; <span id="year"></span> FlxOS Labs. Released under AGPL-3.0 License.
             </div>
         </div>
     </footer>
