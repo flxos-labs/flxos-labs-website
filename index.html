@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>FlxOS - High-Performance Embedded Environment</title>
+    <title>FlxOS - Modular OS from ESP32 to Desktop</title>
     <meta name="description"
-        content="FlxOS is a high-performance, feature-rich embedded environment designed for ESP32 microcontrollers, integrating ESP-IDF and LVGL for a desktop-like experience.">
+        content="FlxOS is a modular, profile-driven operating system — from ESP32 microcontrollers to desktop platforms. Built on ESP-IDF, LVGL, and LovyanGFX.">
 
     <!-- Theme Color -->
     <meta name="theme-color" content="#6366f1" media="(prefers-color-scheme: dark)">
@@ -15,16 +15,16 @@
     <!-- Open Graph / Social Media -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://flxos-labs.github.io/">
-    <meta property="og:title" content="FlxOS - High-Performance Embedded Environment">
+    <meta property="og:title" content="FlxOS - Modular OS from ESP32 to Desktop">
     <meta property="og:description"
-        content="FlxOS is a high-performance, feature-rich embedded environment designed for ESP32 microcontrollers, integrating ESP-IDF and LVGL for a desktop-like experience.">
+        content="FlxOS is a modular, profile-driven operating system — from ESP32 microcontrollers to desktop platforms. Built on ESP-IDF, LVGL, and LovyanGFX.">
     <meta property="og:image" content="https://flxos-labs.github.io/og-image.png">
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="FlxOS - High-Performance Embedded Environment">
+    <meta name="twitter:title" content="FlxOS - Modular OS from ESP32 to Desktop">
     <meta name="twitter:description"
-        content="FlxOS is a high-performance, feature-rich embedded environment designed for ESP32 microcontrollers.">
+        content="FlxOS is a modular, profile-driven operating system — from ESP32 microcontrollers to desktop platforms.">
     <meta name="twitter:image" content="https://flxos-labs.github.io/og-image.png">
 
     <!-- Preconnect for Performance -->
@@ -69,6 +69,7 @@
             <div class="nav-links">
                 <a href="#features">Features</a>
                 <a href="#tech-stack">Tech Stack</a>
+                <a href="#roadmap">Roadmap</a>
                 <a href="#get-started">Get Started</a>
                 <a href="/docs">Docs</a>
                 <a href="/about">About</a>
@@ -91,10 +92,12 @@
             <div class="container hero-container">
                 <div class="hero-content">
                     <div class="badge" role="status">v1.0.0</div>
-                    <h1 id="hero-title">Modular Operating System for <span class="gradient-text">ESP32</span></h1>
+                    <h1 id="hero-title">Modular Operating System — from <span class="gradient-text">ESP32</span> to
+                        <span class="gradient-text">Desktop</span></h1>
                     <p class="hero-subtitle">
                         Built on ESP-IDF, LVGL, and LovyanGFX. A complete application framework with a graphical user
-                        interface, modular hardware abstraction, and a powerful profile-based build system.
+                        interface, modular hardware abstraction, and a powerful profile-based build system — growing
+                        from embedded devices to full desktop platforms.
                     </p>
                     <div class="hero-cta">
                         <a href="#get-started" class="btn btn-primary">
@@ -205,11 +208,19 @@
                     </div>
                     <div class="feature-card">
                         <div class="icon-box">
-                            <i class="fas fa-desktop"></i>
+                            <i class="fas fa-tv"></i>
                         </div>
                         <h3>Display-Agnostic</h3>
                         <p>LovyanGFX backend supports ILI9341, ST7789, and many more display controllers, plus a
                             headless mode for embedded server use cases.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="icon-box">
+                            <i class="fas fa-desktop"></i>
+                        </div>
+                        <h3>Desktop (Coming Soon)</h3>
+                        <p>FlxOS is expanding beyond embedded — bringing the same rich UI and modular architecture
+                            natively to Linux, macOS, and Windows desktops.</p>
                     </div>
                 </div>
             </div>
@@ -242,6 +253,47 @@
                     <div class="tech-item">
                         <i class="fas fa-hammer"></i>
                         <span>CMake</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Roadmap Section -->
+        <section id="roadmap" class="roadmap">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Roadmap</h2>
+                    <p>Where FlxOS is headed — from embedded to everywhere.</p>
+                </div>
+                <div class="roadmap-timeline">
+                    <div class="roadmap-item completed">
+                        <div class="roadmap-marker"><i class="fas fa-check"></i></div>
+                        <div class="roadmap-content">
+                            <h3>ESP32 Embedded</h3>
+                            <p>Full OS with touch UI, hardware abstraction layer, built-in apps, and profile-driven
+                                builds.</p>
+                        </div>
+                    </div>
+                    <div class="roadmap-item upcoming">
+                        <div class="roadmap-marker"><i class="fas fa-arrow-right"></i></div>
+                        <div class="roadmap-content">
+                            <h3>Desktop Support</h3>
+                            <p>Expand FlxOS to run natively on Linux, macOS, and Windows desktops.</p>
+                        </div>
+                    </div>
+                    <div class="roadmap-item upcoming">
+                        <div class="roadmap-marker"><i class="fas fa-arrow-right"></i></div>
+                        <div class="roadmap-content">
+                            <h3>Desktop Simulator</h3>
+                            <p>Develop and test FlxOS apps on your desktop without any hardware.</p>
+                        </div>
+                    </div>
+                    <div class="roadmap-item upcoming">
+                        <div class="roadmap-marker"><i class="fas fa-arrow-right"></i></div>
+                        <div class="roadmap-content">
+                            <h3>Plugin Ecosystem</h3>
+                            <p>Community-driven app and driver extensions for both embedded and desktop.</p>
+                        </div>
                     </div>
                 </div>
             </div>
