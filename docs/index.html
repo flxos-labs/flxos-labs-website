@@ -142,10 +142,10 @@ cd flxos</code></pre>
                         <div class="step">
                             <div class="step-number">2</div>
                             <div class="step-content">
-                                <h3>Configure target platform</h3>
+                                <h3>List and Select Profile</h3>
                                 <div class="code-block-wrapper">
-                                    <pre><code>idf.py set-target esp32
-# Or for ESP32-S3: idf.py set-target esp32s3</code></pre>
+                                    <pre><code>python flxos.py list
+python flxos.py select esp32s3-ili9341-xpt</code></pre>
                                 </div>
                             </div>
                         </div>
@@ -153,12 +153,13 @@ cd flxos</code></pre>
                         <div class="step">
                             <div class="step-number">3</div>
                             <div class="step-content">
-                                <h3>Configure project settings</h3>
+                                <h3>Generate Code and Configure</h3>
                                 <div class="code-block-wrapper">
-                                    <pre><code>idf.py menuconfig</code></pre>
+                                    <pre><code>python flxos.py validate
+python flxos.py hwgen</code></pre>
                                 </div>
-                                <p class="note"><i class="fas fa-info-circle"></i> Configure display driver, Wi-Fi, and
-                                    other options in the menu.</p>
+                                <p class="note"><i class="fas fa-info-circle"></i> Profiles are defined via YAML files
+                                    in the Plugins directory.</p>
                             </div>
                         </div>
 
@@ -167,7 +168,8 @@ cd flxos</code></pre>
                             <div class="step-content">
                                 <h3>Build and flash</h3>
                                 <div class="code-block-wrapper">
-                                    <pre><code>idf.py build flash monitor</code></pre>
+                                    <pre><code>python flxos.py build
+python flxos.py flash --port /dev/ttyUSB0</code></pre>
                                 </div>
                             </div>
                         </div>
@@ -240,16 +242,20 @@ cd flxos</code></pre>
 
                     <div class="code-block-wrapper">
                         <pre><code>flxos/
-├── main/
-│   ├── core/
-│   │   ├── apps/           # Application implementations
-│   │   ├── system/         # System management
-│   │   └── connectivity/   # Network stack
-│   ├── lv_os_custom.c      # LVGL OS integration
-│   └── main.cpp            # Entry point
-├── components/             # External libraries
-├── assets/                 # Images, fonts, resources
-└── CMakeLists.txt          # Build configuration</code></pre>
+├── Applications/    # User-facing apps (calendar, files, settings)
+├── Apps/            # App framework and lifecycle management
+├── Buildscripts/    # CMake modules, profile loader, HW code generator
+├── Connectivity/    # WiFi, networking modules
+├── Core/            # Core OS headers and utilities
+├── Firmware/        # Firmware entry point and initialization
+├── HalModule/       # Hardware Abstraction Layer
+├── Kernel/          # Kernel services (tasks, memory, logging)
+├── Profiles/        # Board/device profiles (YAML + generated config)
+├── Services/        # System services
+├── System/          # System-level modules (drivers, buses)
+├── UI/              # LVGL UI framework, themes
+├── flxos.py         # Main CLI build tool
+└── CMakeLists.txt   # Top-level CMake project file</code></pre>
                     </div>
                 </section>
 
@@ -259,24 +265,25 @@ cd flxos</code></pre>
 
                     <div class="module-grid">
                         <div class="module-card">
-                            <h4>System Manager</h4>
-                            <p>Centralized hardware abstraction and resource management for optimal performance.</p>
-                            <code>core/system/</code>
+                            <h4>Hardware Abstraction Layer (HAL)</h4>
+                            <p>Centralized hardware abstraction interface and implementations for optimal performance.
+                            </p>
+                            <code>HalModule/</code>
                         </div>
                         <div class="module-card">
-                            <h4>Desktop Environment</h4>
-                            <p>Window management, task scheduling, and user interface coordination.</p>
-                            <code>core/apps/DE/</code>
+                            <h4>UI and Apps Framework</h4>
+                            <p>Application base classes, lifecycle management, and LVGL UI elements.</p>
+                            <code>UI/ & Apps/</code>
                         </div>
                         <div class="module-card">
                             <h4>Connectivity</h4>
                             <p>Wi-Fi management, network protocols, and IoT capabilities.</p>
-                            <code>core/connectivity/</code>
+                            <code>Connectivity/</code>
                         </div>
                         <div class="module-card">
                             <h4>Applications</h4>
-                            <p>Built-in apps: Settings, Files, Browser, Terminal.</p>
-                            <code>core/apps/</code>
+                            <p>Built-in apps: Calendar, Files, Settings, System Info.</p>
+                            <code>Applications/</code>
                         </div>
                     </div>
                 </section>
@@ -288,42 +295,40 @@ cd flxos</code></pre>
                     <div class="warning-box">
                         <i class="fas fa-exclamation-triangle"></i>
                         <div>
-                            <strong>Important:</strong> Always run <code>idf.py set-target</code> before the first build
-                            to configure for your specific ESP32 variant.
+                            <strong>Important:</strong> Always select a profile using
+                            <code>python flxos.py select &lt;id&gt;</code> before building.
                         </div>
                     </div>
 
                     <h3>Build Commands</h3>
                     <div class="code-block-wrapper">
-                        <pre><code># Full build
-idf.py build
+                        <pre><code># Standard build
+python flxos.py build
 
-# Clean build
-idf.py fullclean build
+# Dev build with faster iterations
+python flxos.py build --dev
 
-# Build and flash
-idf.py build flash
-
-# Build, flash, and monitor
-idf.py build flash monitor</code></pre>
+# Flash and connect monitor
+python flxos.py flash --port /dev/ttyUSB0</code></pre>
                     </div>
                 </section>
 
                 <!-- Configuration -->
                 <section id="configuration" class="doc-section">
                     <h2><i class="fas fa-cog"></i> Configuration</h2>
-                    <p>FlxOS uses the ESP-IDF menuconfig system for configuration.</p>
+                    <p>FlxOS uses a YAML profile system instead of traditional menuconfig for platform definitions.</p>
 
                     <div class="code-block-wrapper">
-                        <pre><code>idf.py menuconfig</code></pre>
+                        <pre><code>python flxos.py list
+python flxos.py diff a b --json</code></pre>
                     </div>
 
-                    <h3>Key Configuration Options</h3>
+                    <h3>Key Profile Definitions (profile.yaml)</h3>
                     <ul>
-                        <li><strong>Display Driver:</strong> Configure your TFT display type and pins</li>
-                        <li><strong>Touch Controller:</strong> Set up touch input device</li>
-                        <li><strong>Wi-Fi:</strong> Default SSID and password</li>
-                        <li><strong>Performance:</strong> CPU frequency, memory allocation</li>
+                        <li><strong>SoC Target:</strong> Chip sequence and flash sizing.</li>
+                        <li><strong>Display Driver:</strong> TFT resolution, backend type, SPI pins.</li>
+                        <li><strong>Touch Controller:</strong> XPT2046, FT6336, GT911 mappings.</li>
+                        <li><strong>Peripherals:</strong> SD card interfaces and Battery ADC defaults.</li>
                     </ul>
                 </section>
 
@@ -364,12 +369,11 @@ public:
                 <section id="api" class="doc-section">
                     <h2><i class="fas fa-code"></i> API Reference</h2>
                     <p>Complete API documentation coming soon. For now, refer to the source code in
-                        <code>main/core/</code>.
+                        <code>Core/</code> and <code>UI/</code>.
                     </p>
 
                     <div class="api-links">
-                        <a href="https://github.com/flxos-labs/flxos/tree/main/main/core/apps" target="_blank"
-                            class="api-link">
+                        <a href="https://github.com/flxos-labs/flxos/tree/main/Core" target="_blank" class="api-link">
                             <i class="fab fa-github"></i>
                             <span>Browse Source Code</span>
                         </a>
@@ -381,21 +385,20 @@ public:
                     <h2><i class="fas fa-wrench"></i> Troubleshooting</h2>
 
                     <div class="faq-item">
-                        <h4>Build fails with "CMake Error"</h4>
-                        <p>Ensure you've run <code>idf.py set-target esp32</code> before building. Also verify ESP-IDF
-                            is properly installed and sourced.</p>
+                        <h4>Build fails with "Target Not Set"</h4>
+                        <p>Ensure you've run <code>python flxos.py select &lt;profile&gt;</code> before building.</p>
                     </div>
 
                     <div class="faq-item">
                         <h4>Display shows garbage or doesn't work</h4>
-                        <p>Check your display configuration in menuconfig. Verify pin connections match your hardware
-                            setup.</p>
+                        <p>Check the <code>profile.yaml</code> for your selected configuration. Verify pin connections
+                            match your hardware pinout.</p>
                     </div>
 
                     <div class="faq-item">
                         <h4>Touch not responding</h4>
-                        <p>Ensure touch controller is enabled in menuconfig and pins are correctly configured. Some
-                            displays require calibration.</p>
+                        <p>Ensure touch controller is correctly mapped in the hardware definitions inside the active
+                            profile.</p>
                     </div>
 
                     <div class="faq-item">
