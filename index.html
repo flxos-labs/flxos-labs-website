@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>FlxOS - High-Performance Embedded Environment</title>
+    <title>FlxOS - Modular OS from ESP32 to Desktop</title>
     <meta name="description"
-        content="FlxOS is a high-performance, feature-rich embedded environment designed for ESP32 microcontrollers, integrating ESP-IDF and LVGL for a desktop-like experience.">
+        content="FlxOS is a modular, profile-driven operating system — from ESP32 microcontrollers to desktop platforms. Built on ESP-IDF, LVGL, and LovyanGFX.">
 
     <!-- Theme Color -->
     <meta name="theme-color" content="#6366f1" media="(prefers-color-scheme: dark)">
@@ -15,16 +15,16 @@
     <!-- Open Graph / Social Media -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://flxos-labs.github.io/">
-    <meta property="og:title" content="FlxOS - High-Performance Embedded Environment">
+    <meta property="og:title" content="FlxOS - Modular OS from ESP32 to Desktop">
     <meta property="og:description"
-        content="FlxOS is a high-performance, feature-rich embedded environment designed for ESP32 microcontrollers, integrating ESP-IDF and LVGL for a desktop-like experience.">
+        content="FlxOS is a modular, profile-driven operating system — from ESP32 microcontrollers to desktop platforms. Built on ESP-IDF, LVGL, and LovyanGFX.">
     <meta property="og:image" content="https://flxos-labs.github.io/og-image.png">
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="FlxOS - High-Performance Embedded Environment">
+    <meta name="twitter:title" content="FlxOS - Modular OS from ESP32 to Desktop">
     <meta name="twitter:description"
-        content="FlxOS is a high-performance, feature-rich embedded environment designed for ESP32 microcontrollers.">
+        content="FlxOS is a modular, profile-driven operating system — from ESP32 microcontrollers to desktop platforms.">
     <meta name="twitter:image" content="https://flxos-labs.github.io/og-image.png">
 
     <!-- Preconnect for Performance -->
@@ -45,6 +45,9 @@
 
     <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Prism.js Syntax Highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
 
     <!-- Styles -->
     <link rel="stylesheet" href="styles.css">
@@ -69,7 +72,8 @@
             <div class="nav-links">
                 <a href="#features">Features</a>
                 <a href="#tech-stack">Tech Stack</a>
-                <a href="#get-started">Get Started</a>
+                <a href="#roadmap">Roadmap</a>
+                <a href="#community">Community</a>
                 <a href="/docs">Docs</a>
                 <a href="/about">About</a>
                 <button id="themeToggle" aria-label="Toggle theme">
@@ -91,10 +95,12 @@
             <div class="container hero-container">
                 <div class="hero-content">
                     <div class="badge" role="status">v1.0.0</div>
-                    <h1 id="hero-title">Modular Operating System for <span class="gradient-text">ESP32</span></h1>
+                    <h1 id="hero-title">Modular Operating System — from <span class="gradient-text">ESP32</span> to
+                        <span class="gradient-text">Desktop</span></h1>
                     <p class="hero-subtitle">
                         Built on ESP-IDF, LVGL, and LovyanGFX. A complete application framework with a graphical user
-                        interface, modular hardware abstraction, and a powerful profile-based build system.
+                        interface, modular hardware abstraction, and a powerful profile-based build system — growing
+                        from embedded devices to full desktop platforms.
                     </p>
                     <div class="hero-cta">
                         <a href="#get-started" class="btn btn-primary">
@@ -205,11 +211,19 @@
                     </div>
                     <div class="feature-card">
                         <div class="icon-box">
-                            <i class="fas fa-desktop"></i>
+                            <i class="fas fa-tv"></i>
                         </div>
                         <h3>Display-Agnostic</h3>
                         <p>LovyanGFX backend supports ILI9341, ST7789, and many more display controllers, plus a
                             headless mode for embedded server use cases.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="icon-box">
+                            <i class="fas fa-desktop"></i>
+                        </div>
+                        <h3>Desktop (Coming Soon)</h3>
+                        <p>FlxOS is expanding beyond embedded — bringing the same rich UI and modular architecture
+                            natively to Linux, macOS, and Windows desktops.</p>
                     </div>
                 </div>
             </div>
@@ -247,6 +261,91 @@
             </div>
         </section>
 
+        <!-- Roadmap Section -->
+        <section id="roadmap" class="roadmap">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Roadmap</h2>
+                    <p>Where FlxOS is headed — from embedded to everywhere.</p>
+                </div>
+                <div class="roadmap-timeline">
+                    <div class="roadmap-item completed">
+                        <div class="roadmap-marker"><i class="fas fa-check"></i></div>
+                        <div class="roadmap-content">
+                            <h3>ESP32 Embedded</h3>
+                            <p>Full OS with touch UI, hardware abstraction layer, built-in apps, and profile-driven
+                                builds.</p>
+                        </div>
+                    </div>
+                    <div class="roadmap-item upcoming">
+                        <div class="roadmap-marker"><i class="fas fa-arrow-right"></i></div>
+                        <div class="roadmap-content">
+                            <h3>Desktop Support</h3>
+                            <p>Expand FlxOS to run natively on Linux, macOS, and Windows desktops.</p>
+                        </div>
+                    </div>
+                    <div class="roadmap-item upcoming">
+                        <div class="roadmap-marker"><i class="fas fa-arrow-right"></i></div>
+                        <div class="roadmap-content">
+                            <h3>Desktop Simulator</h3>
+                            <p>Develop and test FlxOS apps on your desktop without any hardware.</p>
+                        </div>
+                    </div>
+                    <div class="roadmap-item upcoming">
+                        <div class="roadmap-marker"><i class="fas fa-arrow-right"></i></div>
+                        <div class="roadmap-content">
+                            <h3>Plugin Ecosystem</h3>
+                            <p>Community-driven app and driver extensions for both embedded and desktop.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Community Section -->
+        <section id="community" class="community">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Join the Community</h2>
+                    <p>FlxOS is open source and community-driven. Get involved today.</p>
+                </div>
+                <div class="community-grid">
+                    <a href="https://github.com/flxos-labs/flxos/blob/main/CONTRIBUTING.md" target="_blank" class="community-card">
+                        <div class="community-icon">
+                            <i class="fas fa-code-pull-request"></i>
+                        </div>
+                        <h3>Contribute</h3>
+                        <p>Submit pull requests, fix bugs, or add new features. Every contribution matters.</p>
+                        <span class="community-link">Read Contributing Guide <i class="fas fa-arrow-right"></i></span>
+                    </a>
+                    <a href="https://github.com/flxos-labs/flxos/issues" target="_blank" class="community-card">
+                        <div class="community-icon">
+                            <i class="fas fa-bug"></i>
+                        </div>
+                        <h3>Report Issues</h3>
+                        <p>Found a bug or have a feature request? Open an issue on GitHub to help us improve.</p>
+                        <span class="community-link">Open an Issue <i class="fas fa-arrow-right"></i></span>
+                    </a>
+                    <a href="https://github.com/flxos-labs/flxos/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22" target="_blank" class="community-card">
+                        <div class="community-icon">
+                            <i class="fas fa-seedling"></i>
+                        </div>
+                        <h3>Good First Issues</h3>
+                        <p>New to FlxOS? Start with beginner-friendly issues tagged for first-time contributors.</p>
+                        <span class="community-link">Browse Issues <i class="fas fa-arrow-right"></i></span>
+                    </a>
+                    <a href="https://github.com/flxos-labs/flxos" target="_blank" class="community-card">
+                        <div class="community-icon">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <h3>Star on GitHub</h3>
+                        <p>Show your support by starring the project. It helps others discover FlxOS.</p>
+                        <span class="community-link">Star the Repo <i class="fas fa-arrow-right"></i></span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
         <!-- Get Started -->
         <section id="get-started" class="get-started">
             <div class="container">
@@ -270,7 +369,7 @@
                                 <i class="far fa-copy"></i>
                             </button>
                         </div>
-                        <pre><code id="installCode"># Clone the repository
+                        <pre><code id="installCode" class="language-bash"># Clone the repository
 git clone --recurse-submodules https://github.com/flxos-labs/flxos.git
 cd flxos
 
@@ -292,21 +391,46 @@ python flxos.py flash --port /dev/ttyUSB0</code></pre>
 
     <footer>
         <div class="container footer-container">
-            <div class="footer-brand">
-                <div class="logo-icon small"></div>
-                <span>FlxOS Labs</span>
+            <div class="footer-top">
+                <div class="footer-brand-col">
+                    <div class="footer-brand">
+                        <div class="logo-icon small"></div>
+                        <span>FlxOS Labs</span>
+                    </div>
+                    <p class="footer-tagline">Modular OS from ESP32 to Desktop.<br>Open source under AGPL-3.0.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Project</h4>
+                    <a href="#features">Features</a>
+                    <a href="#roadmap">Roadmap</a>
+                    <a href="#get-started">Get Started</a>
+                    <a href="/docs">Documentation</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Community</h4>
+                    <a href="https://github.com/flxos-labs/flxos" target="_blank">GitHub</a>
+                    <a href="https://github.com/flxos-labs/flxos/issues" target="_blank">Issues</a>
+                    <a href="https://github.com/flxos-labs/flxos/blob/main/CONTRIBUTING.md" target="_blank">Contributing</a>
+                    <a href="https://github.com/flxos-labs/flxos/blob/main/LICENSE" target="_blank">License</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Resources</h4>
+                    <a href="/about">About</a>
+                    <a href="/docs#api">API Reference</a>
+                    <a href="/docs#troubleshooting">Troubleshooting</a>
+                </div>
             </div>
-            <div class="footer-links">
-                <a href="https://github.com/flxos-labs/flxos" target="_blank">GitHub</a>
-                <a href="https://github.com/flxos-labs/flxos/issues" target="_blank">Issues</a>
-                <a href="https://github.com/flxos-labs/flxos/blob/main/LICENSE" target="_blank">License</a>
-            </div>
-            <div class="copyright">
-                &copy; <span id="year"></span> FlxOS Labs. Released under AGPL-3.0 License.
+            <div class="footer-bottom">
+                <div class="copyright">
+                    &copy; <span id="year"></span> FlxOS Labs. Released under AGPL-3.0 License.
+                </div>
             </div>
         </div>
     </footer>
 
+    <!-- Prism.js for syntax highlighting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js" defer></script>
     <script src="script.js" defer></script>
 </body>
 
