@@ -553,6 +553,17 @@ ul {
     z-index: -1;
 }
 
+/* Particle Canvas */
+.particle-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+}
+
 /* Features Section */
 .features {
     padding: 120px 0;
@@ -670,6 +681,88 @@ ul {
     text-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
 }
 
+/* Roadmap */
+.roadmap {
+    padding: 120px 0;
+    background: var(--bg-darker);
+    content-visibility: auto;
+    contain-intrinsic-size: auto 600px;
+}
+
+.roadmap-timeline {
+    max-width: 700px;
+    margin: 0 auto;
+    position: relative;
+    padding-left: 40px;
+}
+
+.roadmap-timeline::before {
+    content: '';
+    position: absolute;
+    left: 30px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--primary), var(--border));
+}
+
+.roadmap-item {
+    position: relative;
+    padding: 0 0 48px 32px;
+}
+
+.roadmap-item:last-child {
+    padding-bottom: 0;
+}
+
+.roadmap-marker {
+    position: absolute;
+    left: -25px;
+    top: 4px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    z-index: 1;
+    transition: all 0.3s ease;
+}
+
+.roadmap-item.completed .roadmap-marker {
+    background: var(--primary);
+    color: white;
+    box-shadow: 0 0 15px rgba(99, 102, 241, 0.4);
+}
+
+.roadmap-item.upcoming .roadmap-marker {
+    background: var(--bg-card);
+    border: 2px solid var(--border);
+    color: var(--text-muted);
+}
+
+.roadmap-item:hover .roadmap-marker {
+    transform: scale(1.15);
+}
+
+.roadmap-item.upcoming:hover .roadmap-marker {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+.roadmap-content h3 {
+    font-size: 1.25rem;
+    color: var(--text-highlight);
+    margin-bottom: 8px;
+}
+
+.roadmap-content p {
+    font-size: 1rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+}
+
 /* Get Started */
 .get-started {
     padding: 120px 0;
@@ -756,9 +849,109 @@ ul {
     color: #e2e8f0;
 }
 
+/* Community Section */
+.community {
+    padding: 120px 0;
+    position: relative;
+    content-visibility: auto;
+    contain-intrinsic-size: auto 800px;
+}
+
+.community-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 24px;
+}
+
+.community-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    padding: 36px 28px;
+    border-radius: var(--radius-lg);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+    position: relative;
+    overflow: hidden;
+}
+
+.community-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--gradient-main);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+}
+
+.community-card:hover {
+    transform: translateY(-8px);
+    border-color: rgba(99, 102, 241, 0.3);
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.2);
+}
+
+.community-card:hover::before {
+    transform: scaleX(1);
+}
+
+.community-icon {
+    width: 56px;
+    height: 56px;
+    background: rgba(99, 102, 241, 0.1);
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    color: var(--primary);
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
+}
+
+.community-card:hover .community-icon {
+    background: var(--primary);
+    color: white;
+    transform: rotate(5deg) scale(1.05);
+}
+
+.community-card h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: var(--text-highlight);
+}
+
+.community-card p {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 16px;
+    flex: 1;
+}
+
+.community-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--primary);
+    transition: gap 0.3s ease;
+}
+
+.community-card:hover .community-link {
+    gap: 12px;
+}
+
 /* Footer */
 footer {
-    padding: 60px 0 40px;
+    padding: 60px 0 0;
     background: var(--bg-darker);
     border-top: 1px solid var(--border);
 }
@@ -766,36 +959,73 @@ footer {
 .footer-container {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: 24px;
 }
 
-.footer-brand {
+.footer-top {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 48px;
+    padding-bottom: 48px;
+    border-bottom: 1px solid var(--border);
+}
+
+.footer-brand-col .footer-brand {
     display: flex;
     align-items: center;
     gap: 10px;
     font-size: 1.2rem;
     font-weight: 700;
+    margin-bottom: 16px;
 }
 
-.footer-links {
+.footer-tagline {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+}
+
+.footer-col {
     display: flex;
-    gap: 32px;
+    flex-direction: column;
+    gap: 12px;
 }
 
-.footer-links a {
+.footer-col h4 {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-highlight);
+    margin-bottom: 4px;
+}
+
+.footer-col a {
     color: var(--text-muted);
     font-size: 0.95rem;
+    transition: color 0.2s ease;
 }
 
-.footer-links a:hover {
+.footer-col a:hover {
     color: var(--primary);
+}
+
+.footer-bottom {
+    padding: 24px 0;
+    display: flex;
+    justify-content: center;
 }
 
 .copyright {
     color: rgba(148, 163, 184, 0.5);
     font-size: 0.9rem;
-    margin-top: 20px;
+}
+
+/* Prism.js Overrides */
+.code-block-wrapper pre[class*="language-"],
+.code-block-wrapper code[class*="language-"] {
+    background: transparent !important;
+    margin: 0 !important;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.95rem;
 }
 
 /* Responsive Design */
@@ -948,7 +1178,8 @@ footer {
     }
 
     .card-grid,
-    .features-grid {
+    .features-grid,
+    .community-grid {
         grid-template-columns: 1fr;
         gap: 20px;
     }
@@ -1056,5 +1287,29 @@ footer {
 
     .hero-container {
         gap: 100px;
+    }
+}
+
+/* Footer responsive */
+@media (max-width: 900px) {
+    .footer-top {
+        grid-template-columns: 1fr 1fr;
+        gap: 32px;
+    }
+}
+
+@media (max-width: 640px) {
+    .footer-top {
+        grid-template-columns: 1fr;
+        gap: 24px;
+        text-align: center;
+    }
+
+    .footer-brand-col .footer-brand {
+        justify-content: center;
+    }
+
+    .footer-col {
+        align-items: center;
     }
 }

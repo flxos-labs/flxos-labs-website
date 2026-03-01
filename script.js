@@ -91,10 +91,16 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // GitHub Stats with retry logic
+    // GitHub Stats with caching and better fallback
     fetchGitHubStats();
 
     async function fetchGitHubStats(retries = 3) {
+        // Try to load from cache first
+        const cached = loadCachedStats();
+        if (cached) {
+            displayStats(cached);
+        }
+
         try {
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), 5000);
@@ -110,33 +116,67 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const data = await response.json();
+            const stats = {
+                stars: data.stargazers_count,
+                forks: data.forks_count,
+                watchers: data.watchers_count,
+                timestamp: Date.now()
+            };
 
-            const starsElement = document.getElementById('github-stars');
-            const forksElement = document.getElementById('github-forks');
-            const watchersElement = document.getElementById('github-watchers');
+            // Cache the stats
+            try {
+                localStorage.setItem('flxos_github_stats', JSON.stringify(stats));
+            } catch (e) { /* ignore storage errors */ }
 
-            if (starsElement) animateCounter(starsElement, data.stargazers_count);
-            if (forksElement) animateCounter(forksElement, data.forks_count);
-            if (watchersElement) animateCounter(watchersElement, data.watchers_count);
+            displayStats(stats);
         } catch (error) {
-            console.error('Failed to fetch GitHub stats:', error);
+            console.warn('GitHub API fetch failed:', error.message);
 
             // Retry logic
             if (retries > 0 && error.name !== 'AbortError') {
-                console.log(`Retrying... (${retries} attempts left)`);
                 setTimeout(() => fetchGitHubStats(retries - 1), 2000);
-            } else {
-                // Show fallback values
-                const elements = ['github-stars', 'github-forks', 'github-watchers'];
-                elements.forEach(id => {
-                    const el = document.getElementById(id);
-                    if (el) el.textContent = '--';
-                });
+            } else if (!cached) {
+                // If no cached data either, show dashes gracefully
+                displayStats(null);
             }
         }
     }
 
+    function loadCachedStats() {
+        try {
+            const cached = localStorage.getItem('flxos_github_stats');
+            if (cached) {
+                const data = JSON.parse(cached);
+                // Cache valid for 1 hour
+                if (Date.now() - data.timestamp < 3600000) {
+                    return data;
+                }
+            }
+        } catch (e) { /* ignore */ }
+        return null;
+    }
+
+    function displayStats(stats) {
+        const starsElement = document.getElementById('github-stars');
+        const forksElement = document.getElementById('github-forks');
+        const watchersElement = document.getElementById('github-watchers');
+
+        if (stats) {
+            if (starsElement) animateCounter(starsElement, stats.stars);
+            if (forksElement) animateCounter(forksElement, stats.forks);
+            if (watchersElement) animateCounter(watchersElement, stats.watchers);
+        } else {
+            if (starsElement) starsElement.textContent = '—';
+            if (forksElement) forksElement.textContent = '—';
+            if (watchersElement) watchersElement.textContent = '—';
+        }
+    }
+
     function animateCounter(element, target) {
+        if (target === undefined || target === null) {
+            element.textContent = '—';
+            return;
+        }
         const duration = 1000;
         const start = 0;
         const increment = target / (duration / 16);
@@ -198,7 +238,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const targetElement = document.querySelector(targetId);
             if (targetElement) {
-                // Close mobile menu if open (implementation dependent)
+                // Close mobile menu if open
                 const mobileMenu = document.querySelector('.nav-links');
                 if (window.innerWidth <= 768) {
                     mobileMenu.style.display = '';
@@ -263,16 +303,210 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }, observerOptions);
 
-    // Terminal Typing Animation (Optional enhancement)
-    const terminalLines = document.querySelectorAll('.code-line');
-
-    // Simple staggered fade in for terminal lines on load
-    terminalLines.forEach((line, index) => {
-        line.style.opacity = '0';
-        line.style.animation = `fadeIn 0.5s ease forwards ${index * 0.8}s`;
+    // Observe feature cards, tech items, roadmap items for scroll animation
+    document.querySelectorAll('.feature-card, .tech-item, .roadmap-item, .community-card').forEach(el => {
+        el.classList.add('animate-target');
+        observer.observe(el);
     });
 
-    // Add keyframes dynamically
+    // ────────────────────────────────────────────────
+    // Terminal Typing Animation
+    // ────────────────────────────────────────────────
+    const terminalEl = document.querySelector('.window-content');
+    if (terminalEl) {
+        initTerminalTyping(terminalEl);
+    }
+
+    function initTerminalTyping(container) {
+        const lines = [
+            { type: 'command', text: '$ git clone --recurse-submodules https://github.com/flxos-labs/flxos.git' },
+            { type: 'command', text: '$ cd flxos' },
+            { type: 'command', text: '$ python flxos.py select esp32s3-ili9341' },
+            { type: 'command', text: '$ python flxos.py build' },
+            { type: 'output', text: "Selecting profile 'esp32s3-ili9341'..." },
+            { type: 'output', text: 'Generating hardware initialization code...' },
+            { type: 'success', text: 'Build completed successfully.' },
+            { type: 'highlight', text: 'FlxOS ready for flashing!' }
+        ];
+
+        // Clear existing content
+        container.innerHTML = '';
+
+        // Use IntersectionObserver to start animation when visible
+        const terminalObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    typeLines(container, lines, 0);
+                    terminalObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.3 });
+
+        terminalObserver.observe(container);
+    }
+
+    function typeLines(container, lines, index) {
+        if (index >= lines.length) {
+            // Add blinking cursor at the end
+            const cursorEl = document.createElement('div');
+            cursorEl.className = 'cursor';
+            container.appendChild(cursorEl);
+            return;
+        }
+
+        const line = lines[index];
+        const lineEl = document.createElement('div');
+        lineEl.className = 'code-line';
+
+        if (line.type === 'command') {
+            lineEl.classList.add('typing-line');
+            // Split prompt from command text
+            const promptSpan = document.createElement('span');
+            promptSpan.className = 'prompt';
+            promptSpan.textContent = '$';
+            lineEl.appendChild(promptSpan);
+
+            const textSpan = document.createElement('span');
+            textSpan.className = 'typed-text';
+            lineEl.appendChild(textSpan);
+
+            container.appendChild(lineEl);
+
+            // Type out the command text (without the "$ " prefix)
+            const cmdText = line.text.substring(2);
+            typeText(textSpan, cmdText, 0, () => {
+                lineEl.classList.remove('typing-line');
+                setTimeout(() => typeLines(container, lines, index + 1), 300);
+            });
+        } else {
+            // Output lines appear instantly with fade
+            if (line.type === 'output') {
+                lineEl.classList.add('output');
+            } else if (line.type === 'success') {
+                lineEl.classList.add('output', 'success');
+            } else if (line.type === 'highlight') {
+                lineEl.classList.add('output', 'success', 'highlight');
+            }
+            lineEl.textContent = line.text;
+            lineEl.style.opacity = '0';
+            lineEl.style.transform = 'translateY(5px)';
+            container.appendChild(lineEl);
+
+            requestAnimationFrame(() => {
+                lineEl.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+                lineEl.style.opacity = '1';
+                lineEl.style.transform = 'translateY(0)';
+            });
+
+            setTimeout(() => typeLines(container, lines, index + 1), 200);
+        }
+    }
+
+    function typeText(element, text, charIndex, callback) {
+        if (charIndex >= text.length) {
+            callback();
+            return;
+        }
+        element.textContent += text[charIndex];
+        // Vary the typing speed slightly for realism
+        const baseSpeed = 25;
+        const variance = Math.random() * 20 - 10;
+        setTimeout(() => typeText(element, text, charIndex + 1, callback), baseSpeed + variance);
+    }
+
+    // ────────────────────────────────────────────────
+    // Particle Background for Hero
+    // ────────────────────────────────────────────────
+    const heroSection = document.querySelector('.hero');
+    if (heroSection && hasFinePointer) {
+        initParticles(heroSection);
+    }
+
+    function initParticles(container) {
+        const canvas = document.createElement('canvas');
+        canvas.className = 'particle-canvas';
+        canvas.setAttribute('aria-hidden', 'true');
+        container.insertBefore(canvas, container.firstChild);
+
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        let animId;
+
+        function resize() {
+            canvas.width = container.offsetWidth;
+            canvas.height = container.offsetHeight;
+        }
+
+        resize();
+        window.addEventListener('resize', resize, { passive: true });
+
+        // Create particles
+        const particleCount = Math.min(60, Math.floor(canvas.width / 25));
+        for (let i = 0; i < particleCount; i++) {
+            particles.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                vx: (Math.random() - 0.5) * 0.4,
+                vy: (Math.random() - 0.5) * 0.4,
+                size: Math.random() * 2 + 0.5,
+                opacity: Math.random() * 0.4 + 0.1
+            });
+        }
+
+        function drawParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw connections
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+
+                    if (dist < 120) {
+                        const opacity = (1 - dist / 120) * 0.15;
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(99, 102, 241, ${opacity})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+
+            // Draw and update particles
+            particles.forEach(p => {
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(99, 102, 241, ${p.opacity})`;
+                ctx.fill();
+
+                p.x += p.vx;
+                p.y += p.vy;
+
+                if ((p.x < 0 && p.vx < 0) || (p.x > canvas.width && p.vx > 0)) p.vx *= -1;
+                if ((p.y < 0 && p.vy < 0) || (p.y > canvas.height && p.vy > 0)) p.vy *= -1;
+            });
+
+            animId = requestAnimationFrame(drawParticles);
+        }
+
+        // Only run when visible
+        const particleObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    drawParticles();
+                } else {
+                    cancelAnimationFrame(animId);
+                }
+            });
+        });
+
+        particleObserver.observe(container);
+    }
+
+    // Add dynamic stylesheet for animations
     const styleSheet = document.createElement("style");
     styleSheet.innerText = `
         @keyframes fadeIn {
@@ -280,13 +514,29 @@ document.addEventListener('DOMContentLoaded', () => {
             to { opacity: 1; transform: translateY(0); }
         }
         
-        .animate-in {
-            animation: slideUpFade 0.8s ease forwards;
+        .animate-target {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
         }
         
-        @keyframes slideUpFade {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        .animate-in {
+            opacity: 1 !important;
+            transform: translateY(0) !important;
+        }
+        
+        /* Stagger children */
+        .features-grid .animate-in:nth-child(1) { transition-delay: 0s; }
+        .features-grid .animate-in:nth-child(2) { transition-delay: 0.1s; }
+        .features-grid .animate-in:nth-child(3) { transition-delay: 0.2s; }
+        .features-grid .animate-in:nth-child(4) { transition-delay: 0.3s; }
+        .features-grid .animate-in:nth-child(5) { transition-delay: 0.4s; }
+        .features-grid .animate-in:nth-child(6) { transition-delay: 0.5s; }
+
+        .typing-line .typed-text::after {
+            content: '▋';
+            animation: blink 0.7s step-end infinite;
+            color: var(--text-muted);
         }
     `;
     document.head.appendChild(styleSheet);
