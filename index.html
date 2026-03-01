@@ -46,6 +46,9 @@
     <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
+    <!-- Prism.js Syntax Highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+
     <!-- Styles -->
     <link rel="stylesheet" href="styles.css">
 
@@ -70,7 +73,7 @@
                 <a href="#features">Features</a>
                 <a href="#tech-stack">Tech Stack</a>
                 <a href="#roadmap">Roadmap</a>
-                <a href="#get-started">Get Started</a>
+                <a href="#community">Community</a>
                 <a href="/docs">Docs</a>
                 <a href="/about">About</a>
                 <button id="themeToggle" aria-label="Toggle theme">
@@ -299,6 +302,50 @@
             </div>
         </section>
 
+        <!-- Community Section -->
+        <section id="community" class="community">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Join the Community</h2>
+                    <p>FlxOS is open source and community-driven. Get involved today.</p>
+                </div>
+                <div class="community-grid">
+                    <a href="https://github.com/flxos-labs/flxos/blob/main/CONTRIBUTING.md" target="_blank" class="community-card">
+                        <div class="community-icon">
+                            <i class="fas fa-code-pull-request"></i>
+                        </div>
+                        <h3>Contribute</h3>
+                        <p>Submit pull requests, fix bugs, or add new features. Every contribution matters.</p>
+                        <span class="community-link">Read Contributing Guide <i class="fas fa-arrow-right"></i></span>
+                    </a>
+                    <a href="https://github.com/flxos-labs/flxos/issues" target="_blank" class="community-card">
+                        <div class="community-icon">
+                            <i class="fas fa-bug"></i>
+                        </div>
+                        <h3>Report Issues</h3>
+                        <p>Found a bug or have a feature request? Open an issue on GitHub to help us improve.</p>
+                        <span class="community-link">Open an Issue <i class="fas fa-arrow-right"></i></span>
+                    </a>
+                    <a href="https://github.com/flxos-labs/flxos/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22" target="_blank" class="community-card">
+                        <div class="community-icon">
+                            <i class="fas fa-seedling"></i>
+                        </div>
+                        <h3>Good First Issues</h3>
+                        <p>New to FlxOS? Start with beginner-friendly issues tagged for first-time contributors.</p>
+                        <span class="community-link">Browse Issues <i class="fas fa-arrow-right"></i></span>
+                    </a>
+                    <a href="https://github.com/flxos-labs/flxos" target="_blank" class="community-card">
+                        <div class="community-icon">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <h3>Star on GitHub</h3>
+                        <p>Show your support by starring the project. It helps others discover FlxOS.</p>
+                        <span class="community-link">Star the Repo <i class="fas fa-arrow-right"></i></span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
         <!-- Get Started -->
         <section id="get-started" class="get-started">
             <div class="container">
@@ -322,7 +369,7 @@
                                 <i class="far fa-copy"></i>
                             </button>
                         </div>
-                        <pre><code id="installCode"># Clone the repository
+                        <pre><code id="installCode" class="language-bash"># Clone the repository
 git clone --recurse-submodules https://github.com/flxos-labs/flxos.git
 cd flxos
 
@@ -344,21 +391,46 @@ python flxos.py flash --port /dev/ttyUSB0</code></pre>
 
     <footer>
         <div class="container footer-container">
-            <div class="footer-brand">
-                <div class="logo-icon small"></div>
-                <span>FlxOS Labs</span>
+            <div class="footer-top">
+                <div class="footer-brand-col">
+                    <div class="footer-brand">
+                        <div class="logo-icon small"></div>
+                        <span>FlxOS Labs</span>
+                    </div>
+                    <p class="footer-tagline">Modular OS from ESP32 to Desktop.<br>Open source under AGPL-3.0.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Project</h4>
+                    <a href="#features">Features</a>
+                    <a href="#roadmap">Roadmap</a>
+                    <a href="#get-started">Get Started</a>
+                    <a href="/docs">Documentation</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Community</h4>
+                    <a href="https://github.com/flxos-labs/flxos" target="_blank">GitHub</a>
+                    <a href="https://github.com/flxos-labs/flxos/issues" target="_blank">Issues</a>
+                    <a href="https://github.com/flxos-labs/flxos/blob/main/CONTRIBUTING.md" target="_blank">Contributing</a>
+                    <a href="https://github.com/flxos-labs/flxos/blob/main/LICENSE" target="_blank">License</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Resources</h4>
+                    <a href="/about">About</a>
+                    <a href="/docs#api">API Reference</a>
+                    <a href="/docs#troubleshooting">Troubleshooting</a>
+                </div>
             </div>
-            <div class="footer-links">
-                <a href="https://github.com/flxos-labs/flxos" target="_blank">GitHub</a>
-                <a href="https://github.com/flxos-labs/flxos/issues" target="_blank">Issues</a>
-                <a href="https://github.com/flxos-labs/flxos/blob/main/LICENSE" target="_blank">License</a>
-            </div>
-            <div class="copyright">
-                &copy; <span id="year"></span> FlxOS Labs. Released under AGPL-3.0 License.
+            <div class="footer-bottom">
+                <div class="copyright">
+                    &copy; <span id="year"></span> FlxOS Labs. Released under AGPL-3.0 License.
+                </div>
             </div>
         </div>
     </footer>
 
+    <!-- Prism.js for syntax highlighting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js" defer></script>
     <script src="script.js" defer></script>
 </body>
 
