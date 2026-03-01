@@ -375,6 +375,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Type out the command text (without the "$ " prefix)
             const cmdText = line.text.substring(2);
             typeText(textSpan, cmdText, 0, () => {
+                lineEl.classList.remove('typing-line');
                 setTimeout(() => typeLines(container, lines, index + 1), 300);
             });
         } else {
