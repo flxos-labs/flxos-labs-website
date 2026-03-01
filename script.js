@@ -485,8 +485,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 p.x += p.vx;
                 p.y += p.vy;
 
-                if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
-                if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+                if ((p.x < 0 && p.vx < 0) || (p.x > canvas.width && p.vx > 0)) p.vx *= -1;
+                if ((p.y < 0 && p.vy < 0) || (p.y > canvas.height && p.vy > 0)) p.vy *= -1;
             });
 
             animId = requestAnimationFrame(drawParticles);
