@@ -22,6 +22,9 @@
     <link rel="stylesheet" href="/styles.css">
     <link rel="stylesheet" href="/docs-styles.css">
 
+    <!-- Prism.js Syntax Highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml"
         href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%236366f1'/><text x='50' y='70' font-family='sans-serif' font-size='60' font-weight='bold' fill='white' text-anchor='middle'>F</text></svg>">
@@ -118,7 +121,7 @@
                                 <i class="far fa-copy"></i>
                             </button>
                         </div>
-                        <pre><code id="install-code-1">git clone --recurse-submodules https://github.com/flxos-labs/flxos.git
+                        <pre><code id="install-code-1" class="language-bash">git clone --recurse-submodules https://github.com/flxos-labs/flxos.git
 cd flxos</code></pre>
                     </div>
                 </section>
@@ -134,7 +137,7 @@ cd flxos</code></pre>
                             <div class="step-content">
                                 <h3>Set up ESP-IDF environment</h3>
                                 <div class="code-block-wrapper">
-                                    <pre><code>. $HOME/esp/esp-idf/export.sh</code></pre>
+                                    <pre><code class="language-bash">. $HOME/esp/esp-idf/export.sh</code></pre>
                                 </div>
                             </div>
                         </div>
@@ -144,7 +147,7 @@ cd flxos</code></pre>
                             <div class="step-content">
                                 <h3>List and Select Profile</h3>
                                 <div class="code-block-wrapper">
-                                    <pre><code>python flxos.py list
+                                    <pre><code class="language-bash">python flxos.py list
 python flxos.py select esp32s3-ili9341-xpt</code></pre>
                                 </div>
                             </div>
@@ -155,7 +158,7 @@ python flxos.py select esp32s3-ili9341-xpt</code></pre>
                             <div class="step-content">
                                 <h3>Build and flash</h3>
                                 <div class="code-block-wrapper">
-                                    <pre><code>python flxos.py build
+                                    <pre><code class="language-bash">python flxos.py build
 python flxos.py flash --port /dev/ttyUSB0</code></pre>
                                 </div>
                                 <p class="note"><i class="fas fa-info-circle"></i> Profiles are defined via YAML files
@@ -230,7 +233,7 @@ python flxos.py flash --port /dev/ttyUSB0</code></pre>
                     <h2><i class="fas fa-folder-tree"></i> Directory Structure</h2>
 
                     <div class="code-block-wrapper">
-                        <pre><code>flxos/
+                        <pre><code class="language-bash">flxos/
 ├── Applications/    # User-facing apps (calendar, files, text editor, settings, ...)
 ├── Apps/            # App framework and lifecycle management
 ├── Buildscripts/    # CMake modules, profile loader, HW code generator
@@ -292,7 +295,7 @@ python flxos.py flash --port /dev/ttyUSB0</code></pre>
 
                     <h3>Build Commands</h3>
                     <div class="code-block-wrapper">
-                        <pre><code># Standard build
+                        <pre><code class="language-bash"># Standard build
 python flxos.py build
 
 # Dev build with faster iterations
@@ -309,7 +312,7 @@ python flxos.py flash --port /dev/ttyUSB0</code></pre>
                     <p>FlxOS uses a YAML profile system instead of traditional menuconfig for platform definitions.</p>
 
                     <div class="code-block-wrapper">
-                        <pre><code>python flxos.py list
+                        <pre><code class="language-bash">python flxos.py list
 python flxos.py diff a b --json</code></pre>
                     </div>
 
@@ -331,7 +334,7 @@ python flxos.py diff a b --json</code></pre>
                         <div class="code-header">
                             <span>MyApp.hpp</span>
                         </div>
-                        <pre><code>#pragma once
+                        <pre><code class="language-cpp">#pragma once
 #include "App.hpp"
 
 class MyApp : public App {
@@ -412,23 +415,50 @@ public:
 
     <footer>
         <div class="container footer-container">
-            <div class="footer-brand">
-                <div class="logo-icon small"></div>
-                <span>FlxOS Labs</span>
+            <div class="footer-top">
+                <div class="footer-brand-col">
+                    <div class="footer-brand">
+                        <div class="logo-icon small"></div>
+                        <span>FlxOS Labs</span>
+                    </div>
+                    <p class="footer-tagline">Modular OS from ESP32 to Desktop.<br>Open source under AGPL-3.0.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Project</h4>
+                    <a href="/#features">Features</a>
+                    <a href="/#roadmap">Roadmap</a>
+                    <a href="/#get-started">Get Started</a>
+                    <a href="/docs">Documentation</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Community</h4>
+                    <a href="https://github.com/flxos-labs/flxos" target="_blank">GitHub</a>
+                    <a href="https://github.com/flxos-labs/flxos/issues" target="_blank">Issues</a>
+                    <a href="https://github.com/flxos-labs/flxos/blob/main/CONTRIBUTING.md"
+                        target="_blank">Contributing</a>
+                    <a href="https://github.com/flxos-labs/flxos/blob/main/LICENSE" target="_blank">License</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Resources</h4>
+                    <a href="/about">About</a>
+                    <a href="/docs#api">API Reference</a>
+                    <a href="/docs#troubleshooting">Troubleshooting</a>
+                </div>
             </div>
-            <div class="footer-links">
-                <a href="https://github.com/flxos-labs/flxos" target="_blank">GitHub</a>
-                <a href="https://github.com/flxos-labs/flxos/issues" target="_blank">Issues</a>
-                <a href="https://github.com/flxos-labs/flxos/blob/main/LICENSE" target="_blank">License</a>
-            </div>
-            <div class="copyright">
-                &copy; <span id="year"></span> FlxOS Labs. Released under AGPL-3.0 License.
+            <div class="footer-bottom">
+                <div class="copyright">
+                    &copy; <span id="year"></span> FlxOS Labs. Released under AGPL-3.0 License.
+                </div>
             </div>
         </div>
     </footer>
 
     <script src="/script.js"></script>
     <script src="/docs-script.js"></script>
+    <!-- Prism.js for syntax highlighting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-cpp.min.js" defer></script>
 </body>
 
 </html>
