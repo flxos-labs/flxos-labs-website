@@ -181,6 +181,7 @@
 /* Main Content */
 .docs-content {
     max-width: 800px;
+    min-width: 0;
 }
 
 .docs-content h1 {
@@ -269,6 +270,7 @@
 
 .step-content {
     flex: 1;
+    min-width: 0;
 }
 
 .step-content h3 {
