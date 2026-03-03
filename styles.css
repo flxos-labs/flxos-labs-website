@@ -436,6 +436,7 @@ ul {
     position: relative;
     z-index: 10;
     perspective: 1000px;
+    min-width: 0;
 }
 
 .code-window {
@@ -1151,16 +1152,19 @@ footer {
     .code-window {
         transform: none;
         font-size: 0.85rem;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
     }
 
     .window-content {
         padding: 16px;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
+        overflow-x: hidden;
     }
 
     .code-line {
-        white-space: nowrap;
+        white-space: pre-wrap;
+        word-break: break-all;
         font-size: 0.8rem;
     }
 }
