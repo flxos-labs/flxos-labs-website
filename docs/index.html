@@ -65,9 +65,18 @@
     </nav>
 
     <main class="docs-page">
+        <!-- Mobile Sidebar Toggle -->
+        <button id="mobileSidebarToggle" class="mobile-sidebar-toggle" aria-label="Toggle documentation menu">
+            <i class="fas fa-list-ul"></i>
+            <span>Menu</span>
+        </button>
+
+        <!-- Sidebar Backdrop -->
+        <div id="sidebarBackdrop" class="sidebar-backdrop"></div>
+
         <div class="container docs-container">
             <!-- Sidebar Navigation -->
-            <aside class="docs-sidebar">
+            <aside class="docs-sidebar" id="docsSidebar">
                 <div class="search-box">
                     <i class="fas fa-search"></i>
                     <input type="text" id="docSearch" placeholder="Search documentation..." />
