@@ -28,6 +28,15 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
+        searchInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && window.innerWidth <= 1024) {
+                searchInput.blur();
+                if (docsSidebar && docsSidebar.classList.contains('active')) {
+                    toggleSidebar();
+                }
+            }
+        });
+
         searchInput.addEventListener('input', debounce((e) => {
             const query = e.target.value.toLowerCase().trim();
 
@@ -91,6 +100,37 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (!show && noResultsMsg) {
             noResultsMsg.remove();
         }
+    }
+
+    // Mobile Sidebar Toggle Logic
+    const mobileSidebarToggle = document.getElementById('mobileSidebarToggle');
+    const docsSidebar = document.getElementById('docsSidebar');
+    const sidebarBackdrop = document.getElementById('sidebarBackdrop');
+
+    if (mobileSidebarToggle && docsSidebar && sidebarBackdrop) {
+        function toggleSidebar() {
+            const isActive = docsSidebar.classList.toggle('active');
+            sidebarBackdrop.classList.toggle('active', isActive);
+            mobileSidebarToggle.innerHTML = isActive ? 
+                '<i class="fas fa-times"></i><span>Close</span>' : 
+                '<i class="fas fa-list-ul"></i><span>Menu</span>';
+            
+            // Prevent scrolling on body when sidebar is open
+            document.body.style.overflow = isActive ? 'hidden' : '';
+        }
+
+        mobileSidebarToggle.addEventListener('click', toggleSidebar);
+        sidebarBackdrop.addEventListener('click', toggleSidebar);
+
+        // Close sidebar when clicking links (mobile)
+        const sidebarLinks = docsSidebar.querySelectorAll('ul li a');
+        sidebarLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 1024) {
+                    toggleSidebar();
+                }
+            });
+        });
     }
 
     // Copy functionality for all code blocks
