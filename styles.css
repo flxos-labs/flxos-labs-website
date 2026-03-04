@@ -809,6 +809,7 @@ ul {
     border-radius: var(--radius-md);
     border: 1px solid var(--border);
     overflow: hidden;
+    min-width: 0;
 }
 
 .code-header {

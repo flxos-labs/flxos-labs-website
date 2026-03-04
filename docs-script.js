@@ -5,6 +5,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchInput = document.getElementById('docSearch');
     const clearBtn = document.getElementById('clearSearch');
     const docSections = document.querySelectorAll('.doc-section');
+    const docsContent = document.querySelector('.docs-content');
+
+    // Build search index from all doc sections
+    const searchIndex = buildSearchIndex();
 
     if (searchInput) {
         // Debounce function for search performance
@@ -28,17 +32,47 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
+        searchInput.addEventListener('keydown', (e) => {
+            // Navigate results with Arrow keys
+            if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+                e.preventDefault();
+                navigateResults(e.key === 'ArrowDown' ? 1 : -1);
+            }
+
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                // Jump to the first (or currently highlighted) visible section
+                const activeResult = document.querySelector('.search-result-active');
+                if (activeResult) {
+                    const sectionId = activeResult.getAttribute('data-section');
+                    jumpToSection(sectionId);
+                } else {
+                    const firstVisible = document.querySelector('.doc-section:not([style*="display: none"])');
+                    if (firstVisible) {
+                        jumpToSection(firstVisible.id);
+                    }
+                }
+
+                if (window.innerWidth <= 1024) {
+                    searchInput.blur();
+                    if (docsSidebar && docsSidebar.classList.contains('active')) {
+                        toggleSidebar();
+                    }
+                }
+            }
+        });
+
         searchInput.addEventListener('input', debounce((e) => {
             const query = e.target.value.toLowerCase().trim();
 
             if (query) {
                 clearBtn.style.display = 'block';
-                filterSections(query);
+                performSearch(query);
             } else {
                 clearBtn.style.display = 'none';
                 clearSearch();
             }
-        }, 150)); // 150ms debounce delay
+        }, 150));
 
         if (clearBtn) {
             clearBtn.addEventListener('click', () => {
@@ -50,47 +84,373 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function filterSections(query) {
-        let hasResults = false;
-
+    // Build a search index with section id, title, and all text chunks
+    function buildSearchIndex() {
+        const index = [];
         docSections.forEach(section => {
             const heading = section.querySelector('h2');
-            const content = section.textContent.toLowerCase();
+            const headingText = heading ? heading.textContent.trim() : '';
+            const subheadings = Array.from(section.querySelectorAll('h3')).map(h => h.textContent.trim());
+            const codeBlocks = Array.from(section.querySelectorAll('code')).map(c => c.textContent.trim());
+            const paragraphs = Array.from(section.querySelectorAll('p')).map(p => p.textContent.trim());
+            const listItems = Array.from(section.querySelectorAll('li')).map(li => li.textContent.trim());
 
-            if (content.includes(query)) {
-                section.style.display = 'block';
-                section.classList.add('search-highlight');
-                hasResults = true;
-            } else {
-                section.style.display = 'none';
-                section.classList.remove('search-highlight');
+            index.push({
+                id: section.id,
+                title: headingText,
+                subheadings,
+                content: [...paragraphs, ...listItems].join(' '),
+                code: codeBlocks.join(' '),
+                fullText: section.textContent.toLowerCase()
+            });
+        });
+        return index;
+    }
+
+    function performSearch(query) {
+        const results = [];
+        const queryWords = query.split(/\s+/).filter(w => w.length > 0);
+
+        searchIndex.forEach(entry => {
+            // Score-based matching
+            let score = 0;
+            const lowerTitle = entry.title.toLowerCase();
+            const lowerContent = entry.content.toLowerCase();
+            const lowerCode = entry.code.toLowerCase();
+
+            queryWords.forEach(word => {
+                // Title matches score highest
+                if (lowerTitle.includes(word)) score += 10;
+                // Subheading matches
+                entry.subheadings.forEach(sh => {
+                    if (sh.toLowerCase().includes(word)) score += 5;
+                });
+                // Code matches
+                if (lowerCode.includes(word)) score += 3;
+                // Content matches
+                if (lowerContent.includes(word)) score += 1;
+            });
+
+            if (score > 0 || entry.fullText.includes(query)) {
+                results.push({ ...entry, score: score || 0.5 });
             }
         });
 
-        // Show "no results" message if needed
-        showNoResults(!hasResults);
+        // Sort by relevance score
+        results.sort((a, b) => b.score - a.score);
+
+        // Update section visibility
+        docSections.forEach(section => {
+            const match = results.find(r => r.id === section.id);
+            if (match) {
+                section.style.display = 'block';
+                highlightMatches(section, queryWords);
+            } else {
+                section.style.display = 'none';
+                removeHighlights(section);
+            }
+        });
+
+        // Update sidebar links
+        filterSidebarLinks(results.map(r => r.id));
+
+        // Show results count or no-results message
+        updateResultsStatus(results.length, query);
+
+        // Show inline results dropdown
+        showResultsDropdown(results, query);
+    }
+
+    function highlightMatches(section, queryWords) {
+        // Remove previous highlights
+        removeHighlights(section);
+
+        // Only highlight in text nodes within p, li, h3, h4, strong elements
+        const targets = section.querySelectorAll('p, li, h3, h4, strong, .step-content h3');
+        targets.forEach(el => {
+            // Skip elements inside code blocks
+            if (el.closest('pre') || el.closest('code') || el.closest('.code-block-wrapper')) return;
+
+            queryWords.forEach(word => {
+                if (word.length < 2) return; // Skip very short words
+                highlightTextInElement(el, word);
+            });
+        });
+    }
+
+    function highlightTextInElement(element, word) {
+        const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT, null, false);
+        const textNodes = [];
+
+        while (walker.nextNode()) {
+            textNodes.push(walker.currentNode);
+        }
+
+        textNodes.forEach(node => {
+            const text = node.textContent;
+            const lowerText = text.toLowerCase();
+            const index = lowerText.indexOf(word.toLowerCase());
+
+            if (index >= 0) {
+                const before = text.slice(0, index);
+                const matched = text.slice(index, index + word.length);
+                const after = text.slice(index + word.length);
+
+                const mark = document.createElement('mark');
+                mark.className = 'search-match';
+                mark.textContent = matched;
+
+                const frag = document.createDocumentFragment();
+                if (before) frag.appendChild(document.createTextNode(before));
+                frag.appendChild(mark);
+                if (after) frag.appendChild(document.createTextNode(after));
+
+                node.parentNode.replaceChild(frag, node);
+            }
+        });
+    }
+
+    function removeHighlights(section) {
+        const marks = section.querySelectorAll('mark.search-match');
+        marks.forEach(mark => {
+            const parent = mark.parentNode;
+            parent.replaceChild(document.createTextNode(mark.textContent), mark);
+            parent.normalize(); // Merge adjacent text nodes
+        });
+    }
+
+    function filterSidebarLinks(visibleIds) {
+        const allSidebarLinks = document.querySelectorAll('.sidebar-section ul li a');
+        const sidebarSections = document.querySelectorAll('.sidebar-section');
+
+        if (visibleIds.length === 0 || visibleIds.length === searchIndex.length) {
+            // Show all
+            allSidebarLinks.forEach(link => {
+                link.closest('li').style.display = '';
+                link.classList.remove('search-sidebar-match');
+            });
+            sidebarSections.forEach(s => s.style.display = '');
+            return;
+        }
+
+        allSidebarLinks.forEach(link => {
+            const href = link.getAttribute('href').replace('#', '');
+            const li = link.closest('li');
+            if (visibleIds.includes(href)) {
+                li.style.display = '';
+                link.classList.add('search-sidebar-match');
+            } else {
+                li.style.display = 'none';
+                link.classList.remove('search-sidebar-match');
+            }
+        });
+
+        // Hide sidebar sections with no visible links
+        sidebarSections.forEach(section => {
+            const visibleLinks = section.querySelectorAll('ul li:not([style*="display: none"])');
+            section.style.display = visibleLinks.length > 0 ? '' : 'none';
+        });
+    }
+
+    function showResultsDropdown(results, query) {
+        let dropdown = document.getElementById('searchResultsDropdown');
+
+        if (results.length === 0) {
+            if (dropdown) dropdown.remove();
+            return;
+        }
+
+        if (!dropdown) {
+            dropdown = document.createElement('div');
+            dropdown.id = 'searchResultsDropdown';
+            dropdown.className = 'search-results-dropdown';
+            searchInput.closest('.search-box').appendChild(dropdown);
+        }
+
+        dropdown.innerHTML = results.map((r, i) => {
+            // Get a snippet of matching content
+            const snippet = getSnippet(r, query);
+            return `
+                <button class="search-result-item ${i === 0 ? 'search-result-active' : ''}" 
+                        data-section="${r.id}" 
+                        tabindex="-1">
+                    <span class="search-result-title">${escapeHtml(r.title)}</span>
+                    <span class="search-result-snippet">${snippet}</span>
+                </button>
+            `;
+        }).join('');
+
+        // Click handlers
+        dropdown.querySelectorAll('.search-result-item').forEach(item => {
+            item.addEventListener('click', () => {
+                jumpToSection(item.getAttribute('data-section'));
+                dropdown.remove();
+            });
+        });
+    }
+
+    function getSnippet(entry, query) {
+        const text = entry.content;
+        const lower = text.toLowerCase();
+        const idx = lower.indexOf(query);
+
+        if (idx === -1) return '';
+
+        const start = Math.max(0, idx - 40);
+        const end = Math.min(text.length, idx + query.length + 60);
+        let snippet = text.slice(start, end).trim();
+
+        if (start > 0) snippet = '…' + snippet;
+        if (end < text.length) snippet = snippet + '…';
+
+        // Bold the matching part
+        const escaped = escapeHtml(snippet);
+        const escapedQuery = escapeHtml(query);
+        return escaped.replace(
+            new RegExp(`(${escapedQuery.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi'),
+            '<strong>$1</strong>'
+        );
+    }
+
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    let currentResultIndex = -1;
+
+    function navigateResults(direction) {
+        const items = document.querySelectorAll('.search-result-item');
+        if (items.length === 0) return;
+
+        items.forEach(item => item.classList.remove('search-result-active'));
+
+        currentResultIndex += direction;
+        if (currentResultIndex < 0) currentResultIndex = items.length - 1;
+        if (currentResultIndex >= items.length) currentResultIndex = 0;
+
+        items[currentResultIndex].classList.add('search-result-active');
+        items[currentResultIndex].scrollIntoView({ block: 'nearest' });
+    }
+
+    function jumpToSection(sectionId) {
+        const section = document.getElementById(sectionId);
+        if (!section) return;
+
+        const navHeight = document.querySelector('.navbar').offsetHeight;
+        const targetPosition = section.getBoundingClientRect().top + window.scrollY - navHeight - 20;
+
+        window.scrollTo({ top: targetPosition, behavior: 'smooth' });
+
+        // Brief flash effect
+        section.classList.add('search-jump-flash');
+        setTimeout(() => section.classList.remove('search-jump-flash'), 1000);
+    }
+
+    function updateResultsStatus(count, query) {
+        let statusEl = document.getElementById('searchStatus');
+        let noResultsMsg = document.getElementById('noResults');
+
+        if (count > 0) {
+            // Remove no-results if present
+            if (noResultsMsg) noResultsMsg.remove();
+
+            // Show match count
+            if (!statusEl) {
+                statusEl = document.createElement('div');
+                statusEl.id = 'searchStatus';
+                statusEl.className = 'search-status';
+                searchInput.closest('.search-box').appendChild(statusEl);
+            }
+            statusEl.textContent = `${count} section${count !== 1 ? 's' : ''} found`;
+            statusEl.style.display = 'block';
+        } else {
+            if (statusEl) statusEl.style.display = 'none';
+
+            // Show no results
+            if (!noResultsMsg) {
+                noResultsMsg = document.createElement('div');
+                noResultsMsg.id = 'noResults';
+                noResultsMsg.className = 'no-results';
+                docsContent.prepend(noResultsMsg);
+            }
+            noResultsMsg.innerHTML = `
+                <i class="fas fa-search"></i>
+                <p>No results for "<strong>${escapeHtml(query)}</strong>"</p>
+                <p class="no-results-hint">Try different keywords or <button class="no-results-clear" onclick="document.getElementById('clearSearch').click()">clear search</button></p>
+            `;
+        }
     }
 
     function clearSearch() {
+        // Show all sections
         docSections.forEach(section => {
             section.style.display = 'block';
-            section.classList.remove('search-highlight');
+            removeHighlights(section);
         });
-        showNoResults(false);
+
+        // Reset sidebar
+        filterSidebarLinks([]);
+
+        // Remove dropdowns and status
+        const dropdown = document.getElementById('searchResultsDropdown');
+        if (dropdown) dropdown.remove();
+        const statusEl = document.getElementById('searchStatus');
+        if (statusEl) statusEl.style.display = 'none';
+        const noResultsMsg = document.getElementById('noResults');
+        if (noResultsMsg) noResultsMsg.remove();
+
+        currentResultIndex = -1;
     }
 
-    function showNoResults(show) {
-        let noResultsMsg = document.getElementById('noResults');
-
-        if (show && !noResultsMsg) {
-            noResultsMsg = document.createElement('div');
-            noResultsMsg.id = 'noResults';
-            noResultsMsg.className = 'no-results';
-            noResultsMsg.innerHTML = '<i class="fas fa-search"></i><p>No results found. Try a different search term.</p>';
-            document.querySelector('.docs-content').prepend(noResultsMsg);
-        } else if (!show && noResultsMsg) {
-            noResultsMsg.remove();
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.search-box')) {
+            const dropdown = document.getElementById('searchResultsDropdown');
+            if (dropdown) dropdown.remove();
         }
+    });
+
+    // Re-open dropdown on focus
+    if (searchInput) {
+        searchInput.addEventListener('focus', () => {
+            const query = searchInput.value.toLowerCase().trim();
+            if (query) {
+                performSearch(query);
+            }
+        });
+    }
+
+    // Mobile Sidebar Toggle Logic
+    const mobileSidebarToggle = document.getElementById('mobileSidebarToggle');
+    const docsSidebar = document.getElementById('docsSidebar');
+    const sidebarBackdrop = document.getElementById('sidebarBackdrop');
+
+    if (mobileSidebarToggle && docsSidebar && sidebarBackdrop) {
+        function toggleSidebar() {
+            const isActive = docsSidebar.classList.toggle('active');
+            sidebarBackdrop.classList.toggle('active', isActive);
+            mobileSidebarToggle.innerHTML = isActive ?
+                '<i class="fas fa-times"></i><span>Close</span>' :
+                '<i class="fas fa-list-ul"></i><span>Menu</span>';
+
+            // Prevent scrolling on body when sidebar is open
+            document.body.style.overflow = isActive ? 'hidden' : '';
+        }
+
+        mobileSidebarToggle.addEventListener('click', toggleSidebar);
+        sidebarBackdrop.addEventListener('click', toggleSidebar);
+
+        // Close sidebar when clicking links (mobile)
+        const sidebarLinks = docsSidebar.querySelectorAll('ul li a');
+        sidebarLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 1024) {
+                    toggleSidebar();
+                }
+            });
+        });
     }
 
     // Copy functionality for all code blocks
@@ -131,21 +491,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Sidebar scroll spy (highlight active section)
     const sections = document.querySelectorAll('.doc-section');
-    const sidebarLinks = document.querySelectorAll('.docs-sidebar a');
+    const sidebarLinksAll = document.querySelectorAll('.docs-sidebar a');
 
     function highlightActiveSection() {
+        // Don't update scroll spy during search
+        if (searchInput && searchInput.value.trim()) return;
+
         let current = '';
 
         sections.forEach(section => {
             const sectionTop = section.offsetTop;
-            const sectionHeight = section.clientHeight;
 
             if (window.scrollY >= sectionTop - 150) {
                 current = section.getAttribute('id');
             }
         });
 
-        sidebarLinks.forEach(link => {
+        sidebarLinksAll.forEach(link => {
             link.classList.remove('active');
             if (link.getAttribute('href') === `#${current}`) {
                 link.classList.add('active');
@@ -154,19 +516,26 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Only add scroll listener if sidebar exists with passive option
-    if (sidebarLinks.length > 0) {
+    if (sidebarLinksAll.length > 0) {
         window.addEventListener('scroll', highlightActiveSection, { passive: true });
         highlightActiveSection(); // Run once on load
     }
 
     // Smooth scroll for sidebar links
-    sidebarLinks.forEach(link => {
+    sidebarLinksAll.forEach(link => {
         link.addEventListener('click', (e) => {
             e.preventDefault();
             const targetId = link.getAttribute('href');
             const targetSection = document.querySelector(targetId);
 
             if (targetSection) {
+                // Clear any active search first
+                if (searchInput && searchInput.value.trim()) {
+                    searchInput.value = '';
+                    if (clearBtn) clearBtn.style.display = 'none';
+                    clearSearch();
+                }
+
                 const navHeight = document.querySelector('.navbar').offsetHeight;
                 const targetPosition = targetSection.getBoundingClientRect().top + window.scrollY - navHeight - 20;
 

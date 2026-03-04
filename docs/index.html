@@ -4,11 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    
+
     <!-- Theme Color -->
     <meta name="theme-color" content="#6366f1" media="(prefers-color-scheme: dark)">
     <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
     <title>Documentation - FlxOS</title>
+    <link rel="canonical" href="https://flxos-labs.github.io/docs/">
     <meta name="description"
         content="Complete documentation for FlxOS - installation, configuration, API reference, and troubleshooting guides.">
 
@@ -30,8 +31,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <!-- Styles -->
-    <link rel="stylesheet" href="/styles.css">
-    <link rel="stylesheet" href="/docs-styles.css">
+    <link rel="stylesheet" href="/styles.css?v=2">
+    <link rel="stylesheet" href="/docs-styles.css?v=2">
 
     <!-- Prism.js Syntax Highlighting -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
@@ -57,20 +58,33 @@
                 <button id="themeToggle" aria-label="Toggle theme">
                     <i class="fas fa-sun"></i>
                 </button>
-                <a href="https://github.com/flxos-labs/flxos" target="_blank" class="github-link">
+                <a href="https://github.com/flxos-labs/flxos" target="_blank" rel="noopener noreferrer"
+                    class="github-link">
                     <i class="fab fa-github"></i> GitHub
                 </a>
             </div>
+            <button class="mobile-menu-btn" aria-label="Toggle menu">
+                <i class="fas fa-bars"></i>
+            </button>
         </div>
     </nav>
 
     <main class="docs-page">
+        <!-- Mobile Sidebar Toggle -->
+        <button id="mobileSidebarToggle" class="mobile-sidebar-toggle" aria-label="Toggle documentation menu">
+            <i class="fas fa-list-ul"></i>
+            <span>Menu</span>
+        </button>
+
+        <!-- Sidebar Backdrop -->
+        <div id="sidebarBackdrop" class="sidebar-backdrop"></div>
+
         <div class="container docs-container">
             <!-- Sidebar Navigation -->
-            <aside class="docs-sidebar">
+            <aside class="docs-sidebar" id="docsSidebar">
                 <div class="search-box">
                     <i class="fas fa-search"></i>
-                    <input type="text" id="docSearch" placeholder="Search documentation..." />
+                    <input type="text" id="docSearch" placeholder="Search docs... (press /)" />
                     <button id="clearSearch" class="clear-btn" style="display: none;">
                         <i class="fas fa-times"></i>
                     </button>
@@ -122,7 +136,7 @@
                 <!-- Installation -->
                 <section id="installation" class="doc-section">
                     <h2><i class="fas fa-download"></i> Installation</h2>
-                    <p>FlxOS requires ESP-IDF v5.x and a compatible ESP32 development board. Follow these steps to get
+                    <p>FlxOS requires ESP-IDF v5.5+ and a compatible ESP32 development board. Follow these steps to get
                         started.</p>
 
                     <div class="code-block-wrapper">
@@ -186,12 +200,12 @@ python flxos.py flash --port /dev/ttyUSB0</code></pre>
                     <div class="info-box">
                         <h4>Required Software</h4>
                         <ul>
-                            <li><strong>ESP-IDF v5.x</strong> - <a
+                            <li><strong>ESP-IDF v5.5+</strong> - <a
                                     href="https://docs.espressif.com/projects/esp-idf/en/latest/esp32/get-started/"
-                                    target="_blank">Installation Guide</a></li>
+                                    target="_blank" rel="noopener noreferrer">Installation Guide</a></li>
                             <li><strong>CMake 3.16+</strong> - Build system generator</li>
                             <li><strong>Ninja</strong> - Fast build tool</li>
-                            <li><strong>Python 3.8+</strong> - Required for ESP-IDF tools</li>
+                            <li><strong>Python 3.10+</strong> - Required for ESP-IDF tools</li>
                         </ul>
                     </div>
 
@@ -377,7 +391,8 @@ public:
                     </p>
 
                     <div class="api-links">
-                        <a href="https://github.com/flxos-labs/flxos/tree/main/Core" target="_blank" class="api-link">
+                        <a href="https://github.com/flxos-labs/flxos/tree/main/Core" target="_blank"
+                            rel="noopener noreferrer" class="api-link">
                             <i class="fab fa-github"></i>
                             <span>Browse Source Code</span>
                         </a>
@@ -414,7 +429,8 @@ public:
                     <div class="help-box">
                         <h4>Need More Help?</h4>
                         <p>Can't find what you're looking for? Check out these resources:</p>
-                        <a href="https://github.com/flxos-labs/flxos/issues" target="_blank" class="btn btn-secondary">
+                        <a href="https://github.com/flxos-labs/flxos/issues" target="_blank" rel="noopener noreferrer"
+                            class="btn btn-secondary">
                             <i class="fab fa-github"></i>
                             <span>Report an Issue</span>
                         </a>
@@ -443,11 +459,13 @@ public:
                 </div>
                 <div class="footer-col">
                     <h4>Community</h4>
-                    <a href="https://github.com/flxos-labs/flxos" target="_blank">GitHub</a>
-                    <a href="https://github.com/flxos-labs/flxos/issues" target="_blank">Issues</a>
-                    <a href="https://github.com/flxos-labs/flxos/blob/main/CONTRIBUTING.md"
-                        target="_blank">Contributing</a>
-                    <a href="https://github.com/flxos-labs/flxos/blob/main/LICENSE" target="_blank">License</a>
+                    <a href="https://github.com/flxos-labs/flxos" target="_blank" rel="noopener noreferrer">GitHub</a>
+                    <a href="https://github.com/flxos-labs/flxos/issues" target="_blank"
+                        rel="noopener noreferrer">Issues</a>
+                    <a href="https://github.com/flxos-labs/flxos/blob/main/CONTRIBUTING.md" target="_blank"
+                        rel="noopener noreferrer">Contributing</a>
+                    <a href="https://github.com/flxos-labs/flxos/blob/main/LICENSE" target="_blank"
+                        rel="noopener noreferrer">License</a>
                 </div>
                 <div class="footer-col">
                     <h4>Resources</h4>
@@ -458,19 +476,19 @@ public:
             </div>
             <div class="footer-bottom">
                 <div class="copyright">
-                    &copy; <span id="year"></span> FlxOS Labs. Released under AGPL-3.0 License.
+                    &copy; <span id="year">2026</span> FlxOS Labs. Released under AGPL-3.0 License.
                 </div>
             </div>
         </div>
     </footer>
 
-    <script src="/script.js"></script>
-    <script src="/docs-script.js"></script>
     <!-- Prism.js for syntax highlighting -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" defer></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js" defer></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js" defer></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-cpp.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-cpp.min.js"></script>
+    <script src="/script.js?v=2" defer></script>
+    <script src="/docs-script.js?v=2" defer></script>
 </body>
 
 </html>
