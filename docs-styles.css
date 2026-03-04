@@ -42,6 +42,7 @@
     backdrop-filter: blur(10px);
     /* Ensure minimum touch targets */
     min-height: 44px;
+    overflow: visible;
 }
 
 /* Search Box */
