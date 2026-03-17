@@ -1365,3 +1365,20 @@ footer {
         height: 44px;
     }
 }
+
+/* Hero Badges */
+.hero-badges {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.hero-badges .badge {
+    margin-bottom: 0;
+}
+
+.badge.secondary {
+    background: rgba(6, 182, 212, 0.1);
+    border: 1px solid rgba(6, 182, 212, 0.2);
+    color: var(--secondary);
+}
