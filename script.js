@@ -93,8 +93,25 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // GitHub Stats with caching and better fallback
+    // GitHub Stats and Release info
     fetchGitHubStats();
+    fetchLatestRelease();
+
+    async function fetchLatestRelease() {
+        try {
+            const response = await fetch('https://api.github.com/repos/flxos-labs/flxos/releases/latest');
+            if (response.ok) {
+                const data = await response.json();
+                const releaseEl = document.getElementById('latest-release');
+                if (releaseEl && data.tag_name) {
+                    releaseEl.textContent = `Latest: ${data.tag_name}`;
+                    releaseEl.style.display = 'inline-block';
+                }
+            }
+        } catch (error) {
+            console.warn('Failed to fetch latest release:', error);
+        }
+    }
 
     async function fetchGitHubStats(retries = 3) {
         // Try to load from cache first
