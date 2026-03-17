@@ -506,6 +506,26 @@ document.addEventListener('DOMContentLoaded', () => {
         particleObserver.observe(container);
     }
 
+    // Scroll to Top Functionality
+    const scrollToTopBtn = document.getElementById('scrollToTop');
+
+    if (scrollToTopBtn) {
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 500) {
+                scrollToTopBtn.classList.add('visible');
+            } else {
+                scrollToTopBtn.classList.remove('visible');
+            }
+        }, { passive: true });
+
+        scrollToTopBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    }
+
     // Add dynamic stylesheet for animations
     const styleSheet = document.createElement("style");
     styleSheet.innerText = `
