@@ -31,8 +31,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const icon = themeToggle.querySelector('i');
         if (theme === 'dark') {
             icon.className = 'fas fa-sun';
+            themeToggle.setAttribute('aria-label', 'Switch to light theme');
         } else {
             icon.className = 'fas fa-moon';
+            themeToggle.setAttribute('aria-label', 'Switch to dark theme');
         }
     }
 
