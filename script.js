@@ -525,6 +525,23 @@ document.addEventListener('DOMContentLoaded', () => {
         particleObserver.observe(container);
     }
 
+    // Newsletter Subscription
+    const newsletterForm = document.getElementById('newsletter-form');
+    const newsletterMessage = document.getElementById('newsletter-message');
+
+    if (newsletterForm && newsletterMessage) {
+        newsletterForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = newsletterForm.querySelector('input').value;
+            
+            // Mock API call
+            newsletterForm.style.display = 'none';
+            newsletterMessage.style.display = 'flex';
+            
+            console.log(`Subscribed: ${email}`);
+        });
+    }
+
     // Scroll to Top Functionality
     const scrollToTopBtn = document.getElementById('scrollToTop');
 
