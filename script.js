@@ -552,7 +552,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
             try {
                 // Simulate network latency (1.5s)
-                await new Promise(resolve => setTimeout(resolve, 1500));
+                const response = await fetch('/api/newsletter', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Subscription failed');
+                }
 
                 // Final UI state
                 newsletterForm.style.display = 'none';
