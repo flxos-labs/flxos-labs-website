@@ -551,17 +551,23 @@ document.addEventListener('DOMContentLoaded', () => {
             input.disabled = true;
 
             try {
-                // Simulate network latency (1.5s)
-                const response = await fetch('/api/newsletter', {
+                // Formspree Form ID: xqeynadn
+                const FORMSPREE_ID = 'xqeynadn';
+
+                const response = await fetch(`https://formspree.io/f/${FORMSPREE_ID}`, {
                     method: 'POST',
                     headers: {
+                        'Accept': 'application/json',
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ email })
+                    body: JSON.stringify({
+                        email: email,
+                        _subject: 'New Newsletter Subscription'
+                    })
                 });
 
                 if (!response.ok) {
-                    throw new Error('Subscription failed');
+                    throw new Error('Subscription failed or Form ID is invalid');
                 }
 
                 // Final UI state
