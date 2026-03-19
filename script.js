@@ -530,15 +530,58 @@ document.addEventListener('DOMContentLoaded', () => {
     const newsletterMessage = document.getElementById('newsletter-message');
 
     if (newsletterForm && newsletterMessage) {
-        newsletterForm.addEventListener('submit', (e) => {
+        newsletterForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const email = newsletterForm.querySelector('input').value;
-            
-            // Mock API call
-            newsletterForm.style.display = 'none';
-            newsletterMessage.style.display = 'flex';
-            
-            console.log(`Subscribed: ${email}`);
+            const input = newsletterForm.querySelector('input');
+            const button = newsletterForm.querySelector('button');
+            const email = input.value.trim();
+
+            // Basic email validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                input.style.borderColor = '#ef4444';
+                setTimeout(() => input.style.borderColor = '', 2000);
+                return;
+            }
+
+            // Show loading state
+            const originalButtonText = button.innerHTML;
+            button.disabled = true;
+            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Subscribing...';
+            input.disabled = true;
+
+            try {
+                // Formspree Form ID: xqeynadn
+                const FORMSPREE_ID = 'xqeynadn';
+
+                const response = await fetch(`https://formspree.io/f/${FORMSPREE_ID}`, {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        _subject: 'New Newsletter Subscription'
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Subscription failed or Form ID is invalid');
+                }
+
+                // Final UI state
+                newsletterForm.style.display = 'none';
+                newsletterMessage.style.display = 'flex';
+                newsletterMessage.classList.add('animate-in');
+
+                console.log('Successfully subscribed');
+            } catch (error) {
+                console.error('Subscription failed:', error);
+                button.disabled = false;
+                button.innerHTML = originalButtonText;
+                input.disabled = false;
+            }
         });
     }
 
