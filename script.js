@@ -559,7 +559,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 newsletterMessage.style.display = 'flex';
                 newsletterMessage.classList.add('animate-in');
 
-                console.log(`Successfully subscribed: ${email}`);
+                console.log('Successfully subscribed');
             } catch (error) {
                 console.error('Subscription failed:', error);
                 button.disabled = false;
