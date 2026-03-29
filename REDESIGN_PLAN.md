@@ -3,6 +3,7 @@
 > **Approach:** Phase-by-phase implementation with review after each phase.
 > **Primary Theme:** Dark mode (gradients + glow effects look 10× better).
 > **Execution:** All design decisions are locked in.
+> **Git workflow:** Commit phases directly to `develop`. Deploy via `develop` → `main` merge.
 
 ---
 

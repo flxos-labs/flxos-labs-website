@@ -1,22 +1,19 @@
 # FlxOS Website — Redesign Tracker
 
 > Tracks implementation progress for [REDESIGN_PLAN.md](./REDESIGN_PLAN.md).
-> Updated after each PR is merged.
+> **Git workflow:** Commit directly to `develop`. Deploy via `develop` → `main`.
 
 ---
 
 ## Legend
 - `[ ]` Not started
 - `[/]` In progress
-- `[x]` Complete — merged to `develop`
-- `[~]` Complete — PR open, pending review
-- `[!]` Blocked / issue found
+- `[x]` Complete — in `develop`
+- `[!]` Issue noted / blocked
 
 ---
 
 ## Phase 1 — Critical Bug Fixes ✅
-
-**Branch:** `phase-1/critical-fixes` → **PR #11** → merged to `develop`
 
 | # | Task | Status |
 |---|------|--------|
@@ -25,28 +22,17 @@
 | 1.3 | `about/index.html` — `defer` on `<script src="/script.js">` | [x] |
 | 1.4 | `about/index.html` — OG + Twitter Card meta tags | [x] |
 | 1.5 | `docs/index.html` — OG + Twitter Card meta tags | [x] |
-| 1.6 | `404.html` — mobile hamburger + theme toggle (DOM) | [x] |
+| 1.6 | `404.html` — mobile hamburger + theme toggle (DOM + handlers) | [x] |
 | 1.7 | `styles.css` — `.logo-icon.small` CSS rule | [x] |
 | 1.8 | `styles.css` — `.newsletter-error` styling | [x] |
 | 1.9 | `index.html` — 4 missing screenshots added (now 16 total) | [x] |
 | 1.10 | `index.html` — newsletter error message element | [x] |
 | 1.11 | `script.js` — newsletter failure shows error with 5s dismiss | [x] |
-
-### Phase 1 Hotfix — Code Review Violations ✅
-
-**Branch:** `fix/phase-1-review-violations` → **PR #14** → merged to `develop`
-
-| # | Task | Status |
-|---|------|--------|
-| H1 | `404.html` — theme toggle click handler (was non-functional) | [x] |
-| H2 | `404.html` — mobile menu toggle logic (was non-functional) | [x] |
-| H3 | `og-image.png` dimensions — file exists (640×640), non-standard size | [!] noted, future pass |
+| 1.12 | `og-image.png` — file exists but is 640×640 (non-standard) | [!] fix in Phase 6 |
 
 ---
 
 ## Phase 2 — Hero Section Overhaul ✅
-
-**Branch:** `phase-2/hero-overhaul` → **PR #12** → merged to `develop`
 
 | # | Task | Status |
 |---|------|--------|
@@ -62,15 +48,13 @@
 
 ---
 
-## Phase 3 — Section-by-Section Overhaul 🔨
-
-**Branch:** `phase-3/section-overhaul` → in progress
+## Phase 3 — Section-by-Section Overhaul
 
 | # | Task | Status |
 |---|------|--------|
 | 3A | Features → Apple-style bento grid (mixed-size cards) | [ ] |
 | 3B | Gallery → device-framed horizontal carousel (all 16 screenshots) | [ ] |
-| 3C | Tech Stack → real SVG logo cloud with floating/constellation animation | [ ] |
+| 3C | Tech Stack → real SVG logo cloud with floating animation | [ ] |
 | 3D | Roadmap → horizontal animated timeline with progress indicators | [ ] |
 | 3E | Community → GitHub contributor avatars + star count glow | [ ] |
 | 3F | Get Started → animated step-by-step with scroll-triggered replay | [ ] |
@@ -79,8 +63,6 @@
 ---
 
 ## Phase 4 — Motion & Micro-Interaction System
-
-**Branch:** `phase-4/motion-system` → not started
 
 | # | Task | Status |
 |---|------|--------|
@@ -95,8 +77,6 @@
 
 ## Phase 5 — Mobile Excellence
 
-**Branch:** `phase-5/mobile-excellence` → not started
-
 | # | Task | Status |
 |---|------|--------|
 | 5A | Swipeable gallery carousel with touch events | [ ] |
@@ -110,8 +90,6 @@
 
 ## Phase 6 — SEO, Performance & Polish
 
-**Branch:** `phase-6/seo-performance` → not started
-
 | # | Task | Status |
 |---|------|--------|
 | 6A | JSON-LD `SoftwareApplication` schema on homepage | [ ] |
@@ -119,27 +97,13 @@
 | 6C | JSON-LD `WebSite` + `SearchAction` schema | [ ] |
 | 6D | Convert screenshots to WebP (40-60% size savings) | [ ] |
 | 6E | `fetchpriority="high"` on hero image | [x] done in Phase 2 |
-| 6F | Cache-busting `?v=3` standardized across all pages | [ ] |
+| 6F | Cache-busting `?v=` standardized across all pages | [ ] |
 | 6G | `og-image.png` resized to 1200×630 standard | [ ] |
 | 6H | Docs + About pages match homepage polish level | [ ] |
 
 ---
 
-## Open Pull Requests
-
-*None — all current work is merged.*
-
-## Merged Pull Requests
-
-| PR | Branch | Description |
-|----|--------|-------------|
-| #14 | `fix/phase-1-review-violations` | 404 page — functional theme toggle + mobile menu |
-| #12 | `phase-2/hero-overhaul` | Hero overhaul — gradient mesh, device mockup, spring counters |
-| #11 | `phase-1/critical-fixes` | Phase 1 — critical bug fixes & foundation improvements |
-
----
-
 ## Notes
-- Deploy triggers on `develop` → `main` merge via GitHub Actions (Jekyll)
-- Always branch from `develop`, never directly from `main`
-- Branch naming: `phase-N/description` or `fix/description`
+- All work commits directly to `develop`
+- Deploy: merge `develop` → `main` triggers GitHub Actions (Jekyll → GitHub Pages)
+- Use `fix/description` branches only for isolated bug fixes that need code review
