@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ── Device Mockup Parallax ───────────────────────────────────────────
     const heroDevice = document.getElementById('hero-device');
-    if (heroDevice && window.matchMedia('(pointer: fine)').matches) {
+    if (heroDevice && window.matchMedia('(pointer: fine)').matches && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
         const deviceFrame = heroDevice.querySelector('.device-frame');
         document.addEventListener('mousemove', (e) => {
             const { innerWidth: W, innerHeight: H } = window;
