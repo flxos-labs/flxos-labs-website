@@ -581,6 +581,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 button.disabled = false;
                 button.innerHTML = originalButtonText;
                 input.disabled = false;
+
+                // Show visible error message
+                const errorEl = document.getElementById('newsletter-error');
+                if (errorEl) {
+                    errorEl.style.display = 'flex';
+                    setTimeout(() => { errorEl.style.display = 'none'; }, 5000);
+                }
             }
         });
     }
