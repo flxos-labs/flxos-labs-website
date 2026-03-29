@@ -1862,3 +1862,1053 @@ footer {
     .lightbox-prev { left: 10px; }
     .lightbox-next { right: 10px; }
 }
+
+/* =========================================
+   Phase 3A — Bento Grid Features
+   ========================================= */
+.bento-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-auto-rows: auto;
+    gap: 20px;
+}
+
+.bento-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 32px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.bento-card:hover {
+    border-color: rgba(99, 102, 241, 0.4);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25),
+                0 0 0 1px rgba(99, 102, 241, 0.1);
+    transform: translateY(-4px);
+}
+
+/* Large card spans 2 columns */
+.bento-large {
+    grid-column: span 2;
+}
+
+/* Medium spans 1 column — inherits base .bento-card styles */
+
+/* Small spans 1 column */
+.bento-small {
+    padding: 28px;
+}
+
+.bento-accent {
+    background: linear-gradient(135deg, rgba(99,102,241,0.08) 0%, rgba(139,92,246,0.08) 100%);
+    border-color: rgba(99, 102, 241, 0.2);
+}
+
+.bento-future {
+    background: linear-gradient(135deg, rgba(6,182,212,0.06) 0%, rgba(99,102,241,0.08) 100%);
+}
+
+.bento-card-bg {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 80% 20%, rgba(99,102,241,0.08) 0%, transparent 60%);
+    pointer-events: none;
+}
+
+.bento-glow {
+    position: absolute;
+    bottom: -30px;
+    right: -30px;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(99,102,241,0.15) 0%, transparent 70%);
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+    opacity: 0;
+}
+
+.bento-card:hover .bento-glow { opacity: 1; }
+
+.bento-card h3 {
+    font-size: 1.3rem;
+    color: var(--text-highlight);
+    margin-bottom: 12px;
+    margin-top: 16px;
+}
+
+.bento-card p { font-size: 0.95rem; line-height: 1.6; }
+
+/* Preview image inside large card */
+.bento-preview {
+    margin-top: 24px;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    background: #000;
+    max-height: 160px;
+}
+
+.bento-preview img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    object-position: top;
+    image-rendering: pixelated;
+    display: block;
+}
+
+/* Tag chips */
+.bento-tag-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 16px;
+}
+
+.bento-tag {
+    background: rgba(99, 102, 241, 0.12);
+    border: 1px solid rgba(99, 102, 241, 0.2);
+    color: var(--primary);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+/* Layer stack visual */
+.bento-layers {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-top: 16px;
+}
+
+.bento-layers .layer {
+    background: rgba(99, 102, 241, 0.08);
+    border: 1px solid rgba(99, 102, 241, 0.15);
+    border-radius: 6px;
+    padding: 6px 14px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--primary);
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.bento-card:hover .bento-layers .layer {
+    background: rgba(99, 102, 241, 0.15);
+}
+
+.coming-soon-badge {
+    background: rgba(6, 182, 212, 0.15);
+    border: 1px solid rgba(6, 182, 212, 0.3);
+    color: var(--secondary);
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    vertical-align: middle;
+}
+
+@media (max-width: 1024px) {
+    .bento-grid { grid-template-columns: 1fr 1fr; }
+    .bento-large { grid-column: span 2; }
+}
+
+@media (max-width: 640px) {
+    .bento-grid { grid-template-columns: 1fr; }
+    .bento-large { grid-column: span 1; }
+}
+
+/* =========================================
+   Phase 3B — Gallery Carousel
+   ========================================= */
+.screenshots {
+    padding: 120px 0 60px;
+    background: var(--bg-dark);
+    overflow: hidden;
+}
+
+/* Featured hero shot */
+.gallery-featured {
+    display: flex;
+    align-items: center;
+    gap: 60px;
+    max-width: 1100px;
+    margin: 60px auto;
+    padding: 0 24px;
+}
+
+.gallery-featured-device {
+    position: relative;
+    flex-shrink: 0;
+}
+
+.gf-frame {
+    background: linear-gradient(145deg, #1e2130, #0d1117);
+    border-radius: 16px;
+    border: 2px solid rgba(99, 102, 241, 0.3);
+    padding: 8px;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.6), 0 0 40px rgba(99,102,241,0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+.gf-frame img {
+    width: 320px;
+    height: auto;
+    max-height: 240px;
+    object-fit: cover;
+    object-position: top;
+    display: block;
+    border-radius: 10px;
+    image-rendering: pixelated;
+}
+
+.gf-glare {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.07) 0%, transparent 55%);
+    border-radius: 10px;
+    pointer-events: none;
+}
+
+.gf-glow {
+    position: absolute;
+    inset: -30px;
+    background: radial-gradient(ellipse at center, rgba(99,102,241,0.3) 0%, transparent 65%);
+    z-index: -1;
+    border-radius: 50%;
+    animation: device-glow-pulse 3s ease-in-out infinite;
+}
+
+.gallery-featured-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(99, 102, 241, 0.12);
+    border: 1px solid rgba(99, 102, 241, 0.25);
+    color: var(--primary);
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    margin-bottom: 16px;
+}
+
+.gallery-featured-title {
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    color: var(--text-highlight);
+    margin-bottom: 16px;
+    line-height: 1.3;
+}
+
+.gallery-featured-text p {
+    font-size: 1.05rem;
+    line-height: 1.8;
+}
+
+/* Horizontal Carousel */
+.carousel-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 70px;
+}
+
+.carousel-track-outer {
+    overflow: hidden;
+    flex: 1;
+    border-radius: var(--radius-md);
+}
+
+.carousel-track {
+    display: flex;
+    gap: 20px;
+    transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+    will-change: transform;
+}
+
+.carousel-slide {
+    flex: 0 0 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+}
+
+.slide-device {
+    background: linear-gradient(145deg, #1a1f2e, #0d1117);
+    border-radius: 12px;
+    border: 1px solid rgba(99, 102, 241, 0.25);
+    padding: 6px;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    overflow: hidden;
+    line-height: 0;
+}
+
+.slide-device img {
+    width: 188px;
+    height: 141px;
+    object-fit: cover;
+    object-position: top;
+    border-radius: 8px;
+    image-rendering: pixelated;
+    display: block;
+}
+
+.carousel-slide:hover .slide-device {
+    border-color: rgba(99, 102, 241, 0.5);
+    box-shadow: 0 16px 40px rgba(0,0,0,0.5), 0 0 20px rgba(99,102,241,0.2);
+    transform: translateY(-4px) scale(1.02);
+}
+
+.slide-label {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    font-weight: 500;
+    text-align: center;
+    transition: color 0.3s ease;
+}
+
+.carousel-slide:hover .slide-label {
+    color: var(--text-highlight);
+}
+
+.carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 52px;
+    height: 52px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    color: var(--text-main);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    z-index: 10;
+    transition: all 0.3s ease;
+}
+
+.carousel-btn:hover {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: white;
+    box-shadow: 0 8px 20px rgba(99,102,241,0.4);
+}
+
+.carousel-btn-prev { left: 5px; }
+.carousel-btn-next { right: 5px; }
+
+/* Pagination dots */
+.carousel-dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 32px;
+    flex-wrap: wrap;
+    padding: 0 24px;
+}
+
+.carousel-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--border);
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.carousel-dot.active {
+    background: var(--primary);
+    width: 24px;
+    border-radius: 4px;
+    box-shadow: 0 0 8px rgba(99,102,241,0.5);
+}
+
+@media (max-width: 768px) {
+    .gallery-featured {
+        flex-direction: column;
+        text-align: center;
+        margin: 40px auto;
+        gap: 32px;
+    }
+    .gf-frame img { width: 240px; }
+    .carousel-wrapper { padding: 0 52px; }
+    .carousel-slide { flex: 0 0 150px; }
+    .slide-device img { width: 138px; height: 104px; }
+}
+
+/* =========================================
+   Phase 3C — Tech Logo Cloud
+   ========================================= */
+.tech-logo-cloud {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 48px;
+    margin-top: 64px;
+}
+
+.tech-logo-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    position: relative;
+    cursor: default;
+    animation: tech-float 6s ease-in-out infinite;
+}
+
+.tech-logo-item:nth-child(1) { animation-delay: 0s; animation-duration: 6s; }
+.tech-logo-item:nth-child(2) { animation-delay: -1.2s; animation-duration: 7s; }
+.tech-logo-item:nth-child(3) { animation-delay: -2.4s; animation-duration: 5.5s; }
+.tech-logo-item:nth-child(4) { animation-delay: -3.6s; animation-duration: 6.5s; }
+.tech-logo-item:nth-child(5) { animation-delay: -4.8s; animation-duration: 5s; }
+
+@keyframes tech-float {
+    0%, 100% { transform: translateY(0px); }
+    50%       { transform: translateY(-10px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .tech-logo-item { animation: none; }
+}
+
+.tech-logo-circle {
+    width: 80px;
+    height: 80px;
+    border-radius: 18px;
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+    overflow: hidden;
+}
+
+.tech-logo-circle svg {
+    width: 56px;
+    height: 56px;
+}
+
+.tech-logo-item:hover .tech-logo-circle {
+    transform: scale(1.12);
+    border-color: rgba(99, 102, 241, 0.4);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.3), 0 0 20px rgba(99,102,241,0.2);
+}
+
+.tech-logo-item span {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    transition: color 0.3s ease;
+}
+
+.tech-logo-item:hover span { color: var(--text-highlight); }
+
+.tech-tooltip {
+    position: absolute;
+    bottom: calc(100% + 12px);
+    left: 50%;
+    transform: translateX(-50%) translateY(8px);
+    background: var(--bg-darker);
+    border: 1px solid var(--border);
+    color: var(--text-main);
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    max-width: 260px;
+    white-space: normal;
+    text-align: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s ease;
+    z-index: 10;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+}
+
+.tech-logo-item:hover .tech-tooltip {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+@media (max-width: 640px) {
+    .tech-logo-cloud { gap: 28px; }
+    .tech-logo-circle { width: 64px; height: 64px; border-radius: 14px; }
+    .tech-logo-circle svg { width: 44px; height: 44px; }
+}
+
+/* =========================================
+   Phase 3D — Horizontal Roadmap Timeline
+   ========================================= */
+.roadmap {
+    padding: 120px 0;
+    background: var(--bg-darker);
+    overflow: hidden;
+}
+
+.roadmap-h-timeline {
+    position: relative;
+    margin-top: 80px;
+    padding: 0 20px;
+}
+
+.roadmap-h-track {
+    position: absolute;
+    top: 28px;
+    left: 10%;
+    right: 10%;
+    height: 2px;
+    background: linear-gradient(to right, var(--primary), rgba(99,102,241,0.15));
+}
+
+.roadmap-h-items {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    position: relative;
+}
+
+.roadmap-h-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.roadmap-h-marker {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    z-index: 2;
+    position: relative;
+    transition: all 0.3s ease;
+    margin-bottom: 24px;
+    flex-shrink: 0;
+}
+
+.roadmap-h-item.completed .roadmap-h-marker {
+    background: var(--primary);
+    color: white;
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2),
+                0 0 20px rgba(99, 102, 241, 0.4);
+}
+
+.roadmap-h-pulse {
+    position: absolute;
+    inset: -6px;
+    border-radius: 50%;
+    border: 2px solid var(--primary);
+    animation: pulse-ring 2s ease-out infinite;
+    opacity: 0;
+}
+
+@keyframes pulse-ring {
+    0% { transform: scale(0.9); opacity: 0.6; }
+    100% { transform: scale(1.4); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .roadmap-h-pulse { animation: none; }
+}
+
+.roadmap-h-item.upcoming .roadmap-h-marker {
+    background: var(--bg-card);
+    border: 2px solid var(--border);
+    color: var(--text-muted);
+}
+
+.roadmap-h-item.upcoming:hover .roadmap-h-marker {
+    border-color: var(--primary);
+    color: var(--primary);
+    transform: scale(1.1);
+}
+
+.roadmap-h-card {
+    padding: 20px 16px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+.roadmap-h-item.completed .roadmap-h-card {
+    border-color: rgba(99, 102, 241, 0.3);
+    background: rgba(99, 102, 241, 0.05);
+}
+
+.roadmap-h-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.2);
+}
+
+.roadmap-h-version {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--primary);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+
+.roadmap-h-card h3 {
+    font-size: 1.05rem;
+    color: var(--text-highlight);
+    margin-bottom: 8px;
+}
+
+.roadmap-h-card p { font-size: 0.88rem; line-height: 1.6; }
+
+@media (max-width: 900px) {
+    .roadmap-h-items { grid-template-columns: repeat(2, 1fr); }
+    .roadmap-h-track { display: none; }
+}
+
+@media (max-width: 560px) {
+    .roadmap-h-items { grid-template-columns: 1fr; }
+    .roadmap-h-item { align-items: flex-start; text-align: left; flex-direction: row; gap: 16px; }
+    .roadmap-h-marker { margin-bottom: 0; flex-shrink: 0; }
+}
+
+/* =========================================
+   Phase 3E — Community Social Proof
+   ========================================= */
+.community-hero {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 60px;
+    margin: 0 auto 60px;
+    padding: 40px 48px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    max-width: 800px;
+    position: relative;
+    overflow: hidden;
+}
+
+.community-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 30% 50%, rgba(99,102,241,0.08) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.community-star-glow {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: relative;
+    z-index: 1;
+}
+
+.community-star-glow .fas.fa-star {
+    font-size: 2.5rem;
+    color: #fbbf24;
+    filter: drop-shadow(0 0 12px rgba(251, 191, 36, 0.6));
+    animation: star-pulse 2.5s ease-in-out infinite;
+}
+
+@keyframes star-pulse {
+    0%, 100% { filter: drop-shadow(0 0 8px rgba(251, 191, 36, 0.5)); }
+    50%       { filter: drop-shadow(0 0 20px rgba(251, 191, 36, 0.9)); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .community-star-glow .fas.fa-star { animation: none; }
+}
+
+.community-star-count {
+    font-size: 3rem;
+    font-weight: 800;
+    color: var(--text-highlight);
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+}
+
+.community-star-label {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.community-contributors {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    position: relative;
+    z-index: 1;
+}
+
+.contributor-label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+}
+
+.contributor-avatars {
+    display: flex;
+    align-items: center;
+}
+
+.contributor-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid var(--bg-dark);
+    margin-left: -10px;
+    overflow: hidden;
+    background: var(--bg-card);
+    transition: transform 0.3s ease;
+    flex-shrink: 0;
+}
+
+.contributor-avatar:first-child { margin-left: 0; }
+.contributor-avatar:hover { transform: translateY(-4px) scale(1.1); z-index: 2; }
+
+.contributor-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.contributor-placeholder {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+    background: var(--bg-card);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    font-size: 1.1rem;
+}
+
+.contributor-cta {
+    font-size: 0.83rem;
+    font-weight: 600;
+    color: var(--primary);
+    transition: gap 0.3s ease;
+}
+
+.contributor-cta:hover { opacity: 0.8; }
+
+@media (max-width: 700px) {
+    .community-hero {
+        flex-direction: column;
+        text-align: center;
+        gap: 32px;
+        padding: 32px 24px;
+    }
+    .community-contributors { align-items: center; }
+}
+
+/* =========================================
+   Phase 3F — Animated Step-by-Step Get Started
+   ========================================= */
+.get-started {
+    padding: 120px 0;
+    background: var(--bg-dark);
+}
+
+.steps-grid {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 40px;
+    align-items: start;
+    margin-top: 60px;
+}
+
+.steps-sidebar {
+    display: flex;
+    flex-direction: column;
+    position: sticky;
+    top: 100px;
+}
+
+.step-indicator {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 20px;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+    border: 1px solid transparent;
+}
+
+.step-indicator:hover,
+.step-indicator.active {
+    background: var(--bg-card);
+    border-color: rgba(99, 102, 241, 0.2);
+}
+
+.step-indicator.active .step-num {
+    background: var(--primary);
+    color: white;
+    box-shadow: 0 0 12px rgba(99,102,241,0.4);
+}
+
+.step-num {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--bg-card);
+    border: 2px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    flex-shrink: 0;
+    transition: all 0.3s ease;
+}
+
+.step-info-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-highlight);
+}
+
+.step-info-sub {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    margin-top: 2px;
+}
+
+.step-connector {
+    width: 2px;
+    height: 28px;
+    background: var(--border);
+    margin-left: 37px;
+}
+
+.steps-code {
+    min-height: 240px;
+}
+
+.step-panel {
+    display: none;
+    animation: step-fade-in 0.4s ease;
+}
+
+.step-panel.active {
+    display: block;
+}
+
+@keyframes step-fade-in {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.prereqs-pill {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+    background: rgba(6, 182, 212, 0.06);
+    border: 1px solid rgba(6, 182, 212, 0.2);
+    border-radius: var(--radius-md);
+    padding: 14px 20px;
+    font-size: 0.88rem;
+    color: var(--text-muted);
+}
+
+.prereqs-pill i { color: var(--secondary); }
+.prereqs-pill strong { color: var(--secondary); }
+
+@media (max-width: 900px) {
+    .steps-grid { grid-template-columns: 1fr; }
+    .steps-sidebar { position: static; flex-direction: row; flex-wrap: wrap; gap: 8px; }
+    .step-indicator { flex: 1; min-width: 140px; }
+    .step-connector { display: none; }
+}
+
+/* =========================================
+   Phase 3G — Dramatic Newsletter CTA
+   ========================================= */
+.newsletter {
+    position: relative;
+    padding: 120px 0;
+    overflow: hidden;
+    background: var(--bg-darker);
+    border-top: 1px solid var(--border);
+}
+
+.newsletter-bg-wrap {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.newsletter-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+}
+
+.newsletter-orb-1 {
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(99,102,241,0.2) 0%, transparent 70%);
+    top: -150px;
+    left: -100px;
+}
+
+.newsletter-orb-2 {
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(6,182,212,0.15) 0%, transparent 70%);
+    bottom: -100px;
+    right: -80px;
+}
+
+.newsletter-inner {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    max-width: 640px;
+    margin: 0 auto;
+}
+
+.newsletter-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(99,102,241,0.12);
+    border: 1px solid rgba(99,102,241,0.25);
+    color: var(--primary);
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 24px;
+}
+
+.newsletter-headline {
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 16px;
+}
+
+.newsletter-subtext {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    margin-bottom: 40px;
+    line-height: 1.7;
+}
+
+.newsletter-form-v2 {
+    display: flex;
+    gap: 12px;
+    max-width: 520px;
+    margin: 0 auto 24px;
+}
+
+.newsletter-input-wrap {
+    position: relative;
+    flex: 1;
+}
+
+.newsletter-input-icon {
+    position: absolute;
+    left: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.newsletter-input-v2 {
+    width: 100%;
+    padding: 14px 18px 14px 44px;
+    border-radius: 50px;
+    border: 1px solid var(--border);
+    background: var(--bg-card);
+    color: var(--text-main);
+    font-size: 1rem;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.newsletter-input-v2:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(99,102,241,0.15);
+}
+
+.btn-newsletter-cta {
+    white-space: nowrap;
+    padding: 14px 28px;
+}
+
+.newsletter-trust {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.newsletter-trust span {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.82rem;
+    color: var(--text-muted);
+}
+
+.newsletter-trust i {
+    color: var(--primary);
+    font-size: 0.8rem;
+}
+
+/* Confetti canvas */
+#confettiCanvas {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 9998;
+    display: none;
+}
+
+@media (max-width: 600px) {
+    .newsletter-form-v2 { flex-direction: column; }
+    .newsletter-input-v2, .btn-newsletter-cta { width: 100%; }
+}
+
