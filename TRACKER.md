@@ -32,39 +32,39 @@
 | 1.10 | `index.html` — newsletter error message element | [x] |
 | 1.11 | `script.js` — newsletter failure shows error with 5s dismiss | [x] |
 
-### Phase 1 Hotfix — Code Review Violations
+### Phase 1 Hotfix — Code Review Violations ✅
 
-**Branch:** `fix/phase-1-review-violations` → **PR #14** → pending review
+**Branch:** `fix/phase-1-review-violations` → **PR #14** → merged to `develop`
 
 | # | Task | Status |
 |---|------|--------|
-| H1 | `404.html` — theme toggle click handler (was non-functional) | [~] |
-| H2 | `404.html` — mobile menu toggle logic (was non-functional) | [~] |
+| H1 | `404.html` — theme toggle click handler (was non-functional) | [x] |
+| H2 | `404.html` — mobile menu toggle logic (was non-functional) | [x] |
 | H3 | `og-image.png` dimensions — file exists (640×640), non-standard size | [!] noted, future pass |
 
 ---
 
-## Phase 2 — Hero Section Overhaul
+## Phase 2 — Hero Section Overhaul ✅
 
-**Branch:** `phase-2/hero-overhaul` → **PR #12** → pending review
+**Branch:** `phase-2/hero-overhaul` → **PR #12** → merged to `develop`
 
 | # | Task | Status |
 |---|------|--------|
-| 2.1 | Animated gradient mesh background (3 drifting orbs) | [~] |
-| 2.2 | 3D device mockup — framed FlxOS screenshot (dock+wallpaper) | [~] |
-| 2.3 | Device mockup — floating animation + perspective tilt | [~] |
-| 2.4 | Device mockup — mouse-tracking parallax (pointer devices) | [~] |
-| 2.5 | Device mockup — glare overlay + glow pulse | [~] |
-| 2.6 | Spring-physics `easeOutExpo` counter animation | [~] |
-| 2.7 | Scroll progress shimmer bar | [~] |
-| 2.8 | SVG wave section divider (hero → features) | [~] |
-| 2.9 | `prefers-reduced-motion` guards on all animations | [~] |
+| 2.1 | Animated gradient mesh background (3 drifting orbs) | [x] |
+| 2.2 | 3D device mockup — framed FlxOS screenshot (dock+wallpaper) | [x] |
+| 2.3 | Device mockup — floating animation + perspective tilt | [x] |
+| 2.4 | Device mockup — mouse-tracking parallax (pointer devices) | [x] |
+| 2.5 | Device mockup — glare overlay + glow pulse | [x] |
+| 2.6 | Spring-physics `easeOutExpo` counter animation | [x] |
+| 2.7 | Scroll progress shimmer bar | [x] |
+| 2.8 | SVG wave section divider (hero → features) | [x] |
+| 2.9 | `prefers-reduced-motion` guards on all animations | [x] |
 
 ---
 
-## Phase 3 — Section-by-Section Overhaul
+## Phase 3 — Section-by-Section Overhaul 🔨
 
-**Branch:** `phase-3/section-overhaul` → not started
+**Branch:** `phase-3/section-overhaul` → in progress
 
 | # | Task | Status |
 |---|------|--------|
@@ -127,15 +127,14 @@
 
 ## Open Pull Requests
 
-| PR | Branch | Target | Description |
-|----|--------|--------|-------------|
-| #12 | `phase-2/hero-overhaul` | `develop` | Hero overhaul — gradient mesh, device mockup, spring counters |
-| #14 | `fix/phase-1-review-violations` | `develop` | 404 page — functional theme toggle + mobile menu |
+*None — all current work is merged.*
 
 ## Merged Pull Requests
 
 | PR | Branch | Description |
 |----|--------|-------------|
+| #14 | `fix/phase-1-review-violations` | 404 page — functional theme toggle + mobile menu |
+| #12 | `phase-2/hero-overhaul` | Hero overhaul — gradient mesh, device mockup, spring counters |
 | #11 | `phase-1/critical-fixes` | Phase 1 — critical bug fixes & foundation improvements |
 
 ---
