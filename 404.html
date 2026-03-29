@@ -173,10 +173,55 @@
             pathEl.textContent = window.location.pathname;
         }
 
-        // Theme handling
+        // Theme handling — read + apply saved theme
         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
         const currentTheme = localStorage.getItem('theme') || (prefersDark.matches ? 'dark' : 'light');
         document.documentElement.setAttribute('data-theme', currentTheme);
+
+        // Theme toggle click handler (script.js is not loaded on this page)
+        const themeToggle = document.getElementById('themeToggle');
+        if (themeToggle) {
+            const icon = themeToggle.querySelector('i');
+            // Set correct icon on load
+            if (icon) icon.className = currentTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+            themeToggle.setAttribute('aria-label', currentTheme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme');
+
+            themeToggle.addEventListener('click', () => {
+                const theme = document.documentElement.getAttribute('data-theme');
+                const newTheme = theme === 'dark' ? 'light' : 'dark';
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                if (icon) icon.className = newTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+                themeToggle.setAttribute('aria-label', newTheme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme');
+            });
+        }
+
+        // Mobile menu toggle (script.js is not loaded on this page)
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const navLinks = document.querySelector('.nav-links');
+        if (mobileMenuBtn && navLinks) {
+            mobileMenuBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const isActive = navLinks.classList.toggle('active');
+                mobileMenuBtn.classList.toggle('active');
+                mobileMenuBtn.setAttribute('aria-expanded', isActive);
+            });
+            document.addEventListener('click', (e) => {
+                if (!navLinks.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+                    navLinks.classList.remove('active');
+                    mobileMenuBtn.classList.remove('active');
+                    mobileMenuBtn.setAttribute('aria-expanded', 'false');
+                }
+            });
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && navLinks.classList.contains('active')) {
+                    navLinks.classList.remove('active');
+                    mobileMenuBtn.classList.remove('active');
+                    mobileMenuBtn.setAttribute('aria-expanded', 'false');
+                    mobileMenuBtn.focus();
+                }
+            });
+        }
     </script>
 </body>
 
