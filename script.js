@@ -761,4 +761,225 @@ document.addEventListener('DOMContentLoaded', () => {
             if (e.key === 'ArrowLeft') showPrev();
         });
     }
+    // ────────────────────────────────────────────────
+    // Phase 3B — Gallery Carousel
+    // ────────────────────────────────────────────────
+    const galleryTrack = document.getElementById('galleryTrack');
+    const galleryPrev = document.getElementById('galleryPrev');
+    const galleryNext = document.getElementById('galleryNext');
+    const dotsContainer = document.getElementById('carouselDots');
+
+    if (galleryTrack) {
+        const slides = galleryTrack.querySelectorAll('.carousel-slide');
+        const totalSlides = slides.length;
+        const visibleSlides = () => Math.max(1, Math.floor(galleryTrack.parentElement.clientWidth / 220));
+        let currentSlide = 0;
+
+        // Build pagination dots
+        if (dotsContainer) {
+            slides.forEach((_, i) => {
+                const dot = document.createElement('button');
+                dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+                dot.setAttribute('aria-label', `Go to slide ${i + 1}`);
+                dot.addEventListener('click', () => goToSlide(i));
+                dotsContainer.appendChild(dot);
+            });
+        }
+
+        function updateDots(idx) {
+            if (!dotsContainer) return;
+            dotsContainer.querySelectorAll('.carousel-dot').forEach((d, i) => {
+                d.classList.toggle('active', i === idx);
+            });
+        }
+
+        function goToSlide(idx) {
+            const slideWidth = 220; // 200px + 20px gap
+            currentSlide = Math.max(0, Math.min(idx, totalSlides - visibleSlides()));
+            galleryTrack.style.transform = `translateX(-${currentSlide * slideWidth}px)`;
+            updateDots(currentSlide);
+        }
+
+        galleryPrev?.addEventListener('click', () => goToSlide(currentSlide - 1));
+        galleryNext?.addEventListener('click', () => goToSlide(currentSlide + 1));
+
+        // Click slide to open lightbox
+        slides.forEach((slide, index) => {
+            slide.addEventListener('click', () => {
+                const img = slide.querySelector('img');
+                const title = slide.getAttribute('data-title');
+                const lb = document.getElementById('lightbox');
+                const lbImg = document.getElementById('lightbox-img');
+                if (lb && lbImg && img) {
+                    lbImg.src = img.src;
+                    const cap = lb.querySelector('.lightbox-caption');
+                    if (cap) cap.textContent = title;
+                    lb.classList.add('active');
+                    lb.setAttribute('aria-hidden', 'false');
+                    document.body.style.overflow = 'hidden';
+                }
+            });
+        });
+
+        // Keyboard carousel navigation
+        document.addEventListener('keydown', (e) => {
+            if (document.getElementById('lightbox')?.classList.contains('active')) return;
+            if (e.key === 'ArrowLeft') goToSlide(currentSlide - 1);
+            if (e.key === 'ArrowRight') goToSlide(currentSlide + 1);
+        });
+
+        // Resize handler
+        window.addEventListener('resize', () => goToSlide(currentSlide), { passive: true });
+    }
+
+    // ────────────────────────────────────────────────
+    // Phase 3E — Community Star + Contributor Avatars
+    // ────────────────────────────────────────────────
+    const communityStars = document.getElementById('community-stars');
+    if (communityStars) {
+        // Use the cached stats we already have
+        const cached = loadCachedStats();
+        if (cached && cached.stars != null) {
+            animateCounter(communityStars, cached.stars);
+        } else {
+            // Fallback: wait 2s then try
+            setTimeout(() => {
+                const c2 = loadCachedStats();
+                if (c2 && c2.stars != null) animateCounter(communityStars, c2.stars);
+                else communityStars.textContent = '★';
+            }, 2500);
+        }
+    }
+
+    // Fetch contributor avatars
+    const avatarContainer = document.getElementById('contributorAvatars');
+    if (avatarContainer) {
+        fetchContributors();
+    }
+
+    async function fetchContributors() {
+        try {
+            const res = await fetch('https://api.github.com/repos/flxos-labs/flxos/contributors?per_page=8');
+            if (!res.ok) return;
+            const contributors = await res.json();
+            if (!Array.isArray(contributors) || contributors.length === 0) return;
+
+            avatarContainer.innerHTML = '';
+            contributors.slice(0, 8).forEach(c => {
+                const div = document.createElement('a');
+                div.className = 'contributor-avatar';
+                div.href = c.html_url;
+                div.target = '_blank';
+                div.rel = 'noopener noreferrer';
+                div.setAttribute('aria-label', c.login);
+                div.title = c.login;
+
+                const img = document.createElement('img');
+                img.src = c.avatar_url + '&s=80';
+                img.alt = c.login;
+                img.loading = 'lazy';
+                div.appendChild(img);
+                avatarContainer.appendChild(div);
+            });
+        } catch (e) {
+            console.warn('Failed to fetch contributors:', e);
+        }
+    }
+
+    // ────────────────────────────────────────────────
+    // Phase 3F — Step-by-Step Get Started
+    // ────────────────────────────────────────────────
+    const stepButtons = document.querySelectorAll('.step-indicator');
+    const stepPanels = document.querySelectorAll('.step-panel');
+    const stepCopyBtns = document.querySelectorAll('.copy-btn[data-step]');
+
+    if (stepButtons.length > 0) {
+        stepButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const stepIdx = parseInt(btn.getAttribute('data-step'));
+                // Deactivate all
+                stepButtons.forEach(b => b.classList.remove('active'));
+                stepPanels.forEach(p => p.classList.remove('active'));
+                // Activate clicked
+                btn.classList.add('active');
+                const panel = document.getElementById(`step-panel-${stepIdx}`);
+                if (panel) panel.classList.add('active');
+                // Re-run Prism highlighting if available
+                if (window.Prism) Prism.highlightElement(panel.querySelector('code'));
+            });
+        });
+    }
+
+    // Per-step copy buttons
+    stepCopyBtns.forEach(btn => {
+        btn.addEventListener('click', async () => {
+            const stepIdx = btn.getAttribute('data-step');
+            const codeEl = document.querySelector(`#step-panel-${stepIdx} .step-code`);
+            if (!codeEl) return;
+            try {
+                await navigator.clipboard.writeText(codeEl.innerText.trim());
+                const orig = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-check"></i>';
+                btn.style.color = '#4ade80';
+                setTimeout(() => { btn.innerHTML = orig; btn.style.color = ''; }, 2000);
+            } catch (e) { /* clipboard denied */ }
+        });
+    });
+
+    // ────────────────────────────────────────────────
+    // Phase 3G — Confetti on Newsletter Success
+    // ────────────────────────────────────────────────
+    function launchConfetti() {
+        const canvas = document.getElementById('confettiCanvas');
+        if (!canvas || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+        canvas.style.display = 'block';
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const colors = ['#6366f1', '#8b5cf6', '#06b6d4', '#fbbf24', '#34d399', '#f87171'];
+        const pieces = Array.from({ length: 120 }, () => ({
+            x: Math.random() * canvas.width,
+            y: Math.random() * -canvas.height,
+            w: Math.random() * 12 + 6,
+            h: Math.random() * 6 + 4,
+            color: colors[Math.floor(Math.random() * colors.length)],
+            rotation: Math.random() * Math.PI * 2,
+            vx: (Math.random() - 0.5) * 3,
+            vy: Math.random() * 4 + 2,
+            vr: (Math.random() - 0.5) * 0.2
+        }));
+
+        let rafId;
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            let alive = false;
+            pieces.forEach(p => {
+                p.x += p.vx;
+                p.y += p.vy;
+                p.rotation += p.vr;
+                if (p.y < canvas.height + 20) alive = true;
+                ctx.save();
+                ctx.translate(p.x, p.y);
+                ctx.rotate(p.rotation);
+                ctx.fillStyle = p.color;
+                ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+                ctx.restore();
+            });
+            if (alive) rafId = requestAnimationFrame(draw);
+            else { canvas.style.display = 'none'; }
+        }
+        draw();
+        setTimeout(() => { cancelAnimationFrame(rafId); canvas.style.display = 'none'; }, 5000);
+    }
+
+    // Patch newsletter form to also trigger confetti
+    const nlForm = document.getElementById('newsletter-form');
+    if (nlForm) {
+        nlForm.addEventListener('submit', () => {
+            // Confetti fires when success message appears (after async)
+            setTimeout(launchConfetti, 600);
+        });
+    }
 });
