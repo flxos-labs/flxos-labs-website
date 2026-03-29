@@ -21,8 +21,12 @@ document.addEventListener('DOMContentLoaded', () => {
             const x = (e.clientX / W - 0.5) * 2; // -1 to 1
             const y = (e.clientY / H - 0.5) * 2;
             if (deviceFrame) {
-                deviceFrame.style.transform =
-                    `rotateY(${-5 + x * 8}deg) rotateX(${3 - y * 5}deg)`;
+                if (heroDevice.matches(':hover')) {
+                    deviceFrame.style.transform = '';
+                } else {
+                    deviceFrame.style.transform =
+                        `rotateY(${-5 + x * 8}deg) rotateX(${3 - y * 5}deg)`;
+                }
             }
         }, { passive: true });
         heroDevice.addEventListener('mouseleave', () => {
