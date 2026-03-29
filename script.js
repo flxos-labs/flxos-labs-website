@@ -1,4 +1,41 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // ── Scroll Progress Bar ──────────────────────────────────────────────
+    const scrollProgress = document.getElementById('scroll-progress');
+    if (scrollProgress) {
+        const updateProgress = () => {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+            scrollProgress.style.width = pct + '%';
+        };
+        window.addEventListener('scroll', updateProgress, { passive: true });
+        updateProgress();
+    }
+
+    // ── Device Mockup Parallax ───────────────────────────────────────────
+    const heroDevice = document.getElementById('hero-device');
+    if (heroDevice && window.matchMedia('(pointer: fine)').matches && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        const deviceFrame = heroDevice.querySelector('.device-frame');
+        document.addEventListener('mousemove', (e) => {
+            const { innerWidth: W, innerHeight: H } = window;
+            const x = (e.clientX / W - 0.5) * 2; // -1 to 1
+            const y = (e.clientY / H - 0.5) * 2;
+            if (deviceFrame) {
+                if (heroDevice.matches(':hover')) {
+                    deviceFrame.style.transform = '';
+                } else {
+                    deviceFrame.style.transform =
+                        `rotateY(${-5 + x * 8}deg) rotateX(${3 - y * 5}deg)`;
+                }
+            }
+        }, { passive: true });
+        heroDevice.addEventListener('mouseleave', () => {
+            if (deviceFrame) {
+                deviceFrame.style.transform = '';
+            }
+        });
+    }
+
     // Current Year
     const yearElement = document.getElementById('year');
     if (yearElement) {
@@ -196,20 +233,25 @@ document.addEventListener('DOMContentLoaded', () => {
             element.textContent = '—';
             return;
         }
-        const duration = 1000;
-        const start = 0;
-        const increment = target / (duration / 16);
-        let current = start;
 
-        const timer = setInterval(() => {
-            current += increment;
-            if (current >= target) {
-                element.textContent = target;
-                clearInterval(timer);
-            } else {
-                element.textContent = Math.floor(current);
-            }
-        }, 16);
+        // Spring-physics easing: fast start, smooth deceleration
+        const duration = 1400;
+        const startTime = performance.now();
+
+        function easeOutExpo(t) {
+            return t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
+        }
+
+        function tick(now) {
+            const elapsed = now - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            const eased = easeOutExpo(progress);
+            const current = Math.round(eased * target);
+            element.textContent = current;
+            if (progress < 1) requestAnimationFrame(tick);
+        }
+
+        requestAnimationFrame(tick);
     }
 
     // Copy Code functionality

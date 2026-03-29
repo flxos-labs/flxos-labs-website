@@ -67,10 +67,20 @@
 </head>
 
 <body>
+    <!-- Scroll progress bar -->
+    <div id="scroll-progress" aria-hidden="true"></div>
+
     <!-- Skip to main content for accessibility -->
     <a href="#main-content" class="skip-to-main">Skip to main content</a>
 
     <div class="cursor-glow"></div>
+
+    <!-- Animated gradient mesh background -->
+    <div class="hero-gradient-mesh" aria-hidden="true">
+        <div class="mesh-orb mesh-orb-1"></div>
+        <div class="mesh-orb mesh-orb-2"></div>
+        <div class="mesh-orb mesh-orb-3"></div>
+    </div>
 
     <nav class="navbar" role="navigation" aria-label="Main navigation">
         <div class="container nav-container">
@@ -155,6 +165,21 @@
                     </div>
                 </div>
                 <div class="hero-visual">
+                    <!-- 3D Device Mockup -->
+                    <div class="device-mockup" id="hero-device">
+                        <div class="device-frame">
+                            <div class="device-screen">
+                                <img
+                                    src="flxos_screenshots/scr_20260312_161725_home_screen_with_dock_status_bar_wallpaper.png"
+                                    alt="FlxOS home screen with dock, status bar, and wallpaper"
+                                    fetchpriority="high"
+                                    width="320" height="240">
+                                <div class="device-screen-glare"></div>
+                            </div>
+                        </div>
+                        <div class="device-glow"></div>
+                    </div>
+                    <!-- Terminal Window -->
                     <div class="code-window">
                         <div class="window-header">
                             <div class="dots">
@@ -182,6 +207,13 @@
                 </div>
             </div>
         </section>
+
+        <!-- Section divider -->
+        <div class="section-divider" aria-hidden="true">
+            <svg viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M0,30 C360,60 1080,0 1440,30 L1440,60 L0,60 Z" fill="var(--bg-darker)"/>
+            </svg>
+        </div>
 
         <!-- Features Section -->
         <section id="features" class="features">

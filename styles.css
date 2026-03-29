@@ -400,6 +400,110 @@ ul {
     color: var(--text-muted);
 }
 
+/* =========================================
+   Scroll Progress Bar
+   ========================================= */
+#scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    width: 0%;
+    background: linear-gradient(90deg, #6366f1, #06b6d4, #8b5cf6);
+    background-size: 200% 100%;
+    animation: progress-shimmer 2s linear infinite;
+    z-index: 9999;
+    transition: width 0.1s linear;
+    border-radius: 0 2px 2px 0;
+}
+
+@keyframes progress-shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+/* =========================================
+   Animated Gradient Mesh Background
+   ========================================= */
+.hero-gradient-mesh {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.mesh-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    animation: orb-drift 20s ease-in-out infinite;
+    will-change: transform;
+}
+
+.mesh-orb-1 {
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.18) 0%, transparent 70%);
+    top: -200px;
+    left: -100px;
+    animation-delay: 0s;
+    animation-duration: 22s;
+}
+
+.mesh-orb-2 {
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(139, 92, 246, 0.14) 0%, transparent 70%);
+    top: 20%;
+    right: -150px;
+    animation-delay: -7s;
+    animation-duration: 18s;
+}
+
+.mesh-orb-3 {
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(6, 182, 212, 0.12) 0%, transparent 70%);
+    bottom: 10%;
+    left: 30%;
+    animation-delay: -14s;
+    animation-duration: 25s;
+}
+
+@keyframes orb-drift {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    25%       { transform: translate(30px, -40px) scale(1.05); }
+    50%       { transform: translate(-20px, 30px) scale(0.97); }
+    75%       { transform: translate(40px, 20px) scale(1.03); }
+}
+
+[data-theme="light"] .mesh-orb-1 { background: radial-gradient(circle, rgba(99,102,241,0.08) 0%, transparent 70%); }
+[data-theme="light"] .mesh-orb-2 { background: radial-gradient(circle, rgba(139,92,246,0.06) 0%, transparent 70%); }
+[data-theme="light"] .mesh-orb-3 { background: radial-gradient(circle, rgba(6,182,212,0.05) 0%, transparent 70%); }
+
+@media (prefers-reduced-motion: reduce) {
+    .mesh-orb { animation: none; }
+    #scroll-progress { animation: none; }
+}
+
+/* =========================================
+   Section Divider
+   ========================================= */
+.section-divider {
+    line-height: 0;
+    margin-bottom: -1px;
+    overflow: hidden;
+    position: relative;
+    z-index: 2;
+}
+
+.section-divider svg {
+    display: block;
+    width: 100%;
+    height: 60px;
+}
+
 /* Hero Section */
 .hero {
     position: relative;
@@ -446,8 +550,105 @@ ul {
 .hero-visual {
     position: relative;
     z-index: 10;
-    perspective: 1000px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
     min-width: 0;
+}
+
+/* =========================================
+   3D Device Mockup (Phase 2B)
+   ========================================= */
+.device-mockup {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    perspective: 1200px;
+}
+
+.device-frame {
+    background: linear-gradient(145deg, #1e2130, #0d1117);
+    border-radius: 18px;
+    border: 2px solid rgba(99, 102, 241, 0.35);
+    padding: 10px;
+    box-shadow:
+        0 0 0 1px rgba(255,255,255,0.05),
+        0 30px 60px rgba(0,0,0,0.6),
+        0 0 40px rgba(99, 102, 241, 0.15),
+        inset 0 1px 0 rgba(255,255,255,0.08);
+    transform: rotateY(-5deg) rotateX(3deg);
+    transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1),
+                box-shadow 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+    will-change: transform;
+    animation: device-float 6s ease-in-out infinite;
+}
+
+.device-mockup:hover .device-frame {
+    transform: rotateY(0deg) rotateX(0deg);
+    box-shadow:
+        0 0 0 1px rgba(255,255,255,0.08),
+        0 40px 80px rgba(0,0,0,0.5),
+        0 0 60px rgba(99, 102, 241, 0.25),
+        inset 0 1px 0 rgba(255,255,255,0.1);
+}
+
+@keyframes device-float {
+    0%, 100% { transform: rotateY(-5deg) rotateX(3deg) translateY(0px); }
+    50%       { transform: rotateY(-5deg) rotateX(3deg) translateY(-8px); }
+}
+
+.device-mockup:hover .device-frame {
+    animation: none;
+}
+
+.device-screen {
+    position: relative;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #000;
+    line-height: 0;
+}
+
+.device-screen img {
+    width: 100%;
+    height: auto;
+    max-height: 220px;
+    object-fit: cover;
+    object-position: top;
+    display: block;
+    border-radius: 8px;
+    image-rendering: pixelated;
+}
+
+.device-screen-glare {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        135deg,
+        rgba(255,255,255,0.08) 0%,
+        transparent 50%
+    );
+    border-radius: 8px;
+    pointer-events: none;
+}
+
+.device-glow {
+    position: absolute;
+    inset: -20px;
+    background: radial-gradient(ellipse at center, rgba(99,102,241,0.25) 0%, transparent 70%);
+    z-index: -1;
+    border-radius: 50%;
+    animation: device-glow-pulse 3s ease-in-out infinite;
+}
+
+@keyframes device-glow-pulse {
+    0%, 100% { opacity: 0.6; transform: scale(1); }
+    50%       { opacity: 1;   transform: scale(1.05); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .device-frame { animation: none; }
+    .device-glow  { animation: none; }
 }
 
 .code-window {
