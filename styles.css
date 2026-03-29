@@ -580,7 +580,7 @@ ul {
     transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1),
                 box-shadow 0.5s cubic-bezier(0.23, 1, 0.32, 1);
     will-change: transform;
-    animation: device-float 6s ease-in-out infinite;
+    animation: none;
 }
 
 .device-mockup:hover .device-frame {
