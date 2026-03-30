@@ -761,9 +761,9 @@ document.addEventListener('DOMContentLoaded', () => {
         lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
         document.addEventListener('keydown', (e) => {
             if (!lightbox.classList.contains('active')) return;
-            if (e.key === 'Escape')     closeLightbox();
+            if (e.key === 'Escape') closeLightbox();
             if (e.key === 'ArrowRight') lightboxNext();
-            if (e.key === 'ArrowLeft')  lightboxPrev();
+            if (e.key === 'ArrowLeft') lightboxPrev();
         });
     }
 
@@ -842,7 +842,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Keyboard carousel navigation (only when lightbox is closed)
         document.addEventListener('keydown', (e) => {
             if (lightbox?.classList.contains('active')) return;
-            if (e.key === 'ArrowLeft')  goToSlide(currentSlide - 1);
+            if (e.key === 'ArrowLeft') goToSlide(currentSlide - 1);
             if (e.key === 'ArrowRight') goToSlide(currentSlide + 1);
         });
 
@@ -868,7 +868,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const dy = e.changedTouches[0].clientY - touchStartY;
                 if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 44) {
                     if (dx < 0) goToSlide(currentSlide + 1);
-                    else        goToSlide(currentSlide - 1);
+                    else goToSlide(currentSlide - 1);
                 }
             }, { passive: true });
         }
@@ -1184,25 +1184,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ── Phase 5A touch swipe is now inside the galleryTrack block (see above) ──
-
-    // ────────────────────────────────────────────────
-    // Phase 5D — Frosted Glass Menu Backdrop
-    // Reuses the existing #menuBackdrop element from HTML
-    // (no createElement — avoids duplicate overlay element)
-    // ────────────────────────────────────────────────
-    const backdrop = document.getElementById('menuBackdrop');
-
-    // Close menu when backdrop is tapped
-    backdrop?.addEventListener('click', () => {
-        const navLinksEl = document.querySelector('.nav-links');
-        const menuBtn = document.querySelector('.mobile-menu-btn');
-        if (navLinksEl) {
-            navLinksEl.classList.remove('active');
-            menuBtn?.classList.remove('active');
-            document.body.classList.remove('menu-open');
-            menuBtn?.setAttribute('aria-expanded', 'false');
-        }
-    });
+    // ── Phase 5D — Frosted Glass Menu Backdrop: click-to-close is handled    ──
+    // ── by the canonical menuBackdrop listener registered in the mobile nav  ──
+    // ── setup block above (closeMobileMenu). No second listener needed here. ──
 
     // ────────────────────────────────────────────────
     // Phase 5E — Swipe-Down to Close Mobile Menu
