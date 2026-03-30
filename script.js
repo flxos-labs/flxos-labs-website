@@ -1186,14 +1186,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // ── Phase 5A touch swipe is now inside the galleryTrack block (see above) ──
 
     // ────────────────────────────────────────────────
-    // Phase 5D — Frosted Glass Menu Backdrop (injected)
+    // Phase 5D — Frosted Glass Menu Backdrop
+    // Reuses the existing #menuBackdrop element from HTML
+    // (no createElement — avoids duplicate overlay element)
     // ────────────────────────────────────────────────
-    const backdrop = document.createElement('div');
-    backdrop.className = 'menu-backdrop';
-    document.body.appendChild(backdrop);
+    const backdrop = document.getElementById('menuBackdrop');
 
     // Close menu when backdrop is tapped
-    backdrop.addEventListener('click', () => {
+    backdrop?.addEventListener('click', () => {
         const navLinksEl = document.querySelector('.nav-links');
         const menuBtn = document.querySelector('.mobile-menu-btn');
         if (navLinksEl) {

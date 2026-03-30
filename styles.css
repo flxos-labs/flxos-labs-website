@@ -3086,6 +3086,7 @@ footer a:hover::after {
    ========================================= */
 .nav-links a.section-active {
     color: var(--text-highlight);
+    font-weight: 600;
 }
 
 .nav-links a.section-active::after {
@@ -4064,12 +4065,4 @@ body.menu-open .menu-backdrop {
 .hw-photo-card:nth-child(2) { transition-delay: 0.07s; }
 .hw-photo-card:nth-child(3) { transition-delay: 0.14s; }
 .hw-photo-card:nth-child(4) { transition-delay: 0.21s; }
-
-/* =========================================
-   Nav active link (scrollspy)
-   ========================================= */
-.nav-links a.section-active {
-    color: var(--text-highlight) !important;
-    font-weight: 600;
-}
 
