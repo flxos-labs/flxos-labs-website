@@ -1,4 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
+    const hasScrollTimeline = CSS.supports('animation-timeline', 'view()');
+
     // ── Scroll Progress Bar ──────────────────────────────────────────────
     const scrollProgress = document.getElementById('scroll-progress');
     if (scrollProgress) {
@@ -372,31 +374,28 @@ document.addEventListener('DOMContentLoaded', () => {
         rootMargin: '0px 0px -50px 0px'
     };
 
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('animate-in');
-                observer.unobserve(entry.target);
-            }
-        });
-    }, observerOptions);
+    if (!hasScrollTimeline) {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-in');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
 
-    // Observe feature cards, tech items, roadmap items for scroll animation
-    document.querySelectorAll('.feature-card, .tech-item, .roadmap-item, .community-card').forEach(el => {
-        el.classList.add('animate-target');
-        observer.observe(el);
-    });
+        // Observe feature cards, tech items, roadmap items for scroll animation
+        document.querySelectorAll('.feature-card, .tech-item, .roadmap-item, .community-card').forEach(el => {
+            el.classList.add('animate-target');
+            observer.observe(el);
+        });
+    }
 
     // ────────────────────────────────────────────────
     // Terminal Typing Animation
     // ────────────────────────────────────────────────
-    const terminalEl = document.querySelector('.window-content');
-    if (terminalEl) {
-        initTerminalTyping(terminalEl);
-    }
-
-    function initTerminalTyping(container) {
-        const lines = [
+    const terminalDemos = {
+        hero: [
             { type: 'command', text: '$ git clone --recurse-submodules https://github.com/flxos-labs/flxos.git' },
             { type: 'command', text: '$ cd flxos' },
             { type: 'command', text: '$ python flxos.py select esp32s3-ili9341' },
@@ -405,7 +404,26 @@ document.addEventListener('DOMContentLoaded', () => {
             { type: 'output', text: 'Generating hardware initialization code...' },
             { type: 'success', text: 'Build completed successfully.' },
             { type: 'highlight', text: 'FlxOS ready for flashing!' }
-        ];
+        ],
+        'build-story': [
+            { type: 'command', text: '$ git clone --recurse-submodules https://github.com/flxos-labs/flxos.git' },
+            { type: 'command', text: '$ cd flxos' },
+            { type: 'command', text: '$ python flxos.py select esp32s3-ili9341-xpt' },
+            { type: 'output', text: "Profile 'esp32s3-ili9341-xpt' selected." },
+            { type: 'command', text: '$ python flxos.py build' },
+            { type: 'output', text: 'Resolving dependencies and generating hardware init...' },
+            { type: 'success', text: 'Build complete.' },
+            { type: 'highlight', text: 'FlxOS ready for flashing!' }
+        ]
+    };
+
+    document.querySelectorAll('.window-content[data-terminal-demo]').forEach((terminalEl) => {
+        const demoName = terminalEl.getAttribute('data-terminal-demo');
+        const lines = terminalDemos[demoName];
+        if (lines) initTerminalTyping(terminalEl, lines);
+    });
+
+    function initTerminalTyping(container, lines) {
 
         // Clear existing content
         container.innerHTML = '';
@@ -990,74 +1008,68 @@ document.addEventListener('DOMContentLoaded', () => {
     // ────────────────────────────────────────────────
     // Phase 4A — Scroll-Reveal (section headers, bento, roadmap, community)
     // ────────────────────────────────────────────────
-    const revealObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
-                revealObserver.unobserve(entry.target);
-            }
+    let revealObserver;
+    if (!hasScrollTimeline) {
+        revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    revealObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+        document.querySelectorAll('.section-header').forEach(el => {
+            el.classList.add('reveal');
+            revealObserver.observe(el);
         });
-    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
 
-    // Apply reveal to section headers
-    document.querySelectorAll('.section-header').forEach(el => {
-        el.classList.add('reveal');
-        revealObserver.observe(el);
-    });
+        const bentoGrid = document.querySelector('.bento-grid');
+        if (bentoGrid) {
+            bentoGrid.classList.add('reveal-stagger');
+            bentoGrid.querySelectorAll('.bento-card').forEach((card, i) => {
+                card.classList.add('reveal');
+                card.style.transitionDelay = `${i * 0.07}s`;
+                revealObserver.observe(card);
+            });
+        }
 
-    // Apply stagger reveal to bento grid children
-    const bentoGrid = document.querySelector('.bento-grid');
-    if (bentoGrid) {
-        bentoGrid.classList.add('reveal-stagger');
-        bentoGrid.querySelectorAll('.bento-card').forEach((card, i) => {
-            card.classList.add('reveal');
-            // small additional delay per card on top of stagger
-            card.style.transitionDelay = `${i * 0.07}s`;
-            revealObserver.observe(card);
+        document.querySelectorAll('.roadmap-h-item').forEach((el, i) => {
+            el.classList.add('reveal');
+            el.style.transitionDelay = `${i * 0.1}s`;
+            revealObserver.observe(el);
+        });
+
+        document.querySelectorAll('.community-card').forEach((el, i) => {
+            el.classList.add('reveal');
+            el.style.transitionDelay = `${i * 0.08}s`;
+            revealObserver.observe(el);
+        });
+
+        const communityHero = document.querySelector('.community-hero');
+        if (communityHero) {
+            communityHero.classList.add('reveal');
+            revealObserver.observe(communityHero);
+        }
+
+        document.querySelectorAll('.tech-logo-item').forEach((el, i) => {
+            el.classList.add('reveal');
+            el.style.transitionDelay = `${i * 0.1}s`;
+            revealObserver.observe(el);
+        });
+
+        const galleryFeatured = document.querySelector('.gallery-featured');
+        if (galleryFeatured) {
+            galleryFeatured.classList.add('reveal');
+            revealObserver.observe(galleryFeatured);
+        }
+
+        document.querySelectorAll('.carousel-slide').forEach((el, i) => {
+            el.classList.add('reveal-scale');
+            el.style.transitionDelay = `${i * 0.04}s`;
+            revealObserver.observe(el);
         });
     }
-
-    // Roadmap items
-    document.querySelectorAll('.roadmap-h-item').forEach((el, i) => {
-        el.classList.add('reveal');
-        el.style.transitionDelay = `${i * 0.1}s`;
-        revealObserver.observe(el);
-    });
-
-    // Community cards
-    document.querySelectorAll('.community-card').forEach((el, i) => {
-        el.classList.add('reveal');
-        el.style.transitionDelay = `${i * 0.08}s`;
-        revealObserver.observe(el);
-    });
-
-    // Community hero
-    const communityHero = document.querySelector('.community-hero');
-    if (communityHero) {
-        communityHero.classList.add('reveal');
-        revealObserver.observe(communityHero);
-    }
-
-    // Tech logo items
-    document.querySelectorAll('.tech-logo-item').forEach((el, i) => {
-        el.classList.add('reveal');
-        el.style.transitionDelay = `${i * 0.1}s`;
-        revealObserver.observe(el);
-    });
-
-    // Gallery featured
-    const galleryFeatured = document.querySelector('.gallery-featured');
-    if (galleryFeatured) {
-        galleryFeatured.classList.add('reveal');
-        revealObserver.observe(galleryFeatured);
-    }
-
-    // Carousel slides (scale-up variant)
-    document.querySelectorAll('.carousel-slide').forEach((el, i) => {
-        el.classList.add('reveal-scale');
-        el.style.transitionDelay = `${i * 0.04}s`;
-        revealObserver.observe(el);
-    });
 
     // ────────────────────────────────────────────────
     // Phase 4B — Card 3D Tilt (pointer: fine only)
@@ -1087,7 +1099,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ── Phase 5: Bento Card Spotlight Glow (cursor-tracking radial gradient) ──
     if (hasFinePointer) {
-        document.querySelectorAll('.bento-card').forEach(card => {
+        document.querySelectorAll('.bento-card, .philosophy-card').forEach(card => {
             card.addEventListener('pointermove', (e) => {
                 const rect = card.getBoundingClientRect();
                 const x = ((e.clientX - rect.left) / rect.width) * 100;
@@ -1096,6 +1108,72 @@ document.addEventListener('DOMContentLoaded', () => {
                 card.style.setProperty('--glow-y', `${y}%`);
             }, { passive: true });
         });
+    }
+
+    // About page hero parallax + timeline progress
+    const aboutHeroCopy = document.getElementById('aboutHeroCopy');
+    const aboutTimeline = document.getElementById('aboutTimeline');
+    if ((aboutHeroCopy || aboutTimeline) && !reducedMotion) {
+        const updateAboutMotion = () => {
+            if (aboutHeroCopy) {
+                const rect = aboutHeroCopy.getBoundingClientRect();
+                const offset = Math.max(-18, Math.min(18, rect.top * -0.04));
+                aboutHeroCopy.style.transform = `translateY(${offset}px)`;
+            }
+
+            if (aboutTimeline && !hasScrollTimeline) {
+                const rect = aboutTimeline.getBoundingClientRect();
+                const viewportHeight = window.innerHeight;
+                const start = viewportHeight * 0.85;
+                const end = viewportHeight * 0.2;
+                const progress = (start - rect.top) / Math.max(1, start - end);
+                const clamped = Math.max(0, Math.min(progress, 1));
+                aboutTimeline.style.setProperty('--timeline-progress', clamped.toFixed(3));
+            }
+        };
+
+        window.addEventListener('scroll', updateAboutMotion, { passive: true });
+        window.addEventListener('resize', updateAboutMotion, { passive: true });
+        updateAboutMotion();
+    }
+
+    // About page founder activity
+    const founderCommitCount = document.getElementById('founderCommitCount');
+    const founderRepoCount = document.getElementById('founderRepoCount');
+    const founderFollowerCount = document.getElementById('founderFollowerCount');
+    if (founderCommitCount || founderRepoCount || founderFollowerCount) {
+        fetchFounderStats();
+    }
+
+    async function fetchFounderStats() {
+        try {
+            const [userRes, contributorsRes] = await Promise.all([
+                fetch('https://api.github.com/users/Itsmeakash248'),
+                fetch('https://api.github.com/repos/flxos-labs/flxos/contributors?per_page=100')
+            ]);
+
+            if (userRes.ok) {
+                const user = await userRes.json();
+                if (founderRepoCount && user.public_repos != null) {
+                    founderRepoCount.textContent = user.public_repos;
+                }
+                if (founderFollowerCount && user.followers != null) {
+                    founderFollowerCount.textContent = user.followers;
+                }
+            }
+
+            if (contributorsRes.ok) {
+                const contributors = await contributorsRes.json();
+                if (Array.isArray(contributors)) {
+                    const founder = contributors.find((entry) => entry.login === 'Itsmeakash248');
+                    if (founderCommitCount && founder?.contributions != null) {
+                        founderCommitCount.textContent = founder.contributions;
+                    }
+                }
+            }
+        } catch (error) {
+            console.warn('Failed to fetch founder stats:', error);
+        }
     }
 
     // ────────────────────────────────────────────────
@@ -1238,6 +1316,7 @@ document.addEventListener('DOMContentLoaded', () => {
         { label: 'Community', sub: 'GitHub, contributors, get involved', icon: 'fa-users', href: '#community' },
         { label: 'Community Love', sub: 'What people say about FlxOS', icon: 'fa-heart', href: '#testimonials' },
         { label: 'Get Started', sub: 'Clone, build, flash in 4 steps', icon: 'fa-terminal', href: '#get-started' },
+        { label: 'Zero to Running', sub: 'Animated CLI build flow', icon: 'fa-laptop-code', href: '#build-story' },
         { label: 'Newsletter', sub: 'Stay in the loop', icon: 'fa-envelope', href: '#newsletter' },
         { label: 'Documentation', sub: 'Full API reference', icon: 'fa-book', href: '/docs' },
         { label: 'About FlxOS Labs', sub: 'Our story and mission', icon: 'fa-info-circle', href: '/about' },
@@ -1316,8 +1395,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // ────────────────────────────────────────────────
     // TRILLION-DOLLAR — Reveal observers for new sections
     // ────────────────────────────────────────────────
-    document.querySelectorAll(
-        '.hw-photo-card, .testimonial-card, .why-statement, .compare-col, .founder-card'
-    ).forEach(el => revealObserver.observe(el));
+    if (revealObserver) {
+        document.querySelectorAll(
+            '.hw-photo-card, .testimonial-card, .why-statement, .compare-col, .founder-card, .build-story-shell'
+        ).forEach(el => revealObserver.observe(el));
+    }
 
 });
