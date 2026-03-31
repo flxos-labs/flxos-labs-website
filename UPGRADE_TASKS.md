@@ -27,34 +27,35 @@
 
 ---
 
-## Wave 2: Visual Polish (Phases 2, 4)
+## Wave 2: Visual Polish (Phases 2, 4) ✅ COMPLETE (UNCOMMITTED)
 
 ### Phase 2: CSS Scroll-Driven Animations
-- [ ] Replace IntersectionObserver with CSS `animation-timeline: view()` reveals
-- [ ] Add `@supports` guard in script.js so JS observer is fallback only
-- [ ] Apply scroll-scale-in to bento cards, community cards, tech logos
-- [ ] Apply scroll-parallax to hardware photo cards
+- [x] Replace IntersectionObserver with CSS `animation-timeline: view()` reveals
+- [x] Add `@supports` guard in script.js so JS observer is fallback only
+- [x] Apply scroll-scale-in to bento cards, community cards, tech logos
+- [x] Apply scroll-parallax to hardware photo cards
 
 ### Phase 4: Visual Storytelling
-- [ ] Curate gallery from ~15 screenshots down to 8 with captioned story flow
-- [ ] Add animated CSS terminal simulation (clone→build→flash→boot)
-- [ ] Add visible "why we chose X" subtitle text to each tech stack logo
+- [x] Curate gallery from ~15 screenshots down to 8 with captioned story flow
+- [x] Add animated CSS terminal simulation (clone→build→flash→boot)
+- [x] Add visible "why we chose X" subtitle text to each tech stack logo
 
 ---
 
-## Wave 3: Final Polish (Phases 6, 7)
+## Wave 3: Final Polish (Phases 6, 7) ✅ COMPLETE (UNCOMMITTED)
 
 ### Phase 6: About Page Elevation
-- [ ] Add animated gradient mesh + orb background to about/index.html hero
-- [ ] Convert static timeline dots to scroll-driven fill animation
-- [ ] Add hover glow effect to philosophy cards (same as main bento cards)
-- [ ] Add parallax to about hero text on scroll
+- [x] Add animated gradient mesh + orb background to about/index.html hero
+- [x] Convert static timeline dots to scroll-driven fill animation
+- [x] Add hover glow effect to philosophy cards (same as main bento cards)
+- [x] Add parallax to about hero text on scroll
+- [x] Add live founder activity metrics fed from GitHub API
 
 ### Phase 7: Light Mode Polish
-- [ ] Warm tint card backgrounds in light theme (not pure white)
-- [ ] Softer, less saturated gradient-text in light theme
-- [ ] Keep code blocks dark in light mode
-- [ ] Reduce hero orb opacity in light mode, shift to warmer hue
+- [x] Warm tint card backgrounds in light theme (not pure white)
+- [x] Softer, less saturated gradient-text in light theme
+- [x] Keep code blocks dark in light mode
+- [x] Reduce hero orb opacity in light mode, shift to warmer hue
 
 ---
 
@@ -63,3 +64,6 @@
 | Wave | Commit | Changes |
 |---|---|---|
 | Wave 1 | `7ef43e4` | Outfit font, numbers strip, roadmap progress, trust signals — 5 files, +1438/-424 |
+| Docs Baseline | `ca7dfe9` | Added UPGRADE_PLAN.md and UPGRADE_TASKS.md scaffolding |
+| Wave 2 | `pending` | Scroll-driven CSS animations, JS fallback guard, curated 8-screen gallery, terminal story, tech rationale (working tree changes) |
+| Wave 3 | `pending` | About page elevation, founder live metrics, timeline fill/parallax, light-theme polish (working tree changes) |
