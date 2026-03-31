@@ -82,6 +82,8 @@ The site is currently a solid 7.5–8. Here's the battle plan to push it past 10
 
 > Goal: Replace the current IntersectionObserver-based reveals with **native CSS scroll-driven animations** — smoother, 60fps, zero JS.
 
+Status: ✅ Implemented with JS fallback retained for browsers without `animation-timeline: view()`.
+
 ### [MODIFY] [styles.css](file:///home/akash/flxos-labs/flxos-labs.github.io/assets/css/styles.css)
 
 Add a new section `/* === Scroll-Driven Animations (2026) === */`:
@@ -172,8 +174,8 @@ Added between hero wave and features:
 #### 3B. Testimonials ✅
 Removed 2 anonymous testimonials. Kept only verified @Revers-BR (Issue #43).
 
-#### 3C. Tech Stack Rationale
-> Still to do — add visible "why" subtitle under each tech logo.
+#### 3C. Tech Stack Rationale ✅
+Added visible "why we chose this" rationale under each tech logo.
 
 #### 3D. Roadmap with Progress & Timeline ✅
 Version corrected: `v1.0 → v0.1` (current). Roadmap:
@@ -194,6 +196,8 @@ v2.0 — Vision (2027+)          ░░░░░░░░░░░░   0%
 
 #### 4A. Curate Gallery to 8 Hero Screens (not 15)
 
+Status: ✅ Done
+
 Reduce gallery from 15 screenshots to **8 curated** ones that tell a story:
 1. Home Screen (the hero shot)
 2. App Launcher (shows breadth)
@@ -213,7 +217,13 @@ Between Get Started and Community, add an **animated CSS terminal simulation** t
 
 > Decision: Using CSS terminal simulation (no recording needed).
 
+Status: ✅ Done
+
 #### 4C. Skeleton Loading States for GitHub Stats ✅ DONE
+
+#### 4D. Tech Stack "Why We Chose X" Rationale
+
+Status: ✅ Done
 
 ---
 
@@ -234,6 +244,8 @@ Completed:
 
 > Goal: The About page should feel like a **second hero page**, not an afterthought.
 
+Status: ✅ Implemented
+
 ### [MODIFY] [about/index.html](file:///home/akash/flxos-labs/flxos-labs.github.io/about/index.html)
 
 1. **Add animated gradient mesh background** (same as main page)
@@ -245,11 +257,19 @@ Completed:
 4. **Add parallax to hero section text** (subtle translateY on scroll)
 5. **Philosophy cards**: Add hover glow effect matching main page bento cards
 
+Delivered:
+- Added animated mesh/orb hero background to the About page
+- Added live founder activity metrics populated from GitHub API
+- Converted the story timeline to a scroll-progress timeline with CSS/JS fallback
+- Added subtle hero parallax and philosophy-card glow interactions
+
 ---
 
 ## Phase 7: Light Mode & Final Polish
 
 > Goal: Light mode should feel **intentional**, not inverted.
+
+Status: ✅ Implemented
 
 ### [MODIFY] [styles.css](file:///home/akash/flxos-labs/flxos-labs.github.io/assets/css/styles.css)
 
@@ -272,6 +292,12 @@ Completed:
 
 4. **Light mode hero orbs** — reduce opacity further, shift to warmer tones.
 
+Delivered:
+- Warmed `--bg-card` and `--bg-glass` values for the light theme
+- Softened light-theme gradient text colors
+- Kept code windows/code blocks dark in light mode
+- Shifted hero mesh/orb tones warmer and reduced their intensity in light mode
+
 ---
 
 ## Execution Priority
@@ -281,10 +307,10 @@ Completed:
 | Phase 1: Typography | 🔥🔥🔥 | Low | ✅ Done (Wave 1) |
 | Phase 3: Content/Trust | 🔥🔥🔥 | Medium | ✅ Done (Wave 1) |
 | Phase 5: Motion Polish | 🔥🔥🔥 | Medium | ✅ Done (Wave 1) |
-| Phase 2: Scroll Animations | 🔥🔥 | Medium | ⏳ Wave 2 |
-| Phase 4: Visual Storytelling | 🔥🔥 | Medium | ⏳ Wave 2 |
-| Phase 7: Light Mode | 🔥 | Low | ⏳ Wave 3 |
-| Phase 6: About Page | 🔥 | Low | ⏳ Wave 3 |
+| Phase 2: Scroll Animations | 🔥🔥 | Medium | ✅ Done |
+| Phase 4: Visual Storytelling | 🔥🔥 | Medium | ✅ Done |
+| Phase 7: Light Mode | 🔥 | Low | ✅ Done |
+| Phase 6: About Page | 🔥 | Low | ✅ Done |
 
 ---
 
@@ -304,6 +330,27 @@ Completed:
 ### Manual Verification
 - Side-by-side comparison before/after screenshots
 - Check the About page matches the main page's visual quality
+
+## Verification Results (2026-03-31)
+
+### Completed in this session
+- [x] Tracker completeness: `UPGRADE_TASKS.md` has 0 unchecked boxes
+- [x] Branch state validated: `develop` is ahead of `origin/develop` by 2 commits (`7ef43e4`, `ca7dfe9`)
+- [x] Scroll-driven CSS animation implementation present with `@supports (animation-timeline: view())`
+- [x] JS fallback guard present via `hasScrollTimeline` checks
+- [x] Testimonials reduced to one verified source (`@Revers-BR`)
+- [x] Curated gallery count confirmed: 8 `carousel-slide` entries
+- [x] Command palette markup and JS handlers present
+- [x] About founder activity metrics wired to GitHub API fields
+
+### Not run in this session
+- [ ] Lighthouse audit (target: 95+ across categories)
+- [ ] CLS regression measurement
+- [ ] Firefox fallback behavior manual test
+- [ ] Desktop/mobile visual audit (1440px and 375px)
+- [ ] Side-by-side before/after screenshot comparison
+
+Note: Wave 2 and Wave 3 implementation is present in the working tree and tracked as complete, but those changes are still uncommitted.
 
 ---
 
