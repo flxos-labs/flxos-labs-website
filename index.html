@@ -22,14 +22,14 @@
     <meta property="og:title" content="FlxOS - Modular OS from ESP32 to Desktop">
     <meta property="og:description"
         content="FlxOS is a modular, profile-driven operating system — from ESP32 microcontrollers to desktop platforms. Built on ESP-IDF, LVGL, and LovyanGFX.">
-    <meta property="og:image" content="https://flxos-labs.github.io/og-image.png">
+    <meta property="og:image" content="https://flxos-labs.github.io/assets/images/og-image.png">
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="FlxOS - Modular OS from ESP32 to Desktop">
     <meta name="twitter:description"
         content="FlxOS is a modular, profile-driven operating system — from ESP32 microcontrollers to desktop platforms.">
-    <meta name="twitter:image" content="https://flxos-labs.github.io/og-image.png">
+    <meta name="twitter:image" content="https://flxos-labs.github.io/assets/images/og-image.png">
 
     <!-- Preconnect for Performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -39,16 +39,16 @@
     
     <!-- Preload fonts to prevent layout shift -->
     <link rel="preload"
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
         as="style">
 
     <!-- Fonts with optimized loading -->
     <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
         rel="stylesheet" media="print" onload="this.media='all'">
     <noscript>
         <link
-            href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+            href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
             rel="stylesheet">
     </noscript>
 
@@ -59,7 +59,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
 
     <!-- Styles -->
-    <link rel="stylesheet" href="styles.css?v=8">
+    <link rel="stylesheet" href="/assets/css/styles.css?v=11">
 
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml"
@@ -78,7 +78,7 @@
                 "url": "https://flxos-labs.github.io/",
                 "applicationCategory": "DeveloperApplication",
                 "operatingSystem": ["ESP32", "Linux", "macOS", "Windows"],
-                "softwareVersion": "1.0.0",
+                "softwareVersion": "0.1.0",
                 "license": "https://www.gnu.org/licenses/agpl-3.0.html",
                 "codeRepository": "https://github.com/flxos-labs/flxos",
                 "author": {
@@ -86,7 +86,7 @@
                     "name": "FlxOS Labs",
                     "url": "https://flxos-labs.github.io/"
                 },
-                "image": "https://flxos-labs.github.io/og-image.png",
+                "image": "https://flxos-labs.github.io/assets/images/og-image.png",
                 "offers": {
                     "@type": "Offer",
                     "price": "0",
@@ -169,7 +169,7 @@
             <div class="container hero-container">
                 <div class="hero-content">
                     <div class="hero-badges">
-                        <div class="badge" role="status">v1.0.0</div>
+                        <div class="badge" role="status">v0.1.0</div>
 
                         <div id="latest-release" class="badge secondary" style="display: none;" role="status">Latest: --</div>
 
@@ -202,21 +202,21 @@
                         <div class="stat-item">
                             <i class="fas fa-star"></i>
                             <div>
-                                <div class="stat-value" id="github-stars">--</div>
+                                <div class="stat-value" id="github-stars"><span class="stat-skeleton"></span></div>
                                 <div class="stat-label">Stars</div>
                             </div>
                         </div>
                         <div class="stat-item">
                             <i class="fas fa-code-branch"></i>
                             <div>
-                                <div class="stat-value" id="github-forks">--</div>
+                                <div class="stat-value" id="github-forks"><span class="stat-skeleton"></span></div>
                                 <div class="stat-label">Forks</div>
                             </div>
                         </div>
                         <div class="stat-item">
                             <i class="fas fa-eye"></i>
                             <div>
-                                <div class="stat-value" id="github-watchers">--</div>
+                                <div class="stat-value" id="github-watchers"><span class="stat-skeleton"></span></div>
                                 <div class="stat-label">Watchers</div>
                             </div>
                         </div>
@@ -227,10 +227,21 @@
                     <div class="device-mockup" id="hero-device">
                         <div class="device-frame">
                             <div class="device-screen" id="heroDeviceScreen">
-                                <img class="slide-img active" src="lilygo-thmi-systeminfo-app.jpg" alt="FlxOS System Info running on Lilygo T-HMI device" fetchpriority="high">
-                                <img class="slide-img" src="lilygo-thmi-quickaccess-panel.jpg" alt="FlxOS Quick Access Panel on hardware" loading="lazy">
-                                <img class="slide-img" src="lilygo-thmi-systeminfo-app.jpg" alt="FlxOS System Info on hardware" loading="lazy">
-                                <img class="slide-img" src="lilygo-thmi-notification-panel.jpg" alt="FlxOS Notification Panel on hardware" loading="lazy">
+                                <img class="slide-img active" src="/assets/images/screenshots/scr_20260312_161725_home_screen_with_dock_status_bar_wallpaper.png" alt="FlxOS Home Screen" fetchpriority="high">
+                                <img class="slide-img" src="/assets/images/screenshots/scr_20260312_162354_sleek_app_launcher.png" alt="FlxOS App Launcher" loading="lazy">
+                                <img class="slide-img" src="/assets/images/screenshots/scr_20260312_162706_files_app.png" alt="FlxOS Files App" loading="lazy">
+                                <img class="slide-img" src="/assets/images/screenshots/scr_20260312_162756_settings_app.png" alt="FlxOS Settings App" loading="lazy">
+                                <img class="slide-img" src="/assets/images/screenshots/scr_20260312_161649_calendar_app.png" alt="FlxOS Calendar App" loading="lazy">
+                                <img class="slide-img" src="/assets/images/screenshots/scr_20260312_162819_notification_panel.png" alt="FlxOS Notification Panel" loading="lazy">
+                                <img class="slide-img" src="/assets/images/screenshots/scr_20260312_162917_quickaccess_panel.png" alt="FlxOS Quick Access Panel" loading="lazy">
+                                <img class="slide-img" src="/assets/images/screenshots/scr_20260312_163034_system_info_app_in_material_theme.png" alt="System Info Material Theme" loading="lazy">
+                                <img class="slide-img" src="/assets/images/screenshots/scr_20260312_163047_system_info_app_in_hyprland_dark_theme.png" alt="System Info Dark Theme" loading="lazy">
+                                <img class="slide-img" src="/assets/images/screenshots/scr_20260312_161745_dynamic_tiling_dwindle_layout_with_4_apps.png" alt="Dynamic Tiling Layout" loading="lazy">
+                                <img class="slide-img" src="/assets/images/screenshots/scr_20260312_163214_text_editor_with_on_screen_keyboard.png" alt="Text Editor with Keyboard" loading="lazy">
+                                <img class="slide-img" src="/assets/images/screenshots/scr_20260312_164350_tools_app.png" alt="FlxOS Tools App" loading="lazy">
+                                <img class="slide-img" src="/assets/images/screenshots/scr_20260312_162948_floating_notification.png" alt="FlxOS Floating Notification" loading="lazy">
+                                <img class="slide-img" src="/assets/images/screenshots/scr_20260312_163129_open_image_in_image_viewer_from_files_app_side_by_side_with_dynamic_dwindle_layout.png" alt="Image Viewer side by side with Files App" loading="lazy">
+                                <img class="slide-img" src="/assets/images/screenshots/scr_20260312_163152_open_text_file_in_text_editor_from_files_app_side_by_side_with_dynamic_dwindle_layout.png" alt="Text Editor side by side with Files App" loading="lazy">
                                 <div class="device-screen-glare"></div>
                             </div>
                         </div>
@@ -246,7 +257,7 @@
                             </div>
                             <span class="title">terminal — flxos</span>
                         </div>
-                        <div class="window-content">
+                        <div class="window-content" data-terminal-demo="hero">
                             <div class="code-line"><span class="prompt">$</span> git clone --recurse-submodules
                                 https://github.com/flxos-labs/flxos.git</div>
                             <div class="code-line"><span class="prompt">$</span> cd flxos</div>
@@ -271,6 +282,35 @@
                 <path d="M0,30 C360,60 1080,0 1440,30 L1440,60 L0,60 Z" fill="var(--bg-darker)"/>
             </svg>
         </div>
+
+        <!-- By the Numbers Strip -->
+        <section class="numbers-strip" aria-label="FlxOS by the numbers">
+            <div class="container">
+                <p class="numbers-eyebrow">By the numbers</p>
+                <div class="numbers-grid">
+                    <div class="number-item">
+                        <div class="number-value">&lt;240<span class="number-unit">KB</span></div>
+                        <div class="number-label">RAM Footprint</div>
+                    </div>
+                    <div class="number-item">
+                        <div class="number-value">60<span class="number-unit">FPS</span></div>
+                        <div class="number-label">Smooth Graphics</div>
+                    </div>
+                    <div class="number-item">
+                        <div class="number-value">7<span class="number-unit">+</span></div>
+                        <div class="number-label">MCU Variants</div>
+                    </div>
+                    <div class="number-item">
+                        <div class="number-value">4<span class="number-unit">min</span></div>
+                        <div class="number-label">Zero to Running</div>
+                    </div>
+                    <div class="number-item">
+                        <div class="number-value">$10<span class="number-unit">+</span></div>
+                        <div class="number-label">Min Hardware Cost</div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
         <!-- Features Section — Bento Grid -->
         <section id="features" class="features">
@@ -389,21 +429,21 @@
         <section id="screenshots" class="screenshots" aria-labelledby="screenshots-title">
             <div class="section-header container">
                 <h2 id="screenshots-title">System Gallery</h2>
-                <p>Experience the sleek, modern interface of FlxOS across different components.</p>
+                <p>Eight key moments that show how FlxOS moves from polished home screen to real multitasking workflows.</p>
             </div>
 
             <!-- Featured hero shot -->
             <div class="gallery-featured">
                 <div class="gallery-featured-device">
                     <div class="gf-frame">
-                        <img src="flxos_screenshots/scr_20260312_161725_home_screen_with_dock_status_bar_wallpaper.png"
+                        <img src="/assets/images/screenshots/scr_20260312_161725_home_screen_with_dock_status_bar_wallpaper.png"
                             alt="FlxOS full home screen" loading="lazy">
                         <div class="gf-glare"></div>
                     </div>
                     <div class="gf-glow"></div>
                 </div>
                 <div class="gallery-featured-text">
-                    <div class="gallery-featured-label">Featured Screen</div>
+                    <div class="gallery-featured-label">Story Beat 01</div>
                     <h3 class="gallery-featured-title">Home Screen — Full Experience</h3>
                     <p>Dock, status bar, dynamic wallpaper and live widgets — all running on a tiny ESP32 display.</p>
                 </div>
@@ -419,137 +459,82 @@
                         <div class="carousel-slide" data-title="Home Screen">
                             <div class="slide-device">
                                 <picture>
-                                    <source srcset="flxos_screenshots/scr_20260312_161725_home_screen_with_dock_status_bar_wallpaper.webp" type="image/webp">
-                                    <img src="flxos_screenshots/scr_20260312_161725_home_screen_with_dock_status_bar_wallpaper.png" alt="FlxOS Home Screen" loading="lazy">
+                                    <source srcset="/assets/images/screenshots/scr_20260312_161725_home_screen_with_dock_status_bar_wallpaper.webp" type="image/webp">
+                                    <img src="/assets/images/screenshots/scr_20260312_161725_home_screen_with_dock_status_bar_wallpaper.png" alt="FlxOS Home Screen" loading="lazy">
                                 </picture>
                             </div>
                             <span class="slide-label">Home Screen</span>
+                            <span class="slide-why">A full desktop-like shell on a microcontroller is the opening proof point.</span>
                         </div>
                         <div class="carousel-slide" data-title="App Launcher">
                             <div class="slide-device">
                                 <picture>
-                                    <source srcset="flxos_screenshots/scr_20260312_162354_sleek_app_launcher.webp" type="image/webp">
-                                    <img src="flxos_screenshots/scr_20260312_162354_sleek_app_launcher.png" alt="FlxOS App Launcher" loading="lazy">
+                                    <source srcset="/assets/images/screenshots/scr_20260312_162354_sleek_app_launcher.webp" type="image/webp">
+                                    <img src="/assets/images/screenshots/scr_20260312_162354_sleek_app_launcher.png" alt="FlxOS App Launcher" loading="lazy">
                                 </picture>
                             </div>
                             <span class="slide-label">App Launcher</span>
-                        </div>
-                        <div class="carousel-slide" data-title="Files App">
-                            <div class="slide-device">
-                                <picture>
-                                    <source srcset="flxos_screenshots/scr_20260312_162706_files_app.webp" type="image/webp">
-                                    <img src="flxos_screenshots/scr_20260312_162706_files_app.png" alt="FlxOS Files App" loading="lazy">
-                                </picture>
-                            </div>
-                            <span class="slide-label">Files App</span>
-                        </div>
-                        <div class="carousel-slide" data-title="Settings App">
-                            <div class="slide-device">
-                                <picture>
-                                    <source srcset="flxos_screenshots/scr_20260312_162756_settings_app.webp" type="image/webp">
-                                    <img src="flxos_screenshots/scr_20260312_162756_settings_app.png" alt="FlxOS Settings App" loading="lazy">
-                                </picture>
-                            </div>
-                            <span class="slide-label">Settings</span>
-                        </div>
-                        <div class="carousel-slide" data-title="Calendar App">
-                            <div class="slide-device">
-                                <picture>
-                                    <source srcset="flxos_screenshots/scr_20260312_161649_calendar_app.webp" type="image/webp">
-                                    <img src="flxos_screenshots/scr_20260312_161649_calendar_app.png" alt="FlxOS Calendar App" loading="lazy">
-                                </picture>
-                            </div>
-                            <span class="slide-label">Calendar</span>
-                        </div>
-                        <div class="carousel-slide" data-title="Notification Panel">
-                            <div class="slide-device">
-                                <picture>
-                                    <source srcset="flxos_screenshots/scr_20260312_162819_notification_panel.webp" type="image/webp">
-                                    <img src="flxos_screenshots/scr_20260312_162819_notification_panel.png" alt="FlxOS Notification Panel" loading="lazy">
-                                </picture>
-                            </div>
-                            <span class="slide-label">Notifications</span>
-                        </div>
-                        <div class="carousel-slide" data-title="Quick Access">
-                            <div class="slide-device">
-                                <picture>
-                                    <source srcset="flxos_screenshots/scr_20260312_162917_quickaccess_panel.webp" type="image/webp">
-                                    <img src="flxos_screenshots/scr_20260312_162917_quickaccess_panel.png" alt="FlxOS Quick Access Panel" loading="lazy">
-                                </picture>
-                            </div>
-                            <span class="slide-label">Quick Access</span>
-                        </div>
-                        <div class="carousel-slide" data-title="System Info (Material)">
-                            <div class="slide-device">
-                                <picture>
-                                    <source srcset="flxos_screenshots/scr_20260312_163034_system_info_app_in_material_theme.webp" type="image/webp">
-                                    <img src="flxos_screenshots/scr_20260312_163034_system_info_app_in_material_theme.png" alt="System Info Material Theme" loading="lazy">
-                                </picture>
-                            </div>
-                            <span class="slide-label">System Info</span>
-                        </div>
-                        <div class="carousel-slide" data-title="System Info (Dark)">
-                            <div class="slide-device">
-                                <picture>
-                                    <source srcset="flxos_screenshots/scr_20260312_163047_system_info_app_in_hyprland_dark_theme.webp" type="image/webp">
-                                    <img src="flxos_screenshots/scr_20260312_163047_system_info_app_in_hyprland_dark_theme.png" alt="System Info Dark Theme" loading="lazy">
-                                </picture>
-                            </div>
-                            <span class="slide-label">Dark Theme</span>
+                            <span class="slide-why">Shows app breadth and a touch-first navigation model that feels deliberate.</span>
                         </div>
                         <div class="carousel-slide" data-title="Tiling Layout">
                             <div class="slide-device">
                                 <picture>
-                                    <source srcset="flxos_screenshots/scr_20260312_161745_dynamic_tiling_dwindle_layout_with_4_apps.webp" type="image/webp">
-                                    <img src="flxos_screenshots/scr_20260312_161745_dynamic_tiling_dwindle_layout_with_4_apps.png" alt="Dynamic Tiling Layout" loading="lazy">
+                                    <source srcset="/assets/images/screenshots/scr_20260312_161745_dynamic_tiling_dwindle_layout_with_4_apps.webp" type="image/webp">
+                                    <img src="/assets/images/screenshots/scr_20260312_161745_dynamic_tiling_dwindle_layout_with_4_apps.png" alt="Dynamic Tiling Layout" loading="lazy">
                                 </picture>
                             </div>
                             <span class="slide-label">Tiling Layout</span>
-                        </div>
-                        <div class="carousel-slide" data-title="Text Editor">
-                            <div class="slide-device">
-                                <picture>
-                                    <source srcset="flxos_screenshots/scr_20260312_163214_text_editor_with_on_screen_keyboard.webp" type="image/webp">
-                                    <img src="flxos_screenshots/scr_20260312_163214_text_editor_with_on_screen_keyboard.png" alt="Text Editor with Keyboard" loading="lazy">
-                                </picture>
-                            </div>
-                            <span class="slide-label">Text Editor</span>
-                        </div>
-                        <div class="carousel-slide" data-title="Tools App">
-                            <div class="slide-device">
-                                <picture>
-                                    <source srcset="flxos_screenshots/scr_20260312_164350_tools_app.webp" type="image/webp">
-                                    <img src="flxos_screenshots/scr_20260312_164350_tools_app.png" alt="FlxOS Tools App" loading="lazy">
-                                </picture>
-                            </div>
-                            <span class="slide-label">Tools</span>
-                        </div>
-                        <div class="carousel-slide" data-title="Floating Notification">
-                            <div class="slide-device">
-                                <picture>
-                                    <source srcset="flxos_screenshots/scr_20260312_162948_floating_notification.webp" type="image/webp">
-                                    <img src="flxos_screenshots/scr_20260312_162948_floating_notification.png" alt="FlxOS Floating Notification" loading="lazy">
-                                </picture>
-                            </div>
-                            <span class="slide-label">Floating Notification</span>
+                            <span class="slide-why">This is the "wait, it can tile windows too?" moment for embedded devs.</span>
                         </div>
                         <div class="carousel-slide" data-title="Image Viewer + Files">
                             <div class="slide-device">
                                 <picture>
-                                    <source srcset="flxos_screenshots/scr_20260312_163129_open_image_in_image_viewer_from_files_app_side_by_side_with_dynamic_dwindle_layout.webp" type="image/webp">
-                                    <img src="flxos_screenshots/scr_20260312_163129_open_image_in_image_viewer_from_files_app_side_by_side_with_dynamic_dwindle_layout.png" alt="Image Viewer side by side with Files App" loading="lazy">
+                                    <source srcset="/assets/images/screenshots/scr_20260312_163129_open_image_in_image_viewer_from_files_app_side_by_side_with_dynamic_dwindle_layout.webp" type="image/webp">
+                                    <img src="/assets/images/screenshots/scr_20260312_163129_open_image_in_image_viewer_from_files_app_side_by_side_with_dynamic_dwindle_layout.png" alt="Image Viewer side by side with Files App" loading="lazy">
                                 </picture>
                             </div>
-                            <span class="slide-label">Image Viewer</span>
+                            <span class="slide-label">Files + Viewer</span>
+                            <span class="slide-why">A split-view workflow makes FlxOS feel like an operating system, not a demo.</span>
                         </div>
-                        <div class="carousel-slide" data-title="Text Editor + Files">
+                        <div class="carousel-slide" data-title="Settings App">
                             <div class="slide-device">
                                 <picture>
-                                    <source srcset="flxos_screenshots/scr_20260312_163152_open_text_file_in_text_editor_from_files_app_side_by_side_with_dynamic_dwindle_layout.webp" type="image/webp">
-                                    <img src="flxos_screenshots/scr_20260312_163152_open_text_file_in_text_editor_from_files_app_side_by_side_with_dynamic_dwindle_layout.png" alt="Text Editor side by side with Files App" loading="lazy">
+                                    <source srcset="/assets/images/screenshots/scr_20260312_162756_settings_app.webp" type="image/webp">
+                                    <img src="/assets/images/screenshots/scr_20260312_162756_settings_app.png" alt="FlxOS Settings App" loading="lazy">
                                 </picture>
                             </div>
-                            <span class="slide-label">Split View</span>
+                            <span class="slide-label">Settings</span>
+                            <span class="slide-why">Polished system settings signal maturity beyond a flashy shell.</span>
+                        </div>
+                        <div class="carousel-slide" data-title="Calendar App">
+                            <div class="slide-device">
+                                <picture>
+                                    <source srcset="/assets/images/screenshots/scr_20260312_161649_calendar_app.webp" type="image/webp">
+                                    <img src="/assets/images/screenshots/scr_20260312_161649_calendar_app.png" alt="FlxOS Calendar App" loading="lazy">
+                                </picture>
+                            </div>
+                            <span class="slide-label">Calendar</span>
+                            <span class="slide-why">A practical built-in app proves the platform is usable for everyday tasks.</span>
+                        </div>
+                        <div class="carousel-slide" data-title="Notification Panel">
+                            <div class="slide-device">
+                                <picture>
+                                    <source srcset="/assets/images/screenshots/scr_20260312_162819_notification_panel.webp" type="image/webp">
+                                    <img src="/assets/images/screenshots/scr_20260312_162819_notification_panel.png" alt="FlxOS Notification Panel" loading="lazy">
+                                </picture>
+                            </div>
+                            <span class="slide-label">Notifications</span>
+                            <span class="slide-why">OS-level alerts are the kind of detail that turns UI into platform.</span>
+                        </div>
+                        <div class="carousel-slide" data-title="System Info (Dark)">
+                            <div class="slide-device">
+                                <picture>
+                                    <source srcset="/assets/images/screenshots/scr_20260312_163047_system_info_app_in_hyprland_dark_theme.webp" type="image/webp">
+                                    <img src="/assets/images/screenshots/scr_20260312_163047_system_info_app_in_hyprland_dark_theme.png" alt="System Info Dark Theme" loading="lazy">
+                                </picture>
+                            </div>
+                            <span class="slide-label">Dark Theme</span>
+                            <span class="slide-why">Theme adaptability shows the UI system can scale stylistically too.</span>
                         </div>
                     </div>
                 </div>
@@ -583,22 +568,22 @@
                 <div class="hw-photo-grid">
                     <div class="hw-photo-card reveal">
                         <span class="hw-device-badge">Lilygo T-HMI</span>
-                        <img src="lilygo-thmi-quickaccess-panel.jpg" alt="FlxOS Quick Access Panel running on Lilygo T-HMI" loading="lazy">
+                        <img src="/assets/images/hardware/lilygo-thmi-quickaccess-panel.jpg" alt="FlxOS Quick Access Panel running on Lilygo T-HMI" loading="lazy">
                         <div class="hw-photo-label">Quick Access Panel</div>
                     </div>
                     <div class="hw-photo-card reveal">
                         <span class="hw-device-badge">Lilygo T-HMI</span>
-                        <img src="lilygo-thmi-systeminfo-app.jpg" alt="FlxOS System Info app running on Lilygo T-HMI" loading="lazy">
+                        <img src="/assets/images/hardware/lilygo-thmi-systeminfo-app.jpg" alt="FlxOS System Info app running on Lilygo T-HMI" loading="lazy">
                         <div class="hw-photo-label">System Info App</div>
                     </div>
                     <div class="hw-photo-card reveal">
                         <span class="hw-device-badge">Lilygo T-HMI</span>
-                        <img src="lilygo-thmi-notification-panel.jpg" alt="FlxOS Notification Panel on hardware" loading="lazy">
+                        <img src="/assets/images/hardware/lilygo-thmi-notification-panel.jpg" alt="FlxOS Notification Panel on hardware" loading="lazy">
                         <div class="hw-photo-label">Notification Panel</div>
                     </div>
                     <div class="hw-photo-card reveal">
                         <span class="hw-device-badge">Lilygo T-HMI</span>
-                        <img src="lilygo-thmi-calculator-app.jpg" alt="FlxOS Calculator App on Lilygo T-HMI" loading="lazy">
+                        <img src="/assets/images/hardware/lilygo-thmi-calculator-app.jpg" alt="FlxOS Calculator App on Lilygo T-HMI" loading="lazy">
                         <div class="hw-photo-label">Calculator App</div>
                     </div>
                 </div>
@@ -623,6 +608,7 @@
                             </svg>
                         </div>
                         <span>ESP-IDF</span>
+                        <p class="tech-rationale">Chosen for native Espressif support, stable drivers, and the right low-level control for a real OS.</p>
                         <div class="tech-tooltip">Espressif IoT Development Framework — the real-time OS foundation of FlxOS</div>
                     </div>
 
@@ -634,6 +620,7 @@
                             </svg>
                         </div>
                         <span>LVGL</span>
+                        <p class="tech-rationale">Chosen because it delivers rich embedded UI primitives without forcing FlxOS into a toy interface.</p>
                         <div class="tech-tooltip">Light &amp; Versatile Graphics Library — hardware-accelerated UI engine</div>
                     </div>
 
@@ -646,6 +633,7 @@
                             </svg>
                         </div>
                         <span>LovyanGFX</span>
+                        <p class="tech-rationale">Chosen for fast display support across panels like ILI9341 and ST7789 with minimal friction.</p>
                         <div class="tech-tooltip">High-performance graphics library supporting ILI9341, ST7789 &amp; more</div>
                     </div>
 
@@ -658,6 +646,7 @@
                             </svg>
                         </div>
                         <span>Python 3</span>
+                        <p class="tech-rationale">Chosen to keep board selection, automation, and release tooling approachable on every developer machine.</p>
                         <div class="tech-tooltip">Python-powered CLI for profile selection, building &amp; flashing</div>
                     </div>
 
@@ -670,6 +659,7 @@
                             </svg>
                         </div>
                         <span>CMake</span>
+                        <p class="tech-rationale">Chosen for reproducible cross-platform builds as FlxOS expands from chips toward desktop targets.</p>
                         <div class="tech-tooltip">Cross-platform build system managing all FlxOS compilation targets</div>
                     </div>
 
@@ -687,45 +677,65 @@
                 <div class="roadmap-h-timeline">
                     <div class="roadmap-h-track"></div>
                     <div class="roadmap-h-items">
-                        <div class="roadmap-h-item completed" data-version="v1.0">
+                        <div class="roadmap-h-item completed" data-version="v0.1">
                             <div class="roadmap-h-marker">
                                 <i class="fas fa-check"></i>
                                 <div class="roadmap-h-pulse"></div>
                             </div>
                             <div class="roadmap-h-card">
-                                <div class="roadmap-h-version">v1.0 — Released</div>
+                                <div class="roadmap-h-version">v0.1 &mdash; Released</div>
                                 <h3>ESP32 Embedded</h3>
-                                <p>Full OS with touch UI, hardware abstraction layer, built-in apps, and profile-driven builds.</p>
+                                <p>Full OS with touch UI, hardware abstraction, built-in apps, and profile-driven builds.</p>
+                                <div class="roadmap-h-date">March 2026</div>
+                                <div class="roadmap-h-progress">
+                                    <div class="roadmap-h-bar"><div class="roadmap-h-fill" style="width:100%"></div></div>
+                                    <span>100%</span>
+                                </div>
                             </div>
                         </div>
-                        <div class="roadmap-h-item upcoming" data-version="v2.0">
+                        <div class="roadmap-h-item upcoming" data-version="v1.0">
                             <div class="roadmap-h-marker">
                                 <i class="fas fa-desktop"></i>
                             </div>
                             <div class="roadmap-h-card">
-                                <div class="roadmap-h-version">v2.0 — In Progress</div>
-                                <h3>Desktop Support</h3>
-                                <p>Expand FlxOS to run natively on Linux, macOS, and Windows desktops.</p>
+                                <div class="roadmap-h-version">v1.0 &mdash; In Progress</div>
+                                <h3>Stable Release</h3>
+                                <p>Feature-complete build: Bluetooth, media player, theme customization, and extended hardware support.</p>
+                                <div class="roadmap-h-date">Target: Q4 2026</div>
+                                <div class="roadmap-h-progress">
+                                    <div class="roadmap-h-bar"><div class="roadmap-h-fill" style="width:30%"></div></div>
+                                    <span>30%</span>
+                                </div>
                             </div>
                         </div>
-                        <div class="roadmap-h-item upcoming" data-version="v2.5">
+                        <div class="roadmap-h-item upcoming" data-version="v1.5">
                             <div class="roadmap-h-marker">
                                 <i class="fas fa-flask"></i>
                             </div>
                             <div class="roadmap-h-card">
-                                <div class="roadmap-h-version">v2.5 — Planned</div>
+                                <div class="roadmap-h-version">v1.5 &mdash; Planned</div>
                                 <h3>Desktop Simulator</h3>
-                                <p>Develop and test FlxOS apps on your desktop without any hardware.</p>
+                                <p>Develop and test FlxOS apps on your desktop without any physical hardware.</p>
+                                <div class="roadmap-h-date">Target: Q2 2027</div>
+                                <div class="roadmap-h-progress">
+                                    <div class="roadmap-h-bar"><div class="roadmap-h-fill" style="width:0%"></div></div>
+                                    <span>0%</span>
+                                </div>
                             </div>
                         </div>
-                        <div class="roadmap-h-item upcoming" data-version="v3.0">
+                        <div class="roadmap-h-item upcoming" data-version="v2.0">
                             <div class="roadmap-h-marker">
                                 <i class="fas fa-plug"></i>
                             </div>
                             <div class="roadmap-h-card">
-                                <div class="roadmap-h-version">v3.0 — Vision</div>
-                                <h3>Plugin Ecosystem</h3>
-                                <p>Community-driven app and driver extensions for both embedded and desktop.</p>
+                                <div class="roadmap-h-version">v2.0 &mdash; Vision</div>
+                                <h3>Desktop Native + Plugins</h3>
+                                <p>Run FlxOS on Linux, macOS, and Windows. Community-driven app and driver extensions.</p>
+                                <div class="roadmap-h-date">Target: 2027+</div>
+                                <div class="roadmap-h-progress">
+                                    <div class="roadmap-h-bar"><div class="roadmap-h-fill" style="width:0%"></div></div>
+                                    <span>0%</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -817,34 +827,8 @@
                             <div class="testimonial-avatar-initials">RB</div>
                             <div>
                                 <div class="testimonial-name">@Revers-BR</div>
-                                <div class="testimonial-handle"><a href="https://github.com/flxos-labs/flxos/issues/43" target="_blank" rel="noopener noreferrer">github.com/flxos-labs · Issue #43</a></div>
+                                <div class="testimonial-handle"><a href="https://github.com/flxos-labs/flxos/issues/43" target="_blank" rel="noopener noreferrer">github.com/flxos-labs &middot; Issue #43</a></div>
                                 <span class="testimonial-source-badge"><i class="fab fa-github"></i> GitHub Issue</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="testimonial-card">
-                        <div class="testimonial-quote-mark">&ldquo;</div>
-                        <p class="testimonial-text">Finally — an embedded OS that <strong>doesn't require gluing 5 libraries together</strong>. The profile system is a game changer for multi-board projects.</p>
-                        <div class="testimonial-author">
-                            <div class="testimonial-avatar-initials">DX</div>
-                            <div>
-                                <div class="testimonial-name">Embedded Developer</div>
-                                <div class="testimonial-handle">Community Feedback</div>
-                                <span class="testimonial-source-badge"><i class="fas fa-code-branch"></i> Contributor</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="testimonial-card">
-                        <div class="testimonial-quote-mark">&ldquo;</div>
-                        <p class="testimonial-text">The <strong>touch UI quality is insane</strong> for an ESP32. Calendar, file manager, tiling WM — running on a $10 chip. Wild stuff.</p>
-                        <div class="testimonial-author">
-                            <div class="testimonial-avatar-initials">MK</div>
-                            <div>
-                                <div class="testimonial-name">Hardware Enthusiast</div>
-                                <div class="testimonial-handle">Community Feedback</div>
-                                <span class="testimonial-source-badge"><i class="fas fa-star"></i> GitHub Star</span>
                             </div>
                         </div>
                     </div>
@@ -962,6 +946,42 @@ python flxos.py flash --port /dev/ttyUSB0</code></pre>
                 </div>
             </div>
         </section>
+        <section id="build-story" class="build-story" aria-labelledby="build-story-title">
+            <div class="container">
+                <div class="build-story-shell">
+                    <div class="build-story-copy">
+                        <div class="section-eyebrow">Zero to running</div>
+                        <h2 id="build-story-title">From clone to flashing in one clean flow</h2>
+                        <p>The build experience is part of the product. FlxOS uses a profile-driven CLI so setup feels guided instead of stitched together from docs, shell history, and guesswork.</p>
+                        <div class="build-story-points">
+                            <div class="build-story-point">
+                                <strong>Profile-aware</strong>
+                                <span>Select the board once and the build pipeline follows that hardware path.</span>
+                            </div>
+                            <div class="build-story-point">
+                                <strong>Repeatable</strong>
+                                <span>The same command flow works for demos, iteration, and release builds.</span>
+                            </div>
+                            <div class="build-story-point">
+                                <strong>Fast feedback</strong>
+                                <span>You get visible progress instead of opaque build-system noise.</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="code-window build-story-terminal">
+                        <div class="window-header">
+                            <div class="dots">
+                                <span class="dot red"></span>
+                                <span class="dot yellow"></span>
+                                <span class="dot green"></span>
+                            </div>
+                            <span class="title">zero-to-running.sh</span>
+                        </div>
+                        <div class="window-content" data-terminal-demo="build-story"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
         <!-- Newsletter Section — Full-Width Dramatic CTA -->
         <section class="newsletter" id="newsletter">
             <div class="newsletter-bg-wrap" aria-hidden="true">
@@ -1073,10 +1093,9 @@ python flxos.py flash --port /dev/ttyUSB0</code></pre>
         <i class="fas fa-chevron-up"></i>
     </button>
 
-    <!-- Prism.js for syntax highlighting -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js" defer></script>
-    <script src="script.js?v=5" defer></script>
+    <script src="/assets/js/script.js?v=8" defer></script>
 </body>
 
 </html>
