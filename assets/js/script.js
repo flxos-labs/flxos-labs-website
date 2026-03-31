@@ -226,6 +226,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const forksElement = document.getElementById('github-forks');
         const watchersElement = document.getElementById('github-watchers');
 
+        // Clear any skeleton placeholders first
+        [starsElement, forksElement, watchersElement].forEach(el => {
+            if (el) {
+                const skeleton = el.querySelector('.stat-skeleton');
+                if (skeleton) skeleton.remove();
+            }
+        });
+
         if (stats) {
             if (starsElement) animateCounter(starsElement, stats.stars);
             if (forksElement) animateCounter(forksElement, stats.forks);
@@ -698,91 +706,41 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
     document.head.appendChild(styleSheet);
 
-    // ────────────────────────────────────────────────
-    // Screenshots Gallery & Lightbox — unified system
-    // ────────────────────────────────────────────────
-    const lightbox = document.getElementById('lightbox');
-    const lightboxImg = document.getElementById('lightbox-img');
-    const lightboxCaption = lightbox?.querySelector('.lightbox-caption');
-    const lightboxClose = document.querySelector('.lightbox-close');
-    const lightboxPrevBtn = document.querySelector('.lightbox-prev');
-    const lightboxNextBtn = document.querySelector('.lightbox-next');
-
-    // All lightbox-able items come from the carousel slides
-    // We keep a reference after the carousel block sets them up.
-    let lbSlides = [];   // NodeList-to-array of .carousel-slide elements
-    let lbCurrentIdx = 0;
-
-    // ── Prevent layout-shift when hiding scrollbar ──
-    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
-    document.documentElement.style.setProperty('--scrollbar-gutter', scrollbarWidth + 'px');
-
-    function openLightbox(slides, idx) {
-        if (!lightbox || !lightboxImg) return;
-        lbSlides = slides;
-        lbCurrentIdx = idx;
-        const slide = lbSlides[lbCurrentIdx];
-        const img = slide.querySelector('img');
-        const title = slide.getAttribute('data-title') || '';
-        lightboxImg.src = img.src;
-        if (lightboxCaption) lightboxCaption.textContent = title;
-        // Compensate scrollbar removal to avoid layout shift
-        document.body.style.paddingRight = scrollbarWidth + 'px';
-        document.body.style.overflow = 'hidden';
-        lightbox.classList.add('active');
-        lightbox.setAttribute('aria-hidden', 'false');
-        lightboxImg.focus();
-    }
-
-    function closeLightbox() {
-        if (!lightbox) return;
-        lightbox.classList.remove('active');
-        lightbox.setAttribute('aria-hidden', 'true');
-        document.body.style.overflow = '';
-        document.body.style.paddingRight = '';
-    }
-
-    function lightboxNext() {
-        if (!lbSlides.length) return;
-        lbCurrentIdx = (lbCurrentIdx + 1) % lbSlides.length;
-        openLightbox(lbSlides, lbCurrentIdx);
-    }
-
-    function lightboxPrev() {
-        if (!lbSlides.length) return;
-        lbCurrentIdx = (lbCurrentIdx - 1 + lbSlides.length) % lbSlides.length;
-        openLightbox(lbSlides, lbCurrentIdx);
-    }
-
-    if (lightbox) {
-        lightboxClose?.addEventListener('click', closeLightbox);
-        lightboxNextBtn?.addEventListener('click', (e) => { e.stopPropagation(); lightboxNext(); });
-        lightboxPrevBtn?.addEventListener('click', (e) => { e.stopPropagation(); lightboxPrev(); });
-        lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
-        document.addEventListener('keydown', (e) => {
-            if (!lightbox.classList.contains('active')) return;
-            if (e.key === 'Escape') closeLightbox();
-            if (e.key === 'ArrowRight') lightboxNext();
-            if (e.key === 'ArrowLeft') lightboxPrev();
-        });
-    }
-
-    // ── Featured image click-to-lightbox ──
     const featuredImg = document.querySelector('.gallery-featured .gf-frame img');
-    if (featuredImg) {
-        featuredImg.style.cursor = 'pointer';
-        featuredImg.parentElement.style.cursor = 'pointer';
-        featuredImg.closest('.gallery-featured-device').addEventListener('click', () => {
-            if (!lightbox || !lightboxImg) return;
-            lightboxImg.src = featuredImg.src;
-            if (lightboxCaption) lightboxCaption.textContent = 'Home Screen — Full Experience';
-            document.body.style.paddingRight = scrollbarWidth + 'px';
-            document.body.style.overflow = 'hidden';
-            lightbox.classList.add('active');
-            lightbox.setAttribute('aria-hidden', 'false');
-            // Featured is not part of the carousel slides, so clear lbSlides
-            lbSlides = [];
-        });
+    const featuredTitle = document.querySelector('.gallery-featured-title');
+    const featuredDescription = document.querySelector('.gallery-featured-text p');
+    const galleryCopy = {
+        'Home Screen': 'Dock, status bar, dynamic wallpaper and live widgets all working together in the main FlxOS experience.',
+        'App Launcher': 'A compact launcher for browsing apps quickly with a touch-friendly layout built for embedded hardware.',
+        'Files App': 'A lightweight file browser for navigating storage, opening assets, and managing content directly on the device.',
+        'Settings App': 'System preferences for adjusting behavior, visuals, and device options from a clean native control panel.',
+        'Calendar App': 'A focused calendar screen that keeps scheduling readable and fast on a small touchscreen.',
+        'Notification Panel': 'A dedicated panel for reviewing alerts and updates without interrupting the rest of the interface.',
+        'Quick Access': 'Fast toggles and shortcuts for common actions, giving users an easy control center from anywhere.',
+        'System Info (Material)': 'System metrics and device details presented with a bright material-inspired visual treatment.',
+        'System Info (Dark)': 'The same live system overview adapted to a darker UI theme for a more contrast-heavy look.',
+        'Tiling Layout': 'Multiple apps arranged together to show FlxOS handling dynamic tiled layouts on constrained hardware.',
+        'Text Editor': 'An editable text workspace paired with an on-screen keyboard for direct input on the device.',
+        'Tools App': 'A utility hub that groups device tools and diagnostics into one practical launcher screen.',
+        'Floating Notification': 'Transient notifications appear above the interface to surface updates without taking over the screen.',
+        'Image Viewer + Files': 'An image viewer opened side by side with the file browser to demonstrate smooth multi-window workflows.',
+        'Text Editor + Files': 'Text editing and file browsing working together in split view for a more desktop-like multitasking setup.'
+    };
+
+    function updateFeaturedFromSlide(slides, slide) {
+        if (!featuredImg || !slide) return;
+        const img = slide.querySelector('img');
+        const title = slide.getAttribute('data-title') || img?.alt || 'System Screen';
+        if (!img) return;
+
+        featuredImg.src = img.currentSrc || img.src;
+        featuredImg.alt = img.alt;
+        if (featuredTitle) featuredTitle.textContent = title;
+        if (featuredDescription) {
+            featuredDescription.textContent = galleryCopy[title] || img.alt || '';
+        }
+
+        slides.forEach((item) => item.classList.toggle('active', item === slide));
     }
 
     // ────────────────────────────────────────────────
@@ -797,6 +755,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const slides = Array.from(galleryTrack.querySelectorAll('.carousel-slide'));
         const totalSlides = slides.length;
         const visibleSlides = () => Math.max(1, Math.floor(galleryTrack.parentElement.clientWidth / 220));
+        const maxOffset = () => Math.max(0, totalSlides - visibleSlides());
         let currentSlide = 0;
 
         // Build pagination dots — one per reachable scroll position.
@@ -806,8 +765,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const positions = Math.max(1, totalSlides - visibleSlides() + 1);
             for (let i = 0; i < positions; i++) {
                 const dot = document.createElement('button');
-                dot.className = 'carousel-dot' + (i === currentSlide ? ' active' : '');
-                dot.setAttribute('aria-label', `Go to slide ${i + 1}`);
+                dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+                dot.setAttribute('aria-label', `Go to gallery position ${i + 1}`);
                 dot.addEventListener('click', () => goToSlide(i));
                 dotsContainer.appendChild(dot);
             }
@@ -824,7 +783,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         function goToSlide(idx) {
             const slideWidth = 220; // 200px + 20px gap
-            currentSlide = Math.max(0, Math.min(idx, totalSlides - visibleSlides()));
+            currentSlide = Math.max(0, Math.min(idx, maxOffset()));
             galleryTrack.style.transform = `translateX(-${currentSlide * slideWidth}px)`;
             updateDots(currentSlide);
         }
@@ -832,16 +791,19 @@ document.addEventListener('DOMContentLoaded', () => {
         galleryPrev?.addEventListener('click', () => goToSlide(currentSlide - 1));
         galleryNext?.addEventListener('click', () => goToSlide(currentSlide + 1));
 
-        // Click slide → open lightbox with correct index and full slides list
-        slides.forEach((slide, index) => {
+        if (slides.length > 0) {
+            updateFeaturedFromSlide(slides, slides[0]);
+        }
+
+        // Click slide → update the featured screenshot and its context copy
+        slides.forEach((slide) => {
             slide.addEventListener('click', () => {
-                openLightbox(slides, index);
+                updateFeaturedFromSlide(slides, slide);
             });
         });
 
-        // Keyboard carousel navigation (only when lightbox is closed)
+        // Keyboard carousel navigation
         document.addEventListener('keydown', (e) => {
-            if (lightbox?.classList.contains('active')) return;
             if (e.key === 'ArrowLeft') goToSlide(currentSlide - 1);
             if (e.key === 'ArrowRight') goToSlide(currentSlide + 1);
         });
@@ -1120,6 +1082,19 @@ document.addEventListener('DOMContentLoaded', () => {
             card.addEventListener('pointerleave', () => {
                 card.style.transform = '';
             });
+        });
+    }
+
+    // ── Phase 5: Bento Card Spotlight Glow (cursor-tracking radial gradient) ──
+    if (hasFinePointer) {
+        document.querySelectorAll('.bento-card').forEach(card => {
+            card.addEventListener('pointermove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = ((e.clientX - rect.left) / rect.width) * 100;
+                const y = ((e.clientY - rect.top) / rect.height) * 100;
+                card.style.setProperty('--glow-x', `${x}%`);
+                card.style.setProperty('--glow-y', `${y}%`);
+            }, { passive: true });
         });
     }
 

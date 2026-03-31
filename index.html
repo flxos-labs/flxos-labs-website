@@ -39,16 +39,16 @@
     
     <!-- Preload fonts to prevent layout shift -->
     <link rel="preload"
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
         as="style">
 
     <!-- Fonts with optimized loading -->
     <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
         rel="stylesheet" media="print" onload="this.media='all'">
     <noscript>
         <link
-            href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+            href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;700;800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
             rel="stylesheet">
     </noscript>
 
@@ -59,7 +59,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
 
     <!-- Styles -->
-    <link rel="stylesheet" href="/assets/css/styles.css?v=9">
+    <link rel="stylesheet" href="/assets/css/styles.css?v=10">
 
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml"
@@ -78,7 +78,7 @@
                 "url": "https://flxos-labs.github.io/",
                 "applicationCategory": "DeveloperApplication",
                 "operatingSystem": ["ESP32", "Linux", "macOS", "Windows"],
-                "softwareVersion": "1.0.0",
+                "softwareVersion": "0.1.0",
                 "license": "https://www.gnu.org/licenses/agpl-3.0.html",
                 "codeRepository": "https://github.com/flxos-labs/flxos",
                 "author": {
@@ -169,7 +169,7 @@
             <div class="container hero-container">
                 <div class="hero-content">
                     <div class="hero-badges">
-                        <div class="badge" role="status">v1.0.0</div>
+                        <div class="badge" role="status">v0.1.0</div>
 
                         <div id="latest-release" class="badge secondary" style="display: none;" role="status">Latest: --</div>
 
@@ -202,21 +202,21 @@
                         <div class="stat-item">
                             <i class="fas fa-star"></i>
                             <div>
-                                <div class="stat-value" id="github-stars">--</div>
+                                <div class="stat-value" id="github-stars"><span class="stat-skeleton"></span></div>
                                 <div class="stat-label">Stars</div>
                             </div>
                         </div>
                         <div class="stat-item">
                             <i class="fas fa-code-branch"></i>
                             <div>
-                                <div class="stat-value" id="github-forks">--</div>
+                                <div class="stat-value" id="github-forks"><span class="stat-skeleton"></span></div>
                                 <div class="stat-label">Forks</div>
                             </div>
                         </div>
                         <div class="stat-item">
                             <i class="fas fa-eye"></i>
                             <div>
-                                <div class="stat-value" id="github-watchers">--</div>
+                                <div class="stat-value" id="github-watchers"><span class="stat-skeleton"></span></div>
                                 <div class="stat-label">Watchers</div>
                             </div>
                         </div>
@@ -227,10 +227,21 @@
                     <div class="device-mockup" id="hero-device">
                         <div class="device-frame">
                             <div class="device-screen" id="heroDeviceScreen">
-                                <img class="slide-img active" src="/assets/images/hardware/lilygo-thmi-systeminfo-app.jpg" alt="FlxOS System Info running on Lilygo T-HMI device" fetchpriority="high">
-                                <img class="slide-img" src="/assets/images/hardware/lilygo-thmi-quickaccess-panel.jpg" alt="FlxOS Quick Access Panel on hardware" loading="lazy">
-                                <img class="slide-img" src="/assets/images/hardware/lilygo-thmi-systeminfo-app.jpg" alt="FlxOS System Info on hardware" loading="lazy">
-                                <img class="slide-img" src="/assets/images/hardware/lilygo-thmi-notification-panel.jpg" alt="FlxOS Notification Panel on hardware" loading="lazy">
+                                <img class="slide-img active" src="/assets/images/screenshots/scr_20260312_161725_home_screen_with_dock_status_bar_wallpaper.png" alt="FlxOS Home Screen" fetchpriority="high">
+                                <img class="slide-img" src="/assets/images/screenshots/scr_20260312_162354_sleek_app_launcher.png" alt="FlxOS App Launcher" loading="lazy">
+                                <img class="slide-img" src="/assets/images/screenshots/scr_20260312_162706_files_app.png" alt="FlxOS Files App" loading="lazy">
+                                <img class="slide-img" src="/assets/images/screenshots/scr_20260312_162756_settings_app.png" alt="FlxOS Settings App" loading="lazy">
+                                <img class="slide-img" src="/assets/images/screenshots/scr_20260312_161649_calendar_app.png" alt="FlxOS Calendar App" loading="lazy">
+                                <img class="slide-img" src="/assets/images/screenshots/scr_20260312_162819_notification_panel.png" alt="FlxOS Notification Panel" loading="lazy">
+                                <img class="slide-img" src="/assets/images/screenshots/scr_20260312_162917_quickaccess_panel.png" alt="FlxOS Quick Access Panel" loading="lazy">
+                                <img class="slide-img" src="/assets/images/screenshots/scr_20260312_163034_system_info_app_in_material_theme.png" alt="System Info Material Theme" loading="lazy">
+                                <img class="slide-img" src="/assets/images/screenshots/scr_20260312_163047_system_info_app_in_hyprland_dark_theme.png" alt="System Info Dark Theme" loading="lazy">
+                                <img class="slide-img" src="/assets/images/screenshots/scr_20260312_161745_dynamic_tiling_dwindle_layout_with_4_apps.png" alt="Dynamic Tiling Layout" loading="lazy">
+                                <img class="slide-img" src="/assets/images/screenshots/scr_20260312_163214_text_editor_with_on_screen_keyboard.png" alt="Text Editor with Keyboard" loading="lazy">
+                                <img class="slide-img" src="/assets/images/screenshots/scr_20260312_164350_tools_app.png" alt="FlxOS Tools App" loading="lazy">
+                                <img class="slide-img" src="/assets/images/screenshots/scr_20260312_162948_floating_notification.png" alt="FlxOS Floating Notification" loading="lazy">
+                                <img class="slide-img" src="/assets/images/screenshots/scr_20260312_163129_open_image_in_image_viewer_from_files_app_side_by_side_with_dynamic_dwindle_layout.png" alt="Image Viewer side by side with Files App" loading="lazy">
+                                <img class="slide-img" src="/assets/images/screenshots/scr_20260312_163152_open_text_file_in_text_editor_from_files_app_side_by_side_with_dynamic_dwindle_layout.png" alt="Text Editor side by side with Files App" loading="lazy">
                                 <div class="device-screen-glare"></div>
                             </div>
                         </div>
@@ -271,6 +282,35 @@
                 <path d="M0,30 C360,60 1080,0 1440,30 L1440,60 L0,60 Z" fill="var(--bg-darker)"/>
             </svg>
         </div>
+
+        <!-- By the Numbers Strip -->
+        <section class="numbers-strip" aria-label="FlxOS by the numbers">
+            <div class="container">
+                <p class="numbers-eyebrow">By the numbers</p>
+                <div class="numbers-grid">
+                    <div class="number-item">
+                        <div class="number-value">&lt;240<span class="number-unit">KB</span></div>
+                        <div class="number-label">RAM Footprint</div>
+                    </div>
+                    <div class="number-item">
+                        <div class="number-value">60<span class="number-unit">FPS</span></div>
+                        <div class="number-label">Smooth Graphics</div>
+                    </div>
+                    <div class="number-item">
+                        <div class="number-value">7<span class="number-unit">+</span></div>
+                        <div class="number-label">MCU Variants</div>
+                    </div>
+                    <div class="number-item">
+                        <div class="number-value">4<span class="number-unit">min</span></div>
+                        <div class="number-label">Zero to Running</div>
+                    </div>
+                    <div class="number-item">
+                        <div class="number-value">$10<span class="number-unit">+</span></div>
+                        <div class="number-label">Min Hardware Cost</div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
         <!-- Features Section — Bento Grid -->
         <section id="features" class="features">
@@ -687,45 +727,65 @@
                 <div class="roadmap-h-timeline">
                     <div class="roadmap-h-track"></div>
                     <div class="roadmap-h-items">
-                        <div class="roadmap-h-item completed" data-version="v1.0">
+                        <div class="roadmap-h-item completed" data-version="v0.1">
                             <div class="roadmap-h-marker">
                                 <i class="fas fa-check"></i>
                                 <div class="roadmap-h-pulse"></div>
                             </div>
                             <div class="roadmap-h-card">
-                                <div class="roadmap-h-version">v1.0 — Released</div>
+                                <div class="roadmap-h-version">v0.1 &mdash; Released</div>
                                 <h3>ESP32 Embedded</h3>
-                                <p>Full OS with touch UI, hardware abstraction layer, built-in apps, and profile-driven builds.</p>
+                                <p>Full OS with touch UI, hardware abstraction, built-in apps, and profile-driven builds.</p>
+                                <div class="roadmap-h-date">March 2026</div>
+                                <div class="roadmap-h-progress">
+                                    <div class="roadmap-h-bar"><div class="roadmap-h-fill" style="width:100%"></div></div>
+                                    <span>100%</span>
+                                </div>
                             </div>
                         </div>
-                        <div class="roadmap-h-item upcoming" data-version="v2.0">
+                        <div class="roadmap-h-item upcoming" data-version="v1.0">
                             <div class="roadmap-h-marker">
                                 <i class="fas fa-desktop"></i>
                             </div>
                             <div class="roadmap-h-card">
-                                <div class="roadmap-h-version">v2.0 — In Progress</div>
-                                <h3>Desktop Support</h3>
-                                <p>Expand FlxOS to run natively on Linux, macOS, and Windows desktops.</p>
+                                <div class="roadmap-h-version">v1.0 &mdash; In Progress</div>
+                                <h3>Stable Release</h3>
+                                <p>Feature-complete build: Bluetooth, media player, theme customization, and extended hardware support.</p>
+                                <div class="roadmap-h-date">Target: Q4 2026</div>
+                                <div class="roadmap-h-progress">
+                                    <div class="roadmap-h-bar"><div class="roadmap-h-fill" style="width:30%"></div></div>
+                                    <span>30%</span>
+                                </div>
                             </div>
                         </div>
-                        <div class="roadmap-h-item upcoming" data-version="v2.5">
+                        <div class="roadmap-h-item upcoming" data-version="v1.5">
                             <div class="roadmap-h-marker">
                                 <i class="fas fa-flask"></i>
                             </div>
                             <div class="roadmap-h-card">
-                                <div class="roadmap-h-version">v2.5 — Planned</div>
+                                <div class="roadmap-h-version">v1.5 &mdash; Planned</div>
                                 <h3>Desktop Simulator</h3>
-                                <p>Develop and test FlxOS apps on your desktop without any hardware.</p>
+                                <p>Develop and test FlxOS apps on your desktop without any physical hardware.</p>
+                                <div class="roadmap-h-date">Target: Q2 2027</div>
+                                <div class="roadmap-h-progress">
+                                    <div class="roadmap-h-bar"><div class="roadmap-h-fill" style="width:0%"></div></div>
+                                    <span>0%</span>
+                                </div>
                             </div>
                         </div>
-                        <div class="roadmap-h-item upcoming" data-version="v3.0">
+                        <div class="roadmap-h-item upcoming" data-version="v2.0">
                             <div class="roadmap-h-marker">
                                 <i class="fas fa-plug"></i>
                             </div>
                             <div class="roadmap-h-card">
-                                <div class="roadmap-h-version">v3.0 — Vision</div>
-                                <h3>Plugin Ecosystem</h3>
-                                <p>Community-driven app and driver extensions for both embedded and desktop.</p>
+                                <div class="roadmap-h-version">v2.0 &mdash; Vision</div>
+                                <h3>Desktop Native + Plugins</h3>
+                                <p>Run FlxOS on Linux, macOS, and Windows. Community-driven app and driver extensions.</p>
+                                <div class="roadmap-h-date">Target: 2027+</div>
+                                <div class="roadmap-h-progress">
+                                    <div class="roadmap-h-bar"><div class="roadmap-h-fill" style="width:0%"></div></div>
+                                    <span>0%</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -817,34 +877,8 @@
                             <div class="testimonial-avatar-initials">RB</div>
                             <div>
                                 <div class="testimonial-name">@Revers-BR</div>
-                                <div class="testimonial-handle"><a href="https://github.com/flxos-labs/flxos/issues/43" target="_blank" rel="noopener noreferrer">github.com/flxos-labs · Issue #43</a></div>
+                                <div class="testimonial-handle"><a href="https://github.com/flxos-labs/flxos/issues/43" target="_blank" rel="noopener noreferrer">github.com/flxos-labs &middot; Issue #43</a></div>
                                 <span class="testimonial-source-badge"><i class="fab fa-github"></i> GitHub Issue</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="testimonial-card">
-                        <div class="testimonial-quote-mark">&ldquo;</div>
-                        <p class="testimonial-text">Finally — an embedded OS that <strong>doesn't require gluing 5 libraries together</strong>. The profile system is a game changer for multi-board projects.</p>
-                        <div class="testimonial-author">
-                            <div class="testimonial-avatar-initials">DX</div>
-                            <div>
-                                <div class="testimonial-name">Embedded Developer</div>
-                                <div class="testimonial-handle">Community Feedback</div>
-                                <span class="testimonial-source-badge"><i class="fas fa-code-branch"></i> Contributor</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="testimonial-card">
-                        <div class="testimonial-quote-mark">&ldquo;</div>
-                        <p class="testimonial-text">The <strong>touch UI quality is insane</strong> for an ESP32. Calendar, file manager, tiling WM — running on a $10 chip. Wild stuff.</p>
-                        <div class="testimonial-author">
-                            <div class="testimonial-avatar-initials">MK</div>
-                            <div>
-                                <div class="testimonial-name">Hardware Enthusiast</div>
-                                <div class="testimonial-handle">Community Feedback</div>
-                                <span class="testimonial-source-badge"><i class="fas fa-star"></i> GitHub Star</span>
                             </div>
                         </div>
                     </div>
@@ -1073,10 +1107,9 @@ python flxos.py flash --port /dev/ttyUSB0</code></pre>
         <i class="fas fa-chevron-up"></i>
     </button>
 
-    <!-- Prism.js for syntax highlighting -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js" defer></script>
-    <script src="/assets/js/script.js?v=6" defer></script>
+    <script src="/assets/js/script.js?v=7" defer></script>
 </body>
 
 </html>

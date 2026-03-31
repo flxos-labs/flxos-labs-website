@@ -36,6 +36,29 @@
     --safe-area-inset-bottom: env(safe-area-inset-bottom);
     --safe-area-inset-left: env(safe-area-inset-left);
     --safe-area-inset-right: env(safe-area-inset-right);
+
+    /* ─── Phase 1 & 5: Premium Additions ─────────────────────── */
+    /* Display font for all headings — sharp, geometric character */
+    --font-display: 'Outfit', sans-serif;
+
+    /* Physics-based spring easing — fast start, natural deceleration */
+    --spring: linear(
+        0, 0.006, 0.025 2.5%, 0.101 5.1%, 0.539 15.1%, 0.721 19.6%,
+        0.849 24%, 0.937 28.6%, 0.985 33.2%, 1.007 37.2%, 1.017 41.2%,
+        1.018 44.5%, 1.013 50.3%, 0.997 63.5%, 0.994 68.5%, 0.998 80%,
+        1
+    );
+
+    /* Layered depth shadow for premium card feel */
+    --shadow-card:
+        0 1px 2px rgba(0, 0, 0, 0.07),
+        0 4px 8px rgba(0, 0, 0, 0.07),
+        0 16px 32px rgba(0, 0, 0, 0.1);
+    --shadow-card-hover:
+        0 2px 4px rgba(0, 0, 0, 0.1),
+        0 8px 16px rgba(0, 0, 0, 0.1),
+        0 24px 48px rgba(0, 0, 0, 0.15),
+        0 0 0 1px rgba(99, 102, 241, 0.12);
 }
 
 /* Light Mode Theme */
@@ -88,11 +111,12 @@ body {
     text-size-adjust: 100%;
 }
 
-/* Typography with fluid scaling */
+/* Typography with fluid scaling — Outfit for display, Inter for body */
 h1,
 h2,
 h3,
 h4 {
+    font-family: var(--font-display);
     font-weight: 700;
     line-height: 1.2;
 }
@@ -100,12 +124,18 @@ h4 {
 h1 {
     font-size: clamp(2rem, 5vw + 1rem, 3.5rem);
     margin-bottom: 24px;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.04em;
+    font-weight: 800;
 }
 
 h2 {
     font-size: clamp(1.75rem, 4vw + 0.5rem, 2.5rem);
     margin-bottom: 16px;
+    letter-spacing: -0.03em;
+}
+
+h3 {
+    letter-spacing: -0.02em;
 }
 
 p {
@@ -139,6 +169,37 @@ ul {
     display: inline-block;
 }
 
+/* Aurora shimmer for hero heading — the wow moment */
+.aurora-text {
+    background: linear-gradient(
+        90deg,
+        #6366f1 0%,
+        #8b5cf6 25%,
+        #06b6d4 50%,
+        #8b5cf6 75%,
+        #6366f1 100%
+    );
+    background-size: 300% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    display: inline-block;
+    animation: aurora-shift 6s ease infinite;
+}
+
+@keyframes aurora-shift {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .aurora-text {
+        animation: none;
+        background-position: 0% 50%;
+    }
+}
+
 /* Skip to main content link for accessibility */
 .skip-to-main {
     position: absolute;
@@ -167,10 +228,12 @@ ul {
     font-weight: 600;
     font-size: 1rem;
     cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.35s var(--spring);
     /* Ensure minimum touch target size */
     min-height: 44px;
     touch-action: manipulation;
+    position: relative;
+    overflow: hidden;
 }
 
 .btn-primary {
@@ -179,9 +242,37 @@ ul {
     box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
 }
 
+/* Shimmer sweep effect on primary buttons */
+.btn-primary::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        105deg,
+        transparent 40%,
+        rgba(255, 255, 255, 0.18) 50%,
+        transparent 60%
+    );
+    animation: btn-shimmer 3.5s ease infinite;
+    pointer-events: none;
+}
+
+@keyframes btn-shimmer {
+    0%   { left: -100%; }
+    30%  { left: 100%; }
+    100% { left: 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .btn-primary::after { animation: none; }
+}
+
 .btn-primary:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+    box-shadow: 0 8px 30px rgba(99, 102, 241, 0.5);
 }
 
 .btn-secondary {
@@ -313,6 +404,26 @@ body[style*="overflow: hidden"] .navbar {
     font-size: 0.95rem;
     font-weight: 500;
     color: var(--text-muted);
+    position: relative;
+}
+
+/* Sliding underline — premium nav interaction */
+.nav-links a:not(.github-link)::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -4px;
+    width: 0;
+    height: 2px;
+    background: var(--gradient-main);
+    border-radius: 2px;
+    transition: width 0.3s var(--spring);
+}
+
+.nav-links a:not(.github-link):hover::after,
+.nav-links a.active::after,
+.nav-links a.section-active::after {
+    width: 100%;
 }
 
 .nav-links a:hover,
@@ -1850,16 +1961,19 @@ footer {
 
 .lightbox-content {
     position: relative;
-    width: min(90vw, 900px);
+    width: fit-content;
+    max-width: min(90vw, 900px);
+    max-height: 90vh;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
 .lightbox-content img {
-    /* Force tiny screenshots (320×240 on ESP32) to fill the lightbox */
-    width: 100%;
+    /* Keep tiny screenshots readable without stretching them beyond the viewport */
+    width: auto;
     height: auto;
+    max-width: min(90vw, 640px);
     max-height: 80vh;
     object-fit: contain;
     image-rendering: pixelated;
@@ -1974,14 +2088,42 @@ footer {
     padding: 32px;
     position: relative;
     overflow: hidden;
-    transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    transition: all 0.4s var(--spring);
+    box-shadow: var(--shadow-card);
+    /* Spotlight glow vars — updated by JS on mousemove */
+    --glow-x: 50%;
+    --glow-y: 50%;
+}
+
+.bento-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+        240px circle at var(--glow-x) var(--glow-y),
+        rgba(99, 102, 241, 0.07),
+        transparent 70%
+    );
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    border-radius: inherit;
+    z-index: 0;
+}
+
+.bento-card > * {
+    position: relative;
+    z-index: 1;
 }
 
 .bento-card:hover {
     border-color: rgba(99, 102, 241, 0.4);
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25),
-        0 0 0 1px rgba(99, 102, 241, 0.1);
+    box-shadow: var(--shadow-card-hover);
     transform: translateY(-4px);
+}
+
+.bento-card:hover::before {
+    opacity: 1;
 }
 
 /* Large card spans 2 columns on desktop */
@@ -2295,6 +2437,12 @@ footer {
     transform: translateY(-4px) scale(1.02);
 }
 
+.carousel-slide.active .slide-device {
+    border-color: rgba(99, 102, 241, 0.85);
+    box-shadow: 0 18px 46px rgba(0, 0, 0, 0.55), 0 0 24px rgba(99, 102, 241, 0.28);
+    transform: translateY(-4px) scale(1.02);
+}
+
 .slide-label {
     font-size: 0.82rem;
     color: var(--text-muted);
@@ -2304,6 +2452,10 @@ footer {
 }
 
 .carousel-slide:hover .slide-label {
+    color: var(--text-highlight);
+}
+
+.carousel-slide.active .slide-label {
     color: var(--text-highlight);
 }
 
@@ -4424,4 +4576,191 @@ body.menu-open .menu-backdrop {
 
 .hw-photo-card:nth-child(4) {
     transition-delay: 0.21s;
+}
+
+/* ===========================================
+   PHASE 1 & 3 & 5: Premium Additions
+   =========================================== */
+
+/* ── By the Numbers Strip ─────────────────── */
+.numbers-strip {
+    padding: 72px 0;
+    background: var(--bg-darker);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+}
+
+.numbers-strip::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(ellipse 60% 80% at 20% 50%, rgba(99, 102, 241, 0.06) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 70% at 80% 50%, rgba(6, 182, 212, 0.05) 0%, transparent 60%);
+    pointer-events: none;
+}
+
+.numbers-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0;
+    position: relative;
+}
+
+.number-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 24px 16px;
+    border-right: 1px solid var(--border);
+    transition: transform 0.3s var(--spring);
+}
+
+.number-item:last-child {
+    border-right: none;
+}
+
+.number-item:hover {
+    transform: translateY(-3px);
+}
+
+.number-value {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 3.5vw, 2.75rem);
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    background: var(--gradient-text);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    line-height: 1;
+}
+
+.number-unit {
+    font-size: 0.55em;
+    font-weight: 700;
+    vertical-align: super;
+    letter-spacing: 0;
+    opacity: 0.8;
+}
+
+.number-label {
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    text-align: center;
+    letter-spacing: 0.01em;
+}
+
+@media (max-width: 768px) {
+    .numbers-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1px;
+        background: var(--border);
+    }
+
+    .number-item {
+        background: var(--bg-darker);
+        border-right: none;
+        padding: 20px 12px;
+    }
+
+    .numbers-grid .number-item:nth-child(4),
+    .numbers-grid .number-item:nth-child(5) {
+        grid-column: span 1;
+    }
+}
+
+@media (max-width: 480px) {
+    .numbers-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .numbers-grid .number-item:last-child {
+        grid-column: span 2;
+    }
+}
+
+/* ── Skeleton shimmer for loading states ──── */
+.stat-skeleton {
+    display: inline-block;
+    width: 36px;
+    height: 1.5rem;
+    background: linear-gradient(
+        90deg,
+        var(--bg-card) 25%,
+        rgba(99, 102, 241, 0.12) 50%,
+        var(--bg-card) 75%
+    );
+    background-size: 200% 100%;
+    animation: skeleton-shimmer 1.6s ease infinite;
+    border-radius: 6px;
+    vertical-align: middle;
+}
+
+@keyframes skeleton-shimmer {
+    0%   { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+/* ── Roadmap progress bars ─────────────────── */
+.roadmap-h-progress {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+}
+
+.roadmap-h-bar {
+    flex: 1;
+    height: 4px;
+    background: rgba(148, 163, 184, 0.12);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.roadmap-h-fill {
+    height: 100%;
+    border-radius: 4px;
+    background: var(--gradient-main);
+    transition: width 1s var(--spring);
+    animation: roadmap-fill-in 1.2s var(--spring) both;
+    animation-timeline: view();
+    animation-range: entry 20% cover 40%;
+}
+
+@supports not (animation-timeline: view()) {
+    .roadmap-h-fill {
+        animation: none;
+    }
+}
+
+@keyframes roadmap-fill-in {
+    from { width: 0 !important; }
+}
+
+.roadmap-h-date {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    margin-top: 6px;
+    opacity: 0.75;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.01em;
+}
+
+/* ── Section eyebrow label ─────────────────── */
+.numbers-eyebrow {
+    text-align: center;
+    margin-bottom: 40px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--primary);
+    opacity: 0.85;
 }
