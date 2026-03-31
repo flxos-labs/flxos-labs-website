@@ -1,7 +1,7 @@
 # FlxOS Labs Website
 
 <div align="center">
-  <img src="flxos_screenshots/scr_20260312_161725_home_screen_with_dock_status_bar_wallpaper.png" alt="FlxOS Home Screen" width="300" />
+  <img src="assets/images/screenshots/scr_20260312_161725_home_screen_with_dock_status_bar_wallpaper.png" alt="FlxOS Home Screen" width="300" />
 </div>
 
 <div align="center">
@@ -42,13 +42,17 @@ The site is built entirely without heavy frontend frameworks to ensure maximum p
 
 ```text
 .
-├── index.html          # Main landing page
-├── script.js           # Interactive components & API fetches
-├── styles.css          # Core design system and global styles
+├── 404.html            # Custom not-found page
+├── assets/
+│   ├── css/            # Shared and page-specific stylesheets
+│   ├── js/             # Shared and page-specific scripts
+│   └── images/         # OG image, hardware photos, and screenshots
 ├── README.md           # This file
-├── docs/               # Documentation section
 ├── about/              # About section
-└── flxos_screenshots/  # High-quality UI captures used in the gallery
+├── docs/               # Documentation section
+├── index.html          # Main landing page
+├── robots.txt          # Search engine crawling rules
+└── sitemap.xml         # Search engine sitemap
 ```
 
 ## 🚀 Local Development
