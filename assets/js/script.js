@@ -1,4 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
+    const hasScrollTimeline = CSS.supports('animation-timeline', 'view()');
+
     // ── Scroll Progress Bar ──────────────────────────────────────────────
     const scrollProgress = document.getElementById('scroll-progress');
     if (scrollProgress) {
@@ -226,6 +228,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const forksElement = document.getElementById('github-forks');
         const watchersElement = document.getElementById('github-watchers');
 
+        // Clear any skeleton placeholders first
+        [starsElement, forksElement, watchersElement].forEach(el => {
+            if (el) {
+                const skeleton = el.querySelector('.stat-skeleton');
+                if (skeleton) skeleton.remove();
+            }
+        });
+
         if (stats) {
             if (starsElement) animateCounter(starsElement, stats.stars);
             if (forksElement) animateCounter(forksElement, stats.forks);
@@ -364,31 +374,28 @@ document.addEventListener('DOMContentLoaded', () => {
         rootMargin: '0px 0px -50px 0px'
     };
 
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('animate-in');
-                observer.unobserve(entry.target);
-            }
-        });
-    }, observerOptions);
+    if (!hasScrollTimeline) {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-in');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
 
-    // Observe feature cards, tech items, roadmap items for scroll animation
-    document.querySelectorAll('.feature-card, .tech-item, .roadmap-item, .community-card').forEach(el => {
-        el.classList.add('animate-target');
-        observer.observe(el);
-    });
+        // Observe feature cards, tech items, roadmap items for scroll animation
+        document.querySelectorAll('.feature-card, .tech-item, .roadmap-item, .community-card').forEach(el => {
+            el.classList.add('animate-target');
+            observer.observe(el);
+        });
+    }
 
     // ────────────────────────────────────────────────
     // Terminal Typing Animation
     // ────────────────────────────────────────────────
-    const terminalEl = document.querySelector('.window-content');
-    if (terminalEl) {
-        initTerminalTyping(terminalEl);
-    }
-
-    function initTerminalTyping(container) {
-        const lines = [
+    const terminalDemos = {
+        hero: [
             { type: 'command', text: '$ git clone --recurse-submodules https://github.com/flxos-labs/flxos.git' },
             { type: 'command', text: '$ cd flxos' },
             { type: 'command', text: '$ python flxos.py select esp32s3-ili9341' },
@@ -397,7 +404,26 @@ document.addEventListener('DOMContentLoaded', () => {
             { type: 'output', text: 'Generating hardware initialization code...' },
             { type: 'success', text: 'Build completed successfully.' },
             { type: 'highlight', text: 'FlxOS ready for flashing!' }
-        ];
+        ],
+        'build-story': [
+            { type: 'command', text: '$ git clone --recurse-submodules https://github.com/flxos-labs/flxos.git' },
+            { type: 'command', text: '$ cd flxos' },
+            { type: 'command', text: '$ python flxos.py select esp32s3-ili9341-xpt' },
+            { type: 'output', text: "Profile 'esp32s3-ili9341-xpt' selected." },
+            { type: 'command', text: '$ python flxos.py build' },
+            { type: 'output', text: 'Resolving dependencies and generating hardware init...' },
+            { type: 'success', text: 'Build complete.' },
+            { type: 'highlight', text: 'FlxOS ready for flashing!' }
+        ]
+    };
+
+    document.querySelectorAll('.window-content[data-terminal-demo]').forEach((terminalEl) => {
+        const demoName = terminalEl.getAttribute('data-terminal-demo');
+        const lines = terminalDemos[demoName];
+        if (lines) initTerminalTyping(terminalEl, lines);
+    });
+
+    function initTerminalTyping(container, lines) {
 
         // Clear existing content
         container.innerHTML = '';
@@ -698,91 +724,41 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
     document.head.appendChild(styleSheet);
 
-    // ────────────────────────────────────────────────
-    // Screenshots Gallery & Lightbox — unified system
-    // ────────────────────────────────────────────────
-    const lightbox = document.getElementById('lightbox');
-    const lightboxImg = document.getElementById('lightbox-img');
-    const lightboxCaption = lightbox?.querySelector('.lightbox-caption');
-    const lightboxClose = document.querySelector('.lightbox-close');
-    const lightboxPrevBtn = document.querySelector('.lightbox-prev');
-    const lightboxNextBtn = document.querySelector('.lightbox-next');
-
-    // All lightbox-able items come from the carousel slides
-    // We keep a reference after the carousel block sets them up.
-    let lbSlides = [];   // NodeList-to-array of .carousel-slide elements
-    let lbCurrentIdx = 0;
-
-    // ── Prevent layout-shift when hiding scrollbar ──
-    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
-    document.documentElement.style.setProperty('--scrollbar-gutter', scrollbarWidth + 'px');
-
-    function openLightbox(slides, idx) {
-        if (!lightbox || !lightboxImg) return;
-        lbSlides = slides;
-        lbCurrentIdx = idx;
-        const slide = lbSlides[lbCurrentIdx];
-        const img = slide.querySelector('img');
-        const title = slide.getAttribute('data-title') || '';
-        lightboxImg.src = img.src;
-        if (lightboxCaption) lightboxCaption.textContent = title;
-        // Compensate scrollbar removal to avoid layout shift
-        document.body.style.paddingRight = scrollbarWidth + 'px';
-        document.body.style.overflow = 'hidden';
-        lightbox.classList.add('active');
-        lightbox.setAttribute('aria-hidden', 'false');
-        lightboxImg.focus();
-    }
-
-    function closeLightbox() {
-        if (!lightbox) return;
-        lightbox.classList.remove('active');
-        lightbox.setAttribute('aria-hidden', 'true');
-        document.body.style.overflow = '';
-        document.body.style.paddingRight = '';
-    }
-
-    function lightboxNext() {
-        if (!lbSlides.length) return;
-        lbCurrentIdx = (lbCurrentIdx + 1) % lbSlides.length;
-        openLightbox(lbSlides, lbCurrentIdx);
-    }
-
-    function lightboxPrev() {
-        if (!lbSlides.length) return;
-        lbCurrentIdx = (lbCurrentIdx - 1 + lbSlides.length) % lbSlides.length;
-        openLightbox(lbSlides, lbCurrentIdx);
-    }
-
-    if (lightbox) {
-        lightboxClose?.addEventListener('click', closeLightbox);
-        lightboxNextBtn?.addEventListener('click', (e) => { e.stopPropagation(); lightboxNext(); });
-        lightboxPrevBtn?.addEventListener('click', (e) => { e.stopPropagation(); lightboxPrev(); });
-        lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
-        document.addEventListener('keydown', (e) => {
-            if (!lightbox.classList.contains('active')) return;
-            if (e.key === 'Escape') closeLightbox();
-            if (e.key === 'ArrowRight') lightboxNext();
-            if (e.key === 'ArrowLeft') lightboxPrev();
-        });
-    }
-
-    // ── Featured image click-to-lightbox ──
     const featuredImg = document.querySelector('.gallery-featured .gf-frame img');
-    if (featuredImg) {
-        featuredImg.style.cursor = 'pointer';
-        featuredImg.parentElement.style.cursor = 'pointer';
-        featuredImg.closest('.gallery-featured-device').addEventListener('click', () => {
-            if (!lightbox || !lightboxImg) return;
-            lightboxImg.src = featuredImg.src;
-            if (lightboxCaption) lightboxCaption.textContent = 'Home Screen — Full Experience';
-            document.body.style.paddingRight = scrollbarWidth + 'px';
-            document.body.style.overflow = 'hidden';
-            lightbox.classList.add('active');
-            lightbox.setAttribute('aria-hidden', 'false');
-            // Featured is not part of the carousel slides, so clear lbSlides
-            lbSlides = [];
-        });
+    const featuredTitle = document.querySelector('.gallery-featured-title');
+    const featuredDescription = document.querySelector('.gallery-featured-text p');
+    const galleryCopy = {
+        'Home Screen': 'Dock, status bar, dynamic wallpaper and live widgets all working together in the main FlxOS experience.',
+        'App Launcher': 'A compact launcher for browsing apps quickly with a touch-friendly layout built for embedded hardware.',
+        'Files App': 'A lightweight file browser for navigating storage, opening assets, and managing content directly on the device.',
+        'Settings App': 'System preferences for adjusting behavior, visuals, and device options from a clean native control panel.',
+        'Calendar App': 'A focused calendar screen that keeps scheduling readable and fast on a small touchscreen.',
+        'Notification Panel': 'A dedicated panel for reviewing alerts and updates without interrupting the rest of the interface.',
+        'Quick Access': 'Fast toggles and shortcuts for common actions, giving users an easy control center from anywhere.',
+        'System Info (Material)': 'System metrics and device details presented with a bright material-inspired visual treatment.',
+        'System Info (Dark)': 'The same live system overview adapted to a darker UI theme for a more contrast-heavy look.',
+        'Tiling Layout': 'Multiple apps arranged together to show FlxOS handling dynamic tiled layouts on constrained hardware.',
+        'Text Editor': 'An editable text workspace paired with an on-screen keyboard for direct input on the device.',
+        'Tools App': 'A utility hub that groups device tools and diagnostics into one practical launcher screen.',
+        'Floating Notification': 'Transient notifications appear above the interface to surface updates without taking over the screen.',
+        'Image Viewer + Files': 'An image viewer opened side by side with the file browser to demonstrate smooth multi-window workflows.',
+        'Text Editor + Files': 'Text editing and file browsing working together in split view for a more desktop-like multitasking setup.'
+    };
+
+    function updateFeaturedFromSlide(slides, slide) {
+        if (!featuredImg || !slide) return;
+        const img = slide.querySelector('img');
+        const title = slide.getAttribute('data-title') || img?.alt || 'System Screen';
+        if (!img) return;
+
+        featuredImg.src = img.currentSrc || img.src;
+        featuredImg.alt = img.alt;
+        if (featuredTitle) featuredTitle.textContent = title;
+        if (featuredDescription) {
+            featuredDescription.textContent = galleryCopy[title] || img.alt || '';
+        }
+
+        slides.forEach((item) => item.classList.toggle('active', item === slide));
     }
 
     // ────────────────────────────────────────────────
@@ -797,6 +773,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const slides = Array.from(galleryTrack.querySelectorAll('.carousel-slide'));
         const totalSlides = slides.length;
         const visibleSlides = () => Math.max(1, Math.floor(galleryTrack.parentElement.clientWidth / 220));
+        const maxOffset = () => Math.max(0, totalSlides - visibleSlides());
         let currentSlide = 0;
 
         // Build pagination dots — one per reachable scroll position.
@@ -806,8 +783,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const positions = Math.max(1, totalSlides - visibleSlides() + 1);
             for (let i = 0; i < positions; i++) {
                 const dot = document.createElement('button');
-                dot.className = 'carousel-dot' + (i === currentSlide ? ' active' : '');
-                dot.setAttribute('aria-label', `Go to slide ${i + 1}`);
+                dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+                dot.setAttribute('aria-label', `Go to gallery position ${i + 1}`);
                 dot.addEventListener('click', () => goToSlide(i));
                 dotsContainer.appendChild(dot);
             }
@@ -824,7 +801,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         function goToSlide(idx) {
             const slideWidth = 220; // 200px + 20px gap
-            currentSlide = Math.max(0, Math.min(idx, totalSlides - visibleSlides()));
+            currentSlide = Math.max(0, Math.min(idx, maxOffset()));
             galleryTrack.style.transform = `translateX(-${currentSlide * slideWidth}px)`;
             updateDots(currentSlide);
         }
@@ -832,16 +809,19 @@ document.addEventListener('DOMContentLoaded', () => {
         galleryPrev?.addEventListener('click', () => goToSlide(currentSlide - 1));
         galleryNext?.addEventListener('click', () => goToSlide(currentSlide + 1));
 
-        // Click slide → open lightbox with correct index and full slides list
-        slides.forEach((slide, index) => {
+        if (slides.length > 0) {
+            updateFeaturedFromSlide(slides, slides[0]);
+        }
+
+        // Click slide → update the featured screenshot and its context copy
+        slides.forEach((slide) => {
             slide.addEventListener('click', () => {
-                openLightbox(slides, index);
+                updateFeaturedFromSlide(slides, slide);
             });
         });
 
-        // Keyboard carousel navigation (only when lightbox is closed)
+        // Keyboard carousel navigation
         document.addEventListener('keydown', (e) => {
-            if (lightbox?.classList.contains('active')) return;
             if (e.key === 'ArrowLeft') goToSlide(currentSlide - 1);
             if (e.key === 'ArrowRight') goToSlide(currentSlide + 1);
         });
@@ -1028,74 +1008,68 @@ document.addEventListener('DOMContentLoaded', () => {
     // ────────────────────────────────────────────────
     // Phase 4A — Scroll-Reveal (section headers, bento, roadmap, community)
     // ────────────────────────────────────────────────
-    const revealObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
-                revealObserver.unobserve(entry.target);
-            }
+    let revealObserver;
+    if (!hasScrollTimeline) {
+        revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    revealObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+        document.querySelectorAll('.section-header').forEach(el => {
+            el.classList.add('reveal');
+            revealObserver.observe(el);
         });
-    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
 
-    // Apply reveal to section headers
-    document.querySelectorAll('.section-header').forEach(el => {
-        el.classList.add('reveal');
-        revealObserver.observe(el);
-    });
+        const bentoGrid = document.querySelector('.bento-grid');
+        if (bentoGrid) {
+            bentoGrid.classList.add('reveal-stagger');
+            bentoGrid.querySelectorAll('.bento-card').forEach((card, i) => {
+                card.classList.add('reveal');
+                card.style.transitionDelay = `${i * 0.07}s`;
+                revealObserver.observe(card);
+            });
+        }
 
-    // Apply stagger reveal to bento grid children
-    const bentoGrid = document.querySelector('.bento-grid');
-    if (bentoGrid) {
-        bentoGrid.classList.add('reveal-stagger');
-        bentoGrid.querySelectorAll('.bento-card').forEach((card, i) => {
-            card.classList.add('reveal');
-            // small additional delay per card on top of stagger
-            card.style.transitionDelay = `${i * 0.07}s`;
-            revealObserver.observe(card);
+        document.querySelectorAll('.roadmap-h-item').forEach((el, i) => {
+            el.classList.add('reveal');
+            el.style.transitionDelay = `${i * 0.1}s`;
+            revealObserver.observe(el);
+        });
+
+        document.querySelectorAll('.community-card').forEach((el, i) => {
+            el.classList.add('reveal');
+            el.style.transitionDelay = `${i * 0.08}s`;
+            revealObserver.observe(el);
+        });
+
+        const communityHero = document.querySelector('.community-hero');
+        if (communityHero) {
+            communityHero.classList.add('reveal');
+            revealObserver.observe(communityHero);
+        }
+
+        document.querySelectorAll('.tech-logo-item').forEach((el, i) => {
+            el.classList.add('reveal');
+            el.style.transitionDelay = `${i * 0.1}s`;
+            revealObserver.observe(el);
+        });
+
+        const galleryFeatured = document.querySelector('.gallery-featured');
+        if (galleryFeatured) {
+            galleryFeatured.classList.add('reveal');
+            revealObserver.observe(galleryFeatured);
+        }
+
+        document.querySelectorAll('.carousel-slide').forEach((el, i) => {
+            el.classList.add('reveal-scale');
+            el.style.transitionDelay = `${i * 0.04}s`;
+            revealObserver.observe(el);
         });
     }
-
-    // Roadmap items
-    document.querySelectorAll('.roadmap-h-item').forEach((el, i) => {
-        el.classList.add('reveal');
-        el.style.transitionDelay = `${i * 0.1}s`;
-        revealObserver.observe(el);
-    });
-
-    // Community cards
-    document.querySelectorAll('.community-card').forEach((el, i) => {
-        el.classList.add('reveal');
-        el.style.transitionDelay = `${i * 0.08}s`;
-        revealObserver.observe(el);
-    });
-
-    // Community hero
-    const communityHero = document.querySelector('.community-hero');
-    if (communityHero) {
-        communityHero.classList.add('reveal');
-        revealObserver.observe(communityHero);
-    }
-
-    // Tech logo items
-    document.querySelectorAll('.tech-logo-item').forEach((el, i) => {
-        el.classList.add('reveal');
-        el.style.transitionDelay = `${i * 0.1}s`;
-        revealObserver.observe(el);
-    });
-
-    // Gallery featured
-    const galleryFeatured = document.querySelector('.gallery-featured');
-    if (galleryFeatured) {
-        galleryFeatured.classList.add('reveal');
-        revealObserver.observe(galleryFeatured);
-    }
-
-    // Carousel slides (scale-up variant)
-    document.querySelectorAll('.carousel-slide').forEach((el, i) => {
-        el.classList.add('reveal-scale');
-        el.style.transitionDelay = `${i * 0.04}s`;
-        revealObserver.observe(el);
-    });
 
     // ────────────────────────────────────────────────
     // Phase 4B — Card 3D Tilt (pointer: fine only)
@@ -1121,6 +1095,85 @@ document.addEventListener('DOMContentLoaded', () => {
                 card.style.transform = '';
             });
         });
+    }
+
+    // ── Phase 5: Bento Card Spotlight Glow (cursor-tracking radial gradient) ──
+    if (hasFinePointer) {
+        document.querySelectorAll('.bento-card, .philosophy-card').forEach(card => {
+            card.addEventListener('pointermove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = ((e.clientX - rect.left) / rect.width) * 100;
+                const y = ((e.clientY - rect.top) / rect.height) * 100;
+                card.style.setProperty('--glow-x', `${x}%`);
+                card.style.setProperty('--glow-y', `${y}%`);
+            }, { passive: true });
+        });
+    }
+
+    // About page hero parallax + timeline progress
+    const aboutHeroCopy = document.getElementById('aboutHeroCopy');
+    const aboutTimeline = document.getElementById('aboutTimeline');
+    if ((aboutHeroCopy || aboutTimeline) && !reducedMotion) {
+        const updateAboutMotion = () => {
+            if (aboutHeroCopy) {
+                const rect = aboutHeroCopy.getBoundingClientRect();
+                const offset = Math.max(-18, Math.min(18, rect.top * -0.04));
+                aboutHeroCopy.style.transform = `translateY(${offset}px)`;
+            }
+
+            if (aboutTimeline && !hasScrollTimeline) {
+                const rect = aboutTimeline.getBoundingClientRect();
+                const viewportHeight = window.innerHeight;
+                const start = viewportHeight * 0.85;
+                const end = viewportHeight * 0.2;
+                const progress = (start - rect.top) / Math.max(1, start - end);
+                const clamped = Math.max(0, Math.min(progress, 1));
+                aboutTimeline.style.setProperty('--timeline-progress', clamped.toFixed(3));
+            }
+        };
+
+        window.addEventListener('scroll', updateAboutMotion, { passive: true });
+        window.addEventListener('resize', updateAboutMotion, { passive: true });
+        updateAboutMotion();
+    }
+
+    // About page founder activity
+    const founderCommitCount = document.getElementById('founderCommitCount');
+    const founderRepoCount = document.getElementById('founderRepoCount');
+    const founderFollowerCount = document.getElementById('founderFollowerCount');
+    if (founderCommitCount || founderRepoCount || founderFollowerCount) {
+        fetchFounderStats();
+    }
+
+    async function fetchFounderStats() {
+        try {
+            const [userRes, contributorsRes] = await Promise.all([
+                fetch('https://api.github.com/users/Itsmeakash248'),
+                fetch('https://api.github.com/repos/flxos-labs/flxos/contributors?per_page=100')
+            ]);
+
+            if (userRes.ok) {
+                const user = await userRes.json();
+                if (founderRepoCount && user.public_repos != null) {
+                    founderRepoCount.textContent = user.public_repos;
+                }
+                if (founderFollowerCount && user.followers != null) {
+                    founderFollowerCount.textContent = user.followers;
+                }
+            }
+
+            if (contributorsRes.ok) {
+                const contributors = await contributorsRes.json();
+                if (Array.isArray(contributors)) {
+                    const founder = contributors.find((entry) => entry.login === 'Itsmeakash248');
+                    if (founderCommitCount && founder?.contributions != null) {
+                        founderCommitCount.textContent = founder.contributions;
+                    }
+                }
+            }
+        } catch (error) {
+            console.warn('Failed to fetch founder stats:', error);
+        }
     }
 
     // ────────────────────────────────────────────────
@@ -1263,6 +1316,7 @@ document.addEventListener('DOMContentLoaded', () => {
         { label: 'Community', sub: 'GitHub, contributors, get involved', icon: 'fa-users', href: '#community' },
         { label: 'Community Love', sub: 'What people say about FlxOS', icon: 'fa-heart', href: '#testimonials' },
         { label: 'Get Started', sub: 'Clone, build, flash in 4 steps', icon: 'fa-terminal', href: '#get-started' },
+        { label: 'Zero to Running', sub: 'Animated CLI build flow', icon: 'fa-laptop-code', href: '#build-story' },
         { label: 'Newsletter', sub: 'Stay in the loop', icon: 'fa-envelope', href: '#newsletter' },
         { label: 'Documentation', sub: 'Full API reference', icon: 'fa-book', href: '/docs' },
         { label: 'About FlxOS Labs', sub: 'Our story and mission', icon: 'fa-info-circle', href: '/about' },
@@ -1341,8 +1395,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // ────────────────────────────────────────────────
     // TRILLION-DOLLAR — Reveal observers for new sections
     // ────────────────────────────────────────────────
-    document.querySelectorAll(
-        '.hw-photo-card, .testimonial-card, .why-statement, .compare-col, .founder-card'
-    ).forEach(el => revealObserver.observe(el));
+    if (revealObserver) {
+        document.querySelectorAll(
+            '.hw-photo-card, .testimonial-card, .why-statement, .compare-col, .founder-card, .build-story-shell'
+        ).forEach(el => revealObserver.observe(el));
+    }
 
 });
