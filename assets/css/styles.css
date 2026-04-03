@@ -220,24 +220,6 @@ ul {
     top: 20px;
 }
 
-/* Responsive media: make images, pictures and videos scale to their containers */
-img, picture, video, svg {
-    max-width: 100%;
-    height: auto;
-    display: block;
-    -webkit-user-drag: none;
-    user-select: none;
-    image-rendering: optimizeQuality;
-}
-
-.slide-device img,
-.founder-avatar,
-.hw-photo-card img {
-    width: 100%;
-    height: auto;
-    display: block;
-}
-
 .btn {
     display: inline-flex;
     align-items: center;
