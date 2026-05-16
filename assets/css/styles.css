@@ -4833,11 +4833,6 @@ body.menu-open .menu-backdrop {
     font-weight: 700;
     vertical-align: super;
     letter-spacing: 0;
-    opacity: 0.8;
-    background: var(--gradient-text);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
 }
 
 .number-label {
