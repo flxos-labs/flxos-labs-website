@@ -4829,10 +4829,17 @@ body.menu-open .menu-backdrop {
 }
 
 .number-unit {
+    display: inline-block;
     font-size: 0.55em;
     font-weight: 700;
     vertical-align: super;
     letter-spacing: 0;
+    opacity: 0.9;
+    background: var(--gradient-text);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
 }
 
 .number-label {
