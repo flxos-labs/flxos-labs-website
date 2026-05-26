@@ -50,11 +50,11 @@ export default function RootLayout({
                 <a className="nav-link" href="/#features">
                   Features
                 </a>
-                <a className="nav-link" href="/#stack">
-                  Stack
+                <a className="nav-link" href="/docs">
+                  Docs
                 </a>
-                <a className="nav-link" href="/#cta">
-                  Get Started
+                <a className="nav-link" href="/about">
+                  About
                 </a>
                 <a
                   className="nav-link"
@@ -86,7 +86,8 @@ export default function RootLayout({
               </div>
               <div className="footer-links">
                 <a href="/#features">Features</a>
-                <a href="/#stack">Stack</a>
+                <a href="/docs">Docs</a>
+                <a href="/about">About</a>
                 <a
                   href="https://github.com/flxos-labs/flxos"
                   target="_blank"
