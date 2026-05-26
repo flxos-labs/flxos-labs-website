@@ -1,6 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
+import Link from "next/link";
 
 export default function NotFound() {
   const pathname = usePathname();
@@ -49,14 +50,14 @@ export default function NotFound() {
 
         {/* Action Buttons */}
         <div className="flex flex-wrap justify-center gap-3.5 pt-2">
-          <a href="/" className="btn-primary gap-2">
+          <Link href="/" className="btn-primary gap-2">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg>
             <span>Go Home</span>
-          </a>
-          <a href="/docs" className="btn-secondary gap-2">
+          </Link>
+          <Link href="/docs" className="btn-secondary gap-2">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/><path d="M6 6h10M6 10h10M6 14h6"/></svg>
             <span>Read Docs</span>
-          </a>
+          </Link>
           <a
             href="https://github.com/flxos-labs/flxos/issues"
             target="_blank"

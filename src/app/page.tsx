@@ -1,5 +1,6 @@
 import PlatformCycler from "../components/PlatformCycler";
 import DeviceSlideshow from "../components/DeviceSlideshow";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -22,9 +23,9 @@ export default function Home() {
               One repo, one CLI, many form factors.
             </p>
             <div className="flex flex-wrap gap-3">
-              <a className="btn-primary" href="/#cta">
+              <Link className="btn-primary" href="/#cta">
                 Get started
-              </a>
+              </Link>
               <a
                 className="btn-secondary"
                 href="https://github.com/flxos-labs/flxos"
@@ -124,9 +125,9 @@ export default function Home() {
             >
               Open repository
             </a>
-            <a className="btn-ghost" href="/#features">
+            <Link className="btn-ghost" href="/#features">
               Learn the stack
-            </a>
+            </Link>
           </div>
         </div>
       </section>

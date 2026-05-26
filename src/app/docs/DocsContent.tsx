@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
+import Link from "next/link";
 
 interface SidebarLink {
   id: string;
@@ -54,10 +55,17 @@ export default function DocsContent() {
     },
   ];
 
-  // Hotkey "/" to focus search
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "/" && document.activeElement !== searchInputRef.current) {
+      const activeEl = document.activeElement;
+      if (!activeEl) return;
+
+      const isEditable =
+        activeEl.tagName === "INPUT" ||
+        activeEl.tagName === "TEXTAREA" ||
+        (activeEl as HTMLElement).isContentEditable;
+
+      if (e.key === "/" && !isEditable) {
         e.preventDefault();
         searchInputRef.current?.focus();
       }
@@ -217,7 +225,7 @@ export default function DocsContent() {
         <div className="space-y-16 max-w-3xl">
           <header className="space-y-3">
             <nav className="flex items-center gap-2 text-xs text-[color:var(--muted)] font-medium" aria-label="Breadcrumb">
-              <a href="/" className="hover:text-[color:var(--ink)] transition-colors">Home</a>
+              <Link href="/" className="hover:text-[color:var(--ink)] transition-colors">Home</Link>
               <span>/</span>
               <span>Documentation</span>
             </nav>

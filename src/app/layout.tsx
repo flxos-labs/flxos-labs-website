@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Figtree, JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import "./globals.css";
+import Link from "next/link";
 import CommandPalette from "../components/CommandPalette";
 
 const fontDisplay = Space_Grotesk({
@@ -41,22 +42,22 @@ export default function RootLayout({
         <div className="site-shell">
           <header className="site-header">
             <div className="site-header-inner">
-              <a className="brand" href="/" aria-label="FlxOS home">
+              <Link className="brand" href="/" aria-label="FlxOS home">
                 <span className="brand-mark" aria-hidden="true">
                   F
                 </span>
                 <span className="brand-text">FlxOS</span>
-              </a>
+              </Link>
               <nav className="site-nav" aria-label="Primary">
-                <a className="nav-link" href="/#features">
+                <Link className="nav-link" href="/#features">
                   Features
-                </a>
-                <a className="nav-link" href="/docs">
+                </Link>
+                <Link className="nav-link" href="/docs">
                   Docs
-                </a>
-                <a className="nav-link" href="/about">
+                </Link>
+                <Link className="nav-link" href="/about">
                   About
-                </a>
+                </Link>
                 <a
                   className="nav-link"
                   href="https://github.com/flxos-labs/flxos"
@@ -86,9 +87,9 @@ export default function RootLayout({
                 </p>
               </div>
               <div className="footer-links">
-                <a href="/#features">Features</a>
-                <a href="/docs">Docs</a>
-                <a href="/about">About</a>
+                <Link href="/#features">Features</Link>
+                <Link href="/docs">Docs</Link>
+                <Link href="/about">About</Link>
                 <a
                   href="https://github.com/flxos-labs/flxos"
                   target="_blank"
