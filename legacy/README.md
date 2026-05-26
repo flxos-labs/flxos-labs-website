@@ -64,11 +64,14 @@ To run the site locally, you can use any basic HTTP server. For example, using P
 git clone https://github.com/flxos-labs/flxos-labs.github.io.git
 cd flxos-labs.github.io
 
-# Start a local development server
+# Start a local development server for the legacy static site
+cd legacy
 python3 -m http.server 8080
 ```
 
 Then visit `http://localhost:8080` in your web browser.
+
+For the Next.js app, run `npm run dev` from the repository root.
 
 ## 📄 License
 

@@ -651,6 +651,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 newsletterForm.style.display = 'none';
                 newsletterMessage.style.display = 'flex';
                 newsletterMessage.classList.add('animate-in');
+                setTimeout(launchConfetti, 600);
 
                 console.log('Successfully subscribed');
             } catch (error) {
@@ -994,15 +995,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         draw();
         setTimeout(() => { cancelAnimationFrame(rafId); canvas.style.display = 'none'; }, 5000);
-    }
-
-    // Patch newsletter form to also trigger confetti
-    const nlForm = document.getElementById('newsletter-form');
-    if (nlForm) {
-        nlForm.addEventListener('submit', () => {
-            // Confetti fires when success message appears (after async)
-            setTimeout(launchConfetti, 600);
-        });
     }
 
     // ────────────────────────────────────────────────

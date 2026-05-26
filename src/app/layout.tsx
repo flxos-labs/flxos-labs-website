@@ -20,8 +20,17 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable}`}>
       <head>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-        <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23F59E0B'/%3E%3Ctext x='50' y='70' font-family='sans-serif' font-size='60' font-weight='bold' fill='%230A0A0B' text-anchor='middle'%3EF%3C/text%3E%3C/svg%3E" />
+        <link
+          rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+          integrity="sha384-iw3OoTErCYJJB9mCa8LNS2hbsQ7M3C0EpIsO/H5+EGAkPGc6rk+V8i04oW/K5xq0"
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="icon"
+          type="image/svg+xml"
+          href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23F59E0B'/%3E%3Ctext x='50' y='70' font-family='sans-serif' font-size='60' font-weight='bold' fill='%230A0A0B' text-anchor='middle'%3EF%3C/text%3E%3C/svg%3E"
+        />
       </head>
       <body>
         <div id="scroll-progress" aria-hidden="true"></div>
@@ -42,11 +51,11 @@ export default function RootLayout({
                     <span>FlxOS</span>
                 </a>
                 <div className="nav-links">
-                    <a href="#features">Features</a>
-                    <a href="#screenshots">Gallery</a>
-                    <a href="#tech-stack">Tech Stack</a>
-                    <a href="#roadmap">Roadmap</a>
-                    <a href="#community">Community</a>
+                    <a href="/#features">Features</a>
+                    <a href="/#screenshots">Gallery</a>
+                    <a href="/#tech-stack">Tech Stack</a>
+                    <a href="/#roadmap">Roadmap</a>
+                    <a href="/#community">Community</a>
                     <a href="/docs">Docs</a>
                     <a href="/about">About</a>
                     <button id="themeToggle" aria-label="Toggle theme">
