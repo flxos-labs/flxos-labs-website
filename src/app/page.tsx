@@ -1,4 +1,5 @@
-import Image from "next/image";
+import PlatformCycler from "../components/PlatformCycler";
+import DeviceSlideshow from "../components/DeviceSlideshow";
 
 export default function Home() {
   return (
@@ -13,7 +14,7 @@ export default function Home() {
           <div className="space-y-6">
             <p className="section-eyebrow">FlxOS Labs</p>
             <h1 className="font-display text-4xl leading-tight text-[color:var(--ink)] md:text-5xl">
-              Modular OS from ESP32 chips to the desktop horizon.
+              Modular OS from <PlatformCycler /> to the desktop horizon.
             </h1>
             <p className="max-w-xl text-lg text-[color:var(--muted)]">
               FlxOS ships a profile-driven build system, a rich GUI stack, and
@@ -41,22 +42,8 @@ export default function Home() {
               <span className="chip">Python</span>
             </div>
           </div>
-          <div className="relative">
-            <div className="device-card">
-              <Image
-                src="/images/screenshots/scr_20260312_161725_home_screen_with_dock_status_bar_wallpaper.png"
-                alt="FlxOS home screen"
-                width={920}
-                height={640}
-                priority
-              />
-            </div>
-            <div className="caption-card">
-              <p className="font-display text-sm">Live UI on real hardware</p>
-              <span className="text-xs text-[color:var(--muted)]">
-                Touch UI, panel layouts, and built-in apps.
-              </span>
-            </div>
+          <div className="relative w-full">
+            <DeviceSlideshow />
           </div>
         </div>
       </section>

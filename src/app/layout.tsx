@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Figtree, JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import "./globals.css";
+import CommandPalette from "../components/CommandPalette";
 
 const fontDisplay = Space_Grotesk({
   variable: "--font-display",
@@ -99,6 +100,7 @@ export default function RootLayout({
             </div>
           </footer>
         </div>
+        <CommandPalette />
       </body>
     </html>
   );
