@@ -24,7 +24,7 @@ export default function NotFound() {
             Page Not Found
           </h1>
           <p className="text-sm md:text-base text-[color:var(--muted)] max-w-md mx-auto leading-relaxed">
-            Looks like this page got lost in the build process. The route you're looking for doesn't exist.
+            Looks like this page got lost in the build process. The route you&apos;re looking for doesn&apos;t exist.
           </p>
         </div>
 
@@ -44,7 +44,7 @@ export default function NotFound() {
             Error: Route not found in active board profile.
           </div>
           <div className="text-gray-400">
-            Suggestion: try navigating to "/" or "/docs" instead.
+            Suggestion: try navigating to &quot;/&quot; or &quot;/docs&quot; instead.
           </div>
         </div>
 

@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 interface PaletteItem {
@@ -92,7 +91,11 @@ export default function CommandPalette() {
       // Ctrl+K or Cmd+K
       if ((e.key === "k" || e.key === "K") && (e.ctrlKey || e.metaKey)) {
         e.preventDefault();
-        isOpen ? closePalette() : openPalette();
+        if (isOpen) {
+          closePalette();
+        } else {
+          openPalette();
+        }
       }
     };
     window.addEventListener("keydown", handleKeyDown);

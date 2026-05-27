@@ -182,10 +182,10 @@ export default function AboutContent() {
           <div className="space-y-6">
             <h2 className="font-display text-3xl font-bold text-[color:var(--ink)]">Our Mission</h2>
             <p className="text-[color:var(--muted)] leading-relaxed">
-              FlxOS Labs is dedicated to pushing the boundaries of what's possible on embedded hardware. We believe that microcontrollers deserve rich, intuitive user interfaces that rival desktop operating systems.
+              FlxOS Labs is dedicated to pushing the boundaries of what&apos;s possible on embedded hardware. We believe that microcontrollers deserve rich, intuitive user interfaces that rival desktop operating systems.
             </p>
             <p className="text-[color:var(--muted)] leading-relaxed">
-              By combining the power of ESP-IDF with cutting-edge graphics libraries like LVGL, we're creating a platform that makes embedded development accessible, enjoyable, and visually stunning.
+              By combining the power of ESP-IDF with cutting-edge graphics libraries like LVGL, we&apos;re creating a platform that makes embedded development accessible, enjoyable, and visually stunning.
             </p>
           </div>
           <div className="grid gap-4 sm:grid-cols-3 md:grid-cols-1">

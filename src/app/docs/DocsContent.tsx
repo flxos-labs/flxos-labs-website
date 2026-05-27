@@ -571,7 +571,7 @@ public:
 
             <div className="space-y-4">
               <div className="border border-[rgba(0,0,0,0.06)] rounded-xl p-4 space-y-1 bg-[rgba(var(--surface-rgb),0.4)]">
-                <h4 className="text-sm font-bold text-[color:var(--ink)]">Build fails with "Target Not Set"</h4>
+                <h4 className="text-sm font-bold text-[color:var(--ink)]">Build fails with &quot;Target Not Set&quot;</h4>
                 <p className="text-xs text-[color:var(--muted)] leading-relaxed">
                   Make sure you have selected an active target profile before executing the compile command: <code>python flxos.py select &lt;profile&gt;</code>.
                 </p>
@@ -580,7 +580,7 @@ public:
               <div className="border border-[rgba(0,0,0,0.06)] rounded-xl p-4 space-y-1 bg-[rgba(var(--surface-rgb),0.4)]">
                 <h4 className="text-sm font-bold text-[color:var(--ink)]">Display shows garbage or remains black</h4>
                 <p className="text-xs text-[color:var(--muted)] leading-relaxed">
-                  Check your SPI connections and pinout settings defined in the active profile's YAML structure. Double-check power supply levels; some displays require clean 5V lines.
+                  Check your SPI connections and pinout settings defined in the active profile&apos;s YAML structure. Double-check power supply levels; some displays require clean 5V lines.
                 </p>
               </div>
 
@@ -603,7 +603,7 @@ public:
               <div className="space-y-1">
                 <h4 className="text-sm font-bold text-[color:var(--accent-2)]">Still need help?</h4>
                 <p className="text-xs text-[color:var(--muted)] max-w-md leading-relaxed">
-                  If you run into issues that aren't covered here, check open issues on our GitHub tracker or open a new one.
+                  If you run into issues that aren&apos;t covered here, check open issues on our GitHub tracker or open a new one.
                 </p>
               </div>
               <a
