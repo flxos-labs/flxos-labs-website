@@ -3,6 +3,7 @@ import { Figtree, JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import Link from "next/link";
 import CommandPalette from "../components/CommandPalette";
+import ThemeToggle from "../components/ThemeToggle";
 
 const fontDisplay = Space_Grotesk({
   variable: "--font-display",
@@ -67,14 +68,17 @@ export default function RootLayout({
                   GitHub
                 </a>
               </nav>
-              <a
-                className="cta-pill"
-                href="https://github.com/flxos-labs/flxos"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Star on GitHub
-              </a>
+              <div className="site-header-actions">
+                <ThemeToggle />
+                <a
+                  className="cta-pill"
+                  href="https://github.com/flxos-labs/flxos"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Star on GitHub
+                </a>
+              </div>
             </div>
           </header>
           {children}

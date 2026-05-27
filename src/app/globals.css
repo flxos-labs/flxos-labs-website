@@ -10,6 +10,7 @@
   --accent-2: #2a9d8f;
   --accent-3: #e9c46a;
   --shadow: rgba(17, 18, 20, 0.12);
+  color-scheme: light;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -23,7 +24,34 @@
     --accent-2: #2a9d8f;
     --accent-3: #e9c46a;
     --shadow: rgba(0, 0, 0, 0.4);
+    color-scheme: dark;
   }
+}
+
+:root[data-theme="light"] {
+  --surface: #f6f2e8;
+  --surface-rgb: 246, 242, 232;
+  --surface-2: #ede6d6;
+  --ink: #161616;
+  --muted: #5c5f66;
+  --accent: #e76f51;
+  --accent-2: #2a9d8f;
+  --accent-3: #e9c46a;
+  --shadow: rgba(17, 18, 20, 0.12);
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  --surface: #111214;
+  --surface-rgb: 17, 18, 20;
+  --surface-2: #17181b;
+  --ink: #f5f2ea;
+  --muted: #b1b3b8;
+  --accent: #f4a261;
+  --accent-2: #2a9d8f;
+  --accent-3: #e9c46a;
+  --shadow: rgba(0, 0, 0, 0.4);
+  color-scheme: dark;
 }
 
 * {
@@ -123,6 +151,12 @@ a {
   color: var(--muted);
 }
 
+.site-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
 .nav-link {
   position: relative;
   transition: color 0.2s ease;
@@ -146,6 +180,40 @@ a {
 
 .nav-link:hover::after {
   width: 100%;
+}
+
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  border-radius: 999px;
+  padding: 0.45rem 0.9rem;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  background: rgba(var(--surface-rgb), 0.7);
+  color: var(--ink);
+  font-size: 0.8rem;
+  font-weight: 700;
+  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.theme-toggle:hover {
+  transform: translateY(-1px);
+  border-color: rgba(0, 0, 0, 0.2);
+}
+
+.theme-toggle-icon {
+  display: inline-flex;
+  width: 1rem;
+  height: 1rem;
+}
+
+.theme-toggle-icon svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.theme-toggle-label {
+  letter-spacing: 0.02em;
 }
 
 .cta-pill {
@@ -389,6 +457,16 @@ a {
   .cta-panel {
     grid-template-columns: 1.2fr 0.8fr;
     align-items: center;
+  }
+}
+
+@media (max-width: 640px) {
+  .theme-toggle {
+    padding: 0.45rem 0.55rem;
+  }
+
+  .theme-toggle-label {
+    display: none;
   }
 }
 
