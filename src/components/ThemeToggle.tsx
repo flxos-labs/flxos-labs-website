@@ -16,27 +16,30 @@ const applyTheme = (theme: Theme) => {
 };
 
 export default function ThemeToggle() {
-  const [theme, setTheme] = useState<Theme>("light");
+  const [theme, setTheme] = useState<Theme>(() => {
+    if (typeof window === "undefined") {
+      return "light";
+    }
+
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored === "light" || stored === "dark") {
+      return stored;
+    }
+
+    return getSystemTheme();
+  });
   const hasStoredPreference = useRef(false);
 
   useEffect(() => {
     const stored = localStorage.getItem(STORAGE_KEY);
-    const hasStored = stored === "light" || stored === "dark";
-    hasStoredPreference.current = hasStored;
-
-    const initialTheme = hasStored ? (stored as Theme) : getSystemTheme();
-    setTheme(initialTheme);
-    applyTheme(initialTheme);
-
+    hasStoredPreference.current = stored === "light" || stored === "dark";
     const media = window.matchMedia("(prefers-color-scheme: dark)");
     const handleChange = (event: MediaQueryListEvent) => {
       if (hasStoredPreference.current) {
         return;
       }
 
-      const nextTheme: Theme = event.matches ? "dark" : "light";
-      setTheme(nextTheme);
-      applyTheme(nextTheme);
+      setTheme(event.matches ? "dark" : "light");
     };
 
     if (media.addEventListener) {
@@ -48,11 +51,14 @@ export default function ThemeToggle() {
     return () => media.removeListener(handleChange);
   }, []);
 
+  useEffect(() => {
+    applyTheme(theme);
+  }, [theme]);
+
   const toggleTheme = () => {
     const nextTheme: Theme = theme === "dark" ? "light" : "dark";
     hasStoredPreference.current = true;
     setTheme(nextTheme);
-    applyTheme(nextTheme);
     localStorage.setItem(STORAGE_KEY, nextTheme);
   };
 
