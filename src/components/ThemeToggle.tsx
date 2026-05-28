@@ -16,23 +16,21 @@ const applyTheme = (theme: Theme) => {
 };
 
 export default function ThemeToggle() {
-  const [theme, setTheme] = useState<Theme>(() => {
-    if (typeof window === "undefined") {
-      return "light";
-    }
-
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored === "light" || stored === "dark") {
-      return stored;
-    }
-
-    return getSystemTheme();
-  });
+  const [theme, setTheme] = useState<Theme>("light");
   const hasStoredPreference = useRef(false);
 
   useEffect(() => {
     const stored = localStorage.getItem(STORAGE_KEY);
-    hasStoredPreference.current = stored === "light" || stored === "dark";
+    let initialTheme: Theme;
+    if (stored === "light" || stored === "dark") {
+      hasStoredPreference.current = true;
+      initialTheme = stored;
+    } else {
+      hasStoredPreference.current = false;
+      initialTheme = getSystemTheme();
+    }
+
+    setTheme(initialTheme);
     const media = window.matchMedia("(prefers-color-scheme: dark)");
     const handleChange = (event: MediaQueryListEvent) => {
       if (hasStoredPreference.current) {
