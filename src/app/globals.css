@@ -10,6 +10,10 @@
   --accent-2: #2a9d8f;
   --accent-3: #e9c46a;
   --shadow: rgba(17, 18, 20, 0.12);
+  --border-faint: rgba(0, 0, 0, 0.06);
+  --border-muted: rgba(0, 0, 0, 0.08);
+  --border-subtle: rgba(0, 0, 0, 0.12);
+  --border-strong: rgba(0, 0, 0, 0.2);
   color-scheme: light;
 }
 
@@ -24,6 +28,10 @@
     --accent-2: #2a9d8f;
     --accent-3: #e9c46a;
     --shadow: rgba(0, 0, 0, 0.4);
+    --border-faint: rgba(255, 255, 255, 0.1);
+    --border-muted: rgba(255, 255, 255, 0.12);
+    --border-subtle: rgba(255, 255, 255, 0.14);
+    --border-strong: rgba(255, 255, 255, 0.24);
     color-scheme: dark;
   }
 }
@@ -38,6 +46,10 @@
   --accent-2: #2a9d8f;
   --accent-3: #e9c46a;
   --shadow: rgba(17, 18, 20, 0.12);
+  --border-faint: rgba(0, 0, 0, 0.06);
+  --border-muted: rgba(0, 0, 0, 0.08);
+  --border-subtle: rgba(0, 0, 0, 0.12);
+  --border-strong: rgba(0, 0, 0, 0.2);
   color-scheme: light;
 }
 
@@ -51,6 +63,10 @@
   --accent-2: #2a9d8f;
   --accent-3: #e9c46a;
   --shadow: rgba(0, 0, 0, 0.4);
+  --border-faint: rgba(255, 255, 255, 0.1);
+  --border-muted: rgba(255, 255, 255, 0.12);
+  --border-subtle: rgba(255, 255, 255, 0.14);
+  --border-strong: rgba(255, 255, 255, 0.24);
   color-scheme: dark;
 }
 
@@ -102,7 +118,7 @@ a {
   position: sticky;
   top: 0;
   z-index: 50;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  border-bottom: 1px solid var(--border-faint);
   background: rgba(var(--surface-rgb), 0.92);
   backdrop-filter: blur(14px);
 }
@@ -188,17 +204,18 @@ a {
   gap: 0.45rem;
   border-radius: 999px;
   padding: 0.45rem 0.9rem;
-  border: 1px solid rgba(0, 0, 0, 0.12);
+  border: 1px solid var(--border-subtle);
   background: rgba(var(--surface-rgb), 0.7);
   color: var(--ink);
   font-size: 0.8rem;
   font-weight: 700;
+  cursor: pointer;
   transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
 }
 
 .theme-toggle:hover {
   transform: translateY(-1px);
-  border-color: rgba(0, 0, 0, 0.2);
+  border-color: var(--border-strong);
 }
 
 .theme-toggle-icon {
@@ -290,7 +307,7 @@ a {
   border-radius: 1.5rem;
   padding: 1rem;
   background: rgba(var(--surface-rgb), 0.8);
-  border: 1px solid rgba(0, 0, 0, 0.06);
+  border: 1px solid var(--border-faint);
   box-shadow: 0 24px 60px var(--shadow);
   animation: reveal-up 0.8s ease both;
 }
@@ -308,7 +325,7 @@ a {
   border-radius: 1rem;
   padding: 0.75rem 1rem;
   background: rgba(var(--surface-rgb), 0.95);
-  border: 1px solid rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--border-muted);
   box-shadow: 0 18px 36px var(--shadow);
 }
 
@@ -337,18 +354,18 @@ a {
 }
 
 .btn-secondary {
-  border: 1px solid rgba(0, 0, 0, 0.12);
+  border: 1px solid var(--border-subtle);
   background: rgba(var(--surface-rgb), 0.6);
   color: var(--ink);
 }
 
 .btn-secondary:hover {
   transform: translateY(-2px);
-  border-color: rgba(0, 0, 0, 0.2);
+  border-color: var(--border-strong);
 }
 
 .btn-ghost {
-  border: 1px dashed rgba(0, 0, 0, 0.2);
+  border: 1px dashed var(--border-strong);
   color: var(--muted);
 }
 
@@ -362,7 +379,7 @@ a {
   padding: 1.5rem;
   border-radius: 1.25rem;
   background: rgba(var(--surface-rgb), 0.75);
-  border: 1px solid rgba(0, 0, 0, 0.06);
+  border: 1px solid var(--border-faint);
   box-shadow: 0 18px 32px var(--shadow);
   animation: reveal-up 0.8s ease both;
 }
@@ -372,7 +389,7 @@ a {
   align-items: center;
   border-radius: 999px;
   padding: 0.35rem 0.8rem;
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--border-muted);
   background: rgba(var(--surface-rgb), 0.7);
 }
 
@@ -382,7 +399,7 @@ a {
   border-radius: 1.5rem;
   padding: 1.75rem;
   background: rgba(var(--surface-rgb), 0.8);
-  border: 1px solid rgba(0, 0, 0, 0.06);
+  border: 1px solid var(--border-faint);
   box-shadow: 0 24px 42px var(--shadow);
 }
 
@@ -403,7 +420,7 @@ a {
   border-radius: 2rem;
   padding: 2.5rem;
   background: linear-gradient(135deg, rgba(231, 111, 81, 0.16), rgba(42, 157, 143, 0.16));
-  border: 1px solid rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--border-muted);
   box-shadow: 0 24px 50px var(--shadow);
 }
 
@@ -414,7 +431,7 @@ a {
 }
 
 .site-footer {
-  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  border-top: 1px solid var(--border-faint);
   padding: 2.5rem 0 3rem;
 }
 
