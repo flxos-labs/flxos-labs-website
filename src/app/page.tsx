@@ -1,5 +1,6 @@
 import PlatformCycler from "../components/PlatformCycler";
 import DeviceSlideshow from "../components/DeviceSlideshow";
+import Image from "next/image";
 import Link from "next/link";
 
 export default function Home() {
@@ -46,6 +47,72 @@ export default function Home() {
           <div className="relative w-full">
             <DeviceSlideshow />
           </div>
+        </div>
+      </section>
+
+      <section id="hardware" className="mx-auto w-full max-w-6xl px-6 pb-20">
+        <div className="section-header">
+          <h2 className="font-display text-3xl">Hardware in the lab</h2>
+          <p className="text-[color:var(--muted)]">
+            Real devices running FlxOS, captured on LilyGo T-HMI prototypes.
+          </p>
+        </div>
+        <div className="hardware-grid">
+          <figure className="hardware-card hardware-card--hero">
+            <Image
+              src="/images/hardware/lilygo-thmi-systeminfo-app.jpg"
+              alt="LilyGo T-HMI system info screen"
+              fill
+              sizes="(max-width: 768px) 100vw, 66vw"
+              className="hardware-photo"
+            />
+            <figcaption className="hardware-caption">
+              <span className="hardware-label">LilyGo T-HMI</span>
+              <span className="hardware-title">System info on-device</span>
+              <span className="hardware-meta">
+                Live diagnostics, sensor readouts, and UI timing.
+              </span>
+            </figcaption>
+          </figure>
+          <figure className="hardware-card">
+            <Image
+              src="/images/hardware/lilygo-thmi-calculator-app.jpg"
+              alt="Calculator app on LilyGo T-HMI"
+              fill
+              sizes="(max-width: 768px) 50vw, 33vw"
+              className="hardware-photo"
+            />
+            <figcaption className="hardware-caption">
+              <span className="hardware-label">Input demo</span>
+              <span className="hardware-title">Calculator app</span>
+            </figcaption>
+          </figure>
+          <figure className="hardware-card">
+            <Image
+              src="/images/hardware/lilygo-thmi-notification-panel.jpg"
+              alt="Notification panel on LilyGo T-HMI"
+              fill
+              sizes="(max-width: 768px) 50vw, 33vw"
+              className="hardware-photo"
+            />
+            <figcaption className="hardware-caption">
+              <span className="hardware-label">Status layer</span>
+              <span className="hardware-title">Notification panel</span>
+            </figcaption>
+          </figure>
+          <figure className="hardware-card">
+            <Image
+              src="/images/hardware/lilygo-thmi-quickaccess-panel.jpg"
+              alt="Quick access panel on LilyGo T-HMI"
+              fill
+              sizes="(max-width: 768px) 50vw, 33vw"
+              className="hardware-photo"
+            />
+            <figcaption className="hardware-caption">
+              <span className="hardware-label">Controls</span>
+              <span className="hardware-title">Quick access panel</span>
+            </figcaption>
+          </figure>
         </div>
       </section>
 
