@@ -51,7 +51,7 @@ export default function DeviceSlideshow() {
   return (
     <div className="relative w-full max-w-lg lg:max-w-xl mx-auto">
       {/* Device Frame Card */}
-      <div className="device-card relative aspect-[920/640] w-full overflow-hidden">
+      <div className="device-card relative aspect-[4/3] w-full overflow-hidden">
         {slides.map((slide, idx) => {
           const isActive = idx === activeIdx;
           return (
