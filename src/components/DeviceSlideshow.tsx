@@ -57,7 +57,7 @@ export default function DeviceSlideshow() {
           return (
             <div
               key={idx}
-              className={`absolute inset-4 transition-opacity duration-700 ease-in-out ${
+              className={`absolute inset-[5%] transition-opacity duration-700 ease-in-out ${
                 isActive ? "opacity-100 z-10" : "opacity-0 z-0"
               }`}
             >
