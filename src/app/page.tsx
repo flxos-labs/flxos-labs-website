@@ -36,6 +36,26 @@ export default function Home() {
                 View GitHub
               </a>
             </div>
+            <div className="hero-highlights">
+              <div className="highlight-card">
+                <p className="highlight-title">Profile graph</p>
+                <p className="highlight-copy">
+                  Define board, display, and input defaults in a single profile.
+                </p>
+              </div>
+              <div className="highlight-card">
+                <p className="highlight-title">GUI foundation</p>
+                <p className="highlight-copy">
+                  LVGL plus tuned drivers for responsive, crisp interfaces.
+                </p>
+              </div>
+              <div className="highlight-card">
+                <p className="highlight-title">Desktop horizon</p>
+                <p className="highlight-copy">
+                  Carry the same design language into simulators and desktop shells.
+                </p>
+              </div>
+            </div>
             <div className="flex flex-wrap gap-2 text-xs text-[color:var(--muted)]">
               <span className="chip">ESP-IDF</span>
               <span className="chip">LVGL</span>
@@ -46,6 +66,49 @@ export default function Home() {
           </div>
           <div className="relative w-full">
             <DeviceSlideshow />
+          </div>
+        </div>
+      </section>
+
+      <section id="workflow" className="mx-auto w-full max-w-6xl px-6 pb-20">
+        <div className="section-header">
+          <h2 className="font-display text-3xl">The build loop</h2>
+          <p className="text-[color:var(--muted)]">
+            Move from a profile to hardware in a short loop and keep the same
+            foundation as you scale the interface.
+          </p>
+        </div>
+        <div className="workflow-grid">
+          <div className="workflow-step">
+            <span className="workflow-step-number">01</span>
+            <h3 className="font-display text-lg">Pick a profile</h3>
+            <p className="text-sm text-[color:var(--muted)]">
+              Start with a board preset that bundles display, input, and storage
+              defaults.
+            </p>
+          </div>
+          <div className="workflow-step">
+            <span className="workflow-step-number">02</span>
+            <h3 className="font-display text-lg">Compose modules</h3>
+            <p className="text-sm text-[color:var(--muted)]">
+              Add UI, connectivity, and app layers without forking core
+              services.
+            </p>
+          </div>
+          <div className="workflow-step">
+            <span className="workflow-step-number">03</span>
+            <h3 className="font-display text-lg">Build and flash</h3>
+            <p className="text-sm text-[color:var(--muted)]">
+              Generate the image and deploy to hardware in one repeatable flow.
+            </p>
+          </div>
+          <div className="workflow-step">
+            <span className="workflow-step-number">04</span>
+            <h3 className="font-display text-lg">Refine the surface</h3>
+            <p className="text-sm text-[color:var(--muted)]">
+              Tune visuals, animations, and layouts while the config stays
+              consistent.
+            </p>
           </div>
         </div>
       </section>
