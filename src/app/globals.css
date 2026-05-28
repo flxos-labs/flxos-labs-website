@@ -361,10 +361,6 @@ a {
   );
 }
 
-.hardware-card--hero {
-  grid-column: 1 / -1;
-  min-height: 360px;
-}
 
 .hardware-photo {
   object-fit: cover;

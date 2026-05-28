@@ -58,7 +58,7 @@ export default function Home() {
           </p>
         </div>
         <div className="hardware-grid">
-          <figure className="hardware-card hardware-card--hero">
+          <figure className="hardware-card">
             <Image
               src="/images/hardware/lilygo-thmi-systeminfo-app.jpg"
               alt="LilyGo T-HMI system info screen"
