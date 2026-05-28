@@ -30,6 +30,7 @@ export default function ThemeToggle() {
       initialTheme = getSystemTheme();
     }
 
+    applyTheme(initialTheme);
     setTheme(initialTheme);
     const media = window.matchMedia("(prefers-color-scheme: dark)");
     const handleChange = (event: MediaQueryListEvent) => {
@@ -37,7 +38,9 @@ export default function ThemeToggle() {
         return;
       }
 
-      setTheme(event.matches ? "dark" : "light");
+      const nextTheme: Theme = event.matches ? "dark" : "light";
+      applyTheme(nextTheme);
+      setTheme(nextTheme);
     };
 
     if (media.addEventListener) {
@@ -49,13 +52,10 @@ export default function ThemeToggle() {
     return () => media.removeListener(handleChange);
   }, []);
 
-  useEffect(() => {
-    applyTheme(theme);
-  }, [theme]);
-
   const toggleTheme = () => {
     const nextTheme: Theme = theme === "dark" ? "light" : "dark";
     hasStoredPreference.current = true;
+    applyTheme(nextTheme);
     setTheme(nextTheme);
     localStorage.setItem(STORAGE_KEY, nextTheme);
   };
