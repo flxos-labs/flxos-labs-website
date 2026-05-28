@@ -79,7 +79,7 @@ export default function Home() {
               src="/images/hardware/lilygo-thmi-calculator-app.jpg"
               alt="Calculator app on LilyGo T-HMI"
               fill
-              sizes="(max-width: 768px) 50vw, 33vw"
+              sizes="(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 33vw"
               className="hardware-photo"
             />
             <figcaption className="hardware-caption">
