@@ -261,7 +261,6 @@ a {
   height: 14rem;
   border-radius: 50%;
   filter: blur(20px);
-  opacity: 0.6;
   animation: float 12s ease-in-out infinite;
 }
 

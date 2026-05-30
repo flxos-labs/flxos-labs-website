@@ -9,9 +9,9 @@ export default function Home() {
     <main className="relative">
       <section className="relative overflow-hidden">
         <div className="hero-orbs" aria-hidden="true">
-          <span className="orb orb-1" />
-          <span className="orb orb-2" />
-          <span className="orb orb-3" />
+          <span className="orb orb-1 opacity-60" />
+          <span className="orb orb-2 opacity-60" />
+          <span className="orb orb-3 opacity-60" />
         </div>
         <div className="mx-auto flex w-full max-w-6xl flex-col gap-12 px-6 pb-20 pt-16 lg:grid lg:grid-cols-[1.15fr_0.85fr] lg:items-center lg:pt-24">
           <div className="space-y-6">
