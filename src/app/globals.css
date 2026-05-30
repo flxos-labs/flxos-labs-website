@@ -2300,3 +2300,321 @@ body:has(.us-page) {
   line-height: 1.6;
 }
 
+/* Dreams Board Grid & Cards */
+.us-dreams-grid {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 2rem;
+  margin-top: 3rem;
+}
+
+@media (min-width: 640px) {
+  .us-dreams-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.us-dream-card-wrapper {
+  perspective: 1000px;
+  cursor: pointer;
+  height: 260px;
+  width: 100%;
+}
+
+.us-dream-card {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.us-dream-card-wrapper.flipped .us-dream-card {
+  transform: rotateY(180deg);
+}
+
+.us-dream-card-front,
+.us-dream-card-back {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: 1.5rem;
+  padding: 2.25rem;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+}
+
+.us-dream-card-front {
+  background: var(--us-dark-card);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.us-dream-card-wrapper:hover .us-dream-card-front {
+  border-color: rgba(212, 168, 83, 0.3);
+  box-shadow: 0 25px 45px rgba(0, 0, 0, 0.4), 0 0 20px rgba(212, 168, 83, 0.05);
+}
+
+.us-dream-card-back {
+  background: linear-gradient(135deg, #16151a, #0b0a0d);
+  border: 1.5px solid rgba(212, 168, 83, 0.3);
+  transform: rotateY(180deg);
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+/* Lyrics Panel next to Vinyl Deck */
+.us-lyrics-panel {
+  display: flex;
+  flex-direction: column;
+  height: 280px;
+  overflow-y: auto;
+  border-left: 1px solid rgba(212, 168, 83, 0.15);
+  padding-left: 2rem;
+  mask-image: linear-gradient(to bottom, transparent 0%, white 20%, white 80%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, white 20%, white 80%, transparent 100%);
+  scroll-behavior: smooth;
+}
+
+@media (max-width: 1024px) {
+  .us-lyrics-panel {
+    border-left: 0;
+    border-top: 1px solid rgba(212, 168, 83, 0.15);
+    padding-left: 0;
+    padding-top: 2rem;
+    height: 180px;
+  }
+}
+
+.us-lyrics-panel::-webkit-scrollbar {
+  width: 4px;
+}
+
+.us-lyrics-panel::-webkit-scrollbar-thumb {
+  background: rgba(212, 168, 83, 0.2);
+  border-radius: 99px;
+}
+
+.us-lyric-line {
+  font-size: 0.95rem;
+  color: rgba(253, 246, 227, 0.35);
+  margin-bottom: 1.15rem;
+  transition: all 0.3s ease;
+  line-height: 1.4;
+}
+
+.us-lyric-line.active {
+  color: var(--us-gold-light);
+  font-weight: 700;
+  text-shadow: 0 0 10px rgba(245, 215, 153, 0.35);
+  transform: scale(1.04);
+}
+
+@media (min-width: 1024px) {
+  .us-player-container {
+    grid-template-columns: 1.1fr 1fr 1fr;
+    gap: 2rem;
+  }
+}
+
+/* Love Constellation Alignment */
+.us-align-visualizer {
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+}
+
+.us-align-node {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  background: rgba(18, 18, 22, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 9999px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transform: translate(-50%, -50%);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  z-index: 20;
+}
+
+.us-align-node:hover {
+  transform: translate(-50%, -50%) scale(1.15);
+  border-color: var(--us-gold);
+  box-shadow: 0 0 15px rgba(212, 168, 83, 0.2);
+}
+
+.us-align-node.selected {
+  background: linear-gradient(135deg, var(--us-rose), var(--us-gold));
+  border-color: transparent;
+  box-shadow: 0 0 20px rgba(232, 71, 95, 0.4);
+}
+
+.us-node-label {
+  position: absolute;
+  top: 42px;
+  font-size: 9px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: rgba(253, 246, 227, 0.45);
+  pointer-events: none;
+  white-space: nowrap;
+  transition: color 0.3s ease;
+}
+
+.us-align-node.selected .us-node-label {
+  color: var(--us-gold-light);
+  text-shadow: 0 0 5px rgba(212, 168, 83, 0.3);
+}
+
+.us-value-btn {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(212, 168, 83, 0.15);
+  border-radius: 1rem;
+  padding: 0.75rem 1.25rem;
+  color: rgba(253, 246, 227, 0.7);
+  font-weight: 600;
+  font-size: 0.85rem;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.us-value-btn:hover {
+  background: rgba(212, 168, 83, 0.05);
+  color: var(--us-gold-light);
+  border-color: rgba(212, 168, 83, 0.4);
+}
+
+.us-value-btn.active {
+  background: linear-gradient(135deg, rgba(232, 71, 95, 0.12), rgba(212, 168, 83, 0.12));
+  border-color: var(--us-rose);
+  color: var(--us-champagne);
+  box-shadow: inset 0 0 10px rgba(232, 71, 95, 0.1);
+}
+
+/* Cosmic Compass Oracle */
+.us-compass-outer {
+  transition: transform 0.5s ease;
+}
+
+.us-spin-slow {
+  animation: us-spin 18s linear infinite;
+}
+
+.us-spin-fast {
+  animation: us-spin-fast-anim 1.8s cubic-bezier(0.1, 0.8, 0.1, 1) forwards;
+}
+
+@keyframes us-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes us-spin-fast-anim {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(1080deg); }
+}
+
+.us-oracle-box {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.6s ease;
+}
+
+.us-oracle-box.active {
+  max-height: 250px;
+}
+
+/* Time Capsule Bottle & Scroll */
+.us-capsule-bottle:hover {
+  transform: scale(1.05);
+}
+
+.us-capsule-container.unlocked .us-capsule-bottle {
+  transform: rotate(-10deg) scale(0.95);
+  opacity: 0.7;
+}
+
+.us-bottle-cork {
+  position: absolute;
+  top: -8px;
+  width: 16px;
+  height: 10px;
+  background: #8b5a2b;
+  border-radius: 3px 3px 0 0;
+}
+
+.us-bottle-body {
+  width: 70px;
+  height: 140px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px 12px 35px 35px;
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: inset 0 0 15px rgba(255, 255, 255, 0.1), 0 10px 25px rgba(0, 0, 0, 0.4);
+  position: relative;
+  overflow: hidden;
+}
+
+.us-bottle-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(212, 168, 83, 0.2), transparent 70%);
+  animation: us-pulse-glow 3s infinite alternate;
+}
+
+.us-bottle-scroll-inside {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 25px;
+  height: 80px;
+  background: #ebd2ad;
+  border: 1px solid #c4ab84;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+.us-parchment-scroll-wrapper {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+  margin-top: 2rem;
+  width: 100%;
+}
+
+.us-parchment-scroll-wrapper.active {
+  max-height: 800px;
+}
+
+.us-parchment-scroll {
+  box-shadow: 0 25px 55px rgba(0, 0, 0, 0.65), inset 0 0 40px rgba(125, 95, 48, 0.15);
+  line-height: 1.8;
+  font-family: Georgia, serif;
+}
+
+/* Celestial Match Tracker Stats */
+.us-stat-card {
+  box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+  transition: all 0.3s ease;
+}
+
+.us-stat-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(212, 168, 83, 0.3);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.35);
+}
+
+
+
