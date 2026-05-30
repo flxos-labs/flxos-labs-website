@@ -145,7 +145,7 @@ export default function AboutContent() {
             <div className="relative mx-auto md:mx-0 w-36 h-36 md:w-44 md:h-44 rounded-2xl overflow-hidden bg-[color:var(--surface-2)] border border-[color:var(--border-muted)] flex items-center justify-center shadow-lg group">
               <Image
                 className="object-cover group-hover:scale-105 transition-transform duration-300"
-                src="https://github.com/Itsmeakash248.png?size=200"
+                src="/images/me.jpg"
                 alt="Akash — Creator of FlxOS"
                 fill
                 sizes="(max-width: 768px) 144px, 176px"
@@ -203,7 +203,7 @@ export default function AboutContent() {
             <div className="relative mx-auto md:mx-0 w-36 h-36 md:w-44 md:h-44 rounded-2xl overflow-hidden bg-[color:var(--surface-2)] border border-[color:var(--border-muted)] flex items-center justify-center shadow-lg group">
               <Image
                 className="object-cover group-hover:scale-105 transition-transform duration-300"
-                src="https://github.com/rekha290907.png?size=200"
+                src="/images/her.jpg"
                 alt="Rekha — UI/UX Designer &amp; Frontend Developer, FlxOS Labs"
                 fill
                 sizes="(max-width: 768px) 144px, 176px"
