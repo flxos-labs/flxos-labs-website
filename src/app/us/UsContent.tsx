@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import StarfieldCanvas from "./StarfieldCanvas";
@@ -365,7 +365,7 @@ export default function UsContent() {
   const renderConstellationLines = () => {
     if (connectedStars.length < 2) return null;
     
-    const lines: JSX.Element[] = [];
+    const lines: React.ReactNode[] = [];
     for (let i = 0; i < connectedStars.length - 1; i++) {
       const fromStar = CONSTELLATION_STARS.find((s) => s.id === connectedStars[i]);
       const toStar = CONSTELLATION_STARS.find((s) => s.id === connectedStars[i + 1]);
