@@ -28,9 +28,8 @@ The main client component (`"use client"`) — the heart of the page. Contains a
 **Section 1 — Cinematic Entrance Hero**
 - Full-viewport dark section with a subtle golden particle canvas background
 - Animated headline: "To the One Who Stole My Heart" — text reveals letter by letter with a golden shimmer
-- Both photos (me.jpg & her.jpg) reveal with a gentle scale and fade-in animation inside glassmorphic frames, connected by a delicate golden line
 - Subtle parallax depth on scroll
-- A gentle golden pulse/glow around Rekha's photo
+- Scroll prompt directing users downward to reveal the content and photos
 
 **Section 2 — The Love Letter**
 - A beautifully typeset heartfelt message on what appears to be a luxurious dark card with gold borders
@@ -49,7 +48,8 @@ The main client component (`"use client"`) — the heart of the page. Contains a
 - On mobile: cards stack vertically with swipe hints
 
 **Section 4 — "Yours Forever" Closing**
-- A final dramatic section with both photos again, this time in a creative collage-style layout
+- A final dramatic section showing both photos (me.jpg & her.jpg) inside glassmorphic frames in a creative collage-style layout
+- Rekha's photo features a gentle golden pulse/glow effect
 - An animated infinity symbol (∞) drawn in gold
 - "Yours forever, Akash" in elegant typography
 - Floating golden sparkles around the section
@@ -151,10 +151,11 @@ graph TD
 
 ## Key Technical Details
 
-### Scroll-Triggered Animations
+### Scroll-Triggered Animations & Snapping
 - Using `IntersectionObserver` API to trigger `.us-reveal` class additions
 - Staggered delays using CSS custom properties (`--reveal-delay: 0.1s`, `0.2s`, etc.)
 - Smooth `translateY` + `opacity` transitions
+- Native CSS Scroll Snapping enabled on desktop viewports (`scroll-snap-type: y mandatory`) with a `scroll-margin-top` offset to account for the sticky header
 
 ### Forced Dark Theme
 - The `/us` page wrapper applies `data-theme="dark"` inline + forces its own dark CSS variables
@@ -165,11 +166,11 @@ graph TD
 - StarfieldCanvas uses `requestAnimationFrame` with `visibility` pausing
 - Reduced particle counts on mobile (`window.innerWidth < 768`)
 - CSS `will-change` on animated elements, removed after animation completes
-- Images use Next.js `<Image>` with `priority` for hero photos
+- Images use Next.js `<Image>` with lazy loading for collage photos at the bottom of the page
 
 ### Responsive Design
 - Mobile-first approach
-- Photos stack vertically on mobile, side-by-side on desktop
+- Collage photos stack vertically on mobile, side-by-side on desktop
 - Reason cards: 1 column mobile → 2 columns tablet → 3-4 columns desktop
 - Font sizes scale with `clamp()` for fluid typography
 
