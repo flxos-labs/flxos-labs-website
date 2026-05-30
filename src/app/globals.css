@@ -9,6 +9,9 @@
   --accent: #e76f51;
   --accent-2: #2a9d8f;
   --accent-3: #e9c46a;
+  --romantic-bg-1: rgba(255, 143, 163, 0.15);
+  --romantic-bg-2: rgba(240, 230, 255, 0.18);
+  --romantic-bg-3: rgba(255, 229, 236, 0.2);
   --shadow: rgba(17, 18, 20, 0.12);
   --border-faint: rgba(0, 0, 0, 0.06);
   --border-muted: rgba(0, 0, 0, 0.08);
@@ -27,6 +30,9 @@
     --accent: #f4a261;
     --accent-2: #2a9d8f;
     --accent-3: #e9c46a;
+    --romantic-bg-1: rgba(201, 24, 74, 0.1);
+    --romantic-bg-2: rgba(128, 15, 47, 0.14);
+    --romantic-bg-3: rgba(255, 195, 112, 0.06);
     --shadow: rgba(0, 0, 0, 0.4);
     --border-faint: rgba(255, 255, 255, 0.1);
     --border-muted: rgba(255, 255, 255, 0.12);
@@ -45,6 +51,9 @@
   --accent: #e76f51;
   --accent-2: #2a9d8f;
   --accent-3: #e9c46a;
+  --romantic-bg-1: rgba(255, 143, 163, 0.15);
+  --romantic-bg-2: rgba(240, 230, 255, 0.18);
+  --romantic-bg-3: rgba(255, 229, 236, 0.2);
   --shadow: rgba(17, 18, 20, 0.12);
   --border-faint: rgba(0, 0, 0, 0.06);
   --border-muted: rgba(0, 0, 0, 0.08);
@@ -62,6 +71,9 @@
   --accent: #f4a261;
   --accent-2: #2a9d8f;
   --accent-3: #e9c46a;
+  --romantic-bg-1: rgba(201, 24, 74, 0.1);
+  --romantic-bg-2: rgba(128, 15, 47, 0.14);
+  --romantic-bg-3: rgba(255, 195, 112, 0.06);
   --shadow: rgba(0, 0, 0, 0.4);
   --border-faint: rgba(255, 255, 255, 0.1);
   --border-muted: rgba(255, 255, 255, 0.12);
@@ -108,10 +120,10 @@ a {
   inset: 0;
   z-index: -1;
   background:
-    radial-gradient(50% 50% at 20% 15%, rgba(231, 111, 81, 0.08), transparent 60%),
-    radial-gradient(40% 40% at 80% 20%, rgba(42, 157, 143, 0.09), transparent 55%),
-    radial-gradient(45% 45% at 70% 85%, rgba(233, 196, 106, 0.1), transparent 60%),
-    linear-gradient(120deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0));
+    radial-gradient(50% 50% at 20% 15%, var(--romantic-bg-1), transparent 60%),
+    radial-gradient(40% 40% at 80% 20%, var(--romantic-bg-2), transparent 55%),
+    radial-gradient(45% 45% at 70% 85%, var(--romantic-bg-3), transparent 60%),
+    linear-gradient(120deg, rgba(var(--surface-rgb), 0.3), rgba(var(--surface-rgb), 0));
 }
 
 .site-header {

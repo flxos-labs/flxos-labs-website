@@ -5,86 +5,158 @@ import { useEffect, useRef, useCallback } from "react";
 /* ------------------------------------------------------------------ */
 /* Types                                                              */
 /* ------------------------------------------------------------------ */
-interface Particle {
+interface RomanticParticle {
+  x: number;
+  y: number;
+  baseX: number;
+  ySpeed: number;
+  swaySpeed: number;
+  swayAmplitude: number;
+  swayOffset: number;
+  size: number;
+  type: "heart" | "bokeh";
+  color: [number, number, number];
+  alpha: number;
+  maxAlpha: number;
+}
+
+interface SparkleParticle {
   x: number;
   y: number;
   vx: number;
   vy: number;
-  radius: number;
-  color: string;
+  size: number;
+  color: [number, number, number];
   alpha: number;
+  life: number;
+  maxLife: number;
+  type: "heart" | "sparkle";
 }
 
 /* ------------------------------------------------------------------ */
-/* Helpers                                                            */
+/* Palettes                                                           */
 /* ------------------------------------------------------------------ */
-function hexToRgb(hex: string): [number, number, number] {
-  hex = hex.replace("#", "");
-  if (hex.length === 3) hex = hex.split("").map((c) => c + c).join("");
-  const n = parseInt(hex, 16);
-  return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
-}
+const LIGHT_PALETTE: [number, number, number][] = [
+  [255, 143, 163], // Soft rose pink
+  [255, 179, 193], // Pastel pink
+  [255, 200, 221], // Sweet pink
+  [255, 229, 236], // Very soft rose
+  [250, 210, 160], // Warm champagne gold
+];
 
-function rgbFromCssColor(raw: string): [number, number, number] {
-  // Handle rgb(r, g, b) or rgba(r, g, b, a)
-  const rgbMatch = raw.match(
-    /rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/
+const DARK_PALETTE: [number, number, number][] = [
+  [255, 77, 109],  // Vivid rose pink
+  [255, 112, 150], // Soft magenta
+  [201, 24, 74],   // Crimson red
+  [128, 15, 47],    // Deep rose gold
+  [255, 195, 112], // Soft glowing warm gold
+];
+
+/* ------------------------------------------------------------------ */
+/* Heart drawing helper                                               */
+/* ------------------------------------------------------------------ */
+function drawHeart(ctx: CanvasRenderingContext2D, x: number, y: number, size: number) {
+  ctx.beginPath();
+  // Start at the top center notch
+  ctx.moveTo(x, y + size * 0.25);
+  // Left curve
+  ctx.bezierCurveTo(
+    x - size * 0.6,
+    y - size * 0.45,
+    x - size * 1.1,
+    y + size * 0.25,
+    x,
+    y + size * 0.95
   );
-  if (rgbMatch) {
-    return [+rgbMatch[1], +rgbMatch[2], +rgbMatch[3]];
-  }
-  // Handle hex
-  if (raw.startsWith("#")) return hexToRgb(raw);
-  return [180, 180, 180]; // fallback grey
-}
-
-function readAccentColors(): [number, number, number][] {
-  const style = getComputedStyle(document.documentElement);
-  return [
-    rgbFromCssColor(style.getPropertyValue("--accent").trim() || "#e76f51"),
-    rgbFromCssColor(style.getPropertyValue("--accent-2").trim() || "#2a9d8f"),
-    rgbFromCssColor(style.getPropertyValue("--accent-3").trim() || "#e9c46a"),
-  ];
+  // Right curve
+  ctx.bezierCurveTo(
+    x + size * 1.1,
+    y + size * 0.25,
+    x + size * 0.6,
+    y - size * 0.45,
+    x,
+    y + size * 0.25
+  );
+  ctx.closePath();
+  ctx.fill();
 }
 
 /* ------------------------------------------------------------------ */
-/* Component                                                          */
+/* Sparkle/Star drawing helper                                        */
+/* ------------------------------------------------------------------ */
+function drawSparkle(ctx: CanvasRenderingContext2D, x: number, y: number, size: number) {
+  ctx.beginPath();
+  ctx.moveTo(x, y - size);
+  ctx.quadraticCurveTo(x, y, x + size, y);
+  ctx.quadraticCurveTo(x, y, x, y + size);
+  ctx.quadraticCurveTo(x, y, x - size, y);
+  ctx.quadraticCurveTo(x, y, x, y - size);
+  ctx.closePath();
+  ctx.fill();
+}
+
+/* ------------------------------------------------------------------ */
+/* Main Component                                                     */
 /* ------------------------------------------------------------------ */
 export default function InteractiveBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animationRef = useRef<number>(0);
-  const particlesRef = useRef<Particle[]>([]);
-  const mouseRef = useRef<{ x: number; y: number; active: boolean }>({
+  const bgParticlesRef = useRef<RomanticParticle[]>([]);
+  const sparkParticlesRef = useRef<SparkleParticle[]>([]);
+  const mouseRef = useRef<{ x: number; y: number; active: boolean; px: number; py: number }>({
     x: -9999,
     y: -9999,
     active: false,
+    px: -9999,
+    py: -9999,
   });
-  const colorsRef = useRef<[number, number, number][]>([]);
+  const themeRef = useRef<"light" | "dark">("light");
   const sizeRef = useRef<{ w: number; h: number }>({ w: 0, h: 0 });
 
-  /* ---------- init particles ---------- */
-  const initParticles = useCallback((w: number, h: number) => {
-    const isMobile = w < 768;
-    const count = isMobile ? 35 : 70;
-    const colors = colorsRef.current;
-    const particles: Particle[] = [];
-
-    for (let i = 0; i < count; i++) {
-      const c = colors[Math.floor(Math.random() * colors.length)];
-      particles.push({
-        x: Math.random() * w,
-        y: Math.random() * h,
-        vx: (Math.random() - 0.5) * 0.35,
-        vy: (Math.random() - 0.5) * 0.35,
-        radius: Math.random() * 2 + 1.2,
-        color: `rgb(${c[0]}, ${c[1]}, ${c[2]})`,
-        alpha: Math.random() * 0.5 + 0.25,
-      });
+  /* ---------- Get current theme ---------- */
+  const updateThemeState = useCallback(() => {
+    const rootTheme = document.documentElement.dataset.theme;
+    if (rootTheme === "dark" || rootTheme === "light") {
+      themeRef.current = rootTheme;
+    } else {
+      themeRef.current = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
     }
-    particlesRef.current = particles;
   }, []);
 
-  /* ---------- resize handler ---------- */
+  /* ---------- Initialize Background Drifters ---------- */
+  const initBackgroundParticles = useCallback((w: number, h: number) => {
+    const isMobile = w < 768;
+    const count = isMobile ? 25 : 55;
+    const palette = themeRef.current === "dark" ? DARK_PALETTE : LIGHT_PALETTE;
+    const particles: RomanticParticle[] = [];
+
+    for (let i = 0; i < count; i++) {
+      const type = Math.random() > 0.4 ? "heart" : "bokeh";
+      const size = type === "heart" ? Math.random() * 12 + 6 : Math.random() * 60 + 20;
+      const x = Math.random() * w;
+      const y = Math.random() * h;
+      const maxAlpha = type === "heart" ? Math.random() * 0.25 + 0.08 : Math.random() * 0.06 + 0.015;
+
+      particles.push({
+        x,
+        y,
+        baseX: x,
+        ySpeed: -(Math.random() * 0.35 + 0.15),
+        swaySpeed: Math.random() * 0.01 + 0.003,
+        swayAmplitude: Math.random() * 25 + 5,
+        swayOffset: Math.random() * Math.PI * 2,
+        size,
+        type,
+        color: palette[Math.floor(Math.random() * palette.length)],
+        alpha: Math.random() * maxAlpha,
+        maxAlpha,
+      });
+    }
+
+    bgParticlesRef.current = particles;
+  }, []);
+
+  /* ---------- Resize Handler ---------- */
   const handleResize = useCallback(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -101,11 +173,48 @@ export default function InteractiveBackground() {
     if (ctx) ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
     sizeRef.current = { w, h };
-    colorsRef.current = readAccentColors();
-    initParticles(w, h);
-  }, [initParticles]);
+    updateThemeState();
+    initBackgroundParticles(w, h);
+  }, [initBackgroundParticles, updateThemeState]);
 
-  /* ---------- animation loop ---------- */
+  /* ---------- Spawn Interactive Sparkle ---------- */
+  const spawnSparkles = useCallback((mx: number, my: number, count = 2) => {
+    const palette = themeRef.current === "dark" ? DARK_PALETTE : LIGHT_PALETTE;
+    const newSparks: SparkleParticle[] = [];
+
+    for (let i = 0; i < count; i++) {
+      const type = Math.random() > 0.4 ? "sparkle" : "heart";
+      const size = type === "heart" ? Math.random() * 7 + 4 : Math.random() * 5 + 3;
+      const maxLife = Math.random() * 45 + 35;
+      const color = palette[Math.floor(Math.random() * palette.length)];
+
+      // Random unit vector with upward bias
+      const angle = Math.random() * Math.PI * 2;
+      const force = Math.random() * 0.8 + 0.2;
+      const vx = Math.cos(angle) * force * 0.5;
+      const vy = (Math.sin(angle) * force - 0.7) * 0.6; // Upward bias
+
+      newSparks.push({
+        x: mx + (Math.random() - 0.5) * 8,
+        y: my + (Math.random() - 0.5) * 8,
+        vx,
+        vy,
+        size,
+        color,
+        alpha: 1,
+        life: maxLife,
+        maxLife,
+        type,
+      });
+    }
+
+    // Cap the active sparkles list to prevent memory bloat
+    if (sparkParticlesRef.current.length < 150) {
+      sparkParticlesRef.current.push(...newSparks);
+    }
+  }, []);
+
+  /* ---------- Animation Loop ---------- */
   const animate = useCallback(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -115,85 +224,80 @@ export default function InteractiveBackground() {
     const { w, h } = sizeRef.current;
     ctx.clearRect(0, 0, w, h);
 
-    const particles = particlesRef.current;
-    const mouse = mouseRef.current;
-    const CONNECTION_DIST = w < 768 ? 100 : 150;
-    const MOUSE_RADIUS = 180;
+    const palette = themeRef.current === "dark" ? DARK_PALETTE : LIGHT_PALETTE;
+    const time = Date.now();
 
-    /* Move & draw particles */
-    for (const p of particles) {
-      /* Mouse attractor effect */
-      if (mouse.active) {
-        const dx = mouse.x - p.x;
-        const dy = mouse.y - p.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < MOUSE_RADIUS && dist > 1) {
-          const force = (MOUSE_RADIUS - dist) / MOUSE_RADIUS;
-          p.vx += (dx / dist) * force * 0.012;
-          p.vy += (dy / dist) * force * 0.012;
-        }
+    /* 1. Update and Render Ambient Background Drifters */
+    const bgParticles = bgParticlesRef.current;
+    for (const p of bgParticles) {
+      // Rise up
+      p.y += p.ySpeed;
+
+      // Gentle wave sway
+      const sway = Math.sin(time * p.swaySpeed + p.swayOffset) * p.swayAmplitude;
+      p.x = p.baseX + sway;
+
+      // Slowly fade in when emerging from bottom
+      if (p.y < h && p.y > h - 100) {
+        p.alpha = Math.min(p.maxAlpha, p.alpha + 0.005);
       }
 
-      /* Update position */
-      p.x += p.vx;
-      p.y += p.vy;
+      // Reset when going off top screen
+      if (p.y + p.size < 0) {
+        p.y = h + p.size + Math.random() * 30;
+        p.baseX = Math.random() * w;
+        p.alpha = 0;
+        // Randomly select a color from the current theme palette
+        p.color = palette[Math.floor(Math.random() * palette.length)];
+      }
 
-      /* Damping */
-      p.vx *= 0.998;
-      p.vy *= 0.998;
-
-      /* Wrap edges */
-      if (p.x < -10) p.x = w + 10;
-      else if (p.x > w + 10) p.x = -10;
-      if (p.y < -10) p.y = h + 10;
-      else if (p.y > h + 10) p.y = -10;
-
-      /* Draw node */
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-      ctx.fillStyle = p.color;
+      // Render
+      ctx.fillStyle = `rgb(${p.color[0]}, ${p.color[1]}, ${p.color[2]})`;
       ctx.globalAlpha = p.alpha;
-      ctx.fill();
-    }
 
-    /* Draw connections */
-    ctx.globalAlpha = 1;
-    for (let i = 0; i < particles.length; i++) {
-      for (let j = i + 1; j < particles.length; j++) {
-        const a = particles[i];
-        const b = particles[j];
-        const dx = a.x - b.x;
-        const dy = a.y - b.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < CONNECTION_DIST) {
-          const opacity = (1 - dist / CONNECTION_DIST) * 0.18;
-          ctx.beginPath();
-          ctx.moveTo(a.x, a.y);
-          ctx.lineTo(b.x, b.y);
-          ctx.strokeStyle = a.color;
-          ctx.globalAlpha = opacity;
-          ctx.lineWidth = 0.6;
-          ctx.stroke();
-        }
+      if (p.type === "heart") {
+        drawHeart(ctx, p.x, p.y, p.size);
+      } else {
+        // Bokeh glow circle
+        const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size);
+        grad.addColorStop(0, `rgba(${p.color[0]}, ${p.color[1]}, ${p.color[2]}, 0.8)`);
+        grad.addColorStop(0.5, `rgba(${p.color[0]}, ${p.color[1]}, ${p.color[2]}, 0.2)`);
+        grad.addColorStop(1, "rgba(255, 255, 255, 0)");
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fill();
       }
     }
 
-    /* Mouse-to-node lines */
-    if (mouse.active) {
-      for (const p of particles) {
-        const dx = mouse.x - p.x;
-        const dy = mouse.y - p.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < MOUSE_RADIUS) {
-          const opacity = (1 - dist / MOUSE_RADIUS) * 0.25;
-          ctx.beginPath();
-          ctx.moveTo(mouse.x, mouse.y);
-          ctx.lineTo(p.x, p.y);
-          ctx.strokeStyle = p.color;
-          ctx.globalAlpha = opacity;
-          ctx.lineWidth = 0.5;
-          ctx.stroke();
-        }
+    /* 2. Update and Render Sparkle Trail */
+    let sparks = sparkParticlesRef.current;
+    for (let i = sparks.length - 1; i >= 0; i--) {
+      const s = sparks[i];
+      s.life--;
+
+      if (s.life <= 0) {
+        sparks.splice(i, 1);
+        continue;
+      }
+
+      // Movement & deceleration
+      s.x += s.vx;
+      s.y += s.vy;
+      s.vx *= 0.98;
+      s.vy *= 0.98;
+
+      // Fade-out and shrink
+      s.alpha = s.life / s.maxLife;
+      const currentSize = s.size * (s.life / s.maxLife);
+
+      ctx.fillStyle = `rgb(${s.color[0]}, ${s.color[1]}, ${s.color[2]})`;
+      ctx.globalAlpha = s.alpha * 0.8;
+
+      if (s.type === "heart") {
+        drawHeart(ctx, s.x, s.y, currentSize);
+      } else {
+        drawSparkle(ctx, s.x, s.y, currentSize);
       }
     }
 
@@ -201,20 +305,38 @@ export default function InteractiveBackground() {
     animationRef.current = requestAnimationFrame(animate);
   }, []);
 
-  /* ---------- lifecycle ---------- */
+  /* ---------- Lifecycle ---------- */
   useEffect(() => {
-    colorsRef.current = readAccentColors();
     handleResize();
 
-    /* Start loop */
+    // Start rendering
     animationRef.current = requestAnimationFrame(animate);
 
-    /* Mouse tracking */
+    /* Mouse actions */
     const onMouseMove = (e: MouseEvent) => {
-      mouseRef.current = { x: e.clientX, y: e.clientY, active: true };
+      const mouse = mouseRef.current;
+      const mx = e.clientX;
+      const my = e.clientY;
+
+      if (mouse.active) {
+        // Only spawn if mouse has moved a threshold to avoid flooding
+        const dist = Math.hypot(mx - mouse.px, my - mouse.py);
+        if (dist > 6) {
+          spawnSparkles(mx, my, Math.min(Math.floor(dist / 4), 4));
+          mouseRef.current.px = mx;
+          mouseRef.current.py = my;
+        }
+      } else {
+        mouseRef.current.active = true;
+        mouseRef.current.px = mx;
+        mouseRef.current.py = my;
+      }
+      mouseRef.current.x = mx;
+      mouseRef.current.y = my;
     };
+
     const onMouseLeave = () => {
-      mouseRef.current = { ...mouseRef.current, active: false };
+      mouseRef.current.active = false;
     };
 
     /* Visibility (pause when tab hidden) */
@@ -222,21 +344,21 @@ export default function InteractiveBackground() {
       if (document.visibilityState === "hidden") {
         cancelAnimationFrame(animationRef.current);
       } else {
-        colorsRef.current = readAccentColors();
+        updateThemeState();
         animationRef.current = requestAnimationFrame(animate);
       }
     };
 
-    /* Theme changes — re-read CSS vars */
+    /* Theme transition watcher */
     const observer = new MutationObserver(() => {
-      colorsRef.current = readAccentColors();
-      // Re-color existing particles without re-init
-      const colors = colorsRef.current;
-      for (const p of particlesRef.current) {
-        const c = colors[Math.floor(Math.random() * colors.length)];
-        p.color = `rgb(${c[0]}, ${c[1]}, ${c[2]})`;
+      updateThemeState();
+      const palette = themeRef.current === "dark" ? DARK_PALETTE : LIGHT_PALETTE;
+      // Re-assign colors to background particles
+      for (const p of bgParticlesRef.current) {
+        p.color = palette[Math.floor(Math.random() * palette.length)];
       }
     });
+
     observer.observe(document.documentElement, {
       attributes: true,
       attributeFilter: ["data-theme"],
@@ -255,7 +377,7 @@ export default function InteractiveBackground() {
       document.removeEventListener("visibilitychange", onVisibility);
       observer.disconnect();
     };
-  }, [animate, handleResize]);
+  }, [animate, handleResize, spawnSparkles, updateThemeState]);
 
   return (
     <canvas
