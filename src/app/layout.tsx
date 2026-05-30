@@ -4,6 +4,7 @@ import "./globals.css";
 import Link from "next/link";
 import CommandPalette from "../components/CommandPalette";
 import ThemeToggle from "../components/ThemeToggle";
+import InteractiveBackground from "../components/InteractiveBackground";
 
 const fontDisplay = Space_Grotesk({
   variable: "--font-display",
@@ -45,6 +46,7 @@ export default function RootLayout({
             __html: `(function(){try{var t=localStorage.getItem('flxos-theme');if(t==='light'||t==='dark'){document.documentElement.dataset.theme=t;}else if(window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches){document.documentElement.dataset.theme='dark';}else{document.documentElement.dataset.theme='light';}}catch(e){} })();`,
           }}
         />
+        <InteractiveBackground />
         <div className="site-shell">
           <header className="site-header">
             <div className="site-header-inner">

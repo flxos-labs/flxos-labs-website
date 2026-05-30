@@ -108,10 +108,10 @@ a {
   inset: 0;
   z-index: -1;
   background:
-    radial-gradient(50% 50% at 20% 15%, rgba(231, 111, 81, 0.16), transparent 60%),
-    radial-gradient(40% 40% at 80% 20%, rgba(42, 157, 143, 0.18), transparent 55%),
-    radial-gradient(45% 45% at 70% 85%, rgba(233, 196, 106, 0.2), transparent 60%),
-    linear-gradient(120deg, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0));
+    radial-gradient(50% 50% at 20% 15%, rgba(231, 111, 81, 0.08), transparent 60%),
+    radial-gradient(40% 40% at 80% 20%, rgba(42, 157, 143, 0.09), transparent 55%),
+    radial-gradient(45% 45% at 70% 85%, rgba(233, 196, 106, 0.1), transparent 60%),
+    linear-gradient(120deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0));
 }
 
 .site-header {
