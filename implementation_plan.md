@@ -4,6 +4,7 @@ A cinematic, luxurious, one-of-a-kind dedication page at `/us` that will absolut
 
 ## Design Vision
 
+
 The page should feel like opening a luxury gift box — each section reveals something more beautiful. The aesthetic is:
 - **Color palette**: Deep blacks (`#0a0a0c`), rich golds (`#d4a853`, `#f5d799`), warm rose (`#e8475f`), soft champagne (`#fdf6e3`), twilight purple (`#7c5cbf`)
 - **Typography**: The existing `Space Grotesk` display font for headlines + `Figtree` body — both already loaded in the project
