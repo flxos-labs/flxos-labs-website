@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
+import { lockScroll, unlockScroll } from "../lib/scrollLock";
 
 interface PaletteItem {
   label: string;
@@ -77,13 +78,21 @@ export default function CommandPalette() {
     setSearch("");
     setActiveIndex(0);
     setTimeout(() => inputRef.current?.focus(), 50);
-    document.body.style.overflow = "hidden";
   };
 
   const closePalette = () => {
     setIsOpen(false);
-    document.body.style.overflow = "";
   };
+
+  // Prevent scroll when command palette is open
+  useEffect(() => {
+    if (isOpen) {
+      lockScroll();
+      return () => {
+        unlockScroll();
+      };
+    }
+  }, [isOpen]);
 
   // Keystroke & custom event listeners
   useEffect(() => {
