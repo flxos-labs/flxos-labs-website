@@ -17,6 +17,11 @@ export default function AboutContent() {
     repos: "24",
     followers: "48",
   });
+  const [rekhaStats, setRekhaStats] = useState<GithubStats>({
+    commits: "15+",
+    repos: "2",
+    followers: "0",
+  });
 
   useEffect(() => {
     // Fetch live developer profile statistics from GitHub
@@ -34,6 +39,22 @@ export default function AboutContent() {
       })
       .catch((err) => {
         console.warn("GitHub API fetch error (likely rate limit):", err);
+      });
+
+    fetch("https://api.github.com/users/rekha290907")
+      .then((res) => {
+        if (!res.ok) throw new Error("Profile request failed");
+        return res.json();
+      })
+      .then((userData) => {
+        setRekhaStats({
+          commits: "15+", // Contributor commits baseline
+          repos: String(userData.public_repos ?? 2),
+          followers: String(userData.followers ?? 0),
+        });
+      })
+      .catch((err) => {
+        console.warn("GitHub API fetch error for Rekha:", err);
       });
   }, []);
 
@@ -112,64 +133,115 @@ export default function AboutContent() {
         </div>
       </section>
 
-      {/* ── Founder ── */}
+      {/* ── Core Team ── */}
       <section className="mx-auto max-w-6xl px-6 pb-20">
         <div className="section-header text-center md:text-left">
-          <p className="section-eyebrow">The Creator</p>
-          <h2 className="font-display text-3xl">The person behind FlxOS</h2>
+          <p className="section-eyebrow">The Team</p>
+          <h2 className="font-display text-3xl">The minds behind FlxOS</h2>
         </div>
-        <div className="feature-card grid gap-8 p-6 md:p-10 md:grid-cols-[200px_1fr] items-center">
-          <div className="relative mx-auto md:mx-0 w-36 h-36 md:w-44 md:h-44 rounded-2xl overflow-hidden bg-[color:var(--surface-2)] border border-[color:var(--border-muted)] flex items-center justify-center shadow-lg group">
-            <Image
-              className="object-cover group-hover:scale-105 transition-transform duration-300"
-              src="https://github.com/Itsmeakash248.png?size=200"
-              alt="Akash — Creator of FlxOS"
-              fill
-              sizes="(max-width: 768px) 144px, 176px"
-              priority
-            />
+        <div className="space-y-8">
+          {/* Akash's Card */}
+          <div className="feature-card grid gap-8 p-6 md:p-10 md:grid-cols-[200px_1fr] items-center">
+            <div className="relative mx-auto md:mx-0 w-36 h-36 md:w-44 md:h-44 rounded-2xl overflow-hidden bg-[color:var(--surface-2)] border border-[color:var(--border-muted)] flex items-center justify-center shadow-lg group">
+              <Image
+                className="object-cover group-hover:scale-105 transition-transform duration-300"
+                src="https://github.com/Itsmeakash248.png?size=200"
+                alt="Akash — Creator of FlxOS"
+                fill
+                sizes="(max-width: 768px) 144px, 176px"
+                priority
+              />
+            </div>
+            <div className="space-y-4 text-center md:text-left">
+              <div>
+                <h3 className="font-display text-2xl font-bold text-[color:var(--ink)]">Akash</h3>
+                <p className="text-sm font-semibold text-[color:var(--accent)]">Creator &amp; Lead Engineer, FlxOS Labs</p>
+              </div>
+              <p className="text-[color:var(--muted)] leading-relaxed">
+                Building FlxOS from scratch — from the bare-metal ESP-IDF kernel to the LVGL touch UI, the Python build toolchain, and the profile-driven hardware abstraction. Passionate about making embedded systems as delightful as desktop software.
+              </p>
+              <div className="flex flex-wrap justify-center md:justify-start gap-4">
+                <a
+                  href="https://github.com/Itsmeakash248"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 text-sm font-medium hover:text-[color:var(--accent)] transition-colors"
+                >
+                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" /></svg>
+                  @Itsmeakash248
+                </a>
+                <a
+                  href="https://github.com/flxos-labs/flxos"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 text-sm font-medium hover:text-[color:var(--accent)] transition-colors"
+                >
+                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M16.5 9.4 7.55 4.24a1.78 1.78 0 0 0-2.5 1.55v12.42a1.78 1.78 0 0 0 2.5 1.55l8.96-5.17a1.78 1.78 0 0 0 0-3.1Z" /></svg>
+                  FlxOS Code Repo
+                </a>
+              </div>
+              {/* GitHub metrics */}
+              <div className="grid grid-cols-3 gap-4 pt-4 border-t border-[color:var(--border-faint)]">
+                <div className="text-center md:text-left">
+                  <span className="block font-display text-2xl font-bold text-[color:var(--ink)]">{stats.commits}</span>
+                  <span className="text-[11px] text-[color:var(--muted)] uppercase tracking-wider font-semibold">Commits</span>
+                </div>
+                <div className="text-center md:text-left">
+                  <span className="block font-display text-2xl font-bold text-[color:var(--ink)]">{stats.repos}</span>
+                  <span className="text-[11px] text-[color:var(--muted)] uppercase tracking-wider font-semibold">Public Repos</span>
+                </div>
+                <div className="text-center md:text-left">
+                  <span className="block font-display text-2xl font-bold text-[color:var(--ink)]">{stats.followers}</span>
+                  <span className="text-[11px] text-[color:var(--muted)] uppercase tracking-wider font-semibold">Followers</span>
+                </div>
+              </div>
+            </div>
           </div>
-          <div className="space-y-4 text-center md:text-left">
-            <div>
-              <h3 className="font-display text-2xl font-bold text-[color:var(--ink)]">Akash</h3>
-              <p className="text-sm font-semibold text-[color:var(--accent)]">Creator &amp; Lead Engineer, FlxOS Labs</p>
+
+          {/* Rekha's Card */}
+          <div className="feature-card grid gap-8 p-6 md:p-10 md:grid-cols-[200px_1fr] items-center">
+            <div className="relative mx-auto md:mx-0 w-36 h-36 md:w-44 md:h-44 rounded-2xl overflow-hidden bg-[color:var(--surface-2)] border border-[color:var(--border-muted)] flex items-center justify-center shadow-lg group">
+              <Image
+                className="object-cover group-hover:scale-105 transition-transform duration-300"
+                src="https://github.com/rekha290907.png?size=200"
+                alt="Rekha — UI/UX Designer &amp; Frontend Developer, FlxOS Labs"
+                fill
+                sizes="(max-width: 768px) 144px, 176px"
+              />
             </div>
-            <p className="text-[color:var(--muted)] leading-relaxed">
-              Building FlxOS from scratch — from the bare-metal ESP-IDF kernel to the LVGL touch UI, the Python build toolchain, and the profile-driven hardware abstraction. Passionate about making embedded systems as delightful as desktop software.
-            </p>
-            <div className="flex flex-wrap justify-center md:justify-start gap-4">
-              <a
-                href="https://github.com/Itsmeakash248"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-sm font-medium hover:text-[color:var(--accent)] transition-colors"
-              >
-                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" /></svg>
-                @Itsmeakash248
-              </a>
-              <a
-                href="https://github.com/flxos-labs/flxos"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-sm font-medium hover:text-[color:var(--accent)] transition-colors"
-              >
-                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M16.5 9.4 7.55 4.24a1.78 1.78 0 0 0-2.5 1.55v12.42a1.78 1.78 0 0 0 2.5 1.55l8.96-5.17a1.78 1.78 0 0 0 0-3.1Z" /></svg>
-                FlxOS Code Repo
-              </a>
-            </div>
-            {/* GitHub metrics */}
-            <div className="grid grid-cols-3 gap-4 pt-4 border-t border-[color:var(--border-faint)]">
-              <div className="text-center md:text-left">
-                <span className="block font-display text-2xl font-bold text-[color:var(--ink)]">{stats.commits}</span>
-                <span className="text-[11px] text-[color:var(--muted)] uppercase tracking-wider font-semibold">Commits</span>
+            <div className="space-y-4 text-center md:text-left">
+              <div>
+                <h3 className="font-display text-2xl font-bold text-[color:var(--ink)]">Rekha</h3>
+                <p className="text-sm font-semibold text-[color:var(--accent)]">UI/UX Designer &amp; Frontend Developer, FlxOS Labs</p>
               </div>
-              <div className="text-center md:text-left">
-                <span className="block font-display text-2xl font-bold text-[color:var(--ink)]">{stats.repos}</span>
-                <span className="text-[11px] text-[color:var(--muted)] uppercase tracking-wider font-semibold">Public Repos</span>
+              <p className="text-[color:var(--muted)] leading-relaxed">
+                Contributing to the frontend design, layout aesthetics, and interactive web experiences for FlxOS Labs. Passionate about crafting responsive, visually stunning user interfaces and creating seamless web applications that bring embedded systems to the modern web.
+              </p>
+              <div className="flex flex-wrap justify-center md:justify-start gap-4">
+                <a
+                  href="https://github.com/rekha290907"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 text-sm font-medium hover:text-[color:var(--accent)] transition-colors"
+                >
+                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" /></svg>
+                  @rekha290907
+                </a>
               </div>
-              <div className="text-center md:text-left">
-                <span className="block font-display text-2xl font-bold text-[color:var(--ink)]">{stats.followers}</span>
-                <span className="text-[11px] text-[color:var(--muted)] uppercase tracking-wider font-semibold">Followers</span>
+              {/* GitHub metrics */}
+              <div className="grid grid-cols-3 gap-4 pt-4 border-t border-[color:var(--border-faint)]">
+                <div className="text-center md:text-left">
+                  <span className="block font-display text-2xl font-bold text-[color:var(--ink)]">{rekhaStats.commits}</span>
+                  <span className="text-[11px] text-[color:var(--muted)] uppercase tracking-wider font-semibold">Commits</span>
+                </div>
+                <div className="text-center md:text-left">
+                  <span className="block font-display text-2xl font-bold text-[color:var(--ink)]">{rekhaStats.repos}</span>
+                  <span className="text-[11px] text-[color:var(--muted)] uppercase tracking-wider font-semibold">Public Repos</span>
+                </div>
+                <div className="text-center md:text-left">
+                  <span className="block font-display text-2xl font-bold text-[color:var(--ink)]">{rekhaStats.followers}</span>
+                  <span className="text-[11px] text-[color:var(--muted)] uppercase tracking-wider font-semibold">Followers</span>
+                </div>
               </div>
             </div>
           </div>
