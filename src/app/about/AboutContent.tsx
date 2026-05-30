@@ -119,7 +119,7 @@ export default function AboutContent() {
           <h2 className="font-display text-3xl">The person behind FlxOS</h2>
         </div>
         <div className="feature-card grid gap-8 p-6 md:p-10 md:grid-cols-[200px_1fr] items-center">
-          <div className="relative mx-auto md:mx-0 w-36 h-36 md:w-44 md:h-44 rounded-2xl overflow-hidden bg-[color:var(--surface-2)] border border-[rgba(0,0,0,0.08)] flex items-center justify-center shadow-lg group">
+          <div className="relative mx-auto md:mx-0 w-36 h-36 md:w-44 md:h-44 rounded-2xl overflow-hidden bg-[color:var(--surface-2)] border border-[color:var(--border-muted)] flex items-center justify-center shadow-lg group">
             <Image
               className="object-cover group-hover:scale-105 transition-transform duration-300"
               src="https://github.com/Itsmeakash248.png?size=200"
@@ -158,7 +158,7 @@ export default function AboutContent() {
               </a>
             </div>
             {/* GitHub metrics */}
-            <div className="grid grid-cols-3 gap-4 pt-4 border-t border-[rgba(0,0,0,0.06)]">
+            <div className="grid grid-cols-3 gap-4 pt-4 border-t border-[color:var(--border-faint)]">
               <div className="text-center md:text-left">
                 <span className="block font-display text-2xl font-bold text-[color:var(--ink)]">{stats.commits}</span>
                 <span className="text-[11px] text-[color:var(--muted)] uppercase tracking-wider font-semibold">Commits</span>
@@ -211,7 +211,7 @@ export default function AboutContent() {
           <p className="section-eyebrow">Milestones</p>
           <h2 className="font-display text-3xl">Project Story</h2>
         </div>
-        <div className="relative pl-6 border-l-2 border-[rgba(0,0,0,0.06)] space-y-12 max-w-3xl ml-2">
+        <div className="relative pl-6 border-l-2 border-[color:var(--border-faint)] space-y-12 max-w-3xl ml-2">
           {/* Milestone 1 */}
           <div className="relative space-y-2">
             <span className="absolute -left-[31px] top-1.5 w-4 h-4 rounded-full bg-[color:var(--accent)] border-4 border-[color:var(--surface)] ring-2 ring-[color:var(--accent)]" />
@@ -339,8 +339,8 @@ export default function AboutContent() {
             return (
               <div
                 key={index}
-                className={`border border-[rgba(0,0,0,0.06)] rounded-2xl overflow-hidden bg-[rgba(var(--surface-rgb),0.65)] backdrop-blur-md transition-all duration-300 ${
-                  isOpen ? "border-[rgba(231,111,81,0.25)] shadow-md" : "hover:border-[rgba(0,0,0,0.1)]"
+                className={`border border-[color:var(--border-faint)] rounded-2xl overflow-hidden bg-[rgba(var(--surface-rgb),0.65)] backdrop-blur-md transition-all duration-300 ${
+                  isOpen ? "border-[rgba(231,111,81,0.25)] shadow-md" : "hover:border-[color:var(--border-subtle)]"
                 }`}
               >
                 <button
@@ -364,7 +364,7 @@ export default function AboutContent() {
                     opacity: isOpen ? 1 : 0,
                   }}
                 >
-                  <div className="px-5 pb-5 md:px-6 md:pb-6 pt-1 text-sm text-[color:var(--muted)] leading-relaxed border-t border-[rgba(0,0,0,0.03)]">
+                  <div className="px-5 pb-5 md:px-6 md:pb-6 pt-1 text-sm text-[color:var(--muted)] leading-relaxed border-t border-[color:var(--border-faint)]">
                     {faq.a}
                   </div>
                 </div>

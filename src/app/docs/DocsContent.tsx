@@ -129,9 +129,16 @@ export default function DocsContent() {
   }).filter((section) => section.links.length > 0);
 
   return (
-    <main className="min-h-screen bg-[color:var(--surface)] text-[color:var(--ink)]">
+    <main className="relative min-h-screen overflow-hidden text-[color:var(--ink)]">
+      {/* Hero Orbs background */}
+      <div className="hero-orbs" aria-hidden="true">
+        <span className="orb orb-1 opacity-40" />
+        <span className="orb orb-2 opacity-35" />
+        <span className="orb orb-3 opacity-30" />
+      </div>
+
       {/* Mobile top-bar */}
-      <div className="md:hidden sticky top-[57px] z-40 bg-[rgba(var(--surface-rgb),0.9)] backdrop-blur-md border-b border-[rgba(0,0,0,0.06)] px-6 py-2.5 flex items-center justify-between">
+      <div className="md:hidden sticky top-[57px] z-40 bg-[rgba(var(--surface-rgb),0.9)] backdrop-blur-md border-b border-[color:var(--border-faint)] px-6 py-2.5 flex items-center justify-between">
         <button
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           className="flex items-center gap-2 text-xs font-semibold text-[color:var(--muted)] hover:text-[color:var(--ink)]"
@@ -149,7 +156,7 @@ export default function DocsContent() {
         
         {/* Sidebar Nav (Desktop & Mobile Drawer) */}
         <aside
-          className={`fixed inset-0 top-[112px] md:top-auto z-40 md:z-10 bg-[color:var(--surface)] md:bg-transparent border-r border-[rgba(0,0,0,0.06)] md:border-none p-6 md:p-0 md:sticky md:block transition-all duration-300 ${
+          className={`fixed inset-0 top-[112px] md:top-auto z-40 md:z-10 bg-[color:var(--surface)] md:bg-transparent border-r border-[color:var(--border-faint)] md:border-none p-6 md:p-0 md:sticky md:block transition-all duration-300 ${
             mobileMenuOpen ? "left-0" : "-left-full md:left-0"
           }`}
           style={{ height: "calc(100vh - 140px)", top: "110px" }}
@@ -165,7 +172,7 @@ export default function DocsContent() {
               placeholder="Search docs... (press /)"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-[rgba(var(--surface-rgb),0.5)] border border-[rgba(0,0,0,0.08)] rounded-xl py-2 pl-9 pr-8 text-xs focus:outline-none focus:ring-1 focus:ring-[color:var(--accent)] focus:border-[color:var(--accent)] font-medium"
+              className="w-full bg-[rgba(var(--surface-rgb),0.5)] border border-[color:var(--border-muted)] rounded-xl py-2 pl-9 pr-8 text-xs focus:outline-none focus:ring-1 focus:ring-[color:var(--accent)] focus:border-[color:var(--accent)] font-medium"
             />
             {searchQuery && (
               <button
@@ -244,8 +251,8 @@ export default function DocsContent() {
             <p className="text-sm text-[color:var(--muted)] leading-relaxed">
               FlxOS requires ESP-IDF v5.5+ and a compatible ESP32 development board. Follow these steps to clone and build the repository.
             </p>
-            <div className="bg-[color:var(--surface-2)] border border-[rgba(0,0,0,0.06)] rounded-xl overflow-hidden shadow-sm">
-              <div className="px-4 py-2 border-b border-[rgba(0,0,0,0.04)] bg-[rgba(var(--surface-rgb),0.5)] flex items-center justify-between text-xs font-semibold text-[color:var(--muted)]">
+            <div className="bg-[color:var(--surface-2)] border border-[color:var(--border-faint)] rounded-xl overflow-hidden shadow-sm">
+              <div className="px-4 py-2 border-b border-[color:var(--border-faint)] bg-[rgba(var(--surface-rgb),0.5)] flex items-center justify-between text-xs font-semibold text-[color:var(--muted)]">
                 <span>Clone Repository</span>
                 <button
                   onClick={() => copyToClipboard("git clone --recurse-submodules https://github.com/flxos-labs/flxos.git\ncd flxos", "clone")}
@@ -274,7 +281,7 @@ cd flxos`}</code>
                 <div className="flex-shrink-0 w-6 h-6 rounded-full bg-[rgba(231,111,81,0.08)] border border-[rgba(231,111,81,0.15)] flex items-center justify-center font-display text-xs font-bold text-[color:var(--accent)]">1</div>
                 <div className="space-y-2 flex-grow">
                   <h3 className="text-sm font-bold">Set up ESP-IDF environment</h3>
-                  <div className="bg-[color:var(--surface-2)] border border-[rgba(0,0,0,0.06)] rounded-xl overflow-hidden text-xs">
+                  <div className="bg-[color:var(--surface-2)] border border-[color:var(--border-faint)] rounded-xl overflow-hidden text-xs">
                     <pre className="p-3 overflow-x-auto font-mono text-[color:var(--ink)]">
                       <code>. $HOME/esp/esp-idf/export.sh</code>
                     </pre>
@@ -286,7 +293,7 @@ cd flxos`}</code>
                 <div className="flex-shrink-0 w-6 h-6 rounded-full bg-[rgba(42,157,143,0.08)] border border-[rgba(42,157,143,0.15)] flex items-center justify-center font-display text-xs font-bold text-[color:var(--accent-2)]">2</div>
                 <div className="space-y-2 flex-grow">
                   <h3 className="text-sm font-bold">List and Select Profile</h3>
-                  <div className="bg-[color:var(--surface-2)] border border-[rgba(0,0,0,0.06)] rounded-xl overflow-hidden text-xs">
+                  <div className="bg-[color:var(--surface-2)] border border-[color:var(--border-faint)] rounded-xl overflow-hidden text-xs">
                     <pre className="p-3 overflow-x-auto font-mono text-[color:var(--ink)]">
                       <code>{`python flxos.py list
 python flxos.py select esp32s3-ili9341-xpt`}</code>
@@ -299,7 +306,7 @@ python flxos.py select esp32s3-ili9341-xpt`}</code>
                 <div className="flex-shrink-0 w-6 h-6 rounded-full bg-[rgba(233,196,106,0.08)] border border-[rgba(233,196,106,0.15)] flex items-center justify-center font-display text-xs font-bold text-[color:var(--accent-3)]">3</div>
                 <div className="space-y-2 flex-grow">
                   <h3 className="text-sm font-bold">Build and Flash</h3>
-                  <div className="bg-[color:var(--surface-2)] border border-[rgba(0,0,0,0.06)] rounded-xl overflow-hidden text-xs">
+                  <div className="bg-[color:var(--surface-2)] border border-[color:var(--border-faint)] rounded-xl overflow-hidden text-xs">
                     <pre className="p-3 overflow-x-auto font-mono text-[color:var(--ink)]">
                       <code>{`python flxos.py build
 python flxos.py flash --port /dev/ttyUSB0`}</code>
@@ -352,7 +359,7 @@ python flxos.py flash --port /dev/ttyUSB0`}</code>
               FlxOS is architected as a modular operating system with a clear separation of concerns across physical and logical boundaries.
             </p>
             {/* Visual representation grid */}
-            <div className="border border-[rgba(0,0,0,0.06)] rounded-2xl overflow-hidden bg-[rgba(var(--surface-rgb),0.55)] backdrop-blur-md shadow-sm p-5 space-y-3.5 max-w-md">
+            <div className="border border-[color:var(--border-faint)] rounded-2xl overflow-hidden bg-[rgba(var(--surface-rgb),0.55)] backdrop-blur-md shadow-sm p-5 space-y-3.5 max-w-md">
               <div className="p-3 text-center rounded-xl bg-orange-500/10 border border-orange-500/20 text-xs font-bold">
                 Application Layer (Settings, Files, Calendar apps)
               </div>
@@ -381,7 +388,7 @@ python flxos.py flash --port /dev/ttyUSB0`}</code>
               <svg className="w-5 h-5 text-[color:var(--accent-2)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
               Directory Structure
             </h2>
-            <div className="bg-[color:var(--surface-2)] border border-[rgba(0,0,0,0.06)] rounded-xl p-4 overflow-x-auto text-xs leading-relaxed font-mono">
+            <div className="bg-[color:var(--surface-2)] border border-[color:var(--border-faint)] rounded-xl p-4 overflow-x-auto text-xs leading-relaxed font-mono">
               <code>{`flxos/
 ├── Applications/    # User-facing apps (calendar, files, text editor, settings, ...)
 ├── Apps/            # App framework and lifecycle management
@@ -449,8 +456,8 @@ python flxos.py flash --port /dev/ttyUSB0`}</code>
               <span><strong>Warning:</strong> Always select a hardware profile using <code>python flxos.py select &lt;id&gt;</code> before building the project.</span>
             </div>
 
-            <div className="bg-[color:var(--surface-2)] border border-[rgba(0,0,0,0.06)] rounded-xl overflow-hidden shadow-sm">
-              <div className="px-4 py-2 border-b border-[rgba(0,0,0,0.04)] bg-[rgba(var(--surface-rgb),0.5)] flex items-center justify-between text-xs font-semibold text-[color:var(--muted)]">
+            <div className="bg-[color:var(--surface-2)] border border-[color:var(--border-faint)] rounded-xl overflow-hidden shadow-sm">
+              <div className="px-4 py-2 border-b border-[color:var(--border-faint)] bg-[rgba(var(--surface-rgb),0.5)] flex items-center justify-between text-xs font-semibold text-[color:var(--muted)]">
                 <span>Compilation Commands</span>
                 <button
                   onClick={() => copyToClipboard("python flxos.py build\npython flxos.py build --dev\npython flxos.py flash --port /dev/ttyUSB0", "build-cmd")}
@@ -481,7 +488,7 @@ python flxos.py flash --port /dev/ttyUSB0`}</code>
             <p className="text-sm text-[color:var(--muted)] leading-relaxed">
               FlxOS uses a declarative YAML profile system instead of traditional Espressif menuconfig for platform definitions. This maps displays, peripherals, and storage blocks cleanly.
             </p>
-            <div className="bg-[color:var(--surface-2)] border border-[rgba(0,0,0,0.06)] rounded-xl p-4 overflow-x-auto text-xs font-mono">
+            <div className="bg-[color:var(--surface-2)] border border-[color:var(--border-faint)] rounded-xl p-4 overflow-x-auto text-xs font-mono">
               <code>{`python flxos.py list
 python flxos.py diff a b --json`}</code>
             </div>
@@ -504,8 +511,8 @@ python flxos.py diff a b --json`}</code>
               Creating custom applications in FlxOS is simple. Inherit from the <code>App</code> class and override the lifecycle functions. Here is a basic template:
             </p>
 
-            <div className="bg-[color:var(--surface-2)] border border-[rgba(0,0,0,0.06)] rounded-xl overflow-hidden shadow-sm">
-              <div className="px-4 py-2 border-b border-[rgba(0,0,0,0.04)] bg-[rgba(var(--surface-rgb),0.5)] flex items-center justify-between text-xs font-semibold text-[color:var(--muted)]">
+            <div className="bg-[color:var(--surface-2)] border border-[color:var(--border-faint)] rounded-xl overflow-hidden shadow-sm">
+              <div className="px-4 py-2 border-b border-[color:var(--border-faint)] bg-[rgba(var(--surface-rgb),0.5)] flex items-center justify-between text-xs font-semibold text-[color:var(--muted)]">
                 <span>MyApp.hpp</span>
                 <button
                   onClick={() => copyToClipboard(`#pragma once\n#include "App.hpp"\n\nclass MyApp : public App {\npublic:\n    MyApp() : App("MyApp", "My Application") {}\n    \n    void onCreate() override {\n        // Initialize app UI\n        lv_obj_t* label = lv_label_create(getContainer());\n        lv_label_set_text(label, "Hello, FlxOS!");\n    }\n    \n    void onResume() override {\n        // App brought to foreground\n    }\n    \n    void onPause() override {\n        // App sent to background\n    }\n};`, "app-code")}
@@ -570,28 +577,28 @@ public:
             </h2>
 
             <div className="space-y-4">
-              <div className="border border-[rgba(0,0,0,0.06)] rounded-xl p-4 space-y-1 bg-[rgba(var(--surface-rgb),0.4)]">
+              <div className="border border-[color:var(--border-faint)] rounded-xl p-4 space-y-1 bg-[rgba(var(--surface-rgb),0.4)]">
                 <h4 className="text-sm font-bold text-[color:var(--ink)]">Build fails with &quot;Target Not Set&quot;</h4>
                 <p className="text-xs text-[color:var(--muted)] leading-relaxed">
                   Make sure you have selected an active target profile before executing the compile command: <code>python flxos.py select &lt;profile&gt;</code>.
                 </p>
               </div>
 
-              <div className="border border-[rgba(0,0,0,0.06)] rounded-xl p-4 space-y-1 bg-[rgba(var(--surface-rgb),0.4)]">
+              <div className="border border-[color:var(--border-faint)] rounded-xl p-4 space-y-1 bg-[rgba(var(--surface-rgb),0.4)]">
                 <h4 className="text-sm font-bold text-[color:var(--ink)]">Display shows garbage or remains black</h4>
                 <p className="text-xs text-[color:var(--muted)] leading-relaxed">
                   Check your SPI connections and pinout settings defined in the active profile&apos;s YAML structure. Double-check power supply levels; some displays require clean 5V lines.
                 </p>
               </div>
 
-              <div className="border border-[rgba(0,0,0,0.06)] rounded-xl p-4 space-y-1 bg-[rgba(var(--surface-rgb),0.4)]">
+              <div className="border border-[color:var(--border-faint)] rounded-xl p-4 space-y-1 bg-[rgba(var(--surface-rgb),0.4)]">
                 <h4 className="text-sm font-bold text-[color:var(--ink)]">Touch clicks not responding or offset</h4>
                 <p className="text-xs text-[color:var(--muted)] leading-relaxed">
                   Make sure the touch driver chip matches your hardware model, and coordinate rotation variables (e.g. swap XY, invert X) match the screen orientation details.
                 </p>
               </div>
 
-              <div className="border border-[rgba(0,0,0,0.06)] rounded-xl p-4 space-y-1 bg-[rgba(var(--surface-rgb),0.4)]">
+              <div className="border border-[color:var(--border-faint)] rounded-xl p-4 space-y-1 bg-[rgba(var(--surface-rgb),0.4)]">
                 <h4 className="text-sm font-bold text-[color:var(--ink)]">Wi-Fi fails to establish connection</h4>
                 <p className="text-xs text-[color:var(--muted)] leading-relaxed">
                   Confirm that the SSID and password are correct. Ensure your router broadcasts a 2.4GHz network, as ESP32 chips do not support 5GHz frequencies.
