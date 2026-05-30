@@ -73,7 +73,7 @@ export default function StarfieldCanvas() {
       const count = isMobile ? cfg.mobileCount : cfg.count;
 
       for (let i = 0; i < count; i++) {
-        const size = (Math.random() * 3 + 1) * cfg.sizeMul;
+        const size = (Math.random() * 4 + 1.8) * cfg.sizeMul;
         const maxAlpha = (Math.random() * 0.5 + 0.3) * cfg.alphaMul;
         const x = Math.random() * w;
         const y = Math.random() * h;

@@ -63,28 +63,22 @@ interface TimelineEvent {
 
 const TIMELINE_EVENTS: TimelineEvent[] = [
   {
-    date: "June 15, 2024",
-    title: "Our Paths Align",
-    desc: "A chance conversation that changed the course of our lives forever.",
-    memory: "We talked about everything under the sun, and I knew right away you were incredibly special. The connection was instant and undeniable."
+    date: "1st Year, 1st Sem",
+    title: "Classroom Chemistry",
+    desc: "First time sitting right next to you during our semester exam.",
+    memory: "I could barely concentrate on the paper. Having you sit next to me was the best kind of distraction, and where my silent admiration for you truly began."
   },
   {
-    date: "August 4, 2024",
-    title: "The First Meet",
-    desc: "Seeing you in person for the first time made my heart skip a beat.",
-    memory: "The way you smiled when you saw me... I'll never forget that moment. Time seemed to stand completely still."
+    date: "April 9, 2026",
+    title: "Our First Chat",
+    desc: "The night we started chatting and couldn't stop.",
+    memory: "A simple text message that sparked a conversation lasting hours. We connected instantly, talking about everything and realizing how beautifully our minds aligned."
   },
   {
-    date: "October 18, 2024",
-    title: "Our Safe Haven",
-    desc: "Realizing we'd found a home in each other, a quiet sanctuary from the noise of the world.",
-    memory: "Rainy days, soft music, and feeling perfectly at peace holding your hand. Silence became our favorite language."
-  },
-  {
-    date: "February 14, 2025",
-    title: "Adventures & Laughter",
-    desc: "Explores, inside jokes, and creating a lifetime of memories in every city we visited.",
-    memory: "Taking photos, laughing until our stomachs hurt, and planning our next dream trip. Every journey is beautiful with you."
+    date: "April 10, 2026",
+    title: "Holding Your Hand",
+    desc: "The moment our fingers laced together for the first time.",
+    memory: "A quiet, gentle touch that sent sparks through my heart. Lacing my fingers with yours, I felt an overwhelming sense of calm, knowing I never wanted to let go."
   },
   {
     date: "Today & Beyond",
@@ -204,7 +198,7 @@ export default function UsContent() {
 
   // Anniversary date setup (June 15, 2024 00:00:00)
   useEffect(() => {
-    const startDate = new Date("2024-06-15T00:00:00").getTime();
+    const startDate = new Date("2026-04-09T00:00:00").getTime();
 
     const interval = setInterval(() => {
       const now = new Date().getTime();
