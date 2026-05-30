@@ -141,8 +141,8 @@ export default function InteractiveBackground() {
         x,
         y,
         baseX: x,
-        ySpeed: -(Math.random() * 0.35 + 0.15),
-        swaySpeed: Math.random() * 0.01 + 0.003,
+        ySpeed: -(Math.random() * 0.12 + 0.06),
+        swaySpeed: Math.random() * 0.004 + 0.001,
         swayAmplitude: Math.random() * 25 + 5,
         swayOffset: Math.random() * Math.PI * 2,
         size,
@@ -191,8 +191,8 @@ export default function InteractiveBackground() {
       // Random unit vector with upward bias
       const angle = Math.random() * Math.PI * 2;
       const force = Math.random() * 0.8 + 0.2;
-      const vx = Math.cos(angle) * force * 0.5;
-      const vy = (Math.sin(angle) * force - 0.7) * 0.6; // Upward bias
+      const vx = Math.cos(angle) * force * 0.25;
+      const vy = (Math.sin(angle) * force - 0.5) * 0.25; // Upward bias
 
       newSparks.push({
         x: mx + (Math.random() - 0.5) * 8,
