@@ -182,6 +182,7 @@ Yours forever and always,
 Akash`;
 
 export default function UsContent() {
+  const pageRef = useRef<HTMLDivElement>(null);
   const [isLetterOpen, setIsLetterOpen] = useState(false);
   const [expandedTimelineNode, setExpandedTimelineNode] = useState<number | null>(null);
   
@@ -224,8 +225,9 @@ export default function UsContent() {
     }, 1800);
   };
 
-  // Intersection Observer for scroll reveals
+  // Intersection Observer for scroll reveals — uses .us-page as root since it's the scroll container
   useEffect(() => {
+    const pageEl = pageRef.current;
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -235,8 +237,9 @@ export default function UsContent() {
         });
       },
       {
-        threshold: 0.15,
-        rootMargin: "0px 0px -50px 0px",
+        root: pageEl,
+        threshold: 0.1,
+        rootMargin: "0px 0px -30px 0px",
       }
     );
 
@@ -412,7 +415,7 @@ export default function UsContent() {
   };
 
   return (
-    <div className="us-page">
+    <div className="us-page" ref={pageRef}>
       <StarfieldCanvas />
 
       {/* Cinematic Hero */}
