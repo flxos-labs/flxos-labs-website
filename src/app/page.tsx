@@ -1,5 +1,6 @@
 import PlatformCycler from "../components/PlatformCycler";
 import DeviceSlideshow from "../components/DeviceSlideshow";
+import CopyCommand from "../components/CopyCommand";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -36,6 +37,7 @@ export default function Home() {
                 View GitHub
               </a>
             </div>
+            <CopyCommand command={"git clone https://github.com/flxos-labs/flxos && cd flxos && flxos init"} />
             <div className="hero-highlights">
               <div className="highlight-card">
                 <p className="highlight-title">Profile graph</p>
@@ -259,6 +261,7 @@ export default function Home() {
               Learn the stack
             </Link>
           </div>
+            <CopyCommand command={"git clone https://github.com/flxos-labs/flxos && cd flxos"} />
         </div>
       </section>
     </main>
