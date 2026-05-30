@@ -95,48 +95,6 @@ export default function UsContent() {
           </p>
         </div>
 
-        {/* Photo frames connected by a golden line */}
-        <div className="relative flex flex-col md:flex-row items-center gap-12 md:gap-24 my-8 z-20">
-          <div className="us-connection-line" />
-          
-          <div className="us-reveal transition-all duration-1000 delay-100">
-            <div className="us-photo-frame w-[280px] sm:w-[320px]">
-              <div className="relative aspect-[3/4] w-full">
-                <Image
-                  src="/images/me.jpg"
-                  alt="Akash"
-                  fill
-                  sizes="(max-width: 768px) 280px, 320px"
-                  priority
-                  className="rounded-xl object-cover"
-                />
-              </div>
-              <p className="text-center mt-3 font-display font-bold text-sm tracking-wider text-[rgba(253,246,227,0.8)]">
-                AKASH
-              </p>
-            </div>
-          </div>
-
-          <div className="us-reveal transition-all duration-1000 delay-300">
-            {/* Rekha's photo has the glow-pulse effect */}
-            <div className="us-photo-frame glow-pulse w-[280px] sm:w-[320px]">
-              <div className="relative aspect-[3/4] w-full">
-                <Image
-                  src="/images/her.jpg"
-                  alt="Rekha"
-                  fill
-                  sizes="(max-width: 768px) 280px, 320px"
-                  priority
-                  className="rounded-xl object-cover"
-                />
-              </div>
-              <p className="text-center mt-3 font-display font-bold text-sm tracking-wider text-[#d4a853]">
-                REKHA ❤️
-              </p>
-            </div>
-          </div>
-        </div>
-
         <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-[rgba(253,246,227,0.4)]">
           <span className="text-xs uppercase tracking-widest font-bold">Scroll Down</span>
           <svg className="w-5 h-5 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
