@@ -21,11 +21,11 @@ export default function CopyCommand({ command, label = "Copy command" }: Props) 
   };
 
   return (
-    <div className="copy-command flex items-center gap-3 mt-3">
-      <pre className="rounded-md bg-[rgba(var(--surface-rgb),0.9)] px-3 py-2 text-xs overflow-auto">{command}</pre>
+    <div className="copy-command flex items-center gap-3 mt-3 w-full max-w-full min-w-0">
+      <pre className="rounded-md bg-[rgba(var(--surface-rgb),0.9)] px-3 py-2 text-xs overflow-x-auto flex-1 min-w-0">{command}</pre>
       <button
         type="button"
-        className="btn-ghost"
+        className="btn-ghost flex-shrink-0"
         onClick={handleCopy}
         aria-label={label}
       >

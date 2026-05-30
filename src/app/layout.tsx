@@ -3,8 +3,8 @@ import { Figtree, JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import Link from "next/link";
 import CommandPalette from "../components/CommandPalette";
-import ThemeToggle from "../components/ThemeToggle";
 import InteractiveBackground from "../components/InteractiveBackground";
+import Header from "../components/Header";
 
 const fontDisplay = Space_Grotesk({
   variable: "--font-display",
@@ -48,46 +48,7 @@ export default function RootLayout({
         />
         <InteractiveBackground />
         <div className="site-shell">
-          <header className="site-header">
-            <div className="site-header-inner">
-              <Link className="brand" href="/" aria-label="FlxOS home">
-                <span className="brand-mark" aria-hidden="true">
-                  F
-                </span>
-                <span className="brand-text">FlxOS</span>
-              </Link>
-              <nav className="site-nav" aria-label="Primary">
-                <Link className="nav-link" href="/#features">
-                  Features
-                </Link>
-                <Link className="nav-link" href="/docs">
-                  Docs
-                </Link>
-                <Link className="nav-link" href="/about">
-                  About
-                </Link>
-                <a
-                  className="nav-link"
-                  href="https://github.com/flxos-labs/flxos"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  GitHub
-                </a>
-              </nav>
-              <div className="site-header-actions">
-                <ThemeToggle />
-                <a
-                  className="cta-pill"
-                  href="https://github.com/flxos-labs/flxos"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Star on GitHub
-                </a>
-              </div>
-            </div>
-          </header>
+          <Header />
           {children}
           <footer className="site-footer">
             <div className="site-footer-inner">

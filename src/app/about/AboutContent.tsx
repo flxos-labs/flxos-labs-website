@@ -184,15 +184,15 @@ export default function AboutContent() {
               <div className="grid grid-cols-3 gap-4 pt-4 border-t border-[color:var(--border-faint)]">
                 <div className="text-center md:text-left">
                   <span className="block font-display text-2xl font-bold text-[color:var(--ink)]">{stats.commits}</span>
-                  <span className="text-[11px] text-[color:var(--muted)] uppercase tracking-wider font-semibold">Commits</span>
+                  <span className="text-[10px] min-[360px]:text-[11px] text-[color:var(--muted)] uppercase tracking-wider font-semibold">Commits</span>
                 </div>
                 <div className="text-center md:text-left">
                   <span className="block font-display text-2xl font-bold text-[color:var(--ink)]">{stats.repos}</span>
-                  <span className="text-[11px] text-[color:var(--muted)] uppercase tracking-wider font-semibold">Public Repos</span>
+                  <span className="text-[10px] min-[360px]:text-[11px] text-[color:var(--muted)] uppercase tracking-wider font-semibold">Public Repos</span>
                 </div>
                 <div className="text-center md:text-left">
                   <span className="block font-display text-2xl font-bold text-[color:var(--ink)]">{stats.followers}</span>
-                  <span className="text-[11px] text-[color:var(--muted)] uppercase tracking-wider font-semibold">Followers</span>
+                  <span className="text-[10px] min-[360px]:text-[11px] text-[color:var(--muted)] uppercase tracking-wider font-semibold">Followers</span>
                 </div>
               </div>
             </div>
@@ -232,15 +232,15 @@ export default function AboutContent() {
               <div className="grid grid-cols-3 gap-4 pt-4 border-t border-[color:var(--border-faint)]">
                 <div className="text-center md:text-left">
                   <span className="block font-display text-2xl font-bold text-[color:var(--ink)]">{rekhaStats.commits}</span>
-                  <span className="text-[11px] text-[color:var(--muted)] uppercase tracking-wider font-semibold">Commits</span>
+                  <span className="text-[10px] min-[360px]:text-[11px] text-[color:var(--muted)] uppercase tracking-wider font-semibold">Commits</span>
                 </div>
                 <div className="text-center md:text-left">
                   <span className="block font-display text-2xl font-bold text-[color:var(--ink)]">{rekhaStats.repos}</span>
-                  <span className="text-[11px] text-[color:var(--muted)] uppercase tracking-wider font-semibold">Public Repos</span>
+                  <span className="text-[10px] min-[360px]:text-[11px] text-[color:var(--muted)] uppercase tracking-wider font-semibold">Public Repos</span>
                 </div>
                 <div className="text-center md:text-left">
                   <span className="block font-display text-2xl font-bold text-[color:var(--ink)]">{rekhaStats.followers}</span>
-                  <span className="text-[11px] text-[color:var(--muted)] uppercase tracking-wider font-semibold">Followers</span>
+                  <span className="text-[10px] min-[360px]:text-[11px] text-[color:var(--muted)] uppercase tracking-wider font-semibold">Followers</span>
                 </div>
               </div>
             </div>

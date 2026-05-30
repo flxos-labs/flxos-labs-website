@@ -85,7 +85,7 @@ export default function CommandPalette() {
     document.body.style.overflow = "";
   };
 
-  // Keystroke listeners
+  // Keystroke & custom event listeners
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       // Ctrl+K or Cmd+K
@@ -98,8 +98,21 @@ export default function CommandPalette() {
         }
       }
     };
+
+    const handleToggleEvent = () => {
+      if (isOpen) {
+        closePalette();
+      } else {
+        openPalette();
+      }
+    };
+
     window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
+    window.addEventListener("toggle-command-palette", handleToggleEvent);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("toggle-command-palette", handleToggleEvent);
+    };
   }, [isOpen]);
 
   // Command selection execution
@@ -172,7 +185,7 @@ export default function CommandPalette() {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center pt-24 px-4 md:pt-36">
+    <div className="fixed inset-0 z-50 flex items-start justify-center pt-8 md:pt-36 px-4">
       {/* Backdrop */}
       <div
         onClick={closePalette}
@@ -180,7 +193,7 @@ export default function CommandPalette() {
       />
 
       {/* Modal Content */}
-      <div className="relative w-full max-w-lg bg-[rgba(var(--surface-rgb),0.92)] border border-[rgba(255,255,255,0.08)] backdrop-blur-xl shadow-2xl rounded-2xl overflow-hidden z-10 flex flex-col max-h-[440px] animate-reveal-up">
+      <div className="relative w-full max-w-lg bg-[rgba(var(--surface-rgb),0.92)] border border-[rgba(255,255,255,0.08)] backdrop-blur-xl shadow-2xl rounded-2xl overflow-hidden z-10 flex flex-col max-h-[75vh] md:max-h-[440px] animate-reveal-up">
         {/* Search Bar Input */}
         <div className="relative flex items-center border-b border-[rgba(0,0,0,0.05)] px-4">
           <span className="text-[color:var(--muted)]">

@@ -156,10 +156,10 @@ export default function DocsContent() {
         
         {/* Sidebar Nav (Desktop & Mobile Drawer) */}
         <aside
-          className={`fixed inset-0 top-[112px] md:top-auto z-40 md:z-10 bg-[color:var(--surface)] md:bg-transparent border-r border-[color:var(--border-faint)] md:border-none p-6 md:p-0 md:sticky md:block transition-all duration-300 ${
-            mobileMenuOpen ? "left-0" : "-left-full md:left-0"
+          className={`fixed md:sticky z-40 md:z-10 bg-[color:var(--surface)] md:bg-transparent border-r border-[color:var(--border-faint)] md:border-none p-6 md:p-0 w-[280px] max-w-[calc(100vw-32px)] md:w-auto transition-all duration-300 ${
+            mobileMenuOpen ? "left-0" : "-left-[290px] md:left-0"
           }`}
-          style={{ height: "calc(100vh - 140px)", top: "110px" }}
+          style={{ height: "calc(100vh - 100px)", top: "100px" }}
         >
           {/* Search Box */}
           <div className="relative mb-6">
@@ -224,7 +224,7 @@ export default function DocsContent() {
         {mobileMenuOpen && (
           <div
             onClick={() => setMobileMenuOpen(false)}
-            className="fixed inset-0 top-[112px] bg-black/20 backdrop-blur-xs z-30 md:hidden"
+            className="fixed inset-0 top-[100px] bg-black/20 backdrop-blur-xs z-30 md:hidden"
           />
         )}
 

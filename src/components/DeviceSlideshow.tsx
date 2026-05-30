@@ -75,7 +75,7 @@ export default function DeviceSlideshow() {
       </div>
 
       {/* Synchronized Caption Card */}
-      <div className="caption-card absolute right-[-10px] bottom-[-40px] md:right-[-20px] md:bottom-[-25px] w-64 md:w-72 bg-[rgba(var(--surface-rgb),0.92)] border border-[rgba(0,0,0,0.08)] backdrop-blur-md p-4 rounded-2xl shadow-xl z-20 space-y-1 transition-all duration-300">
+      <div className="caption-card absolute left-4 right-4 bottom-4 md:left-auto md:right-[-20px] md:bottom-[-25px] w-auto md:w-72 bg-[rgba(var(--surface-rgb),0.92)] border border-[rgba(0,0,0,0.08)] backdrop-blur-md p-4 rounded-2xl shadow-xl z-20 space-y-1 transition-all duration-300">
         <div className="flex items-center gap-1.5 pb-1 border-b border-[rgba(0,0,0,0.03)]">
           <span className="w-2 h-2 rounded-full bg-[color:var(--accent)] animate-pulse" />
           <p className="font-display text-xs font-extrabold text-[color:var(--ink)] transition-colors">
