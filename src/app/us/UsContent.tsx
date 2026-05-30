@@ -88,40 +88,6 @@ const TIMELINE_EVENTS: TimelineEvent[] = [
   }
 ];
 
-interface Track {
-  title: string;
-  artist: string;
-  duration: string;
-  url: string;
-}
-
-const TRACKS: Track[] = [
-  { 
-    title: "Gymnopédie No. 1", 
-    artist: "Erik Satie", 
-    duration: "3:07",
-    url: "https://upload.wikimedia.org/wikipedia/commons/0/08/Erik_Satie_-_Gymnop%C3%A9die_No._1.mp3"
-  },
-  { 
-    title: "Nocturne in E-flat", 
-    artist: "Frédéric Chopin", 
-    duration: "4:14",
-    url: "https://upload.wikimedia.org/wikipedia/commons/3/30/Chopin_Nocturne_Op._9_No._2_E_flat_Major.mp3"
-  },
-  { 
-    title: "Clair de Lune", 
-    artist: "Claude Debussy", 
-    duration: "5:05",
-    url: "https://upload.wikimedia.org/wikipedia/commons/7/78/Debussy_-_Clair_de_Lune.mp3"
-  },
-  { 
-    title: "Für Elise", 
-    artist: "Ludwig van Beethoven", 
-    duration: "2:50",
-    url: "https://upload.wikimedia.org/wikipedia/commons/f/fc/Fur_Elise.mp3"
-  }
-];
-
 const COMPLIMENTS = [
   "You have a heart of pure gold, and being loved by you is my greatest fortune.",
   "Your laughter is my favorite song, and your smile is my daily inspiration.",
@@ -162,110 +128,6 @@ const CONSTELLATION_STARS: StarNode[] = [
   { id: 7, x: 85, y: 25, label: "Kindness" },    // Top right outer
   { id: 8, x: 80, y: 55, label: "Devotion" }     // Lower right curve
 ];
-
-// --- NEW DATASETS FOR DATA-READY SECTIONS ---
-
-interface Dream {
-  id: string;
-  title: string;
-  icon: string;
-  descShort: string;
-  descLong: string;
-  status: "Planned" | "Dreaming" | "Completed";
-}
-
-const DREAMS_LIST: Dream[] = [
-  {
-    id: "lights",
-    title: "See the Northern Lights",
-    icon: "🌌",
-    descShort: "A trip to the edge of the world.",
-    descLong: "I want to stand with you under the glowing green skies of the north, wrapped in warm blankets, watching the universe paint itself in light, knowing my world is right next to me.",
-    status: "Planned"
-  },
-  {
-    id: "library",
-    title: "Build a Home Library",
-    icon: "📚",
-    descShort: "A cozy reading corner for quiet afternoons.",
-    descLong: "A floor-to-ceiling bookshelf filled with our favorite stories, a soft window seat, and the smell of old pages. A quiet sanctuary where we can read together in comfortable silence.",
-    status: "Dreaming"
-  },
-  {
-    id: "stargaze",
-    title: "Stargaze in the Desert",
-    icon: "✨",
-    descShort: "Looking up at the infinite sky together.",
-    descLong: "Away from the city lights, sitting on the hood of a car in the silent desert, counting shooting stars. A reminder that in this vast universe, finding you was my greatest miracle.",
-    status: "Planned"
-  },
-  {
-    id: "grow-old",
-    title: "Grow Old Together",
-    icon: "🌱",
-    descShort: "The ultimate, lifelong adventure.",
-    descLong: "To look back at a life full of shared laughter, crazy dreams, and quiet moments. To hold your wrinkled hand and know that through every season, you were my constant choice.",
-    status: "Dreaming"
-  }
-];
-
-interface LyricLine {
-  time: number;
-  text: string;
-}
-
-const TRACK_LYRICS: Record<number, LyricLine[]> = {
-  0: [ // Satie Gymnopédie No. 1
-    { time: 0, text: "🎵 Gymnopédie No. 1 — Erik Satie" },
-    { time: 5, text: "Listen to the gentle rising notes of the piano..." },
-    { time: 14, text: "Every single tone speaks of your soft, calm presence." },
-    { time: 24, text: "Like a beautiful dream, you entered my world..." },
-    { time: 35, text: "...and turned the quiet spaces into poetry." },
-    { time: 48, text: "I love the way we share both laughter and absolute silence." },
-    { time: 62, text: "With you, my heart finds its steady, peaceful rhythm." },
-    { time: 76, text: "You are the melody I never want to stop playing." },
-    { time: 92, text: "Hand in hand, we write our own quiet chapters." },
-    { time: 110, text: "Thank you for being my light and my anchor, Rekha." },
-    { time: 130, text: "Under this sky, my heart will always belong to yours." },
-    { time: 155, text: "Forever and always." }
-  ],
-  1: [ // Chopin Nocturne
-    { time: 0, text: "🎵 Nocturne in E-flat — Frédéric Chopin" },
-    { time: 5, text: "A nighttime melody under a canopy of stars..." },
-    { time: 15, text: "Your eyes hold a warmth that guides me home." },
-    { time: 28, text: "I see our future shining in the quiet keys..." },
-    { time: 42, text: "A promise of warmth, comfort, and safety." },
-    { time: 58, text: "You make the ordinary moments feel extraordinary." },
-    { time: 74, text: "I love you for your kind heart and brave spirit." },
-    { time: 92, text: "In every season, in every quiet evening..." },
-    { time: 112, text: "...I will choose you, again and again." },
-    { time: 135, text: "Our paths aligned by destiny, bound by devotion." },
-    { time: 160, text: "Two hearts, one infinity." }
-  ],
-  2: [ // Debussy Clair de Lune
-    { time: 0, text: "🎵 Clair de Lune — Claude Debussy" },
-    { time: 5, text: "Clair de Lune... Moonlight painting our memories." },
-    { time: 18, text: "I remember the first time I held your hand." },
-    { time: 35, text: "A spark that quieted the entire universe around us." },
-    { time: 55, text: "You are my moonlit sanctuary, my peaceful harbor." },
-    { time: 75, text: "In the storms, you are my calm; in the dark, my light." },
-    { time: 98, text: "No distance, no time can ever dim what we share." },
-    { time: 120, text: "I promise to protect your dreams and cherish your smile." },
-    { time: 145, text: "You make my soul dance to a sweet, timeless rhythm." },
-    { time: 175, text: "Rekha, you are my greatest miracle." }
-  ],
-  3: [ // Beethoven Für Elise
-    { time: 0, text: "🎵 Für Elise — Ludwig van Beethoven" },
-    { time: 4, text: "A classic, playful, and passionate rhythm..." },
-    { time: 12, text: "Echoing the joy and laughter we bring each other." },
-    { time: 22, text: "Your smile rewrites even my heaviest days." },
-    { time: 34, text: "You inspire me to be the person I am still becoming." },
-    { time: 48, text: "I cherish every adventure, every shared look, every tease." },
-    { time: 64, text: "Thank you for walking this path hand-in-hand with me." },
-    { time: 82, text: "Our story is my favorite composition in the world." },
-    { time: 105, text: "Loving you more with every beat of my heart." }
-  ]
-};
 
 interface LoveValue {
   id: string;
@@ -327,13 +189,6 @@ export default function UsContent() {
   const [connectedStars, setConnectedStars] = useState<number[]>([]);
   const [constellationUnlocked, setConstellationUnlocked] = useState(false);
   
-  // Vinyl Player State
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
-  const [trackProgress, setTrackProgress] = useState(0); // in seconds
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-  const lyricsContainerRef = useRef<HTMLDivElement>(null);
-
   // Love Dashboard Counter State
   const [timeElapsed, setTimeElapsed] = useState({
     years: 0,
@@ -352,25 +207,10 @@ export default function UsContent() {
   const [isJarAnimating, setIsJarAnimating] = useState(false);
 
   // --- NEW SECTIONS STATES & HANDLERS ---
-  const [flippedDreams, setFlippedDreams] = useState<string[]>([]);
   const [capsuleUnlocked, setCapsuleUnlocked] = useState(false);
   const [selectedValues, setSelectedValues] = useState<string[]>([]);
   const [oracleSpinning, setOracleSpinning] = useState(false);
   const [oracleResult, setOracleResult] = useState<string | null>(null);
-
-  // Automatically scroll active lyrics line into focus
-  useEffect(() => {
-    const container = lyricsContainerRef.current;
-    if (container) {
-      const activeEl = container.querySelector(".us-lyric-line.active");
-      if (activeEl) {
-        container.scrollTo({
-          top: (activeEl as HTMLElement).offsetTop - container.clientHeight / 2 + (activeEl as HTMLElement).clientHeight / 2,
-          behavior: "smooth"
-        });
-      }
-    }
-  }, [trackProgress, currentTrackIndex]);
 
   const spinCompass = () => {
     if (oracleSpinning) return;
@@ -433,80 +273,6 @@ export default function UsContent() {
 
     return () => clearInterval(interval);
   }, []);
-
-  // Initialize HTML5 Audio instance in browser
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      audioRef.current = new Audio(TRACKS[currentTrackIndex].url);
-      const audio = audioRef.current;
-
-      const onTimeUpdate = () => {
-        setTrackProgress(audio.currentTime);
-      };
-
-      const onEnded = () => {
-        handleNextTrack();
-      };
-
-      audio.addEventListener("timeupdate", onTimeUpdate);
-      audio.addEventListener("ended", onEnded);
-
-      return () => {
-        audio.pause();
-        audio.removeEventListener("timeupdate", onTimeUpdate);
-        audio.removeEventListener("ended", onEnded);
-      };
-    }
-  }, []);
-
-  // Sync isPlaying state with audio element
-  useEffect(() => {
-    const audio = audioRef.current;
-    if (audio) {
-      if (isPlaying) {
-        audio.play().catch((err) => {
-          console.warn("Audio playback gesture lock or failure:", err);
-        });
-      } else {
-        audio.pause();
-      }
-    }
-  }, [isPlaying]);
-
-  // Handle track source changes
-  useEffect(() => {
-    const audio = audioRef.current;
-    if (audio) {
-      const wasPlaying = isPlaying;
-      audio.pause();
-      audio.src = TRACKS[currentTrackIndex].url;
-      audio.load();
-      setTrackProgress(0);
-      if (wasPlaying) {
-        audio.play().catch((err) => {
-          console.warn("Audio track swap play error:", err);
-        });
-      }
-    }
-  }, [currentTrackIndex]);
-
-  const handlePlayPause = () => {
-    setIsPlaying(!isPlaying);
-  };
-
-  const handleNextTrack = () => {
-    setCurrentTrackIndex((prev) => (prev + 1) % TRACKS.length);
-  };
-
-  const handlePrevTrack = () => {
-    setCurrentTrackIndex((prev) => (prev - 1 + TRACKS.length) % TRACKS.length);
-  };
-
-  const formatProgress = (seconds: number) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = Math.floor(seconds % 60);
-    return `${mins}:${secs < 10 ? "0" : ""}${secs}`;
-  };
 
   // Sparkle / Heart click burst
   const handlePromiseClick = (index: number, e: React.MouseEvent) => {
@@ -766,57 +532,7 @@ export default function UsContent() {
         </div>
       </section>
 
-      {/* Dreams Board Section */}
-      <section className="us-dreams-section py-20 bg-[rgba(10,10,12,0.3)]">
-        <div className="text-center max-w-2xl mx-auto mb-12 px-4">
-          <span className="font-display font-bold text-[#d4a853] tracking-widest text-xs uppercase">
-            Future Horizons
-          </span>
-          <h2 className="font-display text-3xl sm:text-4xl font-extrabold mt-2 text-white">
-            Our Shared Dreams
-          </h2>
-          <p className="text-[rgba(253,246,227,0.6)] mt-4">
-            Click on any dream card to flip it and read a secret promise for our future.
-          </p>
-        </div>
 
-        <div className="us-dreams-grid max-w-5xl mx-auto px-4 us-reveal">
-          {DREAMS_LIST.map((dream) => {
-            const isFlipped = flippedDreams.includes(dream.id);
-            return (
-              <div
-                key={dream.id}
-                className={`us-dream-card-wrapper ${isFlipped ? "flipped" : ""}`}
-                onClick={() => {
-                  setFlippedDreams(prev =>
-                    prev.includes(dream.id) ? prev.filter(id => id !== dream.id) : [...prev, dream.id]
-                  );
-                }}
-              >
-                <div className="us-dream-card">
-                  {/* Front side */}
-                  <div className="us-dream-card-front">
-                    <span className="text-4xl mb-4 block">{dream.icon}</span>
-                    <h3 className="font-display font-bold text-lg text-white mb-2">{dream.title}</h3>
-                    <p className="text-xs text-[rgba(253,246,227,0.5)] uppercase tracking-wider mb-3">
-                      Status: <span className={dream.status === "Completed" ? "text-green-400" : "text-[#d4a853]"}>{dream.status}</span>
-                    </p>
-                    <p className="text-sm text-[rgba(253,246,227,0.65)]">{dream.descShort}</p>
-                    <span className="text-xs text-[#d4a853] mt-auto block font-semibold">Tap to reveal...</span>
-                  </div>
-                  {/* Back side */}
-                  <div className="us-dream-card-back">
-                    <span className="text-2xl mb-2 block">{dream.icon}</span>
-                    <h3 className="font-display font-bold text-base text-[#d4a853] mb-3">{dream.title}</h3>
-                    <p className="text-sm leading-relaxed text-[rgba(253,246,227,0.85)]">{dream.descLong}</p>
-                    <span className="text-[10px] text-[rgba(253,246,227,0.4)] mt-auto block uppercase tracking-widest font-bold">Tap to flip back</span>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </section>
 
       {/* Section 4 — Connect the Stars Constellation Game */}
       <section className="us-constellation-sec">
@@ -1007,154 +723,7 @@ export default function UsContent() {
         </div>
       </section>
 
-      {/* Section 5 — Cinema Vinyl Music Player */}
-      <section className="us-player-section">
-        <div className="text-center max-w-2xl mx-auto mb-10">
-          <span className="font-display font-bold text-[#d4a853] tracking-widest text-xs uppercase">
-            Our Soundtrack
-          </span>
-          <h2 className="font-display text-3xl sm:text-4xl font-extrabold mt-2 text-white">
-            The Rhythm of Us
-          </h2>
-          <p className="text-[rgba(253,246,227,0.6)] mt-4">
-            Listen to a collection of songs that echo the harmony of our hearts. Click play to spin the vinyl.
-          </p>
-        </div>
 
-        <div className={`us-player-container us-reveal ${isPlaying ? "playing" : ""}`}>
-          <div className="us-player-left">
-            <div className="us-vinyl-deck">
-              <div className="us-vinyl-jacket">
-                <span className="text-[10px] text-[#d4a853] tracking-widest uppercase font-bold block mb-1">
-                  Side A
-                </span>
-                <span className="font-display font-bold text-sm text-[rgba(253,246,227,0.85)] truncate block max-w-full">
-                  {TRACKS[currentTrackIndex].title}
-                </span>
-                <span className="text-xs text-[rgba(253,246,227,0.5)] truncate block max-w-full">
-                  {TRACKS[currentTrackIndex].artist}
-                </span>
-              </div>
-              <div className="us-vinyl-record">
-                <div className="us-vinyl-label">
-                  <div className="us-vinyl-label-center"></div>
-                </div>
-              </div>
-            </div>
-
-            {/* Audio equalizers */}
-            <div className="us-audio-equalizer">
-              <div className="us-equalizer-bar"></div>
-              <div className="us-equalizer-bar"></div>
-              <div className="us-equalizer-bar"></div>
-              <div className="us-equalizer-bar"></div>
-              <div className="us-equalizer-bar"></div>
-              <div className="us-equalizer-bar"></div>
-              <div className="us-equalizer-bar"></div>
-              <div className="us-equalizer-bar"></div>
-            </div>
-
-            <div className="mt-4 text-xs font-semibold text-[rgba(253,246,227,0.4)] tracking-widest uppercase">
-              {isPlaying ? "Playing Track" : "Player Paused"}
-            </div>
-
-            <div className="us-player-controls">
-              <button className="us-player-btn" onClick={handlePrevTrack} aria-label="Previous Track">
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M8.445 14.83a1 1 0 001.555-.832V6a1 1 0 00-1.555-.832l-6 4a1 1 0 000 1.664l6 4zM16.445 14.83a1 1 0 001.555-.832V6a1 1 0 00-1.555-.832l-6 4a1 1 0 000 1.664l6 4z" />
-                </svg>
-              </button>
-              <button 
-                className="us-player-btn play-btn" 
-                onClick={handlePlayPause}
-                aria-label={isPlaying ? "Pause Track" : "Play Track"}
-              >
-                {isPlaying ? (
-                  <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
-                  </svg>
-                ) : (
-                  <svg className="w-6 h-6 ml-1" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
-                  </svg>
-                )}
-              </button>
-              <button className="us-player-btn" onClick={handleNextTrack} aria-label="Next Track">
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M4.555 5.168A1 1 0 003 6v8a1 1 0 001.555.832l6-4a1 1 0 000-1.664l-6-4zM11.555 5.168A1 1 0 0010 6v8a1 1 0 001.555.832l6-4a1 1 0 000-1.664l-6-4z" />
-                </svg>
-              </button>
-            </div>
-            
-            {/* progress bar */}
-            <div className="w-full max-w-xs mt-6">
-              <div className="flex justify-between text-[10px] text-[rgba(253,246,227,0.4)] font-bold uppercase tracking-wider mb-2">
-                <span>{formatProgress(trackProgress)}</span>
-                <span>{TRACKS[currentTrackIndex].duration}</span>
-              </div>
-              <div className="w-full h-1 bg-[rgba(255,255,255,0.05)] rounded-full overflow-hidden">
-                <div 
-                  className="h-full us-player-progress-bar"
-                  style={{
-                    width: `${
-                      (trackProgress /
-                        (Number(TRACKS[currentTrackIndex].duration.split(":")[0]) * 60 +
-                          Number(TRACKS[currentTrackIndex].duration.split(":")[1]))) *
-                      100
-                    }%`,
-                  }}
-                ></div>
-              </div>
-            </div>
-          </div>
-
-          {/* Synchronized Lyrics Panel */}
-          <div ref={lyricsContainerRef} className="us-lyrics-panel text-left">
-            {TRACK_LYRICS[currentTrackIndex]?.map((lyric, idx) => {
-              const lyrics = TRACK_LYRICS[currentTrackIndex];
-              const isActive = trackProgress >= lyric.time && (idx === lyrics.length - 1 || trackProgress < lyrics[idx + 1].time);
-              return (
-                <div
-                  key={idx}
-                  className={`us-lyric-line ${isActive ? "active" : ""}`}
-                >
-                  {lyric.text}
-                </div>
-              );
-            })}
-          </div>
-
-          <div className="us-playlist">
-            <h3 className="font-display font-extrabold text-lg text-white mb-4 border-b border-[rgba(212,168,83,0.15)] pb-3 text-left">
-              Playlist Records
-            </h3>
-            {TRACKS.map((track, index) => (
-              <div 
-                key={track.title}
-                className={`us-playlist-track ${currentTrackIndex === index ? "active" : ""}`}
-                onClick={() => {
-                  if (currentTrackIndex === index) {
-                    setIsPlaying(true);
-                    if (audioRef.current && audioRef.current.paused) {
-                      audioRef.current.play().catch((err) => console.warn(err));
-                    }
-                  } else {
-                    setCurrentTrackIndex(index);
-                    setIsPlaying(true);
-                  }
-                }}
-              >
-                <div className="us-playlist-track-num">0{index + 1}</div>
-                <div className="us-playlist-track-info text-left">
-                  <div className="us-playlist-track-title">{track.title}</div>
-                  <div className="us-playlist-track-artist">{track.artist}</div>
-                </div>
-                <div className="us-playlist-track-duration">{track.duration}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* Section 6 — Love Dashboard (Live Counter & Promise Checkboxes) */}
       <section className="us-dashboard-section max-w-5xl mx-auto px-4 py-20">
@@ -1234,7 +803,7 @@ export default function UsContent() {
         {/* Animated Love Stats Dashboard */}
         <div className="us-stats-grid grid grid-cols-2 md:grid-cols-4 gap-4 mt-12 us-reveal">
           {LOVE_STATS.map((stat, i) => (
-            <div key={i} className="us-stat-card border border-[rgba(212,168,83,0.12)] bg-[rgba(18,18,22,0.4)] backdrop-filter blur-md p-5 rounded-2xl flex flex-col items-center text-center">
+            <div key={i} className="us-stat-card border border-[rgba(212,168,83,0.12)] bg-[rgba(18,18,22,0.4)] backdrop-blur-md p-5 rounded-2xl flex flex-col items-center text-center">
               <span className="text-2xl mb-2">{stat.icon}</span>
               <span className="text-2xl font-extrabold text-white font-display mb-1">{stat.val}</span>
               <span className="text-xs text-[rgba(253,246,227,0.5)] uppercase tracking-wider">{stat.label}</span>
@@ -1346,7 +915,7 @@ export default function UsContent() {
 
           <div className={`us-oracle-box ${oracleResult ? "active" : ""}`}>
             {oracleResult && (
-              <div className="p-5 border border-[rgba(212,168,83,0.15)] bg-[rgba(18,18,22,0.6)] backdrop-filter blur-md rounded-2xl animate-fade-in">
+              <div className="p-5 border border-[rgba(212,168,83,0.15)] bg-[rgba(18,18,22,0.6)] backdrop-blur-md rounded-2xl animate-fade-in">
                 <span className="text-xs text-[#d4a853] uppercase font-bold tracking-widest block mb-2">
                   Destiny Proclaimed
                 </span>
@@ -1389,7 +958,7 @@ export default function UsContent() {
 
           <div className={`us-parchment-scroll-wrapper ${capsuleUnlocked ? "active" : ""}`}>
             {capsuleUnlocked && (
-              <div className="us-parchment-scroll p-6 sm:p-10 border border-[rgba(212,168,83,0.2)] bg-[#1e1b15] text-[#362719] rounded-xl shadow-2xl relative text-left">
+              <div className="us-parchment-scroll p-6 sm:p-10 border border-[rgba(212,168,83,0.2)] bg-[#ebd2ad] text-[#362719] rounded-xl shadow-2xl relative text-left">
                 <div className="absolute top-4 right-4 text-lg cursor-pointer hover:scale-110 transition-transform" onClick={(e) => { e.stopPropagation(); setCapsuleUnlocked(false); }}>❌</div>
                 <span className="font-display font-bold text-[#7d5f30] tracking-widest text-[10px] uppercase block mb-4 border-b border-[rgba(125,95,48,0.15)] pb-2">
                   A Promise for the Future
