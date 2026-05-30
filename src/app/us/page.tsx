@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import UsContent from "./UsContent";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://flxos-labs.github.io"),
   title: "For You, Rekha ❤️",
   description: "A cinematic space dedicated to the love story of Akash and Rekha.",
   openGraph: {

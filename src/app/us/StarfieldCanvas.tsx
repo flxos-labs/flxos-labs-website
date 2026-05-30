@@ -634,6 +634,29 @@ export default function StarfieldCanvas() {
       mouseRef.current.y = my;
     };
 
+    const onTouchMove = (e: TouchEvent) => {
+      if (e.touches.length === 0) return;
+      const touch = e.touches[0];
+      const mx = touch.clientX;
+      const my = touch.clientY;
+      const mouse = mouseRef.current;
+
+      if (mouse.active) {
+        const dist = Math.hypot(mx - mouse.px, my - mouse.py);
+        if (dist > 8) {
+          spawnSparkles(mx, my, Math.min(Math.floor(dist / 5), 3));
+          mouseRef.current.px = mx;
+          mouseRef.current.py = my;
+        }
+      } else {
+        mouseRef.current.active = true;
+        mouseRef.current.px = mx;
+        mouseRef.current.py = my;
+      }
+      mouseRef.current.x = mx;
+      mouseRef.current.y = my;
+    };
+
     const onMouseLeave = () => {
       mouseRef.current.active = false;
       mouseRef.current.x = -9999;
@@ -650,6 +673,9 @@ export default function StarfieldCanvas() {
 
     window.addEventListener("resize", handleResize);
     window.addEventListener("mousemove", onMouseMove);
+    window.addEventListener("touchstart", onTouchMove, { passive: true });
+    window.addEventListener("touchmove", onTouchMove, { passive: true });
+    window.addEventListener("touchend", onMouseLeave, { passive: true });
     document.addEventListener("mouseleave", onMouseLeave);
     document.addEventListener("visibilitychange", onVisibility);
 
@@ -657,6 +683,9 @@ export default function StarfieldCanvas() {
       cancelAnimationFrame(animationRef.current);
       window.removeEventListener("resize", handleResize);
       window.removeEventListener("mousemove", onMouseMove);
+      window.removeEventListener("touchstart", onTouchMove);
+      window.removeEventListener("touchmove", onTouchMove);
+      window.removeEventListener("touchend", onMouseLeave);
       document.removeEventListener("mouseleave", onMouseLeave);
       document.removeEventListener("visibilitychange", onVisibility);
     };

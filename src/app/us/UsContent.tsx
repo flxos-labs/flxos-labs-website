@@ -92,13 +92,34 @@ interface Track {
   title: string;
   artist: string;
   duration: string;
+  url: string;
 }
 
 const TRACKS: Track[] = [
-  { title: "Perfect", artist: "Ed Sheeran", duration: "4:23" },
-  { title: "At Last", artist: "Etta James", duration: "3:00" },
-  { title: "Make You Feel My Love", artist: "Adele", duration: "3:32" },
-  { title: "Say You Won't Let Go", artist: "James Arthur", duration: "4:31" }
+  { 
+    title: "Gymnopédie No. 1", 
+    artist: "Erik Satie", 
+    duration: "3:07",
+    url: "https://upload.wikimedia.org/wikipedia/commons/0/08/Erik_Satie_-_Gymnop%C3%A9die_No._1.mp3"
+  },
+  { 
+    title: "Nocturne in E-flat", 
+    artist: "Frédéric Chopin", 
+    duration: "4:14",
+    url: "https://upload.wikimedia.org/wikipedia/commons/3/30/Chopin_Nocturne_Op._9_No._2_E_flat_Major.mp3"
+  },
+  { 
+    title: "Clair de Lune", 
+    artist: "Claude Debussy", 
+    duration: "5:05",
+    url: "https://upload.wikimedia.org/wikipedia/commons/7/78/Debussy_-_Clair_de_Lune.mp3"
+  },
+  { 
+    title: "Für Elise", 
+    artist: "Ludwig van Beethoven", 
+    duration: "2:50",
+    url: "https://upload.wikimedia.org/wikipedia/commons/f/fc/Fur_Elise.mp3"
+  }
 ];
 
 const COMPLIMENTS = [
@@ -194,66 +215,55 @@ interface LyricLine {
 }
 
 const TRACK_LYRICS: Record<number, LyricLine[]> = {
-  0: [ // Perfect - Ed Sheeran
-    { time: 0, text: "🎵 Perfect — Ed Sheeran" },
-    { time: 3, text: "I found a love for me..." },
-    { time: 8, text: "Darling, just dive right in and follow my lead" },
-    { time: 15, text: "Well, I found a girl, beautiful and sweet" },
-    { time: 22, text: "I never knew you were the someone waiting for me" },
-    { time: 30, text: "'Cause we were just kids when we fell in love" },
-    { time: 36, text: "Not knowing what it was, I will not give you up this time" },
-    { time: 45, text: "But darling, just kiss me slow..." },
-    { time: 50, text: "Your heart is all I own, and in your eyes you're holding mine" },
-    { time: 58, text: "Baby, I'm dancing in the dark..." },
-    { time: 64, text: "With you between my arms, barefoot on the grass" },
-    { time: 70, text: "Listening to our favorite song..." },
-    { time: 75, text: "When you said you looked a mess, I whispered underneath my breath" },
-    { time: 82, text: "But you heard it, Darling, you look perfect tonight." }
+  0: [ // Satie Gymnopédie No. 1
+    { time: 0, text: "🎵 Gymnopédie No. 1 — Erik Satie" },
+    { time: 5, text: "Listen to the gentle rising notes of the piano..." },
+    { time: 14, text: "Every single tone speaks of your soft, calm presence." },
+    { time: 24, text: "Like a beautiful dream, you entered my world..." },
+    { time: 35, text: "...and turned the quiet spaces into poetry." },
+    { time: 48, text: "I love the way we share both laughter and absolute silence." },
+    { time: 62, text: "With you, my heart finds its steady, peaceful rhythm." },
+    { time: 76, text: "You are the melody I never want to stop playing." },
+    { time: 92, text: "Hand in hand, we write our own quiet chapters." },
+    { time: 110, text: "Thank you for being my light and my anchor, Rekha." },
+    { time: 130, text: "Under this sky, my heart will always belong to yours." },
+    { time: 155, text: "Forever and always." }
   ],
-  1: [ // At Last - Etta James
-    { time: 0, text: "🎵 At Last — Etta James" },
-    { time: 4, text: "At last, my love has come along..." },
-    { time: 12, text: "My lonely days are over, and life is like a song" },
-    { time: 23, text: "At last, the skies above are blue..." },
-    { time: 30, text: "My heart was wrapped up in clover, the night I looked at you" },
-    { time: 42, text: "I found a dream that I could speak to..." },
-    { time: 50, text: "A dream that I could call my own" },
-    { time: 58, text: "I found a thrill to press my cheek to..." },
-    { time: 66, text: "A thrill that I have never known" },
-    { time: 74, text: "You smiled, you smiled, oh, and then the spell was cast" },
-    { time: 84, text: "And here we are in heaven, for you are mine at last." }
+  1: [ // Chopin Nocturne
+    { time: 0, text: "🎵 Nocturne in E-flat — Frédéric Chopin" },
+    { time: 5, text: "A nighttime melody under a canopy of stars..." },
+    { time: 15, text: "Your eyes hold a warmth that guides me home." },
+    { time: 28, text: "I see our future shining in the quiet keys..." },
+    { time: 42, text: "A promise of warmth, comfort, and safety." },
+    { time: 58, text: "You make the ordinary moments feel extraordinary." },
+    { time: 74, text: "I love you for your kind heart and brave spirit." },
+    { time: 92, text: "In every season, in every quiet evening..." },
+    { time: 112, text: "...I will choose you, again and again." },
+    { time: 135, text: "Our paths aligned by destiny, bound by devotion." },
+    { time: 160, text: "Two hearts, one infinity." }
   ],
-  2: [ // Make You Feel My Love - Adele
-    { time: 0, text: "🎵 Make You Feel My Love — Adele" },
-    { time: 3, text: "When the rain is blowing in your face..." },
-    { time: 9, text: "And the whole world is on your case" },
-    { time: 15, text: "I could offer you a warm embrace" },
-    { time: 21, text: "To make you feel my love" },
-    { time: 27, text: "When the evening shadows and the stars appear..." },
-    { time: 33, text: "And there is no one there to dry your tears" },
-    { time: 39, text: "I could hold you for a million years" },
-    { time: 45, text: "To make you feel my love" },
-    { time: 51, text: "I know you haven't made your mind up yet..." },
-    { time: 57, text: "But I would never do you wrong" },
-    { time: 63, text: "I've known it from the moment that we met" },
-    { time: 69, text: "No doubt in my mind where you belong." }
+  2: [ // Debussy Clair de Lune
+    { time: 0, text: "🎵 Clair de Lune — Claude Debussy" },
+    { time: 5, text: "Clair de Lune... Moonlight painting our memories." },
+    { time: 18, text: "I remember the first time I held your hand." },
+    { time: 35, text: "A spark that quieted the entire universe around us." },
+    { time: 55, text: "You are my moonlit sanctuary, my peaceful harbor." },
+    { time: 75, text: "In the storms, you are my calm; in the dark, my light." },
+    { time: 98, text: "No distance, no time can ever dim what we share." },
+    { time: 120, text: "I promise to protect your dreams and cherish your smile." },
+    { time: 145, text: "You make my soul dance to a sweet, timeless rhythm." },
+    { time: 175, text: "Rekha, you are my greatest miracle." }
   ],
-  3: [ // Say You Won't Let Go - James Arthur
-    { time: 0, text: "🎵 Say You Won't Let Go — James Arthur" },
-    { time: 3, text: "I met you in the dark, you lit me up..." },
-    { time: 8, text: "You made me feel as though I was enough" },
-    { time: 14, text: "We danced the night away, we drank too much" },
-    { time: 20, text: "I held your hair back when you were throwing up" },
-    { time: 26, text: "Then you smiled over your shoulder..." },
-    { time: 31, text: "For a minute, I was stone-cold sober" },
-    { time: 36, text: "I pulled you closer to my chest" },
-    { time: 42, text: "And you asked me to stay over, I said, I already told ya" },
-    { time: 49, text: "I think that you should get some rest" },
-    { time: 55, text: "I knew I loved you then, but you'd never know..." },
-    { time: 61, text: "'Cause I played it cool when I was scared of letting go" },
-    { time: 67, text: "I know I needed you, but I never showed" },
-    { time: 73, text: "But I wanna stay with you until we're grey and old" },
-    { time: 80, text: "Just say you won't let go..." }
+  3: [ // Beethoven Für Elise
+    { time: 0, text: "🎵 Für Elise — Ludwig van Beethoven" },
+    { time: 4, text: "A classic, playful, and passionate rhythm..." },
+    { time: 12, text: "Echoing the joy and laughter we bring each other." },
+    { time: 22, text: "Your smile rewrites even my heaviest days." },
+    { time: 34, text: "You inspire me to be the person I am still becoming." },
+    { time: 48, text: "I cherish every adventure, every shared look, every tease." },
+    { time: 64, text: "Thank you for walking this path hand-in-hand with me." },
+    { time: 82, text: "Our story is my favorite composition in the world." },
+    { time: 105, text: "Loving you more with every beat of my heart." }
   ]
 };
 
@@ -321,7 +331,7 @@ export default function UsContent() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
   const [trackProgress, setTrackProgress] = useState(0); // in seconds
-  const progressIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
   const lyricsContainerRef = useRef<HTMLDivElement>(null);
 
   // Love Dashboard Counter State
@@ -424,34 +434,61 @@ export default function UsContent() {
     return () => clearInterval(interval);
   }, []);
 
-  // Music Player mock tracking
+  // Initialize HTML5 Audio instance in browser
   useEffect(() => {
-    if (isPlaying) {
-      progressIntervalRef.current = setInterval(() => {
-        setTrackProgress((prev) => {
-          const track = TRACKS[currentTrackIndex];
-          const [m, s] = track.duration.split(":").map(Number);
-          const totalSec = m * 60 + s;
-          if (prev >= totalSec) {
-            // Move to next
-            handleNextTrack();
-            return 0;
-          }
-          return prev + 1;
+    if (typeof window !== "undefined") {
+      audioRef.current = new Audio(TRACKS[currentTrackIndex].url);
+      const audio = audioRef.current;
+
+      const onTimeUpdate = () => {
+        setTrackProgress(audio.currentTime);
+      };
+
+      const onEnded = () => {
+        handleNextTrack();
+      };
+
+      audio.addEventListener("timeupdate", onTimeUpdate);
+      audio.addEventListener("ended", onEnded);
+
+      return () => {
+        audio.pause();
+        audio.removeEventListener("timeupdate", onTimeUpdate);
+        audio.removeEventListener("ended", onEnded);
+      };
+    }
+  }, []);
+
+  // Sync isPlaying state with audio element
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (audio) {
+      if (isPlaying) {
+        audio.play().catch((err) => {
+          console.warn("Audio playback gesture lock or failure:", err);
         });
-      }, 1000);
-    } else {
-      if (progressIntervalRef.current) {
-        clearInterval(progressIntervalRef.current);
+      } else {
+        audio.pause();
       }
     }
+  }, [isPlaying]);
 
-    return () => {
-      if (progressIntervalRef.current) {
-        clearInterval(progressIntervalRef.current);
+  // Handle track source changes
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (audio) {
+      const wasPlaying = isPlaying;
+      audio.pause();
+      audio.src = TRACKS[currentTrackIndex].url;
+      audio.load();
+      setTrackProgress(0);
+      if (wasPlaying) {
+        audio.play().catch((err) => {
+          console.warn("Audio track swap play error:", err);
+        });
       }
-    };
-  }, [isPlaying, currentTrackIndex]);
+    }
+  }, [currentTrackIndex]);
 
   const handlePlayPause = () => {
     setIsPlaying(!isPlaying);
@@ -459,12 +496,10 @@ export default function UsContent() {
 
   const handleNextTrack = () => {
     setCurrentTrackIndex((prev) => (prev + 1) % TRACKS.length);
-    setTrackProgress(0);
   };
 
   const handlePrevTrack = () => {
     setCurrentTrackIndex((prev) => (prev - 1 + TRACKS.length) % TRACKS.length);
-    setTrackProgress(0);
   };
 
   const formatProgress = (seconds: number) => {
@@ -555,35 +590,42 @@ export default function UsContent() {
     }, 600);
   };
 
-  // Render SVG connection lines for active stars
+  // Render SVG connection lines for active stars based on adjacency in the heart shape
   const renderConstellationLines = () => {
-    if (connectedStars.length < 2) return null;
-    
     const lines: React.ReactNode[] = [];
-    for (let i = 0; i < connectedStars.length - 1; i++) {
-      const fromStar = CONSTELLATION_STARS.find((s) => s.id === connectedStars[i]);
-      const toStar = CONSTELLATION_STARS.find((s) => s.id === connectedStars[i + 1]);
-      if (fromStar && toStar) {
-        lines.push(
-          <line
-            key={`line-${i}`}
-            x1={`${fromStar.x}%`}
-            y1={`${fromStar.y}%`}
-            x2={`${toStar.x}%`}
-            y2={`${toStar.y}%`}
-            stroke="url(#gold-rose-grad)"
-            strokeWidth="2.5"
-            strokeDasharray="4"
-            className="animate-pulse"
-          />
-        );
+    
+    // Natural pairs forming the heart shape
+    const heartPairs = [
+      [1, 2], [2, 3], [3, 4], [4, 5],
+      [5, 6], [6, 7], [7, 8]
+    ];
+
+    heartPairs.forEach(([id1, id2], i) => {
+      if (connectedStars.includes(id1) && connectedStars.includes(id2)) {
+        const fromStar = CONSTELLATION_STARS.find((s) => s.id === id1);
+        const toStar = CONSTELLATION_STARS.find((s) => s.id === id2);
+        if (fromStar && toStar) {
+          lines.push(
+            <line
+              key={`line-${i}`}
+              x1={`${fromStar.x}%`}
+              y1={`${fromStar.y}%`}
+              x2={`${toStar.x}%`}
+              y2={`${toStar.y}%`}
+              stroke="url(#gold-rose-grad)"
+              strokeWidth="2.5"
+              strokeDasharray="4"
+              className="animate-pulse"
+            />
+          );
+        }
       }
-    }
+    });
 
     // Connect last star to first if fully connected to complete the shape
     if (constellationUnlocked) {
-      const firstStar = CONSTELLATION_STARS.find((s) => s.id === connectedStars[0]);
-      const lastStar = CONSTELLATION_STARS.find((s) => s.id === connectedStars[connectedStars.length - 1]);
+      const firstStar = CONSTELLATION_STARS.find((s) => s.id === 1);
+      const lastStar = CONSTELLATION_STARS.find((s) => s.id === 8);
       if (firstStar && lastStar) {
         lines.push(
           <line
@@ -798,24 +840,18 @@ export default function UsContent() {
           {/* Render Star Dots */}
           {CONSTELLATION_STARS.map((star) => {
             const isConnected = connectedStars.includes(star.id);
-            const isNextToConnect = connectedStars.length === 0 ? star.id === 1 : star.id === connectedStars[connectedStars.length - 1] + 1;
             
             return (
               <div
                 key={star.id}
-                className={`us-sky-star ${isConnected ? "connected" : ""} ${isNextToConnect ? "animate-pulse" : ""}`}
+                className={`us-sky-star ${isConnected ? "connected" : ""}`}
                 style={{
                   left: `${star.x}%`,
                   top: `${star.y}%`,
                   transform: `translate(-50%, -50%) ${isConnected ? "scale(1.3)" : "scale(1)"}`,
                 }}
                 onClick={() => {
-                  // Only allow connecting in order to make it a game
-                  if (connectedStars.length === 0 && star.id === 1) {
-                    handleStarClick(star.id);
-                  } else if (connectedStars.length > 0 && connectedStars[connectedStars.length - 1] === star.id - 1) {
-                    handleStarClick(star.id);
-                  }
+                  handleStarClick(star.id);
                 }}
               >
                 <span className="absolute left-6 -top-2 text-[10px] uppercase font-bold tracking-widest text-[rgba(253,246,227,0.4)] pointer-events-none whitespace-nowrap">
@@ -1097,9 +1133,15 @@ export default function UsContent() {
                 key={track.title}
                 className={`us-playlist-track ${currentTrackIndex === index ? "active" : ""}`}
                 onClick={() => {
-                  setCurrentTrackIndex(index);
-                  setTrackProgress(0);
-                  setIsPlaying(true);
+                  if (currentTrackIndex === index) {
+                    setIsPlaying(true);
+                    if (audioRef.current && audioRef.current.paused) {
+                      audioRef.current.play().catch((err) => console.warn(err));
+                    }
+                  } else {
+                    setCurrentTrackIndex(index);
+                    setIsPlaying(true);
+                  }
                 }}
               >
                 <div className="us-playlist-track-num">0{index + 1}</div>
