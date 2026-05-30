@@ -404,7 +404,7 @@ export default function UsContent() {
   };
 
   return (
-    <div className="us-page bg-[#0a0a0c]">
+    <div className="us-page">
       <StarfieldCanvas />
 
       {/* Cinematic Hero */}
