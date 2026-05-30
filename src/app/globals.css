@@ -983,12 +983,35 @@ body:has(.us-page) .site-footer .footer-links a {
   --us-dark: #0a0a0c;
   --us-dark-card: rgba(18, 18, 22, 0.65);
   --us-champagne: #fdf6e3;
-  
+
   color: var(--us-champagne);
   font-family: var(--font-body), "Segoe UI", sans-serif;
-  min-height: 100vh;
   position: relative;
-  overflow: visible;
+
+  /* Scroll snapping — each section pauses on screen */
+  height: 100dvh;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+}
+
+/* Each section is a snap target */
+.us-page > section {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+
+/* Sections that rely on Tailwind utility classes also need full viewport height for snapping */
+.us-timeline-section,
+.us-constellation-align-section,
+.us-oracle-section,
+.us-capsule-section,
+.us-dashboard-section {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .us-gold-text {
@@ -1000,13 +1023,15 @@ body:has(.us-page) .site-footer .footer-links a {
 
 .us-hero {
   position: relative;
-  min-height: calc(100vh - 60px);
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   padding: 4rem 1.5rem;
   z-index: 10;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
 }
 
 .us-photo-frame {
@@ -1059,10 +1084,14 @@ body:has(.us-page) .site-footer .footer-links a {
 .us-letter-section {
   padding: 6rem 1.5rem;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   position: relative;
   z-index: 10;
+  min-height: 100vh;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
 }
 
 .us-letter-card {
@@ -1143,6 +1172,10 @@ body:has(.us-page) .site-footer .footer-links a {
   z-index: 10;
   max-width: 72rem;
   margin: 0 auto;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .us-reasons-grid {
@@ -1229,9 +1262,11 @@ body:has(.us-page) .site-footer .footer-links a {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   text-align: center;
   position: relative;
   z-index: 10;
+  min-height: 100vh;
 }
 
 .us-collage {
@@ -1672,6 +1707,10 @@ body:has(.us-page) {
   margin: 0 auto;
   padding: 6rem 1.5rem;
   text-align: center;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .us-sky-canvas-wrapper {
@@ -2194,6 +2233,8 @@ body:has(.us-page) {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+  min-height: 100vh;
 }
 
 .us-jar-container {
