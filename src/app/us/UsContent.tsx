@@ -452,154 +452,7 @@ const TypewriterText = ({ text }: { text: string }) => {
   return <span>{displayedText}</span>;
 };
 
-interface PolaroidScratchCardProps {
-  onReveal: () => void;
-  imageUrl: string;
-}
 
-const PolaroidScratchCard: React.FC<PolaroidScratchCardProps> = ({ onReveal, imageUrl }) => {
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const [isRevealed, setIsRevealed] = useState(false);
-  const isDrawing = useRef(false);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-
-    // Fill with a gorgeous golden sparkly gradient foil texture
-    const grad = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
-    grad.addColorStop(0, "#d4a853");
-    grad.addColorStop(0.3, "#f5d799");
-    grad.addColorStop(0.5, "#d4a853");
-    grad.addColorStop(0.7, "#a67c2e");
-    grad.addColorStop(1, "#d4a853");
-    ctx.fillStyle = grad;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    // Add metallic stardust noise
-    for (let i = 0; i < 300; i++) {
-      ctx.fillStyle = Math.random() > 0.5 ? "rgba(255, 255, 255, 0.45)" : "rgba(212, 168, 83, 0.3)";
-      ctx.fillRect(
-        Math.random() * canvas.width,
-        Math.random() * canvas.height,
-        Math.random() * 2 + 1,
-        Math.random() * 2 + 1
-      );
-    }
-  }, []);
-
-  const checkScratchPercentage = () => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-
-    const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    const pixels = imgData.data;
-    let clearedCount = 0;
-
-    for (let i = 3; i < pixels.length; i += 16) {
-      if (pixels[i] === 0) clearedCount++;
-    }
-
-    const totalSampled = pixels.length / 16;
-    const percent = (clearedCount / totalSampled) * 100;
-
-    if (percent > 45 && !isRevealed) {
-      setIsRevealed(true);
-      onReveal();
-    }
-  };
-
-  const getCoordinates = (e: React.MouseEvent | React.TouchEvent | MouseEvent | TouchEvent) => {
-    const canvas = canvasRef.current;
-    if (!canvas) return null;
-    const rect = canvas.getBoundingClientRect();
-
-    let clientX = 0;
-    let clientY = 0;
-
-    if ("touches" in e) {
-      if (e.touches.length === 0) return null;
-      clientX = e.touches[0].clientX;
-      clientY = e.touches[0].clientY;
-    } else {
-      clientX = e.clientX;
-      clientY = e.clientY;
-    }
-
-    const scaleX = canvas.width / rect.width;
-    const scaleY = canvas.height / rect.height;
-
-    return {
-      x: (clientX - rect.left) * scaleX,
-      y: (clientY - rect.top) * scaleY
-    };
-  };
-
-  const scratch = (e: React.MouseEvent | React.TouchEvent | MouseEvent | TouchEvent) => {
-    if (!isDrawing.current || isRevealed) return;
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-
-    const coords = getCoordinates(e);
-    if (!coords) return;
-
-    ctx.globalCompositeOperation = "destination-out";
-    ctx.lineJoin = "round";
-    ctx.lineCap = "round";
-    ctx.lineWidth = 36;
-
-    ctx.beginPath();
-    ctx.arc(coords.x, coords.y, 18, 0, Math.PI * 2);
-    ctx.fill();
-
-    checkScratchPercentage();
-  };
-
-  const startScratch = (e: React.MouseEvent | React.TouchEvent) => {
-    isDrawing.current = true;
-    scratch(e);
-  };
-
-  const endScratch = () => {
-    isDrawing.current = false;
-  };
-
-  return (
-    <div className="us-polaroid-scratch-card relative bg-[#fefdfa] p-4 pb-12 rounded shadow-2xl border border-[rgba(212,168,83,0.15)] flex flex-col items-center">
-      <div className="relative w-[280px] h-[280px] bg-neutral-900 overflow-hidden rounded border border-neutral-200/20">
-        <Image
-          src={imageUrl}
-          alt="Revealed memory"
-          fill
-          className="object-cover"
-        />
-
-        <canvas
-          ref={canvasRef}
-          width={280}
-          height={280}
-          className={`absolute inset-0 cursor-crosshair transition-opacity duration-1000 ${isRevealed ? "opacity-0 pointer-events-none" : "opacity-100"}`}
-          onMouseDown={startScratch}
-          onMouseMove={scratch}
-          onMouseUp={endScratch}
-          onMouseLeave={endScratch}
-          onTouchStart={startScratch}
-          onTouchMove={scratch}
-          onTouchEnd={endScratch}
-        />
-      </div>
-      <div className="mt-4 font-handwriting text-neutral-800 text-lg tracking-wide text-center">
-        Our Golden Hour — Scratch to Reveal ✨
-      </div>
-    </div>
-  );
-};
 
 export default function UsContent() {
 
@@ -655,7 +508,6 @@ export default function UsContent() {
     { id: "time-capsule", label: "Time Capsule" },
     { id: "movie-banner", label: "Movie Highlight" },
     { id: "reasons", label: "Reasons I Love You" },
-    { id: "scratch-card", label: "Memory Scratch" },
     { id: "closing", label: "Infinity Collage" }
   ];
 
@@ -753,25 +605,7 @@ export default function UsContent() {
     }, 2000);
   };
 
-  // Polaroid scratch reveals triggers
-  const [scratchRevealed, setScratchRevealed] = useState(false);
-  const handleScratchReveal = () => {
-    setScratchRevealed(true);
-    const heartCount = 30;
-    for (let i = 0; i < heartCount; i++) {
-      setTimeout(() => {
-        const heart = document.createElement("div");
-        heart.innerHTML = Math.random() > 0.45 ? "💖" : "✨";
-        heart.className = "us-heart-particle";
-        heart.style.left = `${window.innerWidth / 2 + (Math.random() - 0.5) * 240}px`;
-        heart.style.top = `${window.innerHeight / 2 + (Math.random() - 0.5) * 240}px`;
-        const rot = (Math.random() - 0.5) * 180;
-        heart.style.setProperty("--rot", `${rot}deg`);
-        document.body.appendChild(heart);
-        setTimeout(() => heart.remove(), 1200);
-      }, i * 40);
-    }
-  };
+
 
   // Section observer for Celestial Sidebar nodes
   useEffect(() => {
@@ -1053,8 +887,10 @@ export default function UsContent() {
   };
 
   return (
-    <div className="us-page" ref={pageRef}>
+    <>
       <StarfieldCanvas onMeteorClick={handleMeteorClick} />
+      <div className="us-page" ref={pageRef}>
+
 
       {/* P1: Celestial Sidebar Navigator */}
       <nav className="us-sidebar-nav fixed right-6 top-1/2 -translate-y-1/2 z-50 hidden lg:flex flex-col items-center gap-3">
@@ -2100,27 +1936,7 @@ export default function UsContent() {
         </div>
       </section>
 
-      {/* Section 15 — Scratch to Reveal Memory Card */}
-      <section id="scratch-card" className="us-scratch-section py-20 bg-[rgba(10,10,12,0.4)] flex flex-col justify-center items-center">
-        <div className="text-center max-w-2xl mx-auto mb-10 px-4">
-          <span className="font-display font-bold text-[#d4a853] tracking-widest text-xs uppercase">
-            A Hidden Treasure
-          </span>
-          <h2 className="font-display text-3xl sm:text-4xl font-extrabold mt-2 text-white">
-            Scratch-to-Reveal Card
-          </h2>
-          <p className="text-[rgba(253,246,227,0.6)] mt-4 font-display">
-            Our beautiful memory is masked in golden cosmic foil. Drag your cursor or finger to clear the foil and unlock it.
-          </p>
-        </div>
 
-        <div className="us-reveal transition-all duration-1000">
-          <PolaroidScratchCard
-            imageUrl="/images/og-image.png"
-            onReveal={handleScratchReveal}
-          />
-        </div>
-      </section>
 
       {/* Section 9 — Closing Section */}
       <section id="closing" className="us-closing-section">
@@ -2177,5 +1993,6 @@ export default function UsContent() {
         </div>
       </section>
     </div>
+    </>
   );
 }

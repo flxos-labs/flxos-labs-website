@@ -3273,33 +3273,6 @@ body:has(.us-page) {
   background: rgba(212, 168, 83, 0.45);
 }
 
-/* --- P4: Polaroid Scratch Card Section --- */
-.us-scratch-section {
-  z-index: 10;
-  position: relative;
-  min-height: 100vh;
-  scroll-snap-align: start !important;
-  scroll-snap-stop: always !important;
-}
-
-.us-polaroid-scratch-card {
-  width: 312px;
-  margin: 0 auto;
-  border: 1px solid rgba(0, 0, 0, 0.04);
-  box-shadow: 0 25px 65px rgba(0, 0, 0, 0.45);
-  transform: rotate(-1.5deg);
-  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-.us-polaroid-scratch-card:hover {
-  transform: translateY(-8px) rotate(1deg);
-  box-shadow: 0 35px 85px rgba(0, 0, 0, 0.55), 0 0 30px rgba(212, 168, 83, 0.1);
-}
-
-.us-polaroid-scratch-card canvas {
-  touch-action: none; /* disables browser scrolling while scratching */
-}
-
 /* Floating stardust pulse */
 @keyframes us-pulse-glow {
   0%, 100% {
