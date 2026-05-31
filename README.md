@@ -1,75 +1,30 @@
-# FlxOS Labs Website
+## FlxOS Web
 
-<div align="center">
-  <img src="assets/images/screenshots/scr_20260312_161725_home_screen_with_dock_status_bar_wallpaper.png" alt="FlxOS Home Screen" width="300" />
-</div>
+FlxOS Web is the site for the FlxOS project, rebuilt with Next.js, Tailwind CSS, and Supabase support.
 
-<div align="center">
-  <strong>The showcase website for <a href="https://flxos-labs.github.io/">FlxOS</a> — a modular, profile-driven operating system for ESP32 and Desktop platforms.</strong>
-</div>
-
-<br />
-
-## 🌟 Overview
-
-This repository hosts the static website for FlxOS Labs, detailing the FlxOS project, its features, and development roadmap. The website is built with a focus on premium aesthetics, featuring modern web design practices, complex animations, and an interactive presentation of the OS.
-
-Live Website: [flxos-labs.github.io](https://flxos-labs.github.io/)
-
-## ✨ Key Design Features
-
-- **Animated Gradient Mesh**: A dynamic, ambient background that subtly shifts using CSS animations.
-- **3D Device Mockups**: Premium presentations of the OS interface using realistic device frames, screen glare, and glow effects.
-- **Bento Grid Layout**: A modern, asymmetrical grid showcasing core capabilities and feature highlights.
-- **Interactive Component State**:
-  - Horizontal carousel for the screenshot gallery.
-  - Step-by-step interactive installation guide with a built-in terminal UI.
-  - Dynamic theme toggler (Dark / Light modes).
-- **Interactive Tech Stack Cloud**: SVG logos with hover tooltips demonstrating the technologies powering FlxOS.
-- **GitHub API Integration**: Real-time fetching of repository statistics (stars, forks, watchers, contributors) and latest release data.
-
-## 🛠️ Tech Stack
-
-The site is built entirely without heavy frontend frameworks to ensure maximum performance and maintainability:
-
-- **HTML5**: Semantic and accessible markup with SEO optimization built-in.
-- **Vanilla CSS**: Custom design system built with CSS variables, flexbox/grid, and complex keyframe animations.
-- **Vanilla JavaScript (ES6+)**: Handles all interactivities, carousels, theme toggling, and API fetching.
-- **Prism.js**: For terminal syntax highlighting in the Get Started section.
-- **Font Awesome**: High-quality iconography across the platform.
-
-## 📂 Project Structure
-
-```text
-.
-├── 404.html            # Custom not-found page
-├── assets/
-│   ├── css/            # Shared and page-specific stylesheets
-│   ├── js/             # Shared and page-specific scripts
-│   └── images/         # OG image, hardware photos, and screenshots
-├── README.md           # This file
-├── about/              # About section
-├── docs/               # Documentation section
-├── index.html          # Main landing page
-├── robots.txt          # Search engine crawling rules
-└── sitemap.xml         # Search engine sitemap
-```
-
-## 🚀 Local Development
-
-To run the site locally, you can use any basic HTTP server. For example, using Python:
+## Development
 
 ```bash
-# Clone the repository
-git clone https://github.com/flxos-labs/flxos-labs.github.io.git
-cd flxos-labs.github.io
-
-# Start a local development server
-python3 -m http.server 8080
+npm install
+npm run dev
 ```
 
-Then visit `http://localhost:8080` in your web browser.
+Open [http://localhost:3000](http://localhost:3000) to view the site.
 
-## 📄 License
+## Build
 
-This website's content and the FlxOS project itself are released under the **AGPL-3.0** License.
+```bash
+npm run build
+```
+
+## Environment
+
+Copy `.env.local.example` to `.env.local` and fill in your Supabase values:
+
+```bash
+cp .env.local.example .env.local
+```
+
+## Deployment
+
+Deploy the repository to Vercel and add the Supabase environment variables in the Vercel project settings.
