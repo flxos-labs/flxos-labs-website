@@ -95,12 +95,16 @@ const LAYER_CONFIG: Record<DepthLayer, {
   count: number;
   mobileCount: number;
 }> = {
-  far:  { speedMul: 0.3, sizeMul: 0.5,  alphaMul: 0.4, count: 40, mobileCount: 15 },
-  mid:  { speedMul: 0.6, sizeMul: 0.8,  alphaMul: 0.7, count: 30, mobileCount: 12 },
-  near: { speedMul: 1.0, sizeMul: 1.0,  alphaMul: 1.0, count: 20, mobileCount: 8  },
+  far: { speedMul: 0.3, sizeMul: 0.5, alphaMul: 0.4, count: 40, mobileCount: 15 },
+  mid: { speedMul: 0.6, sizeMul: 0.8, alphaMul: 0.7, count: 30, mobileCount: 12 },
+  near: { speedMul: 1.0, sizeMul: 1.0, alphaMul: 1.0, count: 20, mobileCount: 8 },
 };
 
-export default function StarfieldCanvas() {
+interface StarfieldCanvasProps {
+  onMeteorClick?: (x: number, y: number) => void;
+}
+
+export default function StarfieldCanvas({ onMeteorClick }: StarfieldCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animationRef = useRef<number>(0);
   const starsRef = useRef<StarParticle[]>([]);
@@ -306,26 +310,26 @@ export default function StarfieldCanvas() {
     for (const n of nebulaeRef.current) {
       const swayX = Math.sin(time * n.swaySpeedX + n.swayOffsetX) * n.swayAmplitudeX;
       const swayY = Math.cos(time * n.swaySpeedY + n.swayOffsetY) * n.swayAmplitudeY;
-      
+
       let px = 0;
       let py = 0;
       if (mouse.x !== -9999) {
         px = (mouse.x - w / 2) * -0.04;
         py = (mouse.y - h / 2) * -0.04;
       }
-      
+
       n.x = n.baseX + swayX + px;
       n.y = n.baseY + swayY + py;
-      
+
       const pulse = Math.sin(time * 0.0004 + n.swayOffsetX) * 0.15 + 0.85;
       n.opacity += (n.maxOpacity * pulse - n.opacity) * 0.02;
-      
+
       const grad = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, n.radius);
       grad.addColorStop(0, `rgba(${n.color[0]}, ${n.color[1]}, ${n.color[2]}, ${n.opacity})`);
       grad.addColorStop(0.35, `rgba(${n.color[0]}, ${n.color[1]}, ${n.color[2]}, ${n.opacity * 0.35})`);
       grad.addColorStop(0.7, `rgba(${n.color[0]}, ${n.color[1]}, ${n.color[2]}, ${n.opacity * 0.08})`);
       grad.addColorStop(1, `rgba(${n.color[0]}, ${n.color[1]}, ${n.color[2]}, 0)`);
-      
+
       ctx.fillStyle = grad;
       ctx.beginPath();
       ctx.arc(n.x, n.y, n.radius, 0, Math.PI * 2);
@@ -335,12 +339,12 @@ export default function StarfieldCanvas() {
 
     // 2. Draw drifting background stars and their constellations
     const stars = starsRef.current;
-    
+
     // Update star positions and compute display coordinates
     const starCoords = stars.map(p => {
       p.y += p.ySpeed;
       const sway = Math.sin(time * p.swaySpeed + p.swayOffset) * p.swayAmplitude;
-      
+
       let px = 0;
       let py = 0;
       if (mouse.x !== -9999) {
@@ -348,24 +352,24 @@ export default function StarfieldCanvas() {
         px = (mouse.x - w / 2) * factor;
         py = (mouse.y - h / 2) * factor;
       }
-      
+
       p.x = p.baseX + sway + px;
-      
+
       if (p.y + p.size < -10) {
         p.y = h + p.size + Math.random() * 30;
         p.baseX = Math.random() * w;
         p.alpha = 0;
       }
-      
+
       const pulse = Math.sin(time * p.pulseSpeed + p.pulseOffset);
       const twinkleAlpha = p.maxAlpha * (0.6 + 0.4 * pulse);
-      
+
       if (p.y < h && p.y > h - 100) {
         p.alpha = Math.min(twinkleAlpha, p.alpha + 0.005);
       } else {
         p.alpha += (twinkleAlpha - p.alpha) * 0.05;
       }
-      
+
       return {
         x: p.x,
         y: p.y + (mouse.x !== -9999 ? (mouse.y - h / 2) * (p.layer === "near" ? 0.03 : p.layer === "mid" ? 0.015 : 0.007) : 0),
@@ -379,22 +383,22 @@ export default function StarfieldCanvas() {
     for (let i = 0; i < starCoords.length; i++) {
       const s1 = starCoords[i];
       if (s1.p.layer === "far") continue;
-      
+
       let connections = 0;
       const maxConnections = s1.p.layer === "near" ? 3 : 2;
-      
+
       for (let j = i + 1; j < starCoords.length; j++) {
         const s2 = starCoords[j];
         if (s1.p.layer !== s2.p.layer) continue;
-        
+
         const dist = Math.hypot(s2.x - s1.x, s2.y - s1.y);
         if (dist < maxLineDist) {
           connections++;
           if (connections > maxConnections) break;
-          
+
           const alphaFactor = (1 - dist / maxLineDist) * 0.12;
           const lineAlpha = Math.min(s1.p.alpha, s2.p.alpha) * alphaFactor;
-          
+
           if (lineAlpha > 0.01) {
             const [r, g, b] = s1.p.color;
             ctx.strokeStyle = `rgba(${r}, ${g}, ${b}, ${lineAlpha})`;
@@ -412,19 +416,19 @@ export default function StarfieldCanvas() {
       const p = sc.p;
       const [r, g, b] = p.color;
       ctx.globalAlpha = Math.max(0, p.alpha);
-      
+
       // Glow
       const glowSize = p.size * 3.5;
       const grad = ctx.createRadialGradient(sc.x, sc.y, 0, sc.x, sc.y, glowSize);
       grad.addColorStop(0, `rgba(${r}, ${g}, ${b}, 0.8)`);
       grad.addColorStop(0.35, `rgba(${r}, ${g}, ${b}, 0.25)`);
       grad.addColorStop(1, `rgba(${r}, ${g}, ${b}, 0)`);
-      
+
       ctx.fillStyle = grad;
       ctx.beginPath();
       ctx.arc(sc.x, sc.y, glowSize, 0, Math.PI * 2);
       ctx.fill();
-      
+
       // Core
       ctx.fillStyle = `rgb(255, 255, 255)`;
       ctx.beginPath();
@@ -437,39 +441,39 @@ export default function StarfieldCanvas() {
     for (const b of bokeh) {
       b.y += b.ySpeed;
       const sway = Math.sin(time * b.swaySpeed + b.swayOffset) * b.swayAmplitude;
-      
+
       let px = 0;
       let py = 0;
       if (mouse.x !== -9999) {
         px = (mouse.x - w / 2) * 0.025;
         py = (mouse.y - h / 2) * 0.025;
       }
-      
+
       b.x = b.baseX + sway + px;
-      
+
       if (b.y + b.size < -50) {
         b.y = h + b.size + Math.random() * 50;
         b.baseX = Math.random() * w;
         b.alpha = 0;
       }
-      
+
       const pulse = Math.sin(time * b.pulseSpeed + b.pulseOffset);
       const targetAlpha = b.maxAlpha * (0.75 + 0.25 * pulse);
-      
+
       if (b.y < h && b.y > h - 150) {
         b.alpha = Math.min(targetAlpha, b.alpha + 0.003);
       } else {
         b.alpha += (targetAlpha - b.alpha) * 0.02;
       }
-      
+
       const drawY = b.y + py;
       const [r, g, bColor] = b.color;
       ctx.globalAlpha = Math.max(0, b.alpha);
-      
+
       if (b.isHeart) {
         const size = b.size;
         ctx.fillStyle = `rgba(${r}, ${g}, ${bColor}, 0.22)`;
-        
+
         ctx.beginPath();
         const hx = b.x;
         const hy = drawY - size / 2;
@@ -478,7 +482,7 @@ export default function StarfieldCanvas() {
         ctx.bezierCurveTo(hx + size, hy + size / 3, hx + size / 2, hy - size / 4, hx, hy + size * 0.3);
         ctx.closePath();
         ctx.fill();
-        
+
         ctx.fillStyle = `rgba(255, 255, 255, 0.45)`;
         ctx.beginPath();
         ctx.arc(hx, hy + size * 0.45, size * 0.15, 0, Math.PI * 2);
@@ -488,7 +492,7 @@ export default function StarfieldCanvas() {
         grad.addColorStop(0, `rgba(${r}, ${g}, ${bColor}, 0.38)`);
         grad.addColorStop(0.4, `rgba(${r}, ${g}, ${bColor}, 0.14)`);
         grad.addColorStop(1, `rgba(${r}, ${g}, ${bColor}, 0)`);
-        
+
         ctx.fillStyle = grad;
         ctx.beginPath();
         ctx.arc(b.x, drawY, b.size, 0, Math.PI * 2);
@@ -505,7 +509,7 @@ export default function StarfieldCanvas() {
       const length = Math.random() * 80 + 70;
       const speed = Math.random() * 8 + 7;
       const angle = Math.PI / 4 + (Math.random() - 0.5) * 0.15;
-      
+
       meteors.push({
         x: startX,
         y: startY,
@@ -519,19 +523,19 @@ export default function StarfieldCanvas() {
         color: GOLD_ROSE_PALETTE[Math.floor(Math.random() * GOLD_ROSE_PALETTE.length)],
       });
     }
-    
+
     for (let i = meteors.length - 1; i >= 0; i--) {
       const m = meteors[i];
       m.life++;
-      
+
       if (m.life >= m.maxLife) {
         meteors.splice(i, 1);
         continue;
       }
-      
+
       m.x += m.vx;
       m.y += m.vy;
-      
+
       if (m.life < 10) {
         m.alpha = m.life / 10;
       } else if (m.life > m.maxLife - 15) {
@@ -539,19 +543,19 @@ export default function StarfieldCanvas() {
       } else {
         m.alpha = 1;
       }
-      
+
       ctx.globalAlpha = m.alpha * 0.8;
-      
+
       const tailX = m.x - m.vx * 3.5;
       const tailY = m.y - m.vy * 3.5;
-      
+
       const grad = ctx.createLinearGradient(m.x, m.y, tailX, tailY);
       const [mr, mg, mb] = m.color;
       grad.addColorStop(0, "rgba(255, 255, 255, 1)");
       grad.addColorStop(0.1, `rgba(${mr}, ${mg}, ${mb}, 0.8)`);
       grad.addColorStop(0.5, `rgba(${mr}, ${mg}, ${mb}, 0.35)`);
       grad.addColorStop(1, "rgba(255, 255, 255, 0)");
-      
+
       ctx.strokeStyle = grad;
       ctx.lineWidth = m.size;
       ctx.lineCap = "round";
@@ -559,7 +563,7 @@ export default function StarfieldCanvas() {
       ctx.moveTo(m.x, m.y);
       ctx.lineTo(tailX, tailY);
       ctx.stroke();
-      
+
       ctx.fillStyle = "#ffffff";
       ctx.beginPath();
       ctx.arc(m.x, m.y, m.size * 0.9, 0, Math.PI * 2);
@@ -582,7 +586,7 @@ export default function StarfieldCanvas() {
       s.y += s.vy;
       s.vx *= 0.96;
       s.vy *= 0.96;
-      
+
       // Gravity and gentle jitter
       s.vy += 0.005;
       s.vx += (Math.random() - 0.5) * 0.03;
@@ -671,11 +675,55 @@ export default function StarfieldCanvas() {
       }
     };
 
+    const onWindowClick = (e: MouseEvent) => {
+      const { w, h } = sizeRef.current;
+      const mx = e.clientX;
+      const my = e.clientY;
+      
+      const clickedMeteorIndex = meteorsRef.current.findIndex(m => {
+        const dist = Math.hypot(mx - m.x, my - m.y);
+        return dist < 55; // generous tap target radius for mobile
+      });
+
+      if (clickedMeteorIndex !== -1) {
+        const m = meteorsRef.current[clickedMeteorIndex];
+        
+        // Spawn stardust sparkle burst
+        const splashSparks: SparkleParticle[] = [];
+        for (let k = 0; k < 25; k++) {
+          const size = Math.random() * 5 + 3;
+          const maxLife = Math.random() * 40 + 30;
+          const angle = Math.random() * Math.PI * 2;
+          const force = Math.random() * 4 + 2;
+          splashSparks.push({
+            x: m.x,
+            y: m.y,
+            vx: Math.cos(angle) * force,
+            vy: Math.sin(angle) * force,
+            size,
+            color: [212, 168, 83], // Pure Gold
+            alpha: 1,
+            life: maxLife,
+            maxLife,
+          });
+        }
+        sparklesRef.current.push(...splashSparks);
+
+        if (onMeteorClick) {
+          onMeteorClick(m.x, m.y);
+        }
+
+        // Remove the meteor so it doesn't get double clicked
+        meteorsRef.current.splice(clickedMeteorIndex, 1);
+      }
+    };
+
     window.addEventListener("resize", handleResize);
     window.addEventListener("mousemove", onMouseMove);
     window.addEventListener("touchstart", onTouchMove, { passive: true });
     window.addEventListener("touchmove", onTouchMove, { passive: true });
     window.addEventListener("touchend", onMouseLeave, { passive: true });
+    window.addEventListener("click", onWindowClick);
     document.addEventListener("mouseleave", onMouseLeave);
     document.addEventListener("visibilitychange", onVisibility);
 
@@ -686,10 +734,11 @@ export default function StarfieldCanvas() {
       window.removeEventListener("touchstart", onTouchMove);
       window.removeEventListener("touchmove", onTouchMove);
       window.removeEventListener("touchend", onMouseLeave);
+      window.removeEventListener("click", onWindowClick);
       document.removeEventListener("mouseleave", onMouseLeave);
       document.removeEventListener("visibilitychange", onVisibility);
     };
-  }, [animate, handleResize, spawnSparkles]);
+  }, [animate, handleResize, spawnSparkles, onMeteorClick]);
 
   return (
     <canvas

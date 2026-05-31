@@ -452,8 +452,157 @@ const TypewriterText = ({ text }: { text: string }) => {
   return <span>{displayedText}</span>;
 };
 
+interface PolaroidScratchCardProps {
+  onReveal: () => void;
+  imageUrl: string;
+}
+
+const PolaroidScratchCard: React.FC<PolaroidScratchCardProps> = ({ onReveal, imageUrl }) => {
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const [isRevealed, setIsRevealed] = useState(false);
+  const isDrawing = useRef(false);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    // Fill with a gorgeous golden sparkly gradient foil texture
+    const grad = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+    grad.addColorStop(0, "#d4a853");
+    grad.addColorStop(0.3, "#f5d799");
+    grad.addColorStop(0.5, "#d4a853");
+    grad.addColorStop(0.7, "#a67c2e");
+    grad.addColorStop(1, "#d4a853");
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Add metallic stardust noise
+    for (let i = 0; i < 300; i++) {
+      ctx.fillStyle = Math.random() > 0.5 ? "rgba(255, 255, 255, 0.45)" : "rgba(212, 168, 83, 0.3)";
+      ctx.fillRect(
+        Math.random() * canvas.width,
+        Math.random() * canvas.height,
+        Math.random() * 2 + 1,
+        Math.random() * 2 + 1
+      );
+    }
+  }, []);
+
+  const checkScratchPercentage = () => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const pixels = imgData.data;
+    let clearedCount = 0;
+
+    for (let i = 3; i < pixels.length; i += 16) {
+      if (pixels[i] === 0) clearedCount++;
+    }
+
+    const totalSampled = pixels.length / 16;
+    const percent = (clearedCount / totalSampled) * 100;
+
+    if (percent > 45 && !isRevealed) {
+      setIsRevealed(true);
+      onReveal();
+    }
+  };
+
+  const getCoordinates = (e: React.MouseEvent | React.TouchEvent | MouseEvent | TouchEvent) => {
+    const canvas = canvasRef.current;
+    if (!canvas) return null;
+    const rect = canvas.getBoundingClientRect();
+
+    let clientX = 0;
+    let clientY = 0;
+
+    if ("touches" in e) {
+      if (e.touches.length === 0) return null;
+      clientX = e.touches[0].clientX;
+      clientY = e.touches[0].clientY;
+    } else {
+      clientX = e.clientX;
+      clientY = e.clientY;
+    }
+
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+
+    return {
+      x: (clientX - rect.left) * scaleX,
+      y: (clientY - rect.top) * scaleY
+    };
+  };
+
+  const scratch = (e: React.MouseEvent | React.TouchEvent | MouseEvent | TouchEvent) => {
+    if (!isDrawing.current || isRevealed) return;
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    const coords = getCoordinates(e);
+    if (!coords) return;
+
+    ctx.globalCompositeOperation = "destination-out";
+    ctx.lineJoin = "round";
+    ctx.lineCap = "round";
+    ctx.lineWidth = 36;
+
+    ctx.beginPath();
+    ctx.arc(coords.x, coords.y, 18, 0, Math.PI * 2);
+    ctx.fill();
+
+    checkScratchPercentage();
+  };
+
+  const startScratch = (e: React.MouseEvent | React.TouchEvent) => {
+    isDrawing.current = true;
+    scratch(e);
+  };
+
+  const endScratch = () => {
+    isDrawing.current = false;
+  };
+
+  return (
+    <div className="us-polaroid-scratch-card relative bg-[#fefdfa] p-4 pb-12 rounded shadow-2xl border border-[rgba(212,168,83,0.15)] flex flex-col items-center">
+      <div className="relative w-[280px] h-[280px] bg-neutral-900 overflow-hidden rounded border border-neutral-200/20">
+        <Image
+          src={imageUrl}
+          alt="Revealed memory"
+          fill
+          className="object-cover"
+        />
+
+        <canvas
+          ref={canvasRef}
+          width={280}
+          height={280}
+          className={`absolute inset-0 cursor-crosshair transition-opacity duration-1000 ${isRevealed ? "opacity-0 pointer-events-none" : "opacity-100"}`}
+          onMouseDown={startScratch}
+          onMouseMove={scratch}
+          onMouseUp={endScratch}
+          onMouseLeave={endScratch}
+          onTouchStart={startScratch}
+          onTouchMove={scratch}
+          onTouchEnd={endScratch}
+        />
+      </div>
+      <div className="mt-4 font-handwriting text-neutral-800 text-lg tracking-wide text-center">
+        Our Golden Hour — Scratch to Reveal ✨
+      </div>
+    </div>
+  );
+};
 
 export default function UsContent() {
+
 
 
   const pageRef = useRef<HTMLDivElement>(null);
@@ -486,6 +635,169 @@ export default function UsContent() {
   const [selectedValues, setSelectedValues] = useState<string[]>([]);
   const [oracleSpinning, setOracleSpinning] = useState(false);
   const [oracleResult, setOracleResult] = useState<string | null>(null);
+
+  // Active section tracking state
+  const [activeSection, setActiveSection] = useState("hero");
+
+  // Floating Navigator sections details
+  const NAVIGATION_SECTIONS = [
+    { id: "hero", label: "Cinematic Hero" },
+    { id: "letter", label: "Love Letter" },
+    { id: "timeline", label: "Our Chapters" },
+    { id: "connect-stars", label: "Connect the Stars" },
+    { id: "quiz", label: "Knowing Me" },
+    { id: "story-gallery", label: "Our Story" },
+    { id: "love-values", label: "Our Values" },
+    { id: "dashboard", label: "Love Dashboard" },
+    { id: "compliment-jar", label: "Compliment Jar" },
+    { id: "cosmic-compass", label: "Cosmic Compass" },
+    { id: "deep-questions", label: "Between the Lines" },
+    { id: "time-capsule", label: "Time Capsule" },
+    { id: "movie-banner", label: "Movie Highlight" },
+    { id: "reasons", label: "Reasons I Love You" },
+    { id: "scratch-card", label: "Memory Scratch" },
+    { id: "closing", label: "Infinity Collage" }
+  ];
+
+  // Music Audio Player Hook states
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [isMusicPlaying, setIsMusicPlaying] = useState(false);
+  const [isMusicMuted, setIsMusicMuted] = useState(false);
+  const [musicVolume, setMusicVolume] = useState(0.3);
+  const [isMusicExpanded, setIsMusicExpanded] = useState(false);
+
+  useEffect(() => {
+    // Premium copyright-free lofi piano acoustic track
+    const audio = new Audio("https://assets.mixkit.co/music/preview/mixkit-dreaming-big-31.mp3");
+    audio.loop = true;
+    audio.volume = musicVolume;
+    audioRef.current = audio;
+
+    return () => {
+      audio.pause();
+      audioRef.current = null;
+    };
+  }, []);
+
+  const toggleMusicPlay = () => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    if (isMusicPlaying) {
+      audio.pause();
+      setIsMusicPlaying(false);
+    } else {
+      audio.play().then(() => {
+        setIsMusicPlaying(true);
+      }).catch((err) => {
+        console.warn("Autoplay block: ", err);
+      });
+    }
+  };
+
+  const toggleMusicMute = () => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    audio.muted = !isMusicMuted;
+    setIsMusicMuted(!isMusicMuted);
+  };
+
+  const handleMusicVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = parseFloat(e.target.value);
+    setMusicVolume(val);
+    const audio = audioRef.current;
+    if (audio) {
+      audio.volume = val;
+      audio.muted = val === 0;
+      setIsMusicMuted(val === 0);
+    }
+  };
+
+  // Cosmic Wishes Local Storage States
+  const [wishModalOpen, setWishModalOpen] = useState(false);
+  const [wishes, setWishes] = useState<string[]>([]);
+  const [newWishText, setNewWishText] = useState("");
+  const [wishCoords, setWishCoords] = useState<{ x: number; y: number } | null>(null);
+  const [wishConfirmed, setWishConfirmed] = useState(false);
+
+  useEffect(() => {
+    const saved = localStorage.getItem("us_cosmic_wishes");
+    if (saved) {
+      try {
+        setWishes(JSON.parse(saved));
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  }, []);
+
+  const handleMeteorClick = (x: number, y: number) => {
+    setWishCoords({ x, y });
+    setWishModalOpen(true);
+    setWishConfirmed(false);
+  };
+
+  const handleSendWish = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newWishText.trim()) return;
+
+    const updated = [...wishes, newWishText.trim()];
+    setWishes(updated);
+    localStorage.setItem("us_cosmic_wishes", JSON.stringify(updated));
+
+    setWishConfirmed(true);
+    setNewWishText("");
+
+    setTimeout(() => {
+      setWishModalOpen(false);
+      setWishConfirmed(false);
+    }, 2000);
+  };
+
+  // Polaroid scratch reveals triggers
+  const [scratchRevealed, setScratchRevealed] = useState(false);
+  const handleScratchReveal = () => {
+    setScratchRevealed(true);
+    const heartCount = 30;
+    for (let i = 0; i < heartCount; i++) {
+      setTimeout(() => {
+        const heart = document.createElement("div");
+        heart.innerHTML = Math.random() > 0.45 ? "💖" : "✨";
+        heart.className = "us-heart-particle";
+        heart.style.left = `${window.innerWidth / 2 + (Math.random() - 0.5) * 240}px`;
+        heart.style.top = `${window.innerHeight / 2 + (Math.random() - 0.5) * 240}px`;
+        const rot = (Math.random() - 0.5) * 180;
+        heart.style.setProperty("--rot", `${rot}deg`);
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 1200);
+      }, i * 40);
+    }
+  };
+
+  // Section observer for Celestial Sidebar nodes
+  useEffect(() => {
+    const pageEl = pageRef.current;
+    if (!pageEl) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && entry.target.id) {
+            setActiveSection(entry.target.id);
+          }
+        });
+      },
+      {
+        root: pageEl,
+        threshold: 0.5, // 50% visibility
+      }
+    );
+
+    const sections = pageEl.querySelectorAll("section[id]");
+    sections.forEach((sec) => observer.observe(sec));
+
+    return () => observer.disconnect();
+  }, []);
+
 
   // New Quiz States
   const [quizPhase, setQuizPhase] = useState<'start' | 'playing' | 'results'>('start');
@@ -742,10 +1054,154 @@ export default function UsContent() {
 
   return (
     <div className="us-page" ref={pageRef}>
-      <StarfieldCanvas />
+      <StarfieldCanvas onMeteorClick={handleMeteorClick} />
+
+      {/* P1: Celestial Sidebar Navigator */}
+      <nav className="us-sidebar-nav fixed right-6 top-1/2 -translate-y-1/2 z-50 hidden lg:flex flex-col items-center gap-3">
+        <div className="us-sidebar-line absolute w-[1px] h-full bg-gradient-to-b from-transparent via-[rgba(212,168,83,0.3)] to-transparent -z-10"></div>
+        {NAVIGATION_SECTIONS.map((sec) => (
+          <button
+            key={sec.id}
+            onClick={() => document.getElementById(sec.id)?.scrollIntoView({ behavior: "smooth" })}
+            className={`us-sidebar-node relative w-3 h-3 rounded-full transition-all duration-300 ${activeSection === sec.id ? "active bg-[#d4a853] scale-125 shadow-[0_0_8px_rgba(212,168,83,0.8)]" : "bg-[rgba(253,246,227,0.25)] border border-[rgba(253,246,227,0.2)] hover:scale-110"}`}
+            aria-label={`Scroll to ${sec.label}`}
+          >
+            <span className="us-sidebar-tooltip absolute right-7 top-1/2 -translate-y-1/2 bg-[rgba(10,10,12,0.85)] border border-[rgba(212,168,83,0.25)] backdrop-blur-md px-3 py-1 rounded text-[10px] text-[#fdf6e3] tracking-widest font-bold font-display uppercase whitespace-nowrap opacity-0 pointer-events-none transition-all duration-300">
+              {sec.label}
+            </span>
+          </button>
+        ))}
+      </nav>
+
+      {/* P2: Ambient Soundwave Control (Music Player) */}
+      <div className={`us-music-player fixed bottom-6 left-6 z-50 bg-[rgba(10,10,12,0.8)] border border-[rgba(212,168,83,0.15)] backdrop-blur-xl rounded-2xl shadow-2xl transition-all duration-500 overflow-hidden flex items-center ${isMusicExpanded ? "px-5 py-4 max-w-[280px]" : "p-3 w-14 h-14 justify-center"}`}>
+        <button
+          onClick={() => setIsMusicExpanded(!isMusicExpanded)}
+          className={`us-music-vinyl-wrapper relative flex-shrink-0 cursor-pointer ${isMusicPlaying ? "animate-spin-slow" : ""}`}
+        >
+          <div className="w-8 h-8 rounded-full bg-neutral-900 border border-[rgba(212,168,83,0.3)] flex items-center justify-center relative shadow-lg">
+            <span className="text-[10px]">🎵</span>
+            {isMusicPlaying && (
+              <span className="absolute -top-1 -right-1 flex h-2.5 w-2.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#e8475f] opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#e8475f]"></span>
+              </span>
+            )}
+          </div>
+        </button>
+
+        {isMusicExpanded && (
+          <div className="ml-4 flex flex-col w-[180px] animate-fade-in-fast">
+            <div className="flex items-center justify-between mb-1.5">
+              <span className="text-[10px] font-bold tracking-wider text-[#d4a853] uppercase truncate w-[120px]">
+                {isMusicPlaying ? "Playing Love Melodies" : "Music Paused"}
+              </span>
+              <button 
+                onClick={() => setIsMusicExpanded(false)}
+                className="text-[10px] text-[rgba(253,246,227,0.4)] hover:text-white cursor-pointer"
+              >
+                ✕
+              </button>
+            </div>
+            
+            <p className="text-[9px] text-[rgba(253,246,227,0.6)] uppercase tracking-wider mb-2 truncate">
+              Dreaming Big (Lofi Acoustic)
+            </p>
+
+            <div className="flex items-center gap-3">
+              <button
+                onClick={toggleMusicPlay}
+                className="w-6 h-6 rounded-full bg-[rgba(212,168,83,0.1)] border border-[rgba(212,168,83,0.3)] hover:bg-[rgba(212,168,83,0.2)] text-[#d4a853] text-[10px] flex items-center justify-center cursor-pointer transition-all"
+              >
+                {isMusicPlaying ? "⏸" : "▶"}
+              </button>
+
+              <button
+                onClick={toggleMusicMute}
+                className="text-xs text-[#d4a853] hover:text-[#f5d799] cursor-pointer"
+              >
+                {isMusicMuted ? "🔇" : "🔊"}
+              </button>
+
+              <input
+                type="range"
+                min="0"
+                max="1"
+                step="0.05"
+                value={musicVolume}
+                onChange={handleMusicVolumeChange}
+                className="w-full h-1 bg-[rgba(253,246,227,0.2)] rounded-lg appearance-none cursor-pointer accent-[#d4a853] us-volume-slider"
+              />
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* P3: Cosmic Wish Modal Popup */}
+      {wishModalOpen && (
+        <div className="us-wish-modal-overlay fixed inset-0 z-[100] bg-black/60 backdrop-blur-md flex items-center justify-center p-4 animate-fade-in">
+          <div className="us-wish-modal max-w-md w-full bg-[rgba(15,15,20,0.85)] border border-[rgba(212,168,83,0.25)] backdrop-blur-2xl p-6 rounded-3xl shadow-2xl relative text-center">
+            <button
+              onClick={() => setWishModalOpen(false)}
+              className="absolute top-4 right-4 text-[rgba(253,246,227,0.5)] hover:text-white text-sm cursor-pointer"
+            >
+              ✕
+            </button>
+
+            {wishConfirmed ? (
+              <div className="py-8 animate-pulse-glow flex flex-col items-center">
+                <span className="text-4xl mb-4">🌠</span>
+                <h3 className="font-display font-extrabold text-[#d4a853] text-xl mb-2">Wish Sent to the Heavens!</h3>
+                <p className="text-[rgba(253,246,227,0.7)] text-sm">May the universe align to write our destiny in gold. ✨</p>
+              </div>
+            ) : (
+              <form onSubmit={handleSendWish} className="flex flex-col">
+                <span className="text-4xl mb-2">🌠</span>
+                <h3 className="font-display font-extrabold text-white text-lg mb-1.5 uppercase tracking-wider">
+                  You Caught a Shooting Star!
+                </h3>
+                <p className="text-[rgba(253,246,227,0.6)] text-xs mb-5">
+                  Make a wish to the universe, and we will carry it high into our love constellation.
+                </p>
+
+                <textarea
+                  required
+                  rows={3}
+                  value={newWishText}
+                  onChange={(e) => setNewWishText(e.target.value)}
+                  placeholder="I wish that we always..."
+                  className="w-full bg-[rgba(255,255,255,0.03)] border border-[rgba(212,168,83,0.15)] rounded-xl p-3 text-sm text-[#fdf6e3] placeholder-[rgba(253,246,227,0.35)] focus:outline-none focus:border-[#d4a853] transition-colors resize-none mb-4"
+                />
+
+                <button
+                  type="submit"
+                  className="btn-secondary w-full py-2.5 rounded-xl border-[rgba(212,168,83,0.3)] hover:border-[#d4a853] bg-[rgba(212,168,83,0.1)] hover:bg-[rgba(212,168,83,0.15)] text-[#d4a853] font-bold text-xs uppercase tracking-widest transition-all cursor-pointer"
+                >
+                  Send to the Stars
+                </button>
+
+                {wishes.length > 0 && (
+                  <div className="mt-6 border-t border-[rgba(212,168,83,0.1)] pt-4 text-left">
+                    <span className="font-display font-bold text-[#d4a853] text-[9px] tracking-widest uppercase block mb-2">
+                      Our Saved Wish Constellation ({wishes.length})
+                    </span>
+                    <div className="max-h-28 overflow-y-auto pr-1 flex flex-col gap-2">
+                      {wishes.map((w, idx) => (
+                        <div key={idx} className="bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.04)] rounded-lg p-2 text-[11px] text-[rgba(253,246,227,0.75)] italic leading-normal">
+                          🌌 &ldquo;{w}&rdquo;
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </form>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Cinematic Hero */}
-      <section className="us-hero">
+      <section id="hero" className="us-hero">
         <div className="text-center max-w-3xl px-4 mb-16">
           <p className="text-[#d4a853] tracking-[0.25em] text-xs font-bold uppercase mb-4 animate-fade-in">
             A Dedication to My Favorite Person
@@ -767,7 +1223,8 @@ export default function UsContent() {
       </section>
 
       {/* Section 2 — Wax-Sealed Love Letter Envelope */}
-      <section className="us-letter-section">
+      <section id="letter" className="us-letter-section">
+
         <div className="text-center max-w-2xl mx-auto mb-10">
           <span className="font-display font-bold text-[#d4a853] tracking-widest text-xs uppercase">
             A Heartfelt Message
@@ -815,7 +1272,7 @@ export default function UsContent() {
       </section>
 
       {/* Section 3 — Relationship Timeline */}
-      <section className="us-timeline-section py-20 bg-[rgba(10,10,12,0.5)]">
+      <section id="timeline" className="us-timeline-section py-20 bg-[rgba(10,10,12,0.5)]">
         <div className="text-center max-w-2xl mx-auto mb-10 px-4">
           <span className="font-display font-bold text-[#d4a853] tracking-widest text-xs uppercase">
             Our Chapters
@@ -864,7 +1321,7 @@ export default function UsContent() {
 
 
       {/* Section 4 — Connect the Stars Constellation Game */}
-      <section className="us-constellation-sec">
+      <section id="connect-stars" className="us-constellation-sec">
         <div className="text-center max-w-2xl mx-auto mb-6">
           <span className="font-display font-bold text-[#d4a853] tracking-widest text-xs uppercase">
             Interactive Star Sky
@@ -931,7 +1388,7 @@ export default function UsContent() {
       </section>
 
       {/* Section 4.5 — "How Well Do You Know Me?" Quiz Game */}
-      <section className="us-quiz-section">
+      <section id="quiz" className="us-quiz-section">
         <div className="text-center max-w-2xl mx-auto mb-10 px-4">
           <span className="font-display font-bold text-[#d4a853] tracking-widest text-xs uppercase">
             Love Challenge
@@ -1069,7 +1526,7 @@ export default function UsContent() {
       </section>
 
       {/* Section 4.6 — "Our Story" Flip-Card Gallery */}
-      <section className="us-flipcard-section">
+      <section id="story-gallery" className="us-flipcard-section">
         <div className="text-center max-w-2xl mx-auto mb-6 px-4">
           <span className="font-display font-bold text-[#d4a853] tracking-widest text-xs uppercase">
             Milestones & Dreams
@@ -1154,7 +1611,7 @@ export default function UsContent() {
       </section>
 
       {/* Love Constellation Alignment Section */}
-      <section className="us-constellation-align-section py-20">
+      <section id="love-values" className="us-constellation-align-section py-20">
 
         <div className="text-center max-w-2xl mx-auto mb-10 px-4">
           <span className="font-display font-bold text-[#d4a853] tracking-widest text-xs uppercase">
@@ -1279,7 +1736,7 @@ export default function UsContent() {
 
 
       {/* Section 6 — Love Dashboard (Live Counter & Promise Checkboxes) */}
-      <section className="us-dashboard-section max-w-5xl mx-auto px-4 py-20">
+      <section id="dashboard" className="us-dashboard-section max-w-5xl mx-auto px-4 py-20">
         <div className="text-center max-w-2xl mx-auto mb-10">
           <span className="font-display font-bold text-[#d4a853] tracking-widest text-xs uppercase">
             Love Dashboard
@@ -1384,7 +1841,7 @@ export default function UsContent() {
       </section>
 
       {/* Section 7 — Compliment Jar */}
-      <section className="us-jar-section">
+      <section id="compliment-jar" className="us-jar-section">
         <div className="text-center max-w-2xl mx-auto mb-10 px-4">
           <span className="font-display font-bold text-[#d4a853] tracking-widest text-xs uppercase">
             Jar of Compliments
@@ -1429,7 +1886,7 @@ export default function UsContent() {
       </section>
 
       {/* Cosmic Compass Oracle Section */}
-      <section className="us-oracle-section py-20 bg-[rgba(10,10,12,0.3)]">
+      <section id="cosmic-compass" className="us-oracle-section py-20 bg-[rgba(10,10,12,0.3)]">
         <div className="text-center max-w-2xl mx-auto mb-10 px-4">
           <span className="font-display font-bold text-[#d4a853] tracking-widest text-xs uppercase">
             Celestial Oracle
@@ -1484,7 +1941,7 @@ export default function UsContent() {
       </section>
 
       {/* Section 4.7 — "Between the Lines" Deep Reveals */}
-      <section className="us-deep-section">
+      <section id="deep-questions" className="us-deep-section">
         <div className="text-center max-w-2xl mx-auto mb-10 px-4">
           <span className="font-display font-bold text-[#d4a853] tracking-widest text-xs uppercase">
             Deep Revelations
@@ -1550,7 +2007,7 @@ export default function UsContent() {
       </section>
 
       {/* Message in a Bottle / Future Capsule Section */}
-      <section className="us-capsule-section py-20">
+      <section id="time-capsule" className="us-capsule-section py-20">
         <div className="text-center max-w-2xl mx-auto mb-10 px-4">
           <span className="font-display font-bold text-[#d4a853] tracking-widest text-xs uppercase">
             Time Capsule
@@ -1594,7 +2051,7 @@ export default function UsContent() {
       </section>
 
       {/* Section 4.8 — Cinematic Movie Highlight Banner */}
-      <section className="us-movie-banner-section py-20">
+      <section id="movie-banner" className="us-movie-banner-section py-20">
         <div className="us-movie-backdrop-glow"></div>
         <div className="us-movie-content us-reveal px-4">
           <span className="font-display font-bold text-[#d4a853] tracking-[0.3em] text-xs uppercase block mb-6 animate-pulse">
@@ -1614,7 +2071,7 @@ export default function UsContent() {
       </section>
 
       {/* Section 8 — Reasons I Love You Cards */}
-      <section className="us-reasons-section">
+      <section id="reasons" className="us-reasons-section">
 
         <div className="text-center max-w-2xl mx-auto mb-12">
           <span className="font-display font-bold text-[#d4a853] tracking-widest text-xs uppercase">
@@ -1643,8 +2100,30 @@ export default function UsContent() {
         </div>
       </section>
 
+      {/* Section 15 — Scratch to Reveal Memory Card */}
+      <section id="scratch-card" className="us-scratch-section py-20 bg-[rgba(10,10,12,0.4)] flex flex-col justify-center items-center">
+        <div className="text-center max-w-2xl mx-auto mb-10 px-4">
+          <span className="font-display font-bold text-[#d4a853] tracking-widest text-xs uppercase">
+            A Hidden Treasure
+          </span>
+          <h2 className="font-display text-3xl sm:text-4xl font-extrabold mt-2 text-white">
+            Scratch-to-Reveal Card
+          </h2>
+          <p className="text-[rgba(253,246,227,0.6)] mt-4 font-display">
+            Our beautiful memory is masked in golden cosmic foil. Drag your cursor or finger to clear the foil and unlock it.
+          </p>
+        </div>
+
+        <div className="us-reveal transition-all duration-1000">
+          <PolaroidScratchCard
+            imageUrl="/images/og-image.png"
+            onReveal={handleScratchReveal}
+          />
+        </div>
+      </section>
+
       {/* Section 9 — Closing Section */}
-      <section className="us-closing-section">
+      <section id="closing" className="us-closing-section">
         <div className="us-reveal transition-all duration-1000 flex flex-col items-center">
           <div className="us-infinity-container">
             <svg className="us-infinity-svg" viewBox="0 0 120 60">

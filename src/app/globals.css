@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@700&display=swap');
 
 :root {
   --surface: #f6f2e8;
@@ -3127,6 +3128,184 @@ body:has(.us-page) {
   }
 }
 
+/* ================================================================== */
+/* PREMIUM CINEMATIC ENHANCEMENTS FOR US PAGE                         */
+/* ================================================================== */
 
 
 
+.font-handwriting {
+  font-family: 'Caveat', cursive, sans-serif !important;
+}
+
+/* --- P1: Celestial Sidebar Navigator --- */
+.us-sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.us-sidebar-line {
+  left: 50%;
+  transform: translateX(-50%);
+  top: 5%;
+  bottom: 5%;
+}
+
+.us-sidebar-node {
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.us-sidebar-node::before {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 1px solid transparent;
+  transition: border-color 0.3s ease;
+}
+
+.us-sidebar-node:hover::before {
+  border-color: rgba(212, 168, 83, 0.3);
+}
+
+.us-sidebar-node.active::before {
+  border-color: rgba(212, 168, 83, 0.65);
+}
+
+.us-sidebar-node:hover .us-sidebar-tooltip {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(-50%) translateX(-4px);
+}
+
+/* --- P2: Ambient Soundwave Control (Music Player) --- */
+.us-music-player {
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), inset 0 0 12px rgba(255, 255, 255, 0.05);
+  animation: us-float 5s ease-in-out infinite;
+}
+
+@keyframes us-spin-vinyl {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: us-spin-vinyl 8s linear infinite;
+}
+
+.animate-fade-in-fast {
+  animation: us-fade-in-fast 0.25s ease-out forwards;
+}
+
+@keyframes us-fade-in-fast {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateX(0);
+  }
+}
+
+.us-volume-slider {
+  background: rgba(253, 246, 227, 0.15);
+  height: 4px;
+  border-radius: 99px;
+  outline: none;
+  transition: background 0.3s ease;
+}
+
+.us-volume-slider::-webkit-slider-runnable-track {
+  height: 4px;
+}
+
+.us-volume-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--us-gold);
+  border: 1px solid var(--us-champagne);
+  box-shadow: 0 0 5px rgba(212, 168, 83, 0.6);
+  margin-top: -3px;
+  transition: transform 0.2s ease;
+}
+
+.us-volume-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.25);
+}
+
+/* --- P3: Cosmic Wish Modal Popup --- */
+.us-wish-modal-overlay {
+  background: rgba(5, 5, 8, 0.7);
+}
+
+.us-wish-modal {
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.75), inset 0 0 20px rgba(212, 168, 83, 0.05);
+}
+
+/* Custom Scrollbar for saved wishes */
+.us-wish-modal ::-webkit-scrollbar {
+  width: 4px;
+}
+
+.us-wish-modal ::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 10px;
+}
+
+.us-wish-modal ::-webkit-scrollbar-thumb {
+  background: rgba(212, 168, 83, 0.25);
+  border-radius: 10px;
+}
+
+.us-wish-modal ::-webkit-scrollbar-thumb:hover {
+  background: rgba(212, 168, 83, 0.45);
+}
+
+/* --- P4: Polaroid Scratch Card Section --- */
+.us-scratch-section {
+  z-index: 10;
+  position: relative;
+  min-height: 100vh;
+  scroll-snap-align: start !important;
+  scroll-snap-stop: always !important;
+}
+
+.us-polaroid-scratch-card {
+  width: 312px;
+  margin: 0 auto;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  box-shadow: 0 25px 65px rgba(0, 0, 0, 0.45);
+  transform: rotate(-1.5deg);
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.us-polaroid-scratch-card:hover {
+  transform: translateY(-8px) rotate(1deg);
+  box-shadow: 0 35px 85px rgba(0, 0, 0, 0.55), 0 0 30px rgba(212, 168, 83, 0.1);
+}
+
+.us-polaroid-scratch-card canvas {
+  touch-action: none; /* disables browser scrolling while scratching */
+}
+
+/* Floating stardust pulse */
+@keyframes us-pulse-glow {
+  0%, 100% {
+    text-shadow: 0 0 15px rgba(212, 168, 83, 0.4);
+  }
+  50% {
+    text-shadow: 0 0 30px rgba(212, 168, 83, 0.8), 0 0 10px rgba(232, 71, 95, 0.4);
+  }
+}
