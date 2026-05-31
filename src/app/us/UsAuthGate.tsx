@@ -44,7 +44,11 @@ export default function UsAuthGate({ children }: UsAuthGateProps) {
       }
 
       try {
-        const res = await fetch(`/api/us/auth?token=${encodeURIComponent(storedToken)}`);
+        const res = await fetch("/api/us/auth", {
+          headers: {
+            Authorization: `Bearer ${storedToken}`,
+          },
+        });
         const data = await res.json();
         if (data.success) {
           setAuthState("unlocked");

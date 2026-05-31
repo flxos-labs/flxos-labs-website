@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
+import { supabase } from "@/lib/supabase";
 
 interface RateLimitAttempt {
   count: number;
@@ -7,12 +8,29 @@ interface RateLimitAttempt {
   lockoutUntil: number;
 }
 
-// In-memory rate limiting map keyed by client IP
-const rateLimitMap = new Map<string, RateLimitAttempt>();
-
 const MAX_ATTEMPTS = 5;
 const WINDOW_MS = 15 * 60 * 1000; // 15 minutes sliding window
 const LOCKOUT_MS = 15 * 60 * 1000; // 15 minutes lockout duration
+
+// Fallback bounded in-memory rate limiting map
+const rateLimitMap = new Map<string, RateLimitAttempt>();
+const MAX_MAP_SIZE = 1000;
+
+/**
+ * Periodically evicts stale entries from the fallback in-memory map to prevent memory growth.
+ */
+function cleanInMemoryLimits() {
+  const now = Date.now();
+  for (const [ip, record] of rateLimitMap.entries()) {
+    if (record.lockoutUntil < now && now - record.firstAttempt > WINDOW_MS) {
+      rateLimitMap.delete(ip);
+    }
+  }
+  // Bounded safety: clear completely if it somehow exceeds capacity
+  if (rateLimitMap.size > MAX_MAP_SIZE) {
+    rateLimitMap.clear();
+  }
+}
 
 /**
  * Retrieves the client's IP address from common forwarding headers.
@@ -27,6 +45,94 @@ function getClientIp(req: NextRequest): string {
     return realIp.trim();
   }
   return "unknown-ip";
+}
+
+/**
+ * Retrieves the rate-limit record for an IP address.
+ * Reads from Supabase and falls back to a bounded in-memory map if queries fail or table is missing.
+ */
+async function getRateLimitRecord(ip: string): Promise<RateLimitAttempt> {
+  const now = Date.now();
+  try {
+    const { data, error } = await supabase
+      .from("us_auth_attempts")
+      .select("count, first_attempt, lockout_until")
+      .eq("ip", ip)
+      .maybeSingle();
+
+    if (error) {
+      throw error;
+    }
+
+    if (data) {
+      return {
+        count: data.count,
+        firstAttempt: Number(data.first_attempt),
+        lockoutUntil: Number(data.lockout_until),
+      };
+    }
+  } catch (err) {
+    console.warn("Supabase rate-limit read failed, falling back to in-memory:", err);
+  }
+
+  // Fallback to bounded in-memory map
+  cleanInMemoryLimits();
+  let record = rateLimitMap.get(ip);
+  if (!record) {
+    record = { count: 0, firstAttempt: now, lockoutUntil: 0 };
+    rateLimitMap.set(ip, record);
+  }
+  return record;
+}
+
+/**
+ * Saves or updates a rate-limit record.
+ * Writes to Supabase and falls back to the in-memory map on failure.
+ */
+async function saveRateLimitRecord(ip: string, record: RateLimitAttempt): Promise<void> {
+  try {
+    const { error } = await supabase
+      .from("us_auth_attempts")
+      .upsert({
+        ip,
+        count: record.count,
+        first_attempt: record.firstAttempt,
+        lockout_until: record.lockoutUntil,
+      });
+
+    if (error) {
+      throw error;
+    }
+    return;
+  } catch (err) {
+    console.warn("Supabase rate-limit write failed, falling back to in-memory:", err);
+  }
+
+  // Fallback to in-memory map
+  rateLimitMap.set(ip, record);
+}
+
+/**
+ * Deletes a rate-limit record upon successful authentication.
+ * Deletes from Supabase and falls back to in-memory removal on failure.
+ */
+async function deleteRateLimitRecord(ip: string): Promise<void> {
+  try {
+    const { error } = await supabase
+      .from("us_auth_attempts")
+      .delete()
+      .eq("ip", ip);
+
+    if (error) {
+      throw error;
+    }
+    return;
+  } catch (err) {
+    console.warn("Supabase rate-limit delete failed, falling back to in-memory:", err);
+  }
+
+  // Fallback to in-memory map
+  rateLimitMap.delete(ip);
 }
 
 /**
@@ -72,14 +178,15 @@ function verifyToken(token: string, secret: string): boolean {
 }
 
 /**
- * GET /api/us/auth?token=...
+ * GET /api/us/auth
  *
  * Verifies if a stored client session token is valid and not expired.
+ * Expects the token in the standard `Authorization: Bearer <token>` header.
  */
 export async function GET(req: NextRequest) {
   try {
-    const { searchParams } = new URL(req.url);
-    const token = searchParams.get("token");
+    const authHeader = req.headers.get("Authorization");
+    const token = authHeader?.startsWith("Bearer ") ? authHeader.substring(7) : null;
 
     if (!token) {
       return NextResponse.json(
@@ -118,7 +225,7 @@ export async function GET(req: NextRequest) {
 /**
  * POST /api/us/auth
  *
- * Validates the passcode, handles IP rate limiting, and returns a signed token.
+ * Validates the passcode, handles persistent IP rate limiting, and returns a signed token.
  */
 export async function POST(req: NextRequest) {
   try {
@@ -126,27 +233,23 @@ export async function POST(req: NextRequest) {
     const now = Date.now();
 
     // Check rate limiting state
-    let record = rateLimitMap.get(clientIp);
-    if (record) {
-      if (record.lockoutUntil > now) {
-        const remainingTime = Math.ceil((record.lockoutUntil - now) / 1000 / 60);
-        return NextResponse.json(
-          {
-            success: false,
-            error: `Too many failed attempts. Locked out. Try again in ${remainingTime} minute${remainingTime > 1 ? "s" : ""}. 🔒`,
-          },
-          { status: 429 }
-        );
-      }
+    let record = await getRateLimitRecord(clientIp);
 
-      // Reset the window count if enough time has passed
-      if (now - record.firstAttempt > WINDOW_MS) {
-        record = { count: 0, firstAttempt: now, lockoutUntil: 0 };
-        rateLimitMap.set(clientIp, record);
-      }
-    } else {
+    if (record.lockoutUntil > now) {
+      const remainingTime = Math.ceil((record.lockoutUntil - now) / 1000 / 60);
+      return NextResponse.json(
+        {
+          success: false,
+          error: `Too many failed attempts. Locked out. Try again in ${remainingTime} minute${remainingTime > 1 ? "s" : ""}. 🔒`,
+        },
+        { status: 429 }
+      );
+    }
+
+    // Reset the window count if enough time has passed
+    if (record.count > 0 && now - record.firstAttempt > WINDOW_MS) {
       record = { count: 0, firstAttempt: now, lockoutUntil: 0 };
-      rateLimitMap.set(clientIp, record);
+      await saveRateLimitRecord(clientIp, record);
     }
 
     const body = await req.json();
@@ -173,7 +276,7 @@ export async function POST(req: NextRequest) {
 
     if (isValid) {
       // Clear rate limit record upon success
-      rateLimitMap.delete(clientIp);
+      await deleteRateLimitRecord(clientIp);
 
       const secret = process.env.US_PAGE_AUTH_SECRET || correctPasscode;
       const token = generateToken(secret);
@@ -181,22 +284,28 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ success: true, token }, { status: 200 });
     } else {
       // Increment lockout counter
+      if (record.count === 0) {
+        record.firstAttempt = now;
+      }
       record.count += 1;
-      if (record.count >= MAX_ATTEMPTS) {
+
+      const isLockedOut = record.count >= MAX_ATTEMPTS;
+      if (isLockedOut) {
         record.lockoutUntil = now + LOCKOUT_MS;
       }
-      rateLimitMap.set(clientIp, record);
+
+      await saveRateLimitRecord(clientIp, record);
 
       // Add a slight delay to prevent timing-based brute force
       await new Promise((r) => setTimeout(r, 400));
 
-      if (record.count >= MAX_ATTEMPTS) {
+      if (isLockedOut) {
         return NextResponse.json(
           {
             success: false,
             error: "Too many failed attempts. Locked out for 15 minutes. 🔒",
           },
-          { status: 401 }
+          { status: 429 } // Correctly return 429 Too Many Requests status code
         );
       }
 
