@@ -107,6 +107,8 @@ interface StarfieldCanvasProps {
 export default function StarfieldCanvas({ onMeteorClick }: StarfieldCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animationRef = useRef<number>(0);
+  const lastTimeRef = useRef<number>(0);
+
   const starsRef = useRef<StarParticle[]>([]);
   const sparklesRef = useRef<SparkleParticle[]>([]);
   const nebulaeRef = useRef<NebulaCloud[]>([]);
@@ -297,6 +299,19 @@ export default function StarfieldCanvas({ onMeteorClick }: StarfieldCanvasProps)
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
+
+    // Reschedule next animation loop immediately
+    animationRef.current = requestAnimationFrame(animate);
+
+    const now = Date.now();
+    const elapsed = now - lastTimeRef.current;
+
+    // Throttle frames to a steady 60 FPS (~16.6ms intervals)
+    // Decouples speed from monitor refresh rates (120Hz/144Hz/240Hz)
+    if (elapsed < 16.6) return;
+
+    // Keep leftover timing fraction to ensure clean alignment over frames
+    lastTimeRef.current = now - (elapsed % 16.6);
 
     const { w, h } = sizeRef.current;
     ctx.clearRect(0, 0, w, h);
@@ -610,7 +625,6 @@ export default function StarfieldCanvas({ onMeteorClick }: StarfieldCanvasProps)
     }
 
     ctx.globalAlpha = 1;
-    animationRef.current = requestAnimationFrame(animate);
   }, []);
 
   useEffect(() => {
