@@ -2671,200 +2671,459 @@ body:has(.us-page) {
   box-shadow: 0 20px 40px rgba(0,0,0,0.35);
 }
 
-/* ------------------------------------------------------------------ */
-/* The Akash & Rekha Universe — Trivia, Memories & Deep Cards         */
-/* ------------------------------------------------------------------ */
-.us-universe-section {
+/* ================================================================== */
+/* 🆕 NEW PREMIUM INTERACTIVE SECTIONS FOR US PAGE                     */
+/* ================================================================== */
+
+/* --- 1. Quiz Section: "How Well Do You Know Me?" --- */
+.us-quiz-section {
+  padding: 6rem 1.5rem;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  scroll-snap-align: start;
-  scroll-snap-stop: always;
+  align-items: center;
   position: relative;
   z-index: 10;
 }
 
-.us-universe-tabs {
+.us-quiz-container {
+  width: 100%;
+  max-width: 32rem;
+  margin: 0 auto;
+}
+
+.us-quiz-card {
+  background: var(--us-dark-card);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(212, 168, 83, 0.15);
+  border-radius: 2rem;
+  padding: 2.5rem 2rem;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
   position: relative;
+  overflow: hidden;
+  transition: transform 0.3s ease, border-color 0.3s ease;
 }
 
-.us-universe-tab-btn {
-  border-bottom: 2px solid transparent;
-  outline: none;
+.us-quiz-card.shake {
+  animation: us-shake 0.5s ease-in-out;
 }
 
-.us-universe-tab-btn:hover {
-  text-shadow: 0 0 10px rgba(255, 255, 255, 0.35);
+@keyframes us-shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-8px); }
+  40%, 80% { transform: translateX(8px); }
 }
 
-.us-universe-panel {
+.us-quiz-progress-bar-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.05);
 }
 
-/* Trivia Panel Elements */
-.us-trivia-game-panel {
-  box-shadow: 0 25px 55px rgba(0, 0, 0, 0.45);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+.us-quiz-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--us-rose), var(--us-gold));
+  transition: width 0.4s cubic-bezier(0.1, 0.8, 0.1, 1);
 }
 
-.us-trivia-opt-btn {
-  width: 100%;
-  text-align: left;
-  padding: 1.15rem 1.5rem;
-  border-radius: 1.25rem;
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: rgba(253, 246, 227, 0.8);
+.us-quiz-options-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+@media (max-width: 480px) {
+  .us-quiz-options-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.us-quiz-option-btn {
   background: rgba(255, 255, 255, 0.02);
   border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 1rem;
+  border-radius: 1.25rem;
+  color: rgba(253, 246, 227, 0.8);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  outline: none;
-  cursor: pointer;
+  justify-content: center;
+  text-align: center;
 }
 
-.us-trivia-opt-btn:hover:not(:disabled) {
-  background: rgba(212, 168, 83, 0.04);
-  border-color: rgba(212, 168, 83, 0.35);
-  color: #fff;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(212, 168, 83, 0.05);
-}
-
-.us-trivia-opt-btn.selected {
+.us-quiz-option-btn:hover:not(:disabled) {
   background: rgba(212, 168, 83, 0.08);
-  border-color: #d4a853;
-  color: #fdf6e3;
-  box-shadow: 0 6px 20px rgba(212, 168, 83, 0.15);
+  border-color: rgba(212, 168, 83, 0.35);
+  color: var(--us-gold-light);
+  transform: translateY(-2px);
 }
 
-.us-trivia-opt-btn.correct {
-  background: rgba(46, 213, 115, 0.08) !important;
-  border-color: #2ed573 !important;
-  color: #2ed573 !important;
-  box-shadow: 0 6px 20px rgba(46, 213, 115, 0.15);
+.us-quiz-option-btn:active:not(:disabled) {
+  transform: scale(0.98);
 }
 
-.us-trivia-opt-btn.incorrect {
-  background: rgba(232, 71, 95, 0.08) !important;
+.us-quiz-option-btn.correct {
+  background: rgba(42, 157, 143, 0.2) !important;
+  border-color: #2a9d8f !important;
+  color: #a7ffd6 !important;
+  box-shadow: 0 0 15px rgba(42, 157, 143, 0.3);
+}
+
+.us-quiz-option-btn.wrong {
+  background: rgba(232, 71, 95, 0.2) !important;
   border-color: #e8475f !important;
-  color: #e8475f !important;
-  box-shadow: 0 6px 20px rgba(232, 71, 95, 0.15);
+  color: #ffb3bf !important;
+  box-shadow: 0 0 15px rgba(232, 71, 95, 0.3);
 }
 
-.us-trivia-opt-btn.disabled {
-  opacity: 0.35;
+.us-quiz-option-btn:disabled:not(.correct):not(.wrong) {
+  opacity: 0.45;
   cursor: not-allowed;
 }
 
-.us-trivia-result-card {
-  box-shadow: 0 35px 70px rgba(0, 0, 0, 0.55);
+.us-quiz-result-header {
+  font-size: 2.25rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--us-gold-light) 0%, var(--us-gold) 50%, var(--us-rose) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-.us-badge-glow {
-  box-shadow: 0 0 20px rgba(212, 168, 83, 0.15);
-  animation: us-badge-pulse 2s infinite alternate;
+/* --- 2. Flip-Card Gallery: "Our Story Cards" --- */
+.us-flipcard-section {
+  padding: 6rem 1.5rem;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  z-index: 10;
 }
 
-@keyframes us-badge-pulse {
-  from {
-    transform: scale(1);
-    box-shadow: 0 0 20px rgba(212, 168, 83, 0.15);
+.us-flipcards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 68rem;
+  margin: 2.5rem auto 0;
+}
+
+@media (max-width: 1024px) {
+  .us-flipcards-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
-  to {
-    transform: scale(1.03);
-    box-shadow: 0 0 30px rgba(212, 168, 83, 0.35);
+}
+
+@media (max-width: 640px) {
+  .us-flipcards-grid {
+    grid-template-columns: 1fr;
   }
 }
 
-/* Custom Scrollbar for memory results drawer */
-.custom-scrollbar::-webkit-scrollbar {
-  width: 4px;
-}
-.custom-scrollbar::-webkit-scrollbar-track {
-  background: transparent;
-}
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background: rgba(212, 168, 83, 0.15);
-  border-radius: 99px;
-}
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: rgba(212, 168, 83, 0.35);
-}
-
-/* Deep Card 3D Flip Mechanics */
-.us-deep-card-container {
+.us-flipcard-container {
   perspective: 1000px;
+  height: 200px;
+  cursor: pointer;
 }
 
-.us-deep-card {
+.us-flipcard {
   position: relative;
   width: 100%;
   height: 100%;
   transform-style: preserve-3d;
-  transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: transform 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-.us-deep-card.flipped {
+.us-flipcard-container:hover .us-flipcard {
+  transform: translateY(-4px);
+}
+
+.us-flipcard-container.flipped .us-flipcard {
   transform: rotateY(180deg);
 }
 
-.us-deep-card-front,
-.us-deep-card-back {
+.us-flipcard-front,
+.us-flipcard-back {
   position: absolute;
-  inset: 0;
   width: 100%;
   height: 100%;
   backface-visibility: hidden;
-  border-radius: 1.25rem;
+  border-radius: 1.5rem;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  box-sizing: border-box;
 }
 
-.us-deep-card-front {
-  background: #121115;
-  border: 1px solid rgba(212, 168, 83, 0.12);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  transform: rotateY(0deg);
+.us-flipcard-front {
+  background: rgba(18, 18, 22, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  color: var(--us-champagne);
 }
 
-.us-deep-card-container:hover .us-deep-card-front {
-  border-color: rgba(212, 168, 83, 0.35);
-  box-shadow: 0 15px 35px rgba(212, 168, 83, 0.08), 0 10px 30px rgba(0,0,0,0.4);
-}
-
-.us-deep-card-back {
-  background: #08080a;
-  border: 1px solid rgba(232, 71, 95, 0.25);
+.us-flipcard-back {
+  background: linear-gradient(135deg, rgba(26, 20, 24, 0.95), rgba(18, 18, 22, 0.95));
+  border: 1px solid rgba(212, 168, 83, 0.25);
+  color: rgba(253, 246, 227, 0.9);
   transform: rotateY(180deg);
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.us-flipcard-category {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--us-gold);
+}
+
+.us-flipcard-question {
+  font-family: var(--font-display), sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.4;
+  margin: auto 0;
+}
+
+.us-flipcard-hint {
+  font-size: 0.7rem;
+  color: rgba(253, 246, 227, 0.35);
+  letter-spacing: 0.05em;
+}
+
+.us-flipcard-answer {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  font-style: italic;
+  font-weight: 500;
+  color: var(--us-gold-light);
+}
+
+.us-flipcards-filter-bar {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+
+.us-flipcard-filter-btn {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(212, 168, 83, 0.15);
+  color: rgba(253, 246, 227, 0.6);
+  padding: 0.5rem 1.25rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.us-flipcard-filter-btn:hover {
+  border-color: rgba(212, 168, 83, 0.4);
+  color: var(--us-gold-light);
+}
+
+.us-flipcard-filter-btn.active {
+  background: linear-gradient(135deg, rgba(232, 71, 95, 0.15), rgba(212, 168, 83, 0.15));
+  border-color: var(--us-rose);
+  color: var(--us-champagne);
+}
+
+/* --- 3. Deep & Cute Reveal Section & Movie Highlight --- */
+.us-deep-section {
+  padding: 6rem 1.5rem;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  position: relative;
+  z-index: 10;
+}
+
+.us-deep-container {
+  width: 100%;
+  max-width: 36rem;
+  margin: 0 auto;
+}
+
+.us-deep-cards-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.us-deep-card {
+  background: rgba(18, 18, 22, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(12px);
+  border-radius: 1.5rem;
+  padding: 1.5rem 1.75rem;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.us-deep-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(212, 168, 83, 0.2);
+  background: rgba(18, 18, 22, 0.7);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+}
+
+.us-deep-question-row {
+  display: flex;
+  align-items: center;
   justify-content: space-between;
+  gap: 1rem;
 }
 
-.us-deep-card-container:hover .us-deep-card-back {
-  border-color: rgba(232, 71, 95, 0.45);
-  box-shadow: 0 15px 35px rgba(232, 71, 95, 0.08), 0 10px 30px rgba(0,0,0,0.4);
+.us-deep-question {
+  font-family: var(--font-display), sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--us-champagne);
 }
 
-/* Animations support */
-.animate-fade-in {
-  animation: us-fade-in 0.4s ease-out forwards;
+.us-deep-reveal-icon {
+  font-size: 0.9rem;
+  color: var(--us-gold);
+  transition: transform 0.3s ease;
 }
 
-@keyframes us-fade-in {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+.us-deep-card.active .us-deep-reveal-icon {
+  transform: rotate(180deg);
+}
+
+.us-deep-answer-box {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.us-deep-card.active .us-deep-answer-box {
+  max-height: 200px;
+}
+
+.us-deep-answer {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-t: 1px dashed rgba(212, 168, 83, 0.15);
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: var(--us-gold-light);
+  font-style: italic;
+  position: relative;
+}
+
+.us-deep-answer::after {
+  content: "|";
+  display: inline-block;
+  color: var(--us-rose);
+  animation: us-cursor-blink 0.8s infinite;
+  margin-left: 2px;
+  font-weight: bold;
+}
+
+@keyframes us-cursor-blink {
+  0%, 100% { opacity: 0; }
+  50% { opacity: 1; }
+}
+
+/* Cinematic Movie Highlight Banner */
+.us-movie-banner-section {
+  position: relative;
+  min-height: 80vh !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: #050508;
+  z-index: 10;
+  border-y: 1px solid rgba(212, 168, 83, 0.15);
+}
+
+/* Film grain effect */
+.us-movie-banner-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.15) 1px, transparent 0),
+                    radial-gradient(rgba(255, 255, 255, 0.1) 2px, transparent 0);
+  background-size: 8px 8px, 16px 16px;
+  background-position: 0 0, 4px 4px;
+  opacity: 0.12;
+  pointer-events: none;
+  animation: us-grain-drift 8s steps(6) infinite;
+}
+
+@keyframes us-grain-drift {
+  0%, 100% { background-position: 0 0, 4px 4px; }
+  20% { background-position: -2px 4px, 2px -6px; }
+  40% { background-position: 4px -2px, -4px 2px; }
+  60% { background-position: -4px 6px, 6px -4px; }
+  80% { background-position: 6px -4px, -2px 6px; }
+}
+
+.us-movie-content {
+  text-align: center;
+  max-width: 44rem;
+  padding: 3rem 1.5rem;
+  z-index: 2;
+  position: relative;
+}
+
+.us-movie-backdrop-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(232, 71, 95, 0.18) 0%, rgba(212, 168, 83, 0.05) 50%, transparent 70%);
+  filter: blur(40px);
+  pointer-events: none;
+}
+
+.us-movie-title {
+  font-family: Georgia, serif;
+  font-size: 3.5rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+  background: linear-gradient(180deg, #ffffff 0%, var(--us-gold-light) 50%, var(--us-gold) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 0 40px rgba(212, 168, 83, 0.25);
+  margin-bottom: 1.5rem;
+  animation: us-title-glow 3s infinite alternate;
+}
+
+@keyframes us-title-glow {
+  from { text-shadow: 0 0 30px rgba(212, 168, 83, 0.15); }
+  to { text-shadow: 0 0 50px rgba(212, 168, 83, 0.4); }
+}
+
+@media (max-width: 640px) {
+  .us-movie-title {
+    font-size: 2.25rem;
   }
 }
 
