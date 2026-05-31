@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import UsContent from "./UsContent";
+import UsAuthGate from "./UsAuthGate";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://flxos-labs.github.io"),
@@ -22,5 +23,9 @@ export const metadata: Metadata = {
 };
 
 export default function UsPage() {
-  return <UsContent />;
+  return (
+    <UsAuthGate>
+      <UsContent />
+    </UsAuthGate>
+  );
 }
