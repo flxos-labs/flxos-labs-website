@@ -143,6 +143,7 @@ export default function InteractiveBackground() {
   });
   const themeRef = useRef<"light" | "dark">("light");
   const sizeRef = useRef<{ w: number; h: number }>({ w: 0, h: 0 });
+  const lastTimeRef = useRef<number>(0);
 
   /* ---------- Get current theme ---------- */
   const updateThemeState = useCallback(() => {
@@ -198,8 +199,8 @@ export default function InteractiveBackground() {
         particles.push({
           x, y,
           baseX: x,
-          ySpeed: -(Math.random() * 0.1 + 0.04) * cfg.speedMul,
-          swaySpeed: (Math.random() * 0.003 + 0.0008) * cfg.speedMul,
+          ySpeed: -(Math.random() * 0.012 + 0.005) * cfg.speedMul,
+          swaySpeed: (Math.random() * 0.0003 + 0.0001) * cfg.speedMul,
           swayAmplitude: (Math.random() * 30 + 8) * cfg.sizeMul,
           swayOffset: Math.random() * Math.PI * 2,
           size,
@@ -209,8 +210,8 @@ export default function InteractiveBackground() {
           maxAlpha,
           layer,
           rotation: Math.random() * Math.PI * 2,
-          rotationSpeed: (Math.random() - 0.5) * 0.004 * cfg.speedMul,
-          pulseSpeed: Math.random() * 0.002 + 0.0005,
+          rotationSpeed: (Math.random() - 0.5) * 0.0005 * cfg.speedMul,
+          pulseSpeed: Math.random() * 0.0003 + 0.0001,
           pulseOffset: Math.random() * Math.PI * 2,
           pulseAmount: shape === "shimmer" ? 0.8 : Math.random() * 0.35 + 0.1,
         });
@@ -283,6 +284,14 @@ export default function InteractiveBackground() {
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
+
+    animationRef.current = requestAnimationFrame(animate);
+
+    const now = Date.now();
+    const elapsed = now - lastTimeRef.current;
+    // Cap to 60 FPS — prevents 2x speed on 120Hz/144Hz/240Hz monitors
+    if (elapsed < 16.6) return;
+    lastTimeRef.current = now - (elapsed % 16.6);
 
     const { w, h } = sizeRef.current;
     ctx.clearRect(0, 0, w, h);
@@ -410,7 +419,6 @@ export default function InteractiveBackground() {
     }
 
     ctx.globalAlpha = 1;
-    animationRef.current = requestAnimationFrame(animate);
   }, []);
 
   /* ---------- Lifecycle ---------- */
