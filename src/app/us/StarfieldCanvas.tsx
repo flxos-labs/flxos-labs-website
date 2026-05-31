@@ -138,8 +138,8 @@ export default function StarfieldCanvas({ onMeteorClick }: StarfieldCanvasProps)
           x,
           y,
           baseX: x,
-          ySpeed: -(Math.random() * 0.02 + 0.008) * cfg.speedMul, // Slower star float speed (cinematic)
-          swaySpeed: (Math.random() * 0.0004 + 0.0001) * cfg.speedMul, // Slower horizontal sway
+          ySpeed: -(Math.random() * 0.005 + 0.002) * cfg.speedMul, // Ultra slow cinematic star drift
+          swaySpeed: (Math.random() * 0.0001 + 0.00003) * cfg.speedMul, // Barely perceptible horizontal sway
           swayAmplitude: (Math.random() * 20 + 5) * cfg.sizeMul,
           swayOffset: Math.random() * Math.PI * 2,
           size,
@@ -169,8 +169,8 @@ export default function StarfieldCanvas({ onMeteorClick }: StarfieldCanvasProps)
         color: [124, 92, 191], // Purple
         maxOpacity: isMobile ? 0.07 : 0.13,
         opacity: 0,
-        swaySpeedX: 0.00015,
-        swaySpeedY: 0.0001,
+        swaySpeedX: 0.00006,
+        swaySpeedY: 0.00004,
         swayAmplitudeX: w * 0.04,
         swayAmplitudeY: h * 0.04,
         swayOffsetX: 0,
@@ -185,8 +185,8 @@ export default function StarfieldCanvas({ onMeteorClick }: StarfieldCanvasProps)
         color: [212, 168, 83], // Gold
         maxOpacity: isMobile ? 0.05 : 0.11,
         opacity: 0,
-        swaySpeedX: 0.0001,
-        swaySpeedY: 0.00015,
+        swaySpeedX: 0.00004,
+        swaySpeedY: 0.00006,
         swayAmplitudeX: w * 0.03,
         swayAmplitudeY: h * 0.03,
         swayOffsetX: Math.PI,
@@ -204,8 +204,8 @@ export default function StarfieldCanvas({ onMeteorClick }: StarfieldCanvasProps)
         color: [232, 71, 95], // Rose
         maxOpacity: 0.12,
         opacity: 0,
-        swaySpeedX: 0.0002,
-        swaySpeedY: 0.00008,
+        swaySpeedX: 0.00007,
+        swaySpeedY: 0.00003,
         swayAmplitudeX: w * 0.05,
         swayAmplitudeY: h * 0.05,
         swayOffsetX: Math.PI / 2,
@@ -229,8 +229,8 @@ export default function StarfieldCanvas({ onMeteorClick }: StarfieldCanvasProps)
         y,
         baseX: x,
         size,
-        ySpeed: -(Math.random() * 0.024 + 0.01), // Slower bokeh and heart float speed (dreamy)
-        swaySpeed: Math.random() * 0.0002 + 0.0001, // Slower sway speed
+        ySpeed: -(Math.random() * 0.006 + 0.003), // Ultra dreamy bokeh float
+        swaySpeed: Math.random() * 0.00006 + 0.00003, // Very gentle sway
         swayAmplitude: Math.random() * 20 + 8,
         swayOffset: Math.random() * Math.PI * 2,
         alpha: Math.random() * maxAlpha,
@@ -518,11 +518,11 @@ export default function StarfieldCanvas({ onMeteorClick }: StarfieldCanvasProps)
 
     // 4. Update and Draw Shooting Stars (Meteors)
     const meteors = meteorsRef.current;
-    if (Math.random() < (isMobile ? 0.0008 : 0.0022) && meteors.length < (isMobile ? 1 : 2)) {
+    if (Math.random() < (isMobile ? 0.0003 : 0.0008) && meteors.length < (isMobile ? 1 : 2)) {
       const startX = Math.random() * w * 0.8;
       const startY = Math.random() * h * 0.3;
       const length = Math.random() * 80 + 70;
-      const speed = Math.random() * 2.2 + 1.8; // Dreamy slower shooting stars
+      const speed = Math.random() * 1.0 + 0.8; // Very slow dreamy shooting stars
       const angle = Math.PI / 4 + (Math.random() - 0.5) * 0.15;
 
       meteors.push({
@@ -534,7 +534,7 @@ export default function StarfieldCanvas({ onMeteorClick }: StarfieldCanvasProps)
         size: Math.random() * 1.5 + 1.2,
         alpha: 0,
         life: 0,
-        maxLife: Math.random() * 130 + 100, // Longer life span to match slower speeds across screen
+        maxLife: Math.random() * 220 + 180, // Much longer life span to match ultra-slow speeds
         color: GOLD_ROSE_PALETTE[Math.floor(Math.random() * GOLD_ROSE_PALETTE.length)],
       });
     }
