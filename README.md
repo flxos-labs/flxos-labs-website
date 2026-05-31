@@ -2,6 +2,7 @@
 
 FlxOS Web is the site for the FlxOS project, rebuilt with Next.js, Tailwind CSS, and Supabase support.
 
+
 ## Development
 
 ```bash
