@@ -181,6 +181,364 @@ I look forward to all the tomorrows we haven't seen yet. To the ordinary morning
 Yours forever and always,
 Akash`;
 
+interface TriviaQuestion {
+  id: number;
+  q: string;
+  answer: string;
+  options: string[];
+  reaction: string;
+}
+
+const TRIVIA_QUESTIONS: TriviaQuestion[] = [
+  {
+    id: 1,
+    q: "What is Akash's favorite watch brand?",
+    answer: "Rolex",
+    options: ["Omega", "Rolex", "Casio", "Seiko"],
+    reaction: "Yes! A classic Rolex represents my timeless love for you! ⌚❤️"
+  },
+  {
+    id: 2,
+    q: "What is Akash's favorite food?",
+    answer: "Scrambled Eggs with Smoked Trout and Crème Fraîche",
+    options: [
+      "Truffle Pizza with Mushrooms",
+      "Spicy Ramen with Boiled Eggs",
+      "Scrambled Eggs with Smoked Trout and Crème Fraîche",
+      "Fresh Salmon Sushi Platter"
+    ],
+    reaction: "Oh my god, you actually know it perfectly! Such a delicious selection! 🍳🐟✨"
+  },
+  {
+    id: 3,
+    q: "What is Akash's favorite color?",
+    answer: "White",
+    options: ["Crimson Red", "White", "Pastel Pink", "Deep Navy Blue"],
+    reaction: "Yes! White—pure, serene, and absolute, just like how I feel when I look at you. 🤍"
+  },
+  {
+    id: 4,
+    q: "What is Akash's favorite movie of all time?",
+    answer: "Interstellar",
+    options: ["Inception", "Tenet", "Interstellar", "Oppenheimer"],
+    reaction: "Correct! The gravity of my love pulls me to you across any dimension, Rekha! 🌌🚀"
+  },
+  {
+    id: 5,
+    q: "What is Akash's favorite song?",
+    answer: "Faded",
+    options: ["Alone", "Faded", "Spectre", "Sing Me To Sleep"],
+    reaction: "Yes! 'Faded' by Alan Walker—but with you, my world is fully in focus. 🎵⚡"
+  },
+  {
+    id: 6,
+    q: "What is Akash's favorite mobile brand?",
+    answer: "Xiaomi",
+    options: ["Samsung", "Apple iPhone", "Xiaomi", "OnePlus"],
+    reaction: "You got it! Xiaomi for life! 📱🔥"
+  },
+  {
+    id: 7,
+    q: "What is Akash's favorite place to visit?",
+    answer: "Japan",
+    options: ["Switzerland", "Japan", "Paris", "Bali"],
+    reaction: "Yes! Japan—and I can't wait to walk under the cherry blossoms hand-in-hand with you. 🌸🇯🇵"
+  },
+  {
+    id: 8,
+    q: "What is Akash's favorite fruit?",
+    answer: "Mango",
+    options: ["Strawberry", "Blueberry", "Mango", "Alphonso Peach"],
+    reaction: "Correct! The sweet king of fruits, just like how sweet you are to me! 🥭💛"
+  },
+  {
+    id: 9,
+    q: "What is Akash's favorite chocolate?",
+    answer: "Feastables",
+    options: ["Feastables", "Lindt Swiss Classic", "Cadbury Dairy Milk Silk", "Ferrero Rocher"],
+    reaction: "Yes! Feastables! A modern sweet treat for my favorite person. 🍫✨"
+  },
+  {
+    id: 10,
+    q: "What is Akash's favorite game?",
+    answer: "Genshin Impact",
+    options: ["Valorant", "Genshin Impact", "Cyberpunk 2077", "Minecraft"],
+    reaction: "Wow! You remembered Genshin Impact! Ready for our next adventure in Teyvat? 🎮💫"
+  },
+  {
+    id: 11,
+    q: "What is Akash's favorite academic subject?",
+    answer: "Computer Science Engineering",
+    options: ["Astrophysics", "Quantum Mechanics", "Computer Science Engineering", "Advanced Mathematics"],
+    reaction: "Correct! Coding my way to your heart is my favorite program. 💻❤️"
+  },
+  {
+    id: 12,
+    q: "Who is Akash's favorite actor?",
+    answer: "Robert Downey Jr.",
+    options: ["Tom Holland", "Robert Downey Jr.", "Cillian Murphy", "Ryan Reynolds"],
+    reaction: "Yes! I love you 3000, just like Tony Stark! 🦾❤️"
+  },
+  {
+    id: 13,
+    q: "Who is Akash's favorite actress?",
+    answer: "Katrina Kaif",
+    options: ["Deepika Padukone", "Alia Bhatt", "Katrina Kaif", "Emma Watson"],
+    reaction: "Correct! Katrina Kaif! You know my silver screen preferences so well. 🎬🌟"
+  },
+  {
+    id: 14,
+    q: "What is Akash's favorite bike or car brand?",
+    answer: "Koenigsegg",
+    options: ["Koenigsegg", "Bugatti Chiron", "Ferrari LaFerrari", "Pagani Huayra"],
+    reaction: "Spot on! Hypercars and fast dreams, and you are my ultimate co-pilot! 🏎️💨"
+  },
+  {
+    id: 15,
+    q: "What is Akash's absolute favorite app?",
+    answer: "Claude",
+    options: ["Spotify", "Claude", "YouTube", "GitHub"],
+    reaction: "Haha, yes! Claude is the assistant of choice, coding up this beautiful site for us. 🤖🤍"
+  },
+  {
+    id: 16,
+    q: "What is Akash's favorite season?",
+    answer: "Winter",
+    options: ["Autumn", "Winter", "Spring", "Summer"],
+    reaction: "Yes! Cold winter mornings are perfect for cozying up and drinking tea together. ❄️☕"
+  },
+  {
+    id: 17,
+    q: "What is Akash's favorite drink?",
+    answer: "Masala Chhas",
+    options: ["Mango Lassi", "Masala Chhas", "Iced Peach Tea", "Cold Coffee"],
+    reaction: "Correct! A refreshing glass of Masala Chhas is unbeatable! 🥛✨"
+  },
+  {
+    id: 18,
+    q: "What is Akash's favorite hobby?",
+    answer: "Content Creation",
+    options: ["Landscape Photography", "Playing the Guitar", "Content Creation", "Reading Novels"],
+    reaction: "Yes! Creating content, and you are my infinite muse. 📹🎨"
+  },
+  {
+    id: 19,
+    q: "What is Akash's favorite festival?",
+    answer: "Dussehra",
+    options: ["Diwali", "Dussehra", "Holi", "Navratri"],
+    reaction: "Correct! Dussehra, celebrating the victory of goodness and light. 🏹✨"
+  },
+  {
+    id: 20,
+    q: "What is Akash's favorite TV show?",
+    answer: "Wednesday",
+    options: ["Stranger Things", "Wednesday", "Dark", "The Crown"],
+    reaction: "Yes! Wednesday Addams! A little bit quirky, highly determined, just like me. 🖤🎻"
+  },
+  {
+    id: 21,
+    q: "What is Akash's favorite pet animal?",
+    answer: "Cat",
+    options: ["Golden Retriever Dog", "Cat", "Fluffy Rabbit", "Baby Panda"],
+    reaction: "Yes! A cat—mysterious, elegant, cozy, and cute. 🐱🐾"
+  },
+  {
+    id: 22,
+    q: "What is Akash's favorite ice cream flavor?",
+    answer: "Butterscotch",
+    options: ["Classic Vanilla Bean", "Double Dark Chocolate", "Butterscotch", "Mint Chocolate Chip"],
+    reaction: "Exactly! Butterscotch with its crunchy caramelized sweetness. 🍦💛"
+  },
+  {
+    id: 23,
+    q: "What is Akash's favorite clothing brand?",
+    answer: "Snitch",
+    options: ["Zara", "Snitch", "H&M", "Uniqlo"],
+    reaction: "Correct! Snitch has the absolute best styling! 👕✨"
+  },
+  {
+    id: 24,
+    q: "What is Akash's favorite YouTube channel?",
+    answer: "MrBeast",
+    options: ["Marques Brownlee", "MrBeast", "PewDiePie", "Zach King"],
+    reaction: "Yes! MrBeast's crazy videos and positive vibes! 🎬💥"
+  },
+  {
+    id: 25,
+    q: "What is Akash's biggest fear?",
+    answer: "Failing to get you",
+    options: ["Extreme Heights", "Spiders & Insects", "Failing to get you", "Being in the Dark"],
+    reaction: "You know my heart completely. My only real fear in this life was losing my chance with you. 💖"
+  },
+  {
+    id: 26,
+    q: "What is Akash's best childhood memory?",
+    answer: "Playing with friends",
+    options: ["Going to a waterpark", "Family picnics", "Playing with friends", "Getting my first bicycle"],
+    reaction: "Yes! Just running around under the afternoon sun, playing carefree with friends. 🏃‍♂️✨"
+  },
+  {
+    id: 27,
+    q: "What makes Akash angry quickly?",
+    answer: "If things don't go as planned",
+    options: ["Wasting precious time", "Unclean spaces", "If things don't go as planned", "Loud environments"],
+    reaction: "Haha, yes. I like precision, so when my plans get interrupted, I get a bit restless. 📈⚡"
+  },
+  {
+    id: 28,
+    q: "What type of people does Akash like most?",
+    answer: "Kind & encouraging",
+    options: ["Kind & encouraging", "Super high achievers", "Quiet and reserved thinkers", "Loud and expressive extroverts"],
+    reaction: "Exactly! Kindness and encouragement are the most beautiful traits a person can have—and you have them both. 🌸❤️"
+  }
+];
+
+interface MemoryItem {
+  q: string;
+  a: string;
+}
+
+interface MemoryCategory {
+  title: string;
+  icon: string;
+  items: MemoryItem[];
+}
+
+const MEMORY_CATEGORIES: MemoryCategory[] = [
+  {
+    title: "🌱 First Impressions & Fun",
+    icon: "😊",
+    items: [
+      {
+        q: "What was your first impression of me?",
+        a: "Cute and spoke nicely. There was this instant warmth and grace about you that made me feel so comfortable right away."
+      },
+      {
+        q: "What is your favorite memory with me?",
+        a: "Spending time on your birthday. Being there to celebrate you, seeing you smile, and knowing we were building our own little world."
+      },
+      {
+        q: "What is our funniest moment together?",
+        a: "The time we spent in the library. Trying to be completely quiet but holding back our giggles, sharing notes, and stealing glances under the strict gaze of the librarian!"
+      }
+    ]
+  },
+  {
+    title: "💖 Love & Devotion",
+    icon: "🔥",
+    items: [
+      {
+        q: "What always makes you smile about me?",
+        a: "Your care for me. The way you check in, the thoughtfulness behind your actions, and how you protect my peace."
+      },
+      {
+        q: "When did you realize you loved me?",
+        a: "When I kindly asked to help you. It wasn't a grand gesture, just a quiet moment where your kindness shined so brightly that my heart simply knew you were the one."
+      },
+      {
+        q: "What makes you feel most loved?",
+        a: "Your attention. When you look at me, listen to me, and make me feel like the only person in the room."
+      },
+      {
+        q: "What is one thing I do that comforts you?",
+        a: "Holding my hand and comforting me. The moment our hands lace, all the noise in the universe quietens down."
+      },
+      {
+        q: "What do you admire most about me?",
+        a: "Listening to me. You don't just hear my words; you understand my thoughts and hold space for my feelings."
+      }
+    ]
+  },
+  {
+    title: "🔮 Our Shared Horizons",
+    icon: "🌌",
+    items: [
+      {
+        q: "Which place should we visit together?",
+        a: "Japan! Exploring the neon streets of Tokyo, the historic temples of Kyoto, and chasing the cherry blossoms together."
+      },
+      {
+        q: "How do you describe our relationship?",
+        a: "Understanding and keeping each other motivated. We are partners, teammates, and each other's biggest cheerleaders."
+      },
+      {
+        q: "What is your dream life with me?",
+        a: "Living together in a big house, caring for each other without worries, and doing whatever we want in our own sanctuary of peace."
+      },
+      {
+        q: "Where do you see us in 5 years?",
+        a: "Probably building something together that impacts billions of people. Combining our talents and dreams to leave a legacy."
+      },
+      {
+        q: "What kind of home do you want together?",
+        a: "A home that satisfies our needs and reminds us of our mission—a space full of warmth, books, code, and love."
+      },
+      {
+        q: "What goals should we achieve together?",
+        a: "Build a company that impacts billions of people, explore the world together, and create a lifetime of absolute happiness."
+      },
+      {
+        q: "What adventure should we try one day?",
+        a: "Trek to Everest Base Camp! Standing in front of the world's tallest peak, hand-in-hand, realizing we can conquer anything."
+      }
+    ]
+  }
+];
+
+interface DeepQuestion {
+  q: string;
+  a: string;
+  icon: string;
+}
+
+const DEEP_QUESTIONS: DeepQuestion[] = [
+  {
+    q: "What is your biggest fear in relationships?",
+    a: "Losing you. You have become my peace and my guiding light, and the thought of a life without your presence is my only true vulnerability.",
+    icon: "🖤"
+  },
+  {
+    q: "What lesson has love taught you?",
+    a: "Staying calm and patient. Real love isn't rushed; it's a gentle, steady fire that teaches us to breathe through the storms and grow stronger together.",
+    icon: "⏳"
+  },
+  {
+    q: "What helps you trust someone deeply?",
+    a: "Their openness with me. When there are no walls, no secrets, just raw, honest truths shared in a safe space.",
+    icon: "🤝"
+  },
+  {
+    q: "What does a healthy relationship mean to you?",
+    a: "Pushing each other to achieve our goals. Being a haven of comfort, but also a launching pad for each other's wildest dreams.",
+    icon: "🌱"
+  },
+  {
+    q: "Which song reminds you of me?",
+    a: "'Alone' by Alan Walker. Because since I found you, I know that neither of us will ever have to walk this massive universe alone again.",
+    icon: "🎧"
+  },
+  {
+    q: "What nickname do you secretly like?",
+    a: "Moonlight. Because in my darkest nights, you are the soft, beautiful glow that shows me the path forward.",
+    icon: "🌙"
+  },
+  {
+    q: "What small thing about me do you love?",
+    a: "Understanding me. Even when I don't express myself fully, you have this beautiful way of reading my mind and soothing my soul.",
+    icon: "🌸"
+  },
+  {
+    q: "If we had a movie, what would its title be?",
+    a: "The One I Didn't See Coming. A beautiful love story that arrived like a sudden, magical whisper and changed everything forever.",
+    icon: "🎬"
+  },
+  {
+    q: "Which moment with me would you relive forever?",
+    a: "Watching our empire rise—because I got to build it with you. Hand in hand, turning dreams into code, and code into reality. ❤️",
+    icon: "🏰"
+  }
+];
+
 export default function UsContent() {
   const pageRef = useRef<HTMLDivElement>(null);
   const [isLetterOpen, setIsLetterOpen] = useState(false);
@@ -212,6 +570,82 @@ export default function UsContent() {
   const [selectedValues, setSelectedValues] = useState<string[]>([]);
   const [oracleSpinning, setOracleSpinning] = useState(false);
   const [oracleResult, setOracleResult] = useState<string | null>(null);
+
+  // --- AKASH & REKHA UNIVERSE STATES ---
+  const [activeUniverseTab, setActiveUniverseTab] = useState<"trivia" | "memories" | "deep">("trivia");
+  
+  // Trivia States
+  const [currentTriviaIdx, setCurrentTriviaIdx] = useState(0);
+  const [selectedTriviaOpt, setSelectedTriviaOpt] = useState<string | null>(null);
+  const [isTriviaChecked, setIsTriviaChecked] = useState(false);
+  const [triviaScore, setTriviaScore] = useState(0);
+  const [triviaEnded, setTriviaEnded] = useState(false);
+
+  // Memories States
+  const [activeMemoryCat, setActiveMemoryCat] = useState<number>(0);
+  const [expandedMemoryIdx, setExpandedMemoryIdx] = useState<number | null>(null);
+
+  // Deep questions States
+  const [activeDeepIdx, setActiveDeepIdx] = useState<number | null>(null);
+
+  const handleSelectTriviaOption = (option: string, e: React.MouseEvent<HTMLButtonElement>) => {
+    if (isTriviaChecked) return;
+    setSelectedTriviaOpt(option);
+    setIsTriviaChecked(true);
+
+    const currentQ = TRIVIA_QUESTIONS[currentTriviaIdx];
+    const isCorrect = option === currentQ.answer;
+
+    if (isCorrect) {
+      setTriviaScore(prev => prev + 1);
+
+      // Spawn heart particles
+      const heartCount = 8;
+      for (let i = 0; i < heartCount; i++) {
+        const heart = document.createElement("div");
+        heart.innerHTML = "❤️";
+        heart.className = "us-heart-particle";
+        heart.style.left = `${e.clientX + (Math.random() - 0.5) * 60}px`;
+        heart.style.top = `${e.clientY + (Math.random() - 0.5) * 60}px`;
+        const rot = (Math.random() - 0.5) * 120;
+        heart.style.setProperty("--rot", `${rot}deg`);
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 1000);
+      }
+    } else {
+      // Spawn sad face particles
+      const heartCount = 5;
+      for (let i = 0; i < heartCount; i++) {
+        const particle = document.createElement("div");
+        particle.innerHTML = "😢";
+        particle.className = "us-heart-particle";
+        particle.style.left = `${e.clientX + (Math.random() - 0.5) * 40}px`;
+        particle.style.top = `${e.clientY + (Math.random() - 0.5) * 40}px`;
+        const rot = (Math.random() - 0.5) * 80;
+        particle.style.setProperty("--rot", `${rot}deg`);
+        document.body.appendChild(particle);
+        setTimeout(() => particle.remove(), 1000);
+      }
+    }
+  };
+
+  const handleNextTrivia = () => {
+    if (currentTriviaIdx < TRIVIA_QUESTIONS.length - 1) {
+      setCurrentTriviaIdx(prev => prev + 1);
+      setSelectedTriviaOpt(null);
+      setIsTriviaChecked(false);
+    } else {
+      setTriviaEnded(true);
+    }
+  };
+
+  const handleResetTrivia = () => {
+    setCurrentTriviaIdx(0);
+    setSelectedTriviaOpt(null);
+    setIsTriviaChecked(false);
+    setTriviaScore(0);
+    setTriviaEnded(false);
+  };
 
   const spinCompass = () => {
     if (oracleSpinning) return;
@@ -535,7 +969,308 @@ export default function UsContent() {
         </div>
       </section>
 
+      {/* Section 3.5 — The Akash & Rekha Universe (Trivia, Memories & Deep Q&A) */}
+      <section className="us-universe-section py-20 bg-[#0d0c11]">
+        <div className="text-center max-w-2xl mx-auto mb-10 px-4">
+          <span className="font-display font-bold text-[#d4a853] tracking-widest text-xs uppercase">
+            The Inner Circle
+          </span>
+          <h2 className="font-display text-3xl sm:text-4xl font-extrabold mt-2 text-white">
+            Akash & Rekha Universe
+          </h2>
+          <p className="text-[rgba(253,246,227,0.6)] mt-4">
+            Test your knowledge about me, browse our heartfelt answers, and unlock the deepest parts of our bond.
+          </p>
+        </div>
 
+        {/* Tab Navigator */}
+        <div className="us-universe-tabs max-w-md mx-auto px-4 flex justify-between gap-2 border-b border-[rgba(212,168,83,0.15)] pb-1 mb-12">
+          <button
+            onClick={() => setActiveUniverseTab("trivia")}
+            className={`us-universe-tab-btn flex-1 py-3 text-xs sm:text-sm font-bold tracking-widest uppercase text-center transition-all ${
+              activeUniverseTab === "trivia"
+                ? "text-[#d4a853] border-b-2 border-[#d4a853] scale-105"
+                : "text-[rgba(253,246,227,0.4)] hover:text-white"
+            }`}
+          >
+            🎮 Trivia Quiz
+          </button>
+          <button
+            onClick={() => {
+              setActiveUniverseTab("memories");
+              setExpandedMemoryIdx(null);
+            }}
+            className={`us-universe-tab-btn flex-1 py-3 text-xs sm:text-sm font-bold tracking-widest uppercase text-center transition-all ${
+              activeUniverseTab === "memories"
+                ? "text-[#d4a853] border-b-2 border-[#d4a853] scale-105"
+                : "text-[rgba(253,246,227,0.4)] hover:text-white"
+            }`}
+          >
+            📖 Memory Book
+          </button>
+          <button
+            onClick={() => {
+              setActiveUniverseTab("deep");
+              setActiveDeepIdx(null);
+            }}
+            className={`us-universe-tab-btn flex-1 py-3 text-xs sm:text-sm font-bold tracking-widest uppercase text-center transition-all ${
+              activeUniverseTab === "deep"
+                ? "text-[#d4a853] border-b-2 border-[#d4a853] scale-105"
+                : "text-[rgba(253,246,227,0.4)] hover:text-white"
+            }`}
+          >
+            ✨ Deep Card
+          </button>
+        </div>
+
+        <div className="us-universe-panel max-w-4xl mx-auto px-4 min-h-[460px] flex items-center justify-center">
+          {/* TAB 1: TRIVIA QUIZ */}
+          {activeUniverseTab === "trivia" && (
+            <div className="w-full us-reveal revealed">
+              {triviaEnded ? (
+                <div className="us-trivia-result-card text-center p-8 border border-[rgba(212,168,83,0.25)] rounded-3xl bg-[rgba(18,18,22,0.6)] backdrop-blur-md max-w-xl mx-auto">
+                  <div className="text-4xl mb-4">🏆</div>
+                  <h3 className="font-display font-bold text-2xl text-[#d4a853]">Quiz Completed!</h3>
+                  
+                  <div className="my-6">
+                    <span className="text-[rgba(253,246,227,0.4)] text-xs uppercase tracking-wider block mb-1">
+                      Your Score
+                    </span>
+                    <span className="font-mono text-5xl font-extrabold text-[#e8475f]">
+                      {triviaScore} / {TRIVIA_QUESTIONS.length}
+                    </span>
+                  </div>
+
+                  <p className="text-sm leading-relaxed text-[rgba(253,246,227,0.85)] max-w-md mx-auto mb-8">
+                    {triviaScore === TRIVIA_QUESTIONS.length ? (
+                      "A perfect 100%! You know me inside out, Rekha! You are officially my ultimate soulmate! 👑❤️"
+                    ) : triviaScore >= 20 ? (
+                      "An outstanding score! You know so many little details about my preferences. It makes me smile to see how much you pay attention. 🥰"
+                    ) : triviaScore >= 10 ? (
+                      "A beautiful score! You know a lot about me, and the parts you missed are just excuses for us to chat and share more! 💕"
+                    ) : (
+                      "A great try! Every question is just a small detail in the massive universe of us. Let's play again and learn more! 🤍"
+                    )}
+                  </p>
+
+                  {triviaScore === TRIVIA_QUESTIONS.length && (
+                    <div className="us-badge-glow border border-[rgba(212,168,83,0.3)] bg-[rgba(212,168,83,0.05)] text-[#f5d799] p-3 rounded-xl inline-block mb-6 animate-pulse text-xs font-bold uppercase tracking-widest">
+                      💫 Soulmate Connection Unlocked
+                    </div>
+                  )}
+
+                  <div>
+                    <button
+                      onClick={handleResetTrivia}
+                      className="px-6 py-2.5 text-xs font-bold border border-[rgba(212,168,83,0.3)] hover:border-[#d4a853] transition-all bg-[rgba(212,168,83,0.05)] text-[#f5d799] rounded-full tracking-widest uppercase"
+                    >
+                      Play Again
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <div className="us-trivia-game-panel max-w-2xl mx-auto border border-[rgba(255,255,255,0.06)] rounded-3xl bg-[rgba(18,18,22,0.65)] backdrop-blur-md p-6 sm:p-8">
+                  {/* Progress Header */}
+                  <div className="flex justify-between items-center mb-6 text-xs text-[rgba(253,246,227,0.45)] font-mono">
+                    <span>PROGRESS: {currentTriviaIdx + 1} / {TRIVIA_QUESTIONS.length}</span>
+                    <span>SCORE: {triviaScore}</span>
+                  </div>
+
+                  {/* Progress Bar */}
+                  <div className="w-full h-1.5 bg-[rgba(255,255,255,0.05)] rounded-full overflow-hidden mb-8">
+                    <div
+                      className="h-full bg-gradient-to-r from-[#e8475f] to-[#d4a853] transition-all duration-300"
+                      style={{ width: `${((currentTriviaIdx + 1) / TRIVIA_QUESTIONS.length) * 100}%` }}
+                    ></div>
+                  </div>
+
+                  {/* Question */}
+                  <h3 className="font-display font-bold text-lg sm:text-xl mb-8 text-white text-center leading-relaxed">
+                    {TRIVIA_QUESTIONS[currentTriviaIdx].q}
+                  </h3>
+
+                  {/* Choices Grid */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {TRIVIA_QUESTIONS[currentTriviaIdx].options.map((option) => {
+                      const isCorrect = option === TRIVIA_QUESTIONS[currentTriviaIdx].answer;
+                      const isSelected = option === selectedTriviaOpt;
+                      
+                      let btnClass = "us-trivia-opt-btn";
+                      if (isTriviaChecked) {
+                        if (isCorrect) {
+                          btnClass += " correct";
+                        } else if (isSelected) {
+                          btnClass += " incorrect";
+                        } else {
+                          btnClass += " disabled";
+                        }
+                      } else if (isSelected) {
+                        btnClass += " selected";
+                      }
+
+                      return (
+                        <button
+                          key={option}
+                          disabled={isTriviaChecked}
+                          onClick={(e) => handleSelectTriviaOption(option, e)}
+                          className={btnClass}
+                        >
+                          <span className="flex items-center gap-2">
+                            {isTriviaChecked && isCorrect && "✨"}
+                            {isTriviaChecked && isSelected && !isCorrect && "❌"}
+                            {option}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  {/* Feedback Drawer */}
+                  {isTriviaChecked && (
+                    <div className="mt-8 p-4 border border-[rgba(212,168,83,0.2)] bg-[rgba(212,168,83,0.04)] rounded-2xl animate-fade-in text-center">
+                      <span className="text-[10px] text-[#d4a853] uppercase font-bold tracking-widest block mb-1">
+                        Akash says:
+                      </span>
+                      <p className="text-xs sm:text-sm text-[rgba(253,246,227,0.85)] font-medium">
+                        {TRIVIA_QUESTIONS[currentTriviaIdx].reaction}
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Next Control */}
+                  {isTriviaChecked && (
+                    <div className="mt-8 text-right">
+                      <button
+                        onClick={handleNextTrivia}
+                        className="px-6 py-2 text-xs font-bold border border-[#d4a853] hover:bg-[rgba(212,168,83,0.1)] transition-all bg-[rgba(212,168,83,0.02)] text-[#f5d799] rounded-full tracking-widest uppercase"
+                      >
+                        {currentTriviaIdx < TRIVIA_QUESTIONS.length - 1 ? "Next Question" : "View Results"}
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* TAB 2: MEMORY BOOK */}
+          {activeUniverseTab === "memories" && (
+            <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-8 us-reveal revealed">
+              {/* Left Side: Category Navigator */}
+              <div className="md:col-span-1 flex flex-col gap-3">
+                {MEMORY_CATEGORIES.map((cat, idx) => {
+                  const isActive = idx === activeMemoryCat;
+                  return (
+                    <button
+                      key={cat.title}
+                      onClick={() => {
+                        setActiveMemoryCat(idx);
+                        setExpandedMemoryIdx(null);
+                      }}
+                      className={`w-full text-left p-4 border rounded-2xl transition-all duration-300 flex items-center gap-3 ${
+                        isActive
+                          ? "border-[#d4a853] bg-[rgba(212,168,83,0.08)] text-[#fdf6e3] shadow-lg"
+                          : "border-[rgba(255,255,255,0.05)] bg-[rgba(18,18,22,0.4)] text-[rgba(253,246,227,0.5)] hover:text-white"
+                      }`}
+                    >
+                      <span className="text-2xl">{cat.icon}</span>
+                      <span className="text-xs sm:text-sm font-display font-bold tracking-wide">
+                        {cat.title}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Right Side: List of Q&As */}
+              <div className="md:col-span-2 flex flex-col gap-4 max-h-[500px] overflow-y-auto pr-2 custom-scrollbar">
+                {MEMORY_CATEGORIES[activeMemoryCat].items.map((item, idx) => {
+                  const isExpanded = idx === expandedMemoryIdx;
+                  return (
+                    <div
+                      key={idx}
+                      onClick={() => setExpandedMemoryIdx(isExpanded ? null : idx)}
+                      className={`border rounded-2xl p-5 cursor-pointer transition-all duration-300 ${
+                        isExpanded
+                          ? "border-[#e8475f] bg-[rgba(232,71,95,0.03)]"
+                          : "border-[rgba(255,255,255,0.06)] bg-[rgba(18,18,22,0.5)] hover:border-[rgba(212,168,83,0.25)]"
+                      }`}
+                    >
+                      <div className="flex justify-between items-center">
+                        <h4 className="font-display font-bold text-xs sm:text-sm text-white tracking-wide pr-4">
+                          Q: {item.q}
+                        </h4>
+                        <span className={`text-xs text-[#d4a853] transform transition-transform duration-300 ${isExpanded ? "rotate-180" : ""}`}>
+                          ▼
+                        </span>
+                      </div>
+                      
+                      <div className={`us-memory-ans-drawer overflow-hidden transition-all duration-500 ease-in-out ${isExpanded ? "max-h-40 mt-4 border-t border-[rgba(255,255,255,0.06)] pt-4" : "max-h-0"}`}>
+                        <p className="font-serif italic text-xs sm:text-sm leading-relaxed text-[rgba(253,246,227,0.85)]">
+                          &ldquo;{item.a}&rdquo;
+                        </p>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {/* TAB 3: DEEP REFLECTIONS */}
+          {activeUniverseTab === "deep" && (
+            <div className="w-full us-reveal revealed">
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-6 max-w-3xl mx-auto">
+                {DEEP_QUESTIONS.map((question, idx) => {
+                  const isFlipped = idx === activeDeepIdx;
+                  return (
+                    <div
+                      key={idx}
+                      onClick={() => setActiveDeepIdx(isFlipped ? null : idx)}
+                      className="us-deep-card-container aspect-[3/4] cursor-pointer"
+                    >
+                      <div className={`us-deep-card ${isFlipped ? "flipped" : ""}`}>
+                        {/* Front Side */}
+                        <div className="us-deep-card-front flex flex-col justify-between p-4 border border-[rgba(212,168,83,0.15)] rounded-2xl bg-[#141318]">
+                          <div className="text-right text-xs font-mono text-[rgba(253,246,227,0.2)]">
+                            {(idx + 1).toString().padStart(2, "0")}
+                          </div>
+                          <div className="text-center text-3xl my-2">
+                            {question.icon}
+                          </div>
+                          <div className="text-center">
+                            <span className="text-[9px] uppercase font-bold tracking-widest text-[#d4a853]">
+                              Read Secret
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Back Side */}
+                        <div className="us-deep-card-back flex flex-col justify-between p-4 border border-[rgba(232,71,95,0.25)] rounded-2xl bg-[#0a0a0c]">
+                          <div className="text-[10px] uppercase font-bold tracking-wider text-[#e8475f] border-b border-[rgba(255,255,255,0.05)] pb-1 mb-2">
+                            Deep Reflection
+                          </div>
+                          <div className="flex-1 overflow-y-auto custom-scrollbar flex flex-col justify-center gap-2">
+                            <h4 className="font-display font-extrabold text-[10px] sm:text-xs text-white leading-snug">
+                              {question.q}
+                            </h4>
+                            <p className="font-serif italic text-[10px] sm:text-[11px] leading-relaxed text-[rgba(253,246,227,0.8)] border-t border-[rgba(255,255,255,0.05)] pt-2 mt-1">
+                              {question.a}
+                            </p>
+                          </div>
+                          <div className="text-right text-[8px] uppercase tracking-widest text-[rgba(253,246,227,0.3)] mt-2">
+                            Close Card
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+        </div>
+      </section>
 
       {/* Section 4 — Connect the Stars Constellation Game */}
       <section className="us-constellation-sec">

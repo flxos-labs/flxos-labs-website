@@ -2671,5 +2671,203 @@ body:has(.us-page) {
   box-shadow: 0 20px 40px rgba(0,0,0,0.35);
 }
 
+/* ------------------------------------------------------------------ */
+/* The Akash & Rekha Universe — Trivia, Memories & Deep Cards         */
+/* ------------------------------------------------------------------ */
+.us-universe-section {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  position: relative;
+  z-index: 10;
+}
+
+.us-universe-tabs {
+  position: relative;
+}
+
+.us-universe-tab-btn {
+  border-bottom: 2px solid transparent;
+  outline: none;
+}
+
+.us-universe-tab-btn:hover {
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.35);
+}
+
+.us-universe-panel {
+  width: 100%;
+}
+
+/* Trivia Panel Elements */
+.us-trivia-game-panel {
+  box-shadow: 0 25px 55px rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.us-trivia-opt-btn {
+  width: 100%;
+  text-align: left;
+  padding: 1.15rem 1.5rem;
+  border-radius: 1.25rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: rgba(253, 246, 227, 0.8);
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  outline: none;
+  cursor: pointer;
+}
+
+.us-trivia-opt-btn:hover:not(:disabled) {
+  background: rgba(212, 168, 83, 0.04);
+  border-color: rgba(212, 168, 83, 0.35);
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(212, 168, 83, 0.05);
+}
+
+.us-trivia-opt-btn.selected {
+  background: rgba(212, 168, 83, 0.08);
+  border-color: #d4a853;
+  color: #fdf6e3;
+  box-shadow: 0 6px 20px rgba(212, 168, 83, 0.15);
+}
+
+.us-trivia-opt-btn.correct {
+  background: rgba(46, 213, 115, 0.08) !important;
+  border-color: #2ed573 !important;
+  color: #2ed573 !important;
+  box-shadow: 0 6px 20px rgba(46, 213, 115, 0.15);
+}
+
+.us-trivia-opt-btn.incorrect {
+  background: rgba(232, 71, 95, 0.08) !important;
+  border-color: #e8475f !important;
+  color: #e8475f !important;
+  box-shadow: 0 6px 20px rgba(232, 71, 95, 0.15);
+}
+
+.us-trivia-opt-btn.disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.us-trivia-result-card {
+  box-shadow: 0 35px 70px rgba(0, 0, 0, 0.55);
+}
+
+.us-badge-glow {
+  box-shadow: 0 0 20px rgba(212, 168, 83, 0.15);
+  animation: us-badge-pulse 2s infinite alternate;
+}
+
+@keyframes us-badge-pulse {
+  from {
+    transform: scale(1);
+    box-shadow: 0 0 20px rgba(212, 168, 83, 0.15);
+  }
+  to {
+    transform: scale(1.03);
+    box-shadow: 0 0 30px rgba(212, 168, 83, 0.35);
+  }
+}
+
+/* Custom Scrollbar for memory results drawer */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(212, 168, 83, 0.15);
+  border-radius: 99px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(212, 168, 83, 0.35);
+}
+
+/* Deep Card 3D Flip Mechanics */
+.us-deep-card-container {
+  perspective: 1000px;
+}
+
+.us-deep-card {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.us-deep-card.flipped {
+  transform: rotateY(180deg);
+}
+
+.us-deep-card-front,
+.us-deep-card-back {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 1.25rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.us-deep-card-front {
+  background: #121115;
+  border: 1px solid rgba(212, 168, 83, 0.12);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transform: rotateY(0deg);
+}
+
+.us-deep-card-container:hover .us-deep-card-front {
+  border-color: rgba(212, 168, 83, 0.35);
+  box-shadow: 0 15px 35px rgba(212, 168, 83, 0.08), 0 10px 30px rgba(0,0,0,0.4);
+}
+
+.us-deep-card-back {
+  background: #08080a;
+  border: 1px solid rgba(232, 71, 95, 0.25);
+  transform: rotateY(180deg);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.us-deep-card-container:hover .us-deep-card-back {
+  border-color: rgba(232, 71, 95, 0.45);
+  box-shadow: 0 15px 35px rgba(232, 71, 95, 0.08), 0 10px 30px rgba(0,0,0,0.4);
+}
+
+/* Animations support */
+.animate-fade-in {
+  animation: us-fade-in 0.4s ease-out forwards;
+}
+
+@keyframes us-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
 
 
