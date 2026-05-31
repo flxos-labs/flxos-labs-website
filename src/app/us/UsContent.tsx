@@ -426,25 +426,32 @@ const DEEP_QUESTIONS: DeepQuestionData[] = [
 ];
 
 const TypewriterText = ({ text }: { text: string }) => {
-
   const [displayedText, setDisplayedText] = useState("");
 
   useEffect(() => {
     let index = 0;
+    let isCancelled = false;
     setDisplayedText("");
-    const interval = setInterval(() => {
-      if (index < text.length) {
-        setDisplayedText((prev) => prev + text.charAt(index));
+
+    const tick = () => {
+      if (isCancelled) return;
+      if (index <= text.length) {
+        setDisplayedText(text.slice(0, index));
         index++;
-      } else {
-        clearInterval(interval);
+        setTimeout(tick, 20);
       }
-    }, 25);
-    return () => clearInterval(interval);
+    };
+
+    tick();
+
+    return () => {
+      isCancelled = true;
+    };
   }, [text]);
 
   return <span>{displayedText}</span>;
 };
+
 
 export default function UsContent() {
 
