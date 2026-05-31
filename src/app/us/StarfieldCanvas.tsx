@@ -136,8 +136,8 @@ export default function StarfieldCanvas({ onMeteorClick }: StarfieldCanvasProps)
           x,
           y,
           baseX: x,
-          ySpeed: -(Math.random() * 0.15 + 0.05) * cfg.speedMul,
-          swaySpeed: (Math.random() * 0.002 + 0.0005) * cfg.speedMul,
+          ySpeed: -(Math.random() * 0.02 + 0.008) * cfg.speedMul, // Slower star float speed (cinematic)
+          swaySpeed: (Math.random() * 0.0004 + 0.0001) * cfg.speedMul, // Slower horizontal sway
           swayAmplitude: (Math.random() * 20 + 5) * cfg.sizeMul,
           swayOffset: Math.random() * Math.PI * 2,
           size,
@@ -227,8 +227,8 @@ export default function StarfieldCanvas({ onMeteorClick }: StarfieldCanvasProps)
         y,
         baseX: x,
         size,
-        ySpeed: -(Math.random() * 0.18 + 0.08),
-        swaySpeed: Math.random() * 0.001 + 0.0004,
+        ySpeed: -(Math.random() * 0.024 + 0.01), // Slower bokeh and heart float speed (dreamy)
+        swaySpeed: Math.random() * 0.0002 + 0.0001, // Slower sway speed
         swayAmplitude: Math.random() * 20 + 8,
         swayOffset: Math.random() * Math.PI * 2,
         alpha: Math.random() * maxAlpha,
@@ -507,7 +507,7 @@ export default function StarfieldCanvas({ onMeteorClick }: StarfieldCanvasProps)
       const startX = Math.random() * w * 0.8;
       const startY = Math.random() * h * 0.3;
       const length = Math.random() * 80 + 70;
-      const speed = Math.random() * 8 + 7;
+      const speed = Math.random() * 2.2 + 1.8; // Dreamy slower shooting stars
       const angle = Math.PI / 4 + (Math.random() - 0.5) * 0.15;
 
       meteors.push({
@@ -519,7 +519,7 @@ export default function StarfieldCanvas({ onMeteorClick }: StarfieldCanvasProps)
         size: Math.random() * 1.5 + 1.2,
         alpha: 0,
         life: 0,
-        maxLife: Math.random() * 40 + 35,
+        maxLife: Math.random() * 130 + 100, // Longer life span to match slower speeds across screen
         color: GOLD_ROSE_PALETTE[Math.floor(Math.random() * GOLD_ROSE_PALETTE.length)],
       });
     }
