@@ -847,17 +847,19 @@ export default function UsContent() {
           </p>
         </div>
 
-        <div 
-          className={`us-jar-container us-reveal ${isJarAnimating ? "scale-90" : ""}`}
-          onClick={handleJarClick}
-        >
-          <div className="us-jar-lid"></div>
-          <div className="us-jar-body">
-            <div className="us-jar-glow"></div>
-            <div className="us-jar-hearts-inside">
-              <div className="us-jar-heart-inside">❤️</div>
-              <div className="us-jar-heart-inside">💖</div>
-              <div className="us-jar-heart-inside">✨</div>
+        <div className="us-reveal">
+          <div 
+            className={`us-jar-container ${isJarAnimating ? "scale-90" : ""}`}
+            onClick={handleJarClick}
+          >
+            <div className="us-jar-lid"></div>
+            <div className="us-jar-body">
+              <div className="us-jar-glow"></div>
+              <div className="us-jar-hearts-inside">
+                <div className="us-jar-heart-inside">❤️</div>
+                <div className="us-jar-heart-inside">💖</div>
+                <div className="us-jar-heart-inside">✨</div>
+              </div>
             </div>
           </div>
         </div>
