@@ -253,13 +253,13 @@ export default function InteractiveBackground() {
     for (let i = 0; i < count; i++) {
       const type = Math.random() > 0.4 ? "sparkle" : "heart";
       const size = type === "heart" ? Math.random() * 7 + 4 : Math.random() * 5 + 3;
-      const maxLife = Math.random() * 90 + 70;
+      const maxLife = Math.random() * 45 + 35;
       const color = palette[Math.floor(Math.random() * palette.length)];
 
       const angle = Math.random() * Math.PI * 2;
-      const force = Math.random() * 0.4 + 0.1;
-      const vx = Math.cos(angle) * force * 0.15;
-      const vy = (Math.sin(angle) * force - 0.25) * 0.15;
+      const force = Math.random() * 0.8 + 0.2;
+      const vx = Math.cos(angle) * force * 0.25;
+      const vy = (Math.sin(angle) * force - 0.5) * 0.25;
 
       newSparks.push({
         x: mx + (Math.random() - 0.5) * 8,
@@ -272,7 +272,7 @@ export default function InteractiveBackground() {
       });
     }
 
-    if (sparkParticlesRef.current.length < 300) {
+    if (sparkParticlesRef.current.length < 150) {
       sparkParticlesRef.current.push(...newSparks);
     }
   }, []);
@@ -393,8 +393,8 @@ export default function InteractiveBackground() {
 
       s.x += s.vx;
       s.y += s.vy;
-      s.vx *= 0.985;
-      s.vy *= 0.985;
+      s.vx *= 0.98;
+      s.vy *= 0.98;
 
       s.alpha = s.life / s.maxLife;
       const currentSize = s.size * (s.life / s.maxLife);

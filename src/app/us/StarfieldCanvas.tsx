@@ -160,7 +160,7 @@ export default function StarfieldCanvas() {
         baseX: w * 0.75,
         baseY: h * 0.2,
         radius: isMobile ? w * 0.8 : Math.min(w, h) * 0.75,
-        color: [124, 92, 191], // Twilight purple
+        color: [124, 92, 191], // Purple
         maxOpacity: isMobile ? 0.07 : 0.13,
         opacity: 0,
         swaySpeedX: 0.00015,
@@ -263,12 +263,12 @@ export default function StarfieldCanvas() {
   const spawnSparkles = useCallback((mx: number, my: number, count = 2) => {
     const newSparks: SparkleParticle[] = [];
     for (let i = 0; i < count; i++) {
-      const size = Math.random() * 4 + 2; // Original dainty size
-      const maxLife = Math.random() * 80 + 60; // Long lifetime for long trail length
+      const size = Math.random() * 4 + 2;
+      const maxLife = Math.random() * 30 + 20;
       const angle = Math.random() * Math.PI * 2;
-      const force = Math.random() * 0.5 + 0.15; // Gentler drift
-      const vx = Math.cos(angle) * force * 0.15; // Slower x speed
-      const vy = (Math.sin(angle) * force - 0.2) * 0.15; // Slower y drift
+      const force = Math.random() * 1.2 + 0.3;
+      const vx = Math.cos(angle) * force * 0.3;
+      const vy = (Math.sin(angle) * force - 0.4) * 0.3;
 
       newSparks.push({
         x: mx + (Math.random() - 0.5) * 6,
@@ -283,7 +283,7 @@ export default function StarfieldCanvas() {
       });
     }
 
-    if (sparklesRef.current.length < 250) { // Support higher particle count for denser tail
+    if (sparklesRef.current.length < 100) {
       sparklesRef.current.push(...newSparks);
     }
   }, []);
@@ -580,12 +580,12 @@ export default function StarfieldCanvas() {
 
       s.x += s.vx;
       s.y += s.vy;
-      s.vx *= 0.98; // Decelerate slower (was 0.96)
-      s.vy *= 0.98;
+      s.vx *= 0.96;
+      s.vy *= 0.96;
       
       // Gravity and gentle jitter
-      s.vy += 0.0018; // Gentler gravity pull (was 0.005)
-      s.vx += (Math.random() - 0.5) * 0.012; // Softer jitter (was 0.03)
+      s.vy += 0.005;
+      s.vx += (Math.random() - 0.5) * 0.03;
 
       s.alpha = s.life / s.maxLife;
       const currentSize = s.size * (s.life / s.maxLife);
