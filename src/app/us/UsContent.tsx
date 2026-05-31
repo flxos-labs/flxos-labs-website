@@ -847,23 +847,6 @@ export default function UsContent() {
           </p>
         </div>
 
-        <div className="us-reveal">
-          <div 
-            className={`us-jar-container ${isJarAnimating ? "scale-90" : ""}`}
-            onClick={handleJarClick}
-          >
-            <div className="us-jar-lid"></div>
-            <div className="us-jar-body">
-              <div className="us-jar-glow"></div>
-              <div className="us-jar-hearts-inside">
-                <div className="us-jar-heart-inside">❤️</div>
-                <div className="us-jar-heart-inside">💖</div>
-                <div className="us-jar-heart-inside">✨</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
         <div className={`us-compliment-scroll-wrapper ${currentCompliment ? "active" : ""}`}>
           {currentCompliment && (
             <div className="us-compliment-scroll">
@@ -875,6 +858,23 @@ export default function UsContent() {
               </p>
             </div>
           )}
+        </div>
+
+        <div className="us-reveal">
+          <div 
+            className={`us-jar-container ${currentCompliment ? "open" : ""} ${isJarAnimating ? "scale-90" : ""}`}
+            onClick={handleJarClick}
+          >
+            <div className={`us-jar-lid ${currentCompliment ? "open" : ""}`}></div>
+            <div className="us-jar-body">
+              <div className="us-jar-glow"></div>
+              <div className="us-jar-hearts-inside">
+                <div className="us-jar-heart-inside">❤️</div>
+                <div className="us-jar-heart-inside">💖</div>
+                <div className="us-jar-heart-inside">✨</div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
