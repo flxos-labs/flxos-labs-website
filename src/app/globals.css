@@ -3267,6 +3267,7 @@ body:has(.us-page) {
 }
 
 .us-auth-card--fade-out {
+  animation: none;
   opacity: 0;
   transform: scale(1.05);
 }

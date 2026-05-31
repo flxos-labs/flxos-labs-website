@@ -33,16 +33,34 @@ export default function UsAuthGate({ children }: UsAuthGateProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
 
-  // Check localStorage on mount
+  // Check localStorage and verify token on mount
   useEffect(() => {
-    const stored = localStorage.getItem(AUTH_STORAGE_KEY);
-    if (stored === "true") {
-      setAuthState("unlocked");
-    } else {
-      setAuthState("locked");
-      // Auto-focus input after mount
-      setTimeout(() => inputRef.current?.focus(), 400);
-    }
+    const verifyStoredToken = async () => {
+      const storedToken = localStorage.getItem(AUTH_STORAGE_KEY);
+      if (!storedToken) {
+        setAuthState("locked");
+        setTimeout(() => inputRef.current?.focus(), 400);
+        return;
+      }
+
+      try {
+        const res = await fetch(`/api/us/auth?token=${encodeURIComponent(storedToken)}`);
+        const data = await res.json();
+        if (data.success) {
+          setAuthState("unlocked");
+        } else {
+          localStorage.removeItem(AUTH_STORAGE_KEY);
+          setAuthState("locked");
+          setTimeout(() => inputRef.current?.focus(), 400);
+        }
+      } catch {
+        localStorage.removeItem(AUTH_STORAGE_KEY);
+        setAuthState("locked");
+        setTimeout(() => inputRef.current?.focus(), 400);
+      }
+    };
+
+    verifyStoredToken();
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -61,9 +79,9 @@ export default function UsAuthGate({ children }: UsAuthGateProps) {
 
       const data = await res.json();
 
-      if (data.success) {
-        // Store auth in localStorage
-        localStorage.setItem(AUTH_STORAGE_KEY, "true");
+      if (data.success && data.token) {
+        // Store auth token in localStorage
+        localStorage.setItem(AUTH_STORAGE_KEY, data.token);
 
         // Spawn celebration particles from center of card
         const card = cardRef.current;
