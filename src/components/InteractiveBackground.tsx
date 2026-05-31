@@ -46,25 +46,25 @@ interface SparkleParticle {
 /* Palettes                                                           */
 /* ------------------------------------------------------------------ */
 const LIGHT_PALETTE: [number, number, number][] = [
-  [255, 105, 135], // Rich rose
-  [255, 143, 163], // Soft rose pink
-  [255, 179, 193], // Pastel pink
-  [255, 200, 221], // Sweet pink
-  [245, 183, 177], // Dusty rose
-  [250, 210, 160], // Warm champagne gold
-  [255, 218, 233], // Blush
-  [230, 190, 255], // Soft lavender
+  [255, 180, 195], // Dreamy soft rose
+  [255, 200, 212], // Light cherry blossom
+  [255, 218, 228], // Soft pastel pink
+  [255, 230, 240], // Light sweet pink
+  [255, 220, 210], // Delicate peach/blush
+  [255, 238, 205], // Gentle champagne gold
+  [255, 242, 248], // Pearl white/pink
+  [242, 228, 255], // Soft lavender mist
 ];
 
 const DARK_PALETTE: [number, number, number][] = [
-  [255, 77, 109],  // Vivid rose
-  [255, 112, 150], // Soft magenta
-  [220, 50, 90],   // Deep pink
-  [180, 40, 80],   // Wine rose
-  [140, 20, 60],   // Dark crimson
-  [255, 195, 112], // Soft warm gold
-  [200, 150, 255], // Twilight purple
-  [255, 140, 180], // Warm pink glow
+  [255, 165, 185], // Soft vivid rose
+  [255, 190, 212], // Light warm magenta
+  [255, 155, 175], // Soft medium pink
+  [255, 175, 190], // Gentle wine rose
+  [255, 185, 200], // Soft crimson glow
+  [255, 225, 180], // Warm glowing pale gold
+  [228, 210, 255], // Soft twilight purple
+  [255, 200, 220], // Pastel pink glow
 ];
 
 /* ------------------------------------------------------------------ */
@@ -252,14 +252,14 @@ export default function InteractiveBackground() {
 
     for (let i = 0; i < count; i++) {
       const type = Math.random() > 0.4 ? "sparkle" : "heart";
-      const size = type === "heart" ? Math.random() * 7 + 4 : Math.random() * 5 + 3;
-      const maxLife = Math.random() * 45 + 35;
+      const size = type === "heart" ? Math.random() * 12 + 8 : Math.random() * 8 + 6;
+      const maxLife = Math.random() * 90 + 70;
       const color = palette[Math.floor(Math.random() * palette.length)];
 
       const angle = Math.random() * Math.PI * 2;
-      const force = Math.random() * 0.8 + 0.2;
-      const vx = Math.cos(angle) * force * 0.25;
-      const vy = (Math.sin(angle) * force - 0.5) * 0.25;
+      const force = Math.random() * 0.4 + 0.1;
+      const vx = Math.cos(angle) * force * 0.15;
+      const vy = (Math.sin(angle) * force - 0.25) * 0.15;
 
       newSparks.push({
         x: mx + (Math.random() - 0.5) * 8,
@@ -272,7 +272,7 @@ export default function InteractiveBackground() {
       });
     }
 
-    if (sparkParticlesRef.current.length < 150) {
+    if (sparkParticlesRef.current.length < 300) {
       sparkParticlesRef.current.push(...newSparks);
     }
   }, []);
@@ -393,8 +393,8 @@ export default function InteractiveBackground() {
 
       s.x += s.vx;
       s.y += s.vy;
-      s.vx *= 0.98;
-      s.vy *= 0.98;
+      s.vx *= 0.985;
+      s.vy *= 0.985;
 
       s.alpha = s.life / s.maxLife;
       const currentSize = s.size * (s.life / s.maxLife);

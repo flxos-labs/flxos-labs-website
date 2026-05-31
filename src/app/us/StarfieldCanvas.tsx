@@ -81,11 +81,11 @@ interface HeartBokeh {
 }
 
 const GOLD_ROSE_PALETTE: [number, number, number][] = [
-  [212, 168, 83],  // Gold (#d4a853)
-  [245, 215, 153], // Light gold (#f5d799)
-  [232, 71, 95],   // Rose (#e8475f)
-  [253, 246, 227], // Champagne (#fdf6e3)
-  [124, 92, 191],  // Twilight purple (#7c5cbf)
+  [238, 206, 145], // Soft warm gold (#eece91)
+  [252, 233, 195], // Pale peach gold (#fce9c3)
+  [255, 168, 185], // Dreamy rose pink (#ffa8b9)
+  [255, 250, 240], // Pure pearl champagne (#fffaf0)
+  [194, 178, 237], // Pastel twilight purple (#c2b2ed)
 ];
 
 const LAYER_CONFIG: Record<DepthLayer, {
@@ -160,7 +160,7 @@ export default function StarfieldCanvas() {
         baseX: w * 0.75,
         baseY: h * 0.2,
         radius: isMobile ? w * 0.8 : Math.min(w, h) * 0.75,
-        color: [124, 92, 191], // Purple
+        color: [194, 178, 237], // Lighter twilight purple
         maxOpacity: isMobile ? 0.07 : 0.13,
         opacity: 0,
         swaySpeedX: 0.00015,
@@ -176,7 +176,7 @@ export default function StarfieldCanvas() {
         baseX: w * 0.2,
         baseY: h * 0.6,
         radius: isMobile ? w * 0.7 : Math.min(w, h) * 0.65,
-        color: [212, 168, 83], // Gold
+        color: [238, 206, 145], // Lighter warm gold
         maxOpacity: isMobile ? 0.05 : 0.11,
         opacity: 0,
         swaySpeedX: 0.0001,
@@ -195,7 +195,7 @@ export default function StarfieldCanvas() {
         baseX: w * 0.5,
         baseY: h * 0.8,
         radius: Math.min(w, h) * 0.7,
-        color: [232, 71, 95], // Rose
+        color: [255, 168, 185], // Lighter dreamy rose pink
         maxOpacity: 0.12,
         opacity: 0,
         swaySpeedX: 0.0002,
@@ -231,7 +231,7 @@ export default function StarfieldCanvas() {
         maxAlpha,
         pulseSpeed: Math.random() * 0.0015 + 0.0008,
         pulseOffset: Math.random() * Math.PI * 2,
-        color: Math.random() < 0.6 ? [232, 71, 95] : [212, 168, 83],
+        color: Math.random() < 0.6 ? [255, 168, 185] : [238, 206, 145],
         isHeart,
       });
     }
@@ -263,12 +263,12 @@ export default function StarfieldCanvas() {
   const spawnSparkles = useCallback((mx: number, my: number, count = 2) => {
     const newSparks: SparkleParticle[] = [];
     for (let i = 0; i < count; i++) {
-      const size = Math.random() * 4 + 2;
-      const maxLife = Math.random() * 30 + 20;
+      const size = Math.random() * 8 + 4; // Lighter, larger sparkles (was * 4 + 2)
+      const maxLife = Math.random() * 70 + 50; // Exist significantly longer (was * 30 + 20)
       const angle = Math.random() * Math.PI * 2;
-      const force = Math.random() * 1.2 + 0.3;
-      const vx = Math.cos(angle) * force * 0.3;
-      const vy = (Math.sin(angle) * force - 0.4) * 0.3;
+      const force = Math.random() * 0.5 + 0.15; // Gentler drift (was * 1.2 + 0.3)
+      const vx = Math.cos(angle) * force * 0.15; // Slower x speed (was * 0.3)
+      const vy = (Math.sin(angle) * force - 0.2) * 0.15; // Slower y drift (was -0.4 * 0.3)
 
       newSparks.push({
         x: mx + (Math.random() - 0.5) * 6,
@@ -283,7 +283,7 @@ export default function StarfieldCanvas() {
       });
     }
 
-    if (sparklesRef.current.length < 100) {
+    if (sparklesRef.current.length < 250) { // Support higher particle count for denser tail
       sparklesRef.current.push(...newSparks);
     }
   }, []);
@@ -580,12 +580,12 @@ export default function StarfieldCanvas() {
 
       s.x += s.vx;
       s.y += s.vy;
-      s.vx *= 0.96;
-      s.vy *= 0.96;
+      s.vx *= 0.98; // Decelerate slower (was 0.96)
+      s.vy *= 0.98;
       
       // Gravity and gentle jitter
-      s.vy += 0.005;
-      s.vx += (Math.random() - 0.5) * 0.03;
+      s.vy += 0.0018; // Gentler gravity pull (was 0.005)
+      s.vx += (Math.random() - 0.5) * 0.012; // Softer jitter (was 0.03)
 
       s.alpha = s.life / s.maxLife;
       const currentSize = s.size * (s.life / s.maxLife);

@@ -942,12 +942,12 @@ body:has(.us-page) canvas:not(.us-starfield-canvas) {
 
 /* Force dark site-shell and header background on /us */
 body:has(.us-page) .site-shell::before {
-  background: radial-gradient(circle at 50% 50%, #0d0c11, #050507) !important;
+  background: radial-gradient(circle at 50% 50%, #1a1825, #0c0b12) !important;
 }
 
 body:has(.us-page) .site-header {
-  background: rgba(10, 10, 12, 0.8) !important;
-  border-bottom: 1px solid rgba(212, 168, 83, 0.15) !important;
+  background: rgba(22, 20, 30, 0.75) !important;
+  border-bottom: 1px solid rgba(238, 206, 145, 0.15) !important;
 }
 
 body:has(.us-page) .site-header .brand-text,
@@ -977,12 +977,12 @@ body:has(.us-page) .site-footer .footer-links a {
 
 /* Scroll lock fix support */
 .us-page {
-  --us-gold: #d4a853;
-  --us-gold-light: #f5d799;
-  --us-rose: #e8475f;
-  --us-dark: #0a0a0c;
-  --us-dark-card: rgba(18, 18, 22, 0.65);
-  --us-champagne: #fdf6e3;
+  --us-gold: #eece91;
+  --us-gold-light: #fce9c3;
+  --us-rose: #ffa8b9;
+  --us-dark: #12101a;
+  --us-dark-card: rgba(28, 26, 38, 0.55);
+  --us-champagne: #fffcf5;
 
   color: var(--us-champagne);
   font-family: var(--font-body), "Segoe UI", sans-serif;
