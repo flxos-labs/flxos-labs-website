@@ -2,6 +2,10 @@ import type { Metadata } from "next";
 import UsContent from "./UsContent";
 import UsAuthGate from "./UsAuthGate";
 
+export const viewport = {
+  themeColor: "#0a0a0c",
+};
+
 export const metadata: Metadata = {
   metadataBase: new URL("https://flxos-labs.github.io"),
   title: "For You, Rekha ❤️",
@@ -20,11 +24,33 @@ export const metadata: Metadata = {
       },
     ],
   },
+  twitter: {
+    card: "summary_large_image",
+    title: "For You, Rekha ❤️",
+    description: "A cinematic space dedicated to the love story of Akash and Rekha.",
+  },
 };
 
 export default function UsPage() {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "CreativeWork",
+    "name": "For You, Rekha",
+    "author": {
+      "@type": "Person",
+      "name": "Akash"
+    },
+    "description": "A cinematic romantic dedication page made for Rekha.",
+    "genre": "Interactive Romance Dedication",
+    "url": "https://flxos-labs.github.io/us/"
+  };
+
   return (
     <UsAuthGate>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <UsContent />
     </UsAuthGate>
   );
