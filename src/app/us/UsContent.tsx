@@ -1185,9 +1185,7 @@ export default function UsContent() {
           {/* Horizontal Lens Flare */}
           <div className="us-intro-flare" />
 
-          {/* Cinematic Letterbox Bars */}
-          <div className="us-intro-letterbox-top" />
-          <div className="us-intro-letterbox-bottom" />
+
 
           {/* Velvet Curtain Reveal */}
           <div className="us-curtain-container">
