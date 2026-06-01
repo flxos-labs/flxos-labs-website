@@ -740,7 +740,7 @@ export default function UsContent() {
         const valYpx = (val.y / 100) * rect.height;
         const dist = Math.hypot(x - valXpx, y - valYpx);
         if (dist < 28) {
-          setSelectedValues((prev) => [...prev, val.id]);
+          setSelectedValues((prev) => prev.includes(val.id) ? prev : [...prev, val.id]);
         }
       });
     }
@@ -761,7 +761,7 @@ export default function UsContent() {
       const valYpx = (val.y / 100) * rect.height;
       const dist = Math.hypot(x - valXpx, y - valYpx);
       if (dist < 28) {
-        setSelectedValues((prev) => [...prev, val.id]);
+        setSelectedValues((prev) => prev.includes(val.id) ? prev : [...prev, val.id]);
       }
     });
   };

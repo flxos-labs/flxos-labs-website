@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
-import { supabase } from "@/lib/supabase";
+import { supabaseAdmin } from "@/lib/supabase";
 
 interface RateLimitAttempt {
   count: number;
@@ -54,7 +54,7 @@ function getClientIp(req: NextRequest): string {
 async function getRateLimitRecord(ip: string): Promise<RateLimitAttempt> {
   const now = Date.now();
   try {
-    const { data, error } = await supabase
+    const { data, error } = await supabaseAdmin
       .from("us_auth_attempts")
       .select("count, first_attempt, lockout_until")
       .eq("ip", ip)
@@ -91,7 +91,7 @@ async function getRateLimitRecord(ip: string): Promise<RateLimitAttempt> {
  */
 async function saveRateLimitRecord(ip: string, record: RateLimitAttempt): Promise<void> {
   try {
-    const { error } = await supabase
+    const { error } = await supabaseAdmin
       .from("us_auth_attempts")
       .upsert({
         ip,
@@ -118,7 +118,7 @@ async function saveRateLimitRecord(ip: string, record: RateLimitAttempt): Promis
  */
 async function deleteRateLimitRecord(ip: string): Promise<void> {
   try {
-    const { error } = await supabase
+    const { error } = await supabaseAdmin
       .from("us_auth_attempts")
       .delete()
       .eq("ip", ip);
@@ -160,7 +160,17 @@ function verifyToken(token: string, secret: string): boolean {
     const hmac = crypto.createHmac("sha256", secret);
     hmac.update(timestamp);
     const expectedSignature = hmac.digest("hex");
-    if (signature !== expectedSignature) return false;
+
+    const signatureBuffer = Buffer.from(signature, "utf-8");
+    const expectedSignatureBuffer = Buffer.from(expectedSignature, "utf-8");
+
+    if (signatureBuffer.length !== expectedSignatureBuffer.length) {
+      return false;
+    }
+
+    if (!crypto.timingSafeEqual(signatureBuffer, expectedSignatureBuffer)) {
+      return false;
+    }
 
     // Check expiration (30 days validity)
     const tokenTime = parseInt(timestamp, 10);
