@@ -1361,13 +1361,13 @@ export default function UsContent() {
                 {isLetterOpen ? (
                   <>
                     <p className="text-xs sm:text-sm leading-relaxed text-[#d4a853] mb-3">
-                      <TypewriterText text="Rekha, from the moment our paths crossed, the world seemed to shift into a warmer, more vibrant focus. You brought a quiet grace and an undeniable magic into my life that I didn't know I was searching for, but now cannot imagine living without." />
+                      Rekha, from the moment our paths crossed, the world seemed to shift into a warmer, more vibrant focus. You brought a quiet grace and an undeniable magic into my life that I didn&apos;t know I was searching for, but now cannot imagine living without.
                     </p>
                     <p className="text-xs sm:text-sm leading-relaxed text-[#df7859] mb-3">
-                      <TypewriterText text="In the noise of the everyday, you are my sanctuary. The ease with which we share both laughter and comfortable silence is a rare gift that I cherish more with each passing day. You have this beautiful way of turning ordinary moments into extraordinary memories." />
+                      In the noise of the everyday, you are my sanctuary. The ease with which we share both laughter and comfortable silence is a rare gift that I cherish more with each passing day. You have this beautiful way of turning ordinary moments into extraordinary memories.
                     </p>
                     <p className="text-xs sm:text-sm leading-relaxed text-[#e8475f]">
-                      <TypewriterText text="Thank you for being my constant anchor, my source of inspiration, and the keeper of my heart. I promise to stand by you through every season, celebrating your triumphs, supporting your dreams, and loving you more fiercely with every beat of my heart." />
+                      Thank you for being my constant anchor, my source of inspiration, and the keeper of my heart. I promise to stand by you through every season, celebrating your triumphs, supporting your dreams, and loving you more fiercely with every beat of my heart.
                     </p>
                   </>
                 ) : (
