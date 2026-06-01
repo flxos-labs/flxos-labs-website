@@ -460,7 +460,10 @@ export default function UsContent() {
   const [isLetterOpen, setIsLetterOpen] = useState(false);
   const [expandedTimelineNode, setExpandedTimelineNode] = useState<number | null>(null);
   
-  // Constellation Game State
+  // Constellation Game State & Refs
+  const skyContainerRef = useRef<HTMLDivElement>(null);
+  const [isDraggingStarSky, setIsDraggingStarSky] = useState(false);
+  const [lastDragStarSkyPos, setLastDragStarSkyPos] = useState<{ x: number; y: number } | null>(null);
   const [connectedStars, setConnectedStars] = useState<number[]>([]);
   const [constellationUnlocked, setConstellationUnlocked] = useState(false);
   
@@ -482,6 +485,9 @@ export default function UsContent() {
   const [isJarAnimating, setIsJarAnimating] = useState(false);
 
   // --- NEW SECTIONS STATES & HANDLERS ---
+  const valuesContainerRef = useRef<HTMLDivElement>(null);
+  const [isDraggingValues, setIsDraggingValues] = useState(false);
+  const [lastDragValuesPos, setLastDragValuesPos] = useState<{ x: number; y: number } | null>(null);
   const [capsuleUnlocked, setCapsuleUnlocked] = useState(false);
   const [selectedValues, setSelectedValues] = useState<string[]>([]);
   const [oracleSpinning, setOracleSpinning] = useState(false);
@@ -603,6 +609,20 @@ export default function UsContent() {
     return () => clearInterval(interval);
   }, []);
 
+  // Safety window pointerup listener to reset dragging states
+  useEffect(() => {
+    const handleGlobalPointerUp = () => {
+      setIsDraggingStarSky(false);
+      setLastDragStarSkyPos(null);
+      setIsDraggingValues(false);
+      setLastDragValuesPos(null);
+    };
+    if (isDraggingStarSky || isDraggingValues) {
+      window.addEventListener("pointerup", handleGlobalPointerUp);
+      return () => window.removeEventListener("pointerup", handleGlobalPointerUp);
+    }
+  }, [isDraggingStarSky, isDraggingValues]);
+
   // Sparkle / Heart click burst
   const handlePromiseClick = (index: number, e: React.MouseEvent) => {
     const isChecked = checkedPromises.includes(index);
@@ -654,6 +674,96 @@ export default function UsContent() {
   const resetConstellation = () => {
     setConnectedStars([]);
     setConstellationUnlocked(false);
+  };
+
+  const handleSkyPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (constellationUnlocked) return;
+    
+    e.currentTarget.setPointerCapture(e.pointerId);
+    setIsDraggingStarSky(true);
+
+    const rect = skyContainerRef.current?.getBoundingClientRect();
+    if (rect) {
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const xPct = (x / rect.width) * 100;
+      const yPct = (y / rect.height) * 100;
+      setLastDragStarSkyPos({ x: xPct, y: yPct });
+
+      CONSTELLATION_STARS.forEach((star) => {
+        if (connectedStars.includes(star.id)) return;
+        const starXpx = (star.x / 100) * rect.width;
+        const starYpx = (star.y / 100) * rect.height;
+        const dist = Math.hypot(x - starXpx, y - starYpx);
+        if (dist < 28) {
+          handleStarClick(star.id);
+        }
+      });
+    }
+  };
+
+  const handleSkyPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!isDraggingStarSky || constellationUnlocked || !skyContainerRef.current) return;
+    const rect = skyContainerRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const xPct = (x / rect.width) * 100;
+    const yPct = (y / rect.height) * 100;
+    setLastDragStarSkyPos({ x: xPct, y: yPct });
+
+    CONSTELLATION_STARS.forEach((star) => {
+      if (connectedStars.includes(star.id)) return;
+      const starXpx = (star.x / 100) * rect.width;
+      const starYpx = (star.y / 100) * rect.height;
+      const dist = Math.hypot(x - starXpx, y - starYpx);
+      if (dist < 28) {
+        handleStarClick(star.id);
+      }
+    });
+  };
+
+  const handleValuesPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    e.currentTarget.setPointerCapture(e.pointerId);
+    setIsDraggingValues(true);
+
+    const rect = valuesContainerRef.current?.getBoundingClientRect();
+    if (rect) {
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const xPct = (x / rect.width) * 100;
+      const yPct = (y / rect.height) * 100;
+      setLastDragValuesPos({ x: xPct, y: yPct });
+
+      LOVE_VALUES.forEach((val) => {
+        if (selectedValues.includes(val.id)) return;
+        const valXpx = (val.x / 100) * rect.width;
+        const valYpx = (val.y / 100) * rect.height;
+        const dist = Math.hypot(x - valXpx, y - valYpx);
+        if (dist < 28) {
+          setSelectedValues((prev) => [...prev, val.id]);
+        }
+      });
+    }
+  };
+
+  const handleValuesPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!isDraggingValues || !valuesContainerRef.current) return;
+    const rect = valuesContainerRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const xPct = (x / rect.width) * 100;
+    const yPct = (y / rect.height) * 100;
+    setLastDragValuesPos({ x: xPct, y: yPct });
+
+    LOVE_VALUES.forEach((val) => {
+      if (selectedValues.includes(val.id)) return;
+      const valXpx = (val.x / 100) * rect.width;
+      const valYpx = (val.y / 100) * rect.height;
+      const dist = Math.hypot(x - valXpx, y - valYpx);
+      if (dist < 28) {
+        setSelectedValues((prev) => [...prev, val.id]);
+      }
+    });
   };
 
   // Compliment Jar click
@@ -732,6 +842,28 @@ export default function UsContent() {
             stroke="url(#gold-rose-grad)"
             strokeWidth="3.5"
             className="animate-pulse"
+          />
+        );
+      }
+    }
+
+    // Render pointer tracking line if dragging
+    if (isDraggingStarSky && lastDragStarSkyPos && connectedStars.length > 0 && !constellationUnlocked) {
+      const lastStarId = connectedStars[connectedStars.length - 1];
+      const lastStar = CONSTELLATION_STARS.find((s) => s.id === lastStarId);
+      if (lastStar) {
+        lines.push(
+          <line
+            key="drag-temp-line"
+            x1={`${lastStar.x}%`}
+            y1={`${lastStar.y}%`}
+            x2={`${lastDragStarSkyPos.x}%`}
+            y2={`${lastDragStarSkyPos.y}%`}
+            stroke="url(#gold-rose-grad)"
+            strokeWidth="2.5"
+            strokeDasharray="4"
+            className="animate-pulse"
+            style={{ opacity: 0.8 }}
           />
         );
       }
@@ -877,8 +1009,25 @@ export default function UsContent() {
           </p>
         </div>
 
-        <div className="us-sky-canvas-wrapper us-reveal">
+        <div 
+          ref={skyContainerRef}
+          className="us-sky-canvas-wrapper us-reveal"
+          style={{ touchAction: "none" }}
+          onPointerDown={handleSkyPointerDown}
+          onPointerMove={handleSkyPointerMove}
+          onPointerUp={(e) => {
+            e.currentTarget.releasePointerCapture(e.pointerId);
+            setIsDraggingStarSky(false);
+            setLastDragStarSkyPos(null);
+          }}
+        >
           <svg className="absolute inset-0 w-full h-full pointer-events-none">
+            <defs>
+              <linearGradient id="gold-rose-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#d4a853" />
+                <stop offset="100%" stopColor="#e8475f" />
+              </linearGradient>
+            </defs>
             {renderConstellationLines()}
           </svg>
 
@@ -1170,7 +1319,18 @@ export default function UsContent() {
 
         <div className="us-constellation-align-container max-w-4xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-10 items-center us-reveal">
           {/* Constellation SVG Interactive Visualizer */}
-          <div className="us-align-visualizer relative aspect-square w-full max-w-[360px] mx-auto border border-[rgba(212,168,83,0.15)] rounded-full bg-[rgba(10,10,12,0.4)] overflow-hidden">
+          <div 
+            ref={valuesContainerRef}
+            className="us-align-visualizer relative aspect-square w-full max-w-[360px] mx-auto border border-[rgba(212,168,83,0.15)] rounded-full bg-[rgba(10,10,12,0.4)] overflow-hidden"
+            style={{ touchAction: "none" }}
+            onPointerDown={handleValuesPointerDown}
+            onPointerMove={handleValuesPointerMove}
+            onPointerUp={(e) => {
+              e.currentTarget.releasePointerCapture(e.pointerId);
+              setIsDraggingValues(false);
+              setLastDragValuesPos(null);
+            }}
+          >
             <div className="absolute inset-4 border border-[rgba(212,168,83,0.06)] rounded-full animate-pulse"></div>
             <div className="absolute inset-12 border border-[rgba(212,168,83,0.04)] rounded-full"></div>
             
@@ -1202,6 +1362,25 @@ export default function UsContent() {
                   );
                 });
               })}
+              {/* Render dynamic cursor tracking line if dragging */}
+              {isDraggingValues && lastDragValuesPos && selectedValues.length > 0 && selectedValues.length < LOVE_VALUES.length && (() => {
+                const lastValId = selectedValues[selectedValues.length - 1];
+                const lastVal = LOVE_VALUES.find((v) => v.id === lastValId);
+                if (!lastVal) return null;
+                return (
+                  <line
+                    x1={`${lastVal.x}%`}
+                    y1={`${lastVal.y}%`}
+                    x2={`${lastDragValuesPos.x}%`}
+                    y2={`${lastDragValuesPos.y}%`}
+                    stroke="url(#rose-gold-glow-values)"
+                    strokeWidth="2"
+                    strokeDasharray="4"
+                    className="animate-pulse"
+                    style={{ opacity: 0.8 }}
+                  />
+                );
+              })()}
             </svg>
 
             {selectedValues.length === LOVE_VALUES.length && (
