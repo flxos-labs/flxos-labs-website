@@ -1012,7 +1012,7 @@ export default function UsContent() {
         <div 
           ref={skyContainerRef}
           className="us-sky-canvas-wrapper us-reveal"
-          style={{ touchAction: "none" }}
+          style={{ touchAction: "none", userSelect: "none" }}
           onPointerDown={handleSkyPointerDown}
           onPointerMove={handleSkyPointerMove}
           onPointerUp={(e) => {
@@ -1322,7 +1322,7 @@ export default function UsContent() {
           <div 
             ref={valuesContainerRef}
             className="us-align-visualizer relative aspect-square w-full max-w-[360px] mx-auto border border-[rgba(212,168,83,0.15)] rounded-full bg-[rgba(10,10,12,0.4)] overflow-hidden"
-            style={{ touchAction: "none" }}
+            style={{ touchAction: "none", userSelect: "none" }}
             onPointerDown={handleValuesPointerDown}
             onPointerMove={handleValuesPointerMove}
             onPointerUp={(e) => {
