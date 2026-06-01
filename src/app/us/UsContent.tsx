@@ -5,6 +5,30 @@ import Image from "next/image";
 import Link from "next/link";
 import StarfieldCanvas from "./StarfieldCanvas";
 
+const SectionHeading = ({ eyebrow, title, description, roseGlow = false }: { eyebrow: string; title: string; description?: string; roseGlow?: boolean }) => {
+  return (
+    <div className={`text-center max-w-2xl mx-auto mb-10 px-4 us-section-glow ${roseGlow ? "us-section-glow-rose" : ""}`}>
+      <div className="flex items-center justify-center gap-3 mb-2 select-none">
+        <span className="text-[10px] text-[rgba(212,168,83,0.4)] animate-pulse">✦</span>
+        <span className="font-display font-bold text-[#d4a853] tracking-[0.25em] text-[10px] uppercase">
+          {eyebrow}
+        </span>
+        <span className="text-[10px] text-[rgba(212,168,83,0.4)] animate-pulse">✦</span>
+      </div>
+      <h2 className="font-display text-3xl sm:text-4xl font-extrabold mt-2 text-white tracking-wide relative inline-block">
+        <span className="absolute -left-7 top-1/2 -translate-y-1/2 text-sm text-[rgba(212,168,83,0.25)] select-none animate-pulse">✨</span>
+        {title}
+        <span className="absolute -right-7 top-1/2 -translate-y-1/2 text-sm text-[rgba(212,168,83,0.25)] select-none animate-pulse">✨</span>
+      </h2>
+      {description && (
+        <p className="text-[rgba(253,246,227,0.6)] mt-4 text-sm sm:text-base leading-relaxed">
+          {description}
+        </p>
+      )}
+    </div>
+  );
+};
+
 interface Reason {
   num: string;
   title: string;
@@ -850,6 +874,8 @@ export default function UsContent() {
 
   // Intersection Observer for scroll reveals — uses .us-page as root since it's the scroll container
   useEffect(() => {
+    if (introPhase < 7) return;
+
     const pageEl = pageRef.current;
     const observer = new IntersectionObserver(
       (entries) => {
@@ -861,16 +887,32 @@ export default function UsContent() {
       },
       {
         root: pageEl,
-        threshold: 0.1,
-        rootMargin: "0px 0px -30px 0px",
+        threshold: 0.05,
+        rootMargin: "0px 0px -10px 0px",
       }
     );
 
     const elements = document.querySelectorAll(".us-reveal");
     elements.forEach((el) => observer.observe(el));
 
-    return () => observer.disconnect();
-  }, []);
+    // Fallback: Reveal items already in viewport after short delay
+    const fallbackTimer = setTimeout(() => {
+      if (!pageEl) return;
+      const rect = pageEl.getBoundingClientRect();
+      elements.forEach((el) => {
+        const elRect = el.getBoundingClientRect();
+        // Check if element overlaps with the visible scroll area of pageEl
+        if (elRect.top < rect.bottom && elRect.bottom > rect.top) {
+          el.classList.add("revealed");
+        }
+      });
+    }, 400);
+
+    return () => {
+      observer.disconnect();
+      clearTimeout(fallbackTimer);
+    };
+  }, [introPhase]);
 
   // Anniversary date setup (June 15, 2024 00:00:00)
   useEffect(() => {
@@ -1299,19 +1341,9 @@ export default function UsContent() {
 
       {/* Section 2 — Wax-Sealed Love Letter Envelope */}
       <section className="us-letter-section">
-        <div className="text-center max-w-2xl mx-auto mb-10">
-          <span className="font-display font-bold text-[#d4a853] tracking-widest text-xs uppercase">
-            A Heartfelt Message
-          </span>
-          <h2 className="font-display text-3xl sm:text-4xl font-extrabold mt-2 text-white">
-            For Your Eyes Only
-          </h2>
-          <p className="text-[rgba(253,246,227,0.6)] mt-4">
-            Click the golden wax seal to open the envelope and reveal the letter inside.
-          </p>
-        </div>
+        <SectionHeading eyebrow="A Heartfelt Message" title="For Your Eyes Only" description="Click the golden wax seal to open the envelope and reveal the letter inside." />
 
-        <div className="us-envelope-wrapper us-reveal">
+        <div className="us-envelope-wrapper us-reveal us-reveal-scale">
           <div 
             className={`us-envelope ${isLetterOpen ? "open" : ""}`}
             onClick={() => setIsLetterOpen(!isLetterOpen)}
@@ -1355,19 +1387,9 @@ export default function UsContent() {
 
       {/* Section 2.5 — Immersive Music Player */}
       <section className="us-player-section py-20">
-        <div className="text-center max-w-2xl mx-auto mb-10 px-4">
-          <span className="font-display font-bold text-[#d4a853] tracking-widest text-xs uppercase">
-            Our Soundtrack
-          </span>
-          <h2 className="font-display text-3xl sm:text-4xl font-extrabold mt-2 text-white">
-            Echoes of Us
-          </h2>
-          <p className="text-[rgba(253,246,227,0.6)] mt-4">
-            A curated selection of melodies that echo the rhythm of our hearts. Press play to spin the vinyl and read the lyrics.
-          </p>
-        </div>
+        <SectionHeading eyebrow="Our Soundtrack" title="Echoes of Us" description="A curated selection of melodies that echo the rhythm of our hearts. Press play to spin the vinyl and read the lyrics." />
 
-        <div className="max-w-4xl mx-auto px-4 us-reveal">
+        <div className="max-w-4xl mx-auto px-4 us-reveal us-reveal-scale us-reveal-stagger-1">
           <div className={`us-player-container ${isPlaying ? "playing" : ""}`}>
             {/* Player Visuals */}
             <div className="us-player-left">
@@ -1494,19 +1516,9 @@ export default function UsContent() {
 
       {/* Section 3 — Relationship Timeline */}
       <section className="us-timeline-section py-20 bg-[rgba(10,10,12,0.5)]">
-        <div className="text-center max-w-2xl mx-auto mb-10 px-4">
-          <span className="font-display font-bold text-[#d4a853] tracking-widest text-xs uppercase">
-            Our Chapters
-          </span>
-          <h2 className="font-display text-3xl sm:text-4xl font-extrabold mt-2 text-white">
-            Our Story So Far
-          </h2>
-          <p className="text-[rgba(253,246,227,0.6)] mt-4">
-            Click on individual milestone cards to unlock deeper memories and reflections.
-          </p>
-        </div>
+        <SectionHeading eyebrow="Our Chapters" title="Our Story So Far" description="Click on individual milestone cards to unlock deeper memories and reflections." />
 
-        <div className="us-timeline us-reveal relative flex md:flex-row flex-col">
+        <div className="us-timeline us-reveal us-reveal-blur relative flex md:flex-row flex-col">
           {/* Horizontal line for desktop */}
           <div className="us-timeline-horizontal-line hidden md:block"></div>
 
@@ -1567,21 +1579,11 @@ export default function UsContent() {
 
       {/* Section 4 — Connect the Stars Constellation Game */}
       <section className="us-constellation-sec">
-        <div className="text-center max-w-2xl mx-auto mb-6">
-          <span className="font-display font-bold text-[#d4a853] tracking-widest text-xs uppercase">
-            Interactive Star Sky
-          </span>
-          <h2 className="font-display text-3xl sm:text-4xl font-extrabold mt-2 text-white">
-            Connect Our Constellation
-          </h2>
-          <p className="text-[rgba(253,246,227,0.6)] mt-4">
-            Click the stars in order to draw the cosmic alignment of our love. Connect all {CONSTELLATION_STARS.length} stars to unlock a hidden constellation.
-          </p>
-        </div>
+        <SectionHeading eyebrow="Interactive Star Sky" title="Connect Our Constellation" description={`Click the stars in order to draw the cosmic alignment of our love. Connect all ${CONSTELLATION_STARS.length} stars to unlock a hidden constellation.`} />
 
         <div 
           ref={skyContainerRef}
-          className="us-sky-canvas-wrapper us-reveal"
+          className="us-sky-canvas-wrapper us-reveal us-reveal-scale"
           style={{ touchAction: "none", userSelect: "none" }}
           onPointerDown={handleSkyPointerDown}
           onPointerMove={handleSkyPointerMove}
@@ -1653,19 +1655,9 @@ export default function UsContent() {
 
       {/* Section 4.5 — "How Well Do You Know Me?" Quiz Game */}
       <section className="us-quiz-section">
-        <div className="text-center max-w-2xl mx-auto mb-10 px-4">
-          <span className="font-display font-bold text-[#d4a853] tracking-widest text-xs uppercase">
-            Love Challenge
-          </span>
-          <h2 className="font-display text-3xl sm:text-4xl font-extrabold mt-2 text-white">
-            How Well Do You Know Me?
-          </h2>
-          <p className="text-[rgba(253,246,227,0.6)] mt-4">
-            Test your knowledge about my favorite things, fears, and quirks. Let&apos;s see if we are perfectly aligned!
-          </p>
-        </div>
+        <SectionHeading eyebrow="Love Challenge" title="How Well Do You Know Me?" description="Test your knowledge about my favorite things, fears, and quirks. Let's see if we are perfectly aligned!" />
 
-        <div className="us-quiz-container px-4 us-reveal">
+        <div className="us-quiz-container px-4 us-reveal us-reveal-scale">
           <div className={`us-quiz-card us-card-gradient ${isQuizCardShaking ? 'shake' : ''}`}>
             <div className="us-quiz-progress-bar-bg">
               <div 
@@ -1839,20 +1831,10 @@ export default function UsContent() {
 
       {/* Section 4.6 — "Our Story" Flip-Card Gallery */}
       <section className="us-flipcard-section">
-        <div className="text-center max-w-2xl mx-auto mb-6 px-4">
-          <span className="font-display font-bold text-[#d4a853] tracking-widest text-xs uppercase">
-            Milestones & Dreams
-          </span>
-          <h2 className="font-display text-3xl sm:text-4xl font-extrabold mt-2 text-white">
-            Our Story Gallery
-          </h2>
-          <p className="text-[rgba(253,246,227,0.6)] mt-4">
-            Click on the cards to flip them and reveal our deep memories, first impressions, and future plans together.
-          </p>
-        </div>
+        <SectionHeading eyebrow="Milestones & Dreams" title="Our Story Gallery" description="Click on the cards to flip them and reveal our deep memories, first impressions, and future plans together." />
 
         {/* Categories filter bar */}
-        <div className="us-flipcards-filter-bar px-4 us-reveal">
+        <div className="us-flipcards-filter-bar px-4 us-reveal us-reveal-blur us-reveal-stagger-1">
           {(["All", "First Impressions", "Deep Realizations", "Future Dreams"] as const).map((category) => (
             <button
               key={category}
@@ -1865,7 +1847,7 @@ export default function UsContent() {
         </div>
 
         {/* Cards Grid */}
-        <div className="us-flipcards-grid px-4 us-reveal">
+        <div className="us-flipcards-grid px-4 us-reveal us-reveal-scale us-reveal-stagger-2">
           {FLIP_CARDS.filter((card) => flipCardsFilter === "All" || card.category === flipCardsFilter).map((card) => {
             // Find global index in FLIP_CARDS array to track flip state consistently
             const globalIndex = FLIP_CARDS.indexOf(card);
@@ -1926,20 +1908,9 @@ export default function UsContent() {
 
       {/* Love Constellation Alignment Section */}
       <section className="us-constellation-align-section py-20">
+        <SectionHeading eyebrow="Value Constellation" title="Our Love Constellation" description="Select the values that connect our hearts. Toggle different pillars to weave the constellation network." roseGlow />
 
-        <div className="text-center max-w-2xl mx-auto mb-10 px-4">
-          <span className="font-display font-bold text-[#d4a853] tracking-widest text-xs uppercase">
-            Value Constellation
-          </span>
-          <h2 className="font-display text-3xl sm:text-4xl font-extrabold mt-2 text-white">
-            Our Love Constellation
-          </h2>
-          <p className="text-[rgba(253,246,227,0.6)] mt-4">
-            Select the values that connect our hearts. Toggle different pillars to weave the constellation network.
-          </p>
-        </div>
-
-        <div className="us-constellation-align-container max-w-4xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-10 items-center us-reveal">
+        <div className="us-constellation-align-container max-w-4xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-10 items-center us-reveal us-reveal-scale">
           {/* Constellation SVG Interactive Visualizer */}
           <div 
             ref={valuesContainerRef}
@@ -2081,19 +2052,9 @@ export default function UsContent() {
 
       {/* Section 6 — Love Dashboard (Live Counter & Promise Checkboxes) */}
       <section className="us-dashboard-section max-w-5xl mx-auto px-4 py-20">
-        <div className="text-center max-w-2xl mx-auto mb-10">
-          <span className="font-display font-bold text-[#d4a853] tracking-widest text-xs uppercase">
-            Love Dashboard
-          </span>
-          <h2 className="font-display text-3xl sm:text-4xl font-extrabold mt-2 text-white">
-            Our Journey In Numbers
-          </h2>
-          <p className="text-[rgba(253,246,227,0.6)] mt-4">
-            Tracking every single beautiful moment of our connection down to the millisecond.
-          </p>
-        </div>
+        <SectionHeading eyebrow="Love Dashboard" title="Our Journey In Numbers" description="Tracking every single beautiful moment of our connection down to the millisecond." roseGlow />
 
-        <div className="us-dashboard-grid us-reveal">
+        <div className="us-dashboard-grid us-reveal us-reveal-scale">
           <div className="us-dashboard-counter-card us-card-frosted relative overflow-hidden">
             <div className="us-counter-title">Our Time in the Universe</div>
 
@@ -2176,7 +2137,7 @@ export default function UsContent() {
         </div>
 
         {/* Animated Love Stats Dashboard */}
-        <div className="us-stats-grid grid grid-cols-2 md:grid-cols-4 gap-4 mt-12 us-reveal">
+        <div className="us-stats-grid grid grid-cols-2 md:grid-cols-4 gap-4 mt-12 us-reveal us-reveal-scale us-reveal-stagger-1">
           {LOVE_STATS.map((stat, i) => (
             <div key={i} className="us-stat-card border border-[rgba(212,168,83,0.12)] bg-[rgba(18,18,22,0.4)] backdrop-blur-md p-5 rounded-2xl flex flex-col items-center text-center">
               <span className="text-2xl mb-2">{stat.icon}</span>
@@ -2209,17 +2170,7 @@ export default function UsContent() {
 
       {/* Section 7 — Compliment Jar */}
       <section className="us-jar-section">
-        <div className="text-center max-w-2xl mx-auto mb-10 px-4">
-          <span className="font-display font-bold text-[#d4a853] tracking-widest text-xs uppercase">
-            Jar of Compliments
-          </span>
-          <h2 className="font-display text-3xl sm:text-4xl font-extrabold mt-2 text-white">
-            A Jar Full of Hearts
-          </h2>
-          <p className="text-[rgba(253,246,227,0.6)] mt-4">
-            Click the glowing glass jar to draw a random message of affection, appreciation, and adoration.
-          </p>
-        </div>
+        <SectionHeading eyebrow="Jar of Compliments" title="A Jar Full of Hearts" description="Click the glowing glass jar to draw a random message of affection, appreciation, and adoration." />
 
         <div className={`us-compliment-scroll-wrapper ${currentCompliment ? "active" : ""}`}>
           {currentCompliment && (
@@ -2256,19 +2207,9 @@ export default function UsContent() {
 
       {/* Cosmic Compass Oracle Section */}
       <section className="us-oracle-section py-20 bg-[rgba(10,10,12,0.3)]">
-        <div className="text-center max-w-2xl mx-auto mb-10 px-4">
-          <span className="font-display font-bold text-[#d4a853] tracking-widest text-xs uppercase">
-            Celestial Oracle
-          </span>
-          <h2 className="font-display text-3xl sm:text-4xl font-extrabold mt-2 text-white">
-            The Cosmic Compass
-          </h2>
-          <p className="text-[rgba(253,246,227,0.6)] mt-4">
-            Click the celestial compass to spin the rings of destiny and reveal a prediction of our beautiful future.
-          </p>
-        </div>
+        <SectionHeading eyebrow="Celestial Oracle" title="The Cosmic Compass" description="Click the celestial compass to spin the rings of destiny and reveal a prediction of our beautiful future." />
 
-        <div className="max-w-md mx-auto text-center px-4 us-reveal">
+        <div className="max-w-md mx-auto text-center px-4 us-reveal us-reveal-scale">
           <div className="relative w-48 h-48 mx-auto mb-8 cursor-pointer" onClick={spinCompass}>
             <div className={`us-compass-outer border-2 border-[rgba(212,168,83,0.25)] rounded-full w-full h-full flex items-center justify-center ${oracleSpinning ? "us-spin-fast" : "us-spin-slow"}`}>
               <div className="us-compass-middle border border-dashed border-[rgba(232,71,95,0.3)] rounded-full w-[85%] h-[85%] flex items-center justify-center">
@@ -2313,19 +2254,9 @@ export default function UsContent() {
 
       {/* Section 4.7 — "Between the Lines" Deep Reveals */}
       <section className="us-deep-section">
-        <div className="text-center max-w-2xl mx-auto mb-10 px-4">
-          <span className="font-display font-bold text-[#d4a853] tracking-widest text-xs uppercase">
-            Deep Revelations
-          </span>
-          <h2 className="font-display text-3xl sm:text-4xl font-extrabold mt-2 text-white">
-            Between the Lines
-          </h2>
-          <p className="text-[rgba(253,246,227,0.6)] mt-4">
-            Click on a topic to uncover the deep and cute truths of our connection.
-          </p>
-        </div>
+        <SectionHeading eyebrow="Deep Revelations" title="Between the Lines" description="Click on a topic to uncover the deep and cute truths of our connection." />
 
-        <div className="us-deep-container px-4 us-reveal">
+        <div className="us-deep-container px-4 us-reveal us-reveal-blur">
           <div className="us-deep-cards-stack">
             {DEEP_QUESTIONS.map((item, idx) => {
               const isActive = activeDeepCardIndex === idx;
@@ -2381,19 +2312,9 @@ export default function UsContent() {
 
       {/* Message in a Bottle / Future Capsule Section */}
       <section className="us-capsule-section py-20">
-        <div className="text-center max-w-2xl mx-auto mb-10 px-4">
-          <span className="font-display font-bold text-[#d4a853] tracking-widest text-xs uppercase">
-            Time Capsule
-          </span>
-          <h2 className="font-display text-3xl sm:text-4xl font-extrabold mt-2 text-white">
-            Message in a Bottle
-          </h2>
-          <p className="text-[rgba(253,246,227,0.6)] mt-4">
-            Click the glowing glass bottle to unlock a letter written for our future self.
-          </p>
-        </div>
+        <SectionHeading eyebrow="Time Capsule" title="Message in a Bottle" description="Click the glowing glass bottle to unlock a letter written for our future self." />
 
-        <div className="max-w-xl mx-auto px-4 text-center us-reveal">
+        <div className="max-w-xl mx-auto px-4 text-center us-reveal us-reveal-scale">
           <div 
             className={`us-capsule-container ${capsuleUnlocked ? "unlocked" : ""}`}
             onClick={() => setCapsuleUnlocked(!capsuleUnlocked)}
@@ -2449,19 +2370,9 @@ export default function UsContent() {
 
       {/* Section 8 — Reasons I Love You Cards */}
       <section className="us-reasons-section py-20">
-        <div className="text-center max-w-2xl mx-auto mb-10 px-4">
-          <span className="font-display font-bold text-[#d4a853] tracking-widest text-xs uppercase">
-            Poetic Reflections
-          </span>
-          <h2 className="font-display text-3xl sm:text-4xl font-extrabold mt-2 text-white">
-            Reasons I Love You
-          </h2>
-          <p className="text-[rgba(253,246,227,0.6)] mt-4">
-            Just a few of the countless ways you fill my life with light, beauty, and joy.
-          </p>
-        </div>
+        <SectionHeading eyebrow="Poetic Reflections" title="Reasons I Love You" description="Just a few of the countless ways you fill my life with light, beauty, and joy." />
 
-        <div className="max-w-xl mx-auto px-4 relative h-[380px] flex flex-col justify-between items-center us-reveal">
+        <div className="max-w-xl mx-auto px-4 relative h-[380px] flex flex-col justify-between items-center us-reveal us-reveal-scale">
           <div className="relative w-full h-[280px]">
             {REASONS.map((reason, index) => {
               const total = REASONS.length;
@@ -2560,8 +2471,10 @@ export default function UsContent() {
             </svg>
           </div>
 
-          <h2 className="font-display text-2xl sm:text-3xl font-extrabold mb-4 text-[#d4a853] tracking-wide">
+          <h2 className="font-display text-2xl sm:text-3xl font-extrabold mb-4 text-[#d4a853] tracking-wide relative inline-block">
+            <span className="absolute -left-7 top-1/2 -translate-y-1/2 text-xs text-[rgba(212,168,83,0.4)] select-none animate-pulse">✦</span>
             Yours Forever
+            <span className="absolute -right-7 top-1/2 -translate-y-1/2 text-xs text-[rgba(212,168,83,0.4)] select-none animate-pulse">✦</span>
           </h2>
           <p className="text-[rgba(253,246,227,0.7)] text-lg italic max-w-md mx-auto mb-10">
             &ldquo;Two hearts, one infinity.&rdquo;

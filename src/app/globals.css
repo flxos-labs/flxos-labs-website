@@ -4152,11 +4152,12 @@ body:has(.us-page) {
   position: absolute;
   width: 320px;
   height: 320px;
-  border: 1px dashed rgba(212, 168, 83, 0.15);
+  border: 1px dashed rgba(212, 168, 83, 0.2);
   border-radius: 50%;
-  animation: us-spin 40s linear infinite;
+  animation: us-spin 35s linear infinite, us-ring-pulse 8s ease-in-out infinite alternate;
   pointer-events: none;
   z-index: 1;
+  box-shadow: inset 0 0 20px rgba(212, 168, 83, 0.03), 0 0 20px rgba(212, 168, 83, 0.03);
 }
 .us-orbital-ring::before {
   content: '';
@@ -4165,30 +4166,41 @@ body:has(.us-page) {
   left: 50%;
   width: 12px;
   height: 12px;
-  background: var(--us-gold);
+  background: radial-gradient(circle, var(--us-gold-light) 0%, var(--us-gold) 60%, transparent 100%);
   border-radius: 50%;
-  box-shadow: 0 0 15px var(--us-gold);
+  box-shadow: 0 0 20px var(--us-gold), 0 0 40px var(--us-gold);
 }
 .us-orbital-ring-outer {
   position: absolute;
-  width: 440px;
-  height: 440px;
-  border: 1px dashed rgba(232, 71, 95, 0.1);
+  width: 460px;
+  height: 460px;
+  border: 1px dashed rgba(232, 71, 95, 0.12);
   border-radius: 50%;
-  animation: us-spin-reverse 60s linear infinite;
+  animation: us-spin-reverse 55s linear infinite, us-ring-pulse-outer 10s ease-in-out infinite alternate;
   pointer-events: none;
   z-index: 1;
+  box-shadow: inset 0 0 30px rgba(232, 71, 95, 0.02), 0 0 30px rgba(232, 71, 95, 0.02);
 }
 .us-orbital-ring-outer::before {
   content: '';
   position: absolute;
   bottom: -4px;
   right: 50%;
-  width: 8px;
-  height: 8px;
-  background: var(--us-rose);
+  width: 9px;
+  height: 9px;
+  background: radial-gradient(circle, #ff6b8b 0%, var(--us-rose) 60%, transparent 100%);
   border-radius: 50%;
-  box-shadow: 0 0 10px var(--us-rose);
+  box-shadow: 0 0 15px var(--us-rose), 0 0 30px var(--us-rose);
+}
+
+@keyframes us-ring-pulse {
+  0% { transform: scale(1) rotate(0deg); opacity: 0.7; }
+  100% { transform: scale(1.05) rotate(360deg); opacity: 1; }
+}
+
+@keyframes us-ring-pulse-outer {
+  0% { transform: scale(1) rotate(360deg); opacity: 0.5; }
+  100% { transform: scale(0.96) rotate(0deg); opacity: 0.9; }
 }
 
 @keyframes us-spin-reverse {
@@ -4196,25 +4208,49 @@ body:has(.us-page) {
   to { transform: rotate(0deg); }
 }
 
-/* Animated self-drawing dividers */
+/* Animated flowing dividers */
 .us-divider-gold {
   position: relative;
-  height: 1px;
+  height: 2px;
   width: 100%;
-  max-width: 600px;
-  margin: 5rem auto;
-  background: linear-gradient(90deg, transparent, rgba(212, 168, 83, 0.35) 50%, transparent);
+  max-width: 700px;
+  margin: 6rem auto;
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    rgba(212, 168, 83, 0.1) 20%, 
+    rgba(212, 168, 83, 0.75) 50%, 
+    rgba(232, 71, 95, 0.75) 55%, 
+    rgba(212, 168, 83, 0.1) 80%, 
+    transparent 100%);
+  background-size: 200% 100%;
+  animation: us-divider-flow 6s linear infinite;
+  box-shadow: 0 0 15px rgba(212, 168, 83, 0.25);
+  border: none;
 }
+
+@keyframes us-divider-flow {
+  0% { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
+
 .us-divider-gold::after {
   content: '✦';
   position: absolute;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  color: var(--us-gold);
-  font-size: 14px;
-  background: #0a0a0c;
-  padding: 0 12px;
+  color: var(--us-gold-light);
+  font-size: 16px;
+  background: #050507;
+  padding: 0 16px;
+  border-radius: 50%;
+  box-shadow: 0 0 10px rgba(212, 168, 83, 0.4);
+  text-shadow: 0 0 8px rgba(212, 168, 83, 0.8);
+  transition: transform 0.3s ease;
+}
+
+.us-divider-gold:hover::after {
+  transform: translate(-50%, -50%) rotate(180deg) scale(1.25);
 }
 
 /* Ambient Music Player / Equalizer custom styles */
@@ -4334,3 +4370,155 @@ body:has(.us-page) {
     background: rgba(232, 71, 95, 0.4);
   }
 }
+
+/* ------------------------------------------------------------------ */
+/* Premium Upgrades & Animations for Romance Page                     */
+/* ------------------------------------------------------------------ */
+
+/* Fade in with scale & blur for high-end movie title feel */
+.animate-fade-in {
+  animation: us-fade-in 1.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes us-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.98);
+    filter: blur(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+/* Staggered Scroll Reveal Delay Classes */
+.us-reveal-stagger-1 { transition-delay: 0.1s; }
+.us-reveal-stagger-2 { transition-delay: 0.2s; }
+.us-reveal-stagger-3 { transition-delay: 0.3s; }
+.us-reveal-stagger-4 { transition-delay: 0.4s; }
+.us-reveal-stagger-5 { transition-delay: 0.5s; }
+.us-reveal-stagger-6 { transition-delay: 0.6s; }
+
+/* Custom entrances for specific reveals */
+.us-reveal-scale {
+  opacity: 0;
+  transform: scale(0.93) translateY(20px);
+  transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.us-reveal-scale.revealed {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+}
+
+.us-reveal-blur {
+  opacity: 0;
+  filter: blur(12px);
+  transition: opacity 1.5s cubic-bezier(0.16, 1, 0.3, 1), filter 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.us-reveal-blur.revealed {
+  opacity: 1;
+  filter: blur(0);
+}
+
+/* Hero Text Breathing Glow */
+.us-hero h1 {
+  text-shadow: 0 0 40px rgba(255, 255, 255, 0.1);
+  animation: us-hero-text-glow 6s ease-in-out infinite alternate;
+}
+
+@keyframes us-hero-text-glow {
+  0% { text-shadow: 0 0 30px rgba(255, 255, 255, 0.08), 0 0 60px rgba(212, 168, 83, 0.05); }
+  100% { text-shadow: 0 0 45px rgba(255, 255, 255, 0.15), 0 0 80px rgba(232, 71, 95, 0.15); }
+}
+
+/* Floating Parallax Container for Hero Content */
+.us-hero {
+  perspective: 1000px;
+}
+.us-hero > div {
+  transform-style: preserve-3d;
+  animation: us-hero-float 8s ease-in-out infinite;
+}
+
+@keyframes us-hero-float {
+  0%, 100% { transform: translateY(0px) rotateX(0deg); }
+  50% { transform: translateY(-10px) rotateX(1deg); }
+}
+
+/* Custom premium scrollbar for us-page container */
+.us-page::-webkit-scrollbar {
+  width: 8px;
+}
+.us-page::-webkit-scrollbar-track {
+  background: #030305;
+}
+.us-page::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--us-gold) 0%, var(--us-rose) 100%);
+  border-radius: 4px;
+}
+.us-page::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, var(--us-gold-light) 0%, #ff5277 100%);
+}
+
+/* Cinematic Vignette Overlay */
+.us-page::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at center, transparent 30%, rgba(3, 3, 5, 0.75) 100%);
+  pointer-events: none;
+  z-index: 99;
+}
+
+/* Section Heading Ambient Glow */
+.us-section-glow {
+  position: relative;
+}
+.us-section-glow::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 350px;
+  height: 350px;
+  background: radial-gradient(circle, rgba(212, 168, 83, 0.06) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: -1;
+  filter: blur(30px);
+}
+
+.us-section-glow-rose::before {
+  background: radial-gradient(circle, rgba(232, 71, 95, 0.06) 0%, transparent 70%);
+}
+
+/* Card Surface Shimmer */
+.us-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+.us-shimmer::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent 45%,
+    rgba(255, 255, 255, 0.04) 50%,
+    transparent 55%
+  );
+  transform: rotate(30deg);
+  animation: us-shimmer-run 6s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes us-shimmer-run {
+  0% { transform: translate(-30%, -30%) rotate(30deg); }
+  30%, 100% { transform: translate(30%, 30%) rotate(30deg); }
+}
+
