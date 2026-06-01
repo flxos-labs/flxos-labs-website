@@ -1174,7 +1174,7 @@ export default function UsContent() {
   };
 
   return (
-    <div className="us-page" ref={pageRef}>
+    <div className={`us-page ${introPhase < 7 ? "intro-active" : ""}`} ref={pageRef}>
       {/* Cinematic Movie Intro & Velvet Curtain Reveal */}
       {introPhase < 7 && (
         <div className={`us-intro-overlay phase-${introPhase}`}>
