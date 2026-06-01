@@ -3605,6 +3605,10 @@ body:has(.us-page) {
 /* Cinematic Movie Intro & Velvet Curtain Reveal                      */
 /* ------------------------------------------------------------------ */
 
+/* ------------------------------------------------------------------ */
+/* Cinematic Movie Intro & Velvet Curtain Reveal                      */
+/* ------------------------------------------------------------------ */
+
 .us-intro-overlay {
   position: fixed;
   inset: 0;
@@ -3615,8 +3619,17 @@ body:has(.us-page) {
   overflow: hidden;
   background: #030305;
   transition: opacity 1.2s cubic-bezier(0.86, 0, 0.07, 1), 
+              background 1.5s ease,
               visibility 1.2s step-end;
   pointer-events: auto;
+  will-change: opacity, background;
+  transform: translate3d(0, 0, 0);
+}
+
+/* Phase 5 onwards: Fade background to transparent to reveal content behind parting curtains */
+.phase-5 .us-intro-overlay,
+.phase-6 .us-intro-overlay {
+  background: rgba(3, 3, 5, 0);
 }
 
 /* Cleanup phase (done) */
@@ -3667,11 +3680,13 @@ body:has(.us-page) {
   background: radial-gradient(circle, rgba(212, 168, 83, 0.8) 0%, rgba(212, 168, 83, 0) 70%);
   opacity: 0;
   animation: us-dust-drift var(--duration) ease-in-out var(--delay) infinite;
+  will-change: transform, opacity;
+  transform: translate3d(0, 0, 0);
 }
 
 @keyframes us-dust-drift {
   0% {
-    transform: translateY(0) translateX(0) scale(0.6);
+    transform: translate3d(0, 0, 0) scale(0.6);
     opacity: 0;
   }
   20% {
@@ -3681,7 +3696,7 @@ body:has(.us-page) {
     opacity: var(--opacity);
   }
   100% {
-    transform: translateY(calc(-120px - var(--drift-y))) translateX(var(--drift-x)) scale(1.3);
+    transform: translate3d(var(--drift-x), calc(-120px - var(--drift-y)), 0) scale(1.3);
     opacity: 0;
   }
 }
@@ -3691,31 +3706,31 @@ body:has(.us-page) {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%) scale(1);
+  transform: translate3d(-50%, -50%, 0) scale3d(1, 1, 1);
   width: 600px;
   height: 600px;
   background: radial-gradient(circle, rgba(212, 168, 83, 0.18) 0%, rgba(232, 71, 95, 0.04) 50%, transparent 70%);
-  filter: blur(60px);
+  filter: blur(75px);
   pointer-events: none;
   z-index: 2;
   opacity: 0;
   transition: opacity 2s ease, transform 3s ease, background 2s ease;
+  will-change: opacity, transform;
 }
 
 .phase-1 .us-intro-projector-glow {
   opacity: 0.65;
-  transform: translate(-50%, -50%) scale(1.1);
+  transform: translate3d(-50%, -50%, 0) scale3d(1.1, 1.1, 1);
 }
 .phase-2 .us-intro-projector-glow,
 .phase-3 .us-intro-projector-glow {
   opacity: 0.85;
-  transform: translate(-50%, -50%) scale(1.3);
+  transform: translate3d(-50%, -50%, 0) scale3d(1.3, 1.3, 1);
 }
 .phase-4 .us-intro-projector-glow {
   opacity: 1;
   background: radial-gradient(circle, rgba(212, 168, 83, 0.45) 0%, rgba(232, 71, 95, 0.18) 50%, transparent 70%);
-  transform: translate(-50%, -50%) scale(2.8);
-  filter: blur(85px);
+  transform: translate3d(-50%, -50%, 0) scale3d(2.8, 2.8, 1);
   transition: all 1.5s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
@@ -3724,7 +3739,7 @@ body:has(.us-page) {
   position: absolute;
   top: 41%;
   left: 50%;
-  transform: translate(-50%, -50%) scale(0.85);
+  transform: translate3d(-50%, -50%, 0) scale3d(0.85, 0.85, 1);
   width: 160px;
   height: 160px;
   display: flex;
@@ -3734,20 +3749,19 @@ body:has(.us-page) {
   opacity: 0;
   pointer-events: none;
   transition: opacity 1.5s cubic-bezier(0.25, 1, 0.5, 1), 
-              transform 1.8s cubic-bezier(0.25, 1, 0.5, 1),
-              filter 1.5s ease;
+              transform 1.8s cubic-bezier(0.25, 1, 0.5, 1);
+  will-change: opacity, transform;
 }
 
 .phase-2 .us-intro-crest,
 .phase-3 .us-intro-crest {
   opacity: 1;
-  transform: translate(-50%, -50%) scale(1);
+  transform: translate3d(-50%, -50%, 0) scale3d(1, 1, 1);
 }
 
 .phase-4 .us-intro-crest {
   opacity: 0;
-  transform: translate(-50%, -50%) scale(1.3);
-  filter: blur(15px) brightness(1.5);
+  transform: translate3d(-50%, -50%, 0) scale3d(1.35, 1.35, 1);
 }
 
 .us-intro-crest-circle {
@@ -3814,12 +3828,13 @@ body:has(.us-page) {
   position: absolute;
   top: 59%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate3d(-50%, -50%, 0) scale3d(1, 1, 1);
   text-align: center;
   z-index: 6;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 1.5s ease, transform 1.8s ease, filter 1.5s ease;
+  transition: opacity 1.5s ease, transform 1.8s ease;
+  will-change: opacity, transform;
 }
 
 .phase-3 .us-intro-tagline {
@@ -3828,8 +3843,7 @@ body:has(.us-page) {
 
 .phase-4 .us-intro-tagline {
   opacity: 0;
-  transform: translate(-50%, -50%) scale(1.12);
-  filter: blur(8px) brightness(1.3);
+  transform: translate3d(-50%, -50%, 0) scale3d(1.15, 1.15, 1);
 }
 
 .us-intro-tagline-text {
@@ -3860,11 +3874,11 @@ body:has(.us-page) {
   width: 240px;
 }
 
-/* Lens Flare Overlay */
+/* Lens Flare Overlay (Uses translate3d to avoid layout reflows) */
 .us-intro-flare {
   position: absolute;
   top: 41%;
-  left: -150%;
+  left: 50%;
   width: 100%;
   height: 4px;
   background: radial-gradient(ellipse at center, rgba(255, 237, 194, 1) 0%, rgba(212, 168, 83, 0.5) 30%, rgba(212, 168, 83, 0) 70%);
@@ -3872,13 +3886,14 @@ body:has(.us-page) {
   z-index: 7;
   opacity: 0;
   pointer-events: none;
-  transform: translateY(-50%) skewX(-45deg);
+  transform: translate3d(-150vw, -50%, 0) skewX(-45deg) scale3d(0.1, 1, 1);
+  will-change: transform, opacity;
 }
 
 .phase-4 .us-intro-flare {
   opacity: 1;
-  left: 150%;
-  transition: left 1.6s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.5s ease;
+  transform: translate3d(150vw, -50%, 0) skewX(-45deg) scale3d(4, 1, 1);
+  transition: transform 1.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease;
 }
 
 /* Velvet Curtains Container */
@@ -3911,15 +3926,18 @@ body:has(.us-page) {
   overflow: hidden;
   transition: transform 2.4s cubic-bezier(0.77, 0, 0.175, 1);
   z-index: 5;
+  will-change: transform;
+  backface-visibility: hidden;
+  transform: translate3d(0, 0, 0);
 }
 
 .us-curtain-left {
-  transform: translateX(0);
+  transform: translate3d(0, 0, 0);
   box-shadow: 20px 0 60px rgba(0, 0, 0, 0.9);
 }
 
 .us-curtain-right {
-  transform: translateX(0);
+  transform: translate3d(0, 0, 0);
   box-shadow: -20px 0 60px rgba(0, 0, 0, 0.9);
 }
 
@@ -4024,15 +4042,15 @@ body:has(.us-page) {
   filter: drop-shadow(0 0 10px rgba(212, 168, 83, 0.75));
 }
 
-/* Opening states of curtains */
+/* Opening states of curtains (Use translate3d for hardware acceleration) */
 .phase-5 .us-curtain-left,
 .phase-6 .us-curtain-left {
-  transform: translateX(-102%) skewY(1deg);
+  transform: translate3d(-102%, 0, 0) skewY(1deg);
 }
 
 .phase-5 .us-curtain-right,
 .phase-6 .us-curtain-right {
-  transform: translateX(102%) skewY(-1deg);
+  transform: translate3d(102%, 0, 0) skewY(-1deg);
 }
 
 /* Light Spill overlay behind opening curtains */
@@ -4055,7 +4073,7 @@ body:has(.us-page) {
   transition: opacity 1.2s ease;
 }
 
-/* Cinematic Letterbox Bars */
+/* Cinematic Letterbox Bars (Uses translate3d) */
 .us-intro-letterbox-top,
 .us-intro-letterbox-bottom {
   position: absolute;
@@ -4066,24 +4084,25 @@ body:has(.us-page) {
   z-index: 8;
   transition: transform 1.4s cubic-bezier(0.85, 0, 0.15, 1);
   pointer-events: none;
+  will-change: transform;
 }
 
 .us-intro-letterbox-top {
   top: 0;
-  transform: translateY(0);
+  transform: translate3d(0, 0, 0);
 }
 
 .us-intro-letterbox-bottom {
   bottom: 0;
-  transform: translateY(0);
+  transform: translate3d(0, 0, 0);
 }
 
 .phase-6 .us-intro-letterbox-top {
-  transform: translateY(-100%);
+  transform: translate3d(0, -100%, 0);
 }
 
 .phase-6 .us-intro-letterbox-bottom {
-  transform: translateY(100%);
+  transform: translate3d(0, 100%, 0);
 }
 
 /* Skip Intro Button */
@@ -4107,6 +4126,8 @@ body:has(.us-page) {
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
   pointer-events: auto;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  will-change: transform, opacity;
+  transform: translate3d(0, 0, 0);
 }
 
 .us-intro-skip:hover {
@@ -4114,11 +4135,11 @@ body:has(.us-page) {
   color: #fdf6e3;
   background: rgba(212, 168, 83, 0.15);
   box-shadow: 0 4px 25px rgba(212, 168, 83, 0.3);
-  transform: translateY(-1.5px);
+  transform: translate3d(0, -1.5px, 0);
 }
 
 .us-intro-skip:active {
-  transform: translateY(0);
+  transform: translate3d(0, 0, 0);
 }
 
 .phase-5 .us-intro-skip,
@@ -4145,14 +4166,14 @@ body:has(.us-page) {
   }
   .us-intro-skip {
     right: 50%;
-    transform: translateX(50%);
+    transform: translate3d(50%, 0, 0);
     bottom: 12vh;
   }
   .us-intro-skip:hover {
-    transform: translateX(50%) translateY(-1px);
+    transform: translate3d(50%, -1px, 0);
   }
   .us-intro-skip:active {
-    transform: translateX(50%) translateY(0);
+    transform: translate3d(50%, 0, 0);
   }
 }
 
