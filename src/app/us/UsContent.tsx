@@ -2372,7 +2372,7 @@ export default function UsContent() {
       <section className="us-reasons-section py-20">
         <SectionHeading eyebrow="Poetic Reflections" title="Reasons I Love You" description="Just a few of the countless ways you fill my life with light, beauty, and joy." />
 
-        <div className="max-w-2xl mx-auto px-4 relative h-[440px] sm:h-[460px] flex flex-col justify-between items-center us-reveal us-reveal-scale">
+        <div className="w-full max-w-2xl mx-auto px-4 relative h-[440px] sm:h-[460px] flex flex-col justify-between items-center us-reveal us-reveal-scale">
           <div className="relative w-full h-[320px] sm:h-[350px]">
             {REASONS.map((reason, index) => {
               const total = REASONS.length;
