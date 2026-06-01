@@ -2372,8 +2372,8 @@ export default function UsContent() {
       <section className="us-reasons-section py-20">
         <SectionHeading eyebrow="Poetic Reflections" title="Reasons I Love You" description="Just a few of the countless ways you fill my life with light, beauty, and joy." />
 
-        <div className="max-w-xl mx-auto px-4 relative h-[380px] flex flex-col justify-between items-center us-reveal us-reveal-scale">
-          <div className="relative w-full h-[280px]">
+        <div className="max-w-2xl mx-auto px-4 relative h-[440px] sm:h-[460px] flex flex-col justify-between items-center us-reveal us-reveal-scale">
+          <div className="relative w-full h-[320px] sm:h-[350px]">
             {REASONS.map((reason, index) => {
               const total = REASONS.length;
               const offset = (index - activeReasonIndex + total) % total;
@@ -2406,7 +2406,7 @@ export default function UsContent() {
                 <div
                   key={reason.num}
                   onClick={() => setActiveReasonIndex((prev) => (prev + 1) % total)}
-                  className={`absolute inset-0 p-8 sm:p-10 rounded-3xl border border-[rgba(212,168,83,0.2)] flex flex-col justify-between text-left transition-all duration-500 cursor-pointer select-none ${
+                  className={`absolute inset-0 p-6 sm:p-8 md:p-10 rounded-3xl border border-[rgba(212,168,83,0.2)] flex flex-col justify-between text-left transition-all duration-500 cursor-pointer select-none ${
                     isActive ? "us-card-gradient shadow-2xl" : "us-card-frosted pointer-events-none"
                   }`}
                   style={{
@@ -2415,20 +2415,22 @@ export default function UsContent() {
                     opacity: opacityVal,
                   }}
                 >
-                  <div>
-                    <div className="flex justify-between items-center mb-6">
-                      <span className="font-mono text-xs font-bold text-[#d4a853] tracking-widest uppercase">
-                        Reason {reason.num}
-                      </span>
-                      <span className="text-xl opacity-60">✦</span>
+                  <div className={`w-full h-full flex flex-col justify-between transition-opacity duration-300 ${isActive ? "opacity-100" : "opacity-0 pointer-events-none"}`}>
+                    <div>
+                      <div className="flex justify-between items-center mb-4 sm:mb-6">
+                        <span className="font-mono text-xs font-bold text-[#d4a853] tracking-widest uppercase">
+                          Reason {reason.num}
+                        </span>
+                        <span className="text-xl opacity-60">✦</span>
+                      </div>
+                      <p className="font-serif-display italic text-lg sm:text-xl md:text-2xl text-white leading-relaxed mb-2 sm:mb-4">
+                        &ldquo;{reason.title}&rdquo;
+                      </p>
                     </div>
-                    <p className="font-serif-display italic text-lg sm:text-xl md:text-2xl text-white leading-relaxed mb-4">
-                      &ldquo;{reason.title}&rdquo;
+                    <p className="text-xs sm:text-sm text-[rgba(253,246,227,0.7)] font-serif-body leading-relaxed border-t border-[rgba(212,168,83,0.1)] pt-3 sm:pt-4">
+                      {reason.desc}
                     </p>
                   </div>
-                  <p className="text-xs sm:text-sm text-[rgba(253,246,227,0.7)] font-serif-body leading-relaxed border-t border-[rgba(212,168,83,0.1)] pt-4">
-                    {reason.desc}
-                  </p>
                 </div>
               );
             })}
