@@ -431,7 +431,6 @@ const TypewriterText = ({ text }: { text: string }) => {
   useEffect(() => {
     let index = 0;
     let isCancelled = false;
-    setDisplayedText("");
 
     const tick = () => {
       if (isCancelled) return;
@@ -442,10 +441,12 @@ const TypewriterText = ({ text }: { text: string }) => {
       }
     };
 
-    tick();
+    // Defer the initial tick to avoid synchronous setState inside effect body
+    const timeoutId = setTimeout(tick, 0);
 
     return () => {
       isCancelled = true;
+      clearTimeout(timeoutId);
     };
   }, [text]);
 
@@ -481,6 +482,83 @@ const Odometer = ({ value }: { value: number }) => {
 };
 
 
+// Stable static random configuration for the 35 cinematic dust particles (avoids render-time impurity)
+const DUST_PARTICLES_CONFIG = Array.from({ length: 35 }).map(() => {
+  const size = Math.random() * 5 + 3; // 3px to 8px
+  const x = Math.random() * 100; // 0% to 100%
+  const y = Math.random() * 100; // 0% to 100%
+  const driftX = (Math.random() - 0.5) * 80; // -40px to 40px
+  const driftY = Math.random() * 60 + 40; // 40px to 100px
+  const duration = Math.random() * 8 + 6; // 6s to 14s
+  const delay = Math.random() * -10; // negative delay to start immediately
+  const opacity = Math.random() * 0.4 + 0.3; // 0.3 to 0.7
+  return {
+    size: `${size}px`,
+    x: `${x}%`,
+    y: `${y}%`,
+    driftX: `${driftX}px`,
+    driftY: `${driftY}px`,
+    duration: `${duration}s`,
+    delay: `${delay}s`,
+    opacity,
+  };
+});
+
+// Pure helper function for DOM particle spawns (extracted to module scope)
+function spawnQuizHearts(clientX: number, clientY: number) {
+  const heartCount = 8;
+  for (let i = 0; i < heartCount; i++) {
+    const heart = document.createElement("div");
+    heart.innerHTML = Math.random() > 0.5 ? "💖" : "✨";
+    heart.className = "us-heart-particle";
+    heart.style.left = `${clientX + (Math.random() - 0.5) * 40}px`;
+    heart.style.top = `${clientY + (Math.random() - 0.5) * 40}px`;
+    const rot = (Math.random() - 0.5) * 120;
+    heart.style.setProperty("--rot", `${rot}deg`);
+    document.body.appendChild(heart);
+    setTimeout(() => heart.remove(), 1000);
+  }
+}
+
+function spawnPromiseHearts(clientX: number, clientY: number) {
+  const heartCount = 6;
+  for (let i = 0; i < heartCount; i++) {
+    const heart = document.createElement("div");
+    heart.innerHTML = "❤️";
+    heart.className = "us-heart-particle";
+    heart.style.left = `${clientX + (Math.random() - 0.5) * 40}px`;
+    heart.style.top = `${clientY + (Math.random() - 0.5) * 40}px`;
+    const rot = (Math.random() - 0.5) * 120;
+    heart.style.setProperty("--rot", `${rot}deg`);
+    document.body.appendChild(heart);
+    setTimeout(() => heart.remove(), 1000);
+  }
+}
+
+function spawnJarHearts(clientX: number, clientY: number) {
+  const heartCount = 10;
+  for (let i = 0; i < heartCount; i++) {
+    const heart = document.createElement("div");
+    heart.innerHTML = Math.random() > 0.5 ? "💖" : "✨";
+    heart.className = "us-heart-particle";
+    heart.style.left = `${clientX + (Math.random() - 0.5) * 60}px`;
+    heart.style.top = `${clientY + (Math.random() - 0.5) * 60}px`;
+    const rot = (Math.random() - 0.5) * 180;
+    heart.style.setProperty("--rot", `${rot}deg`);
+    document.body.appendChild(heart);
+    setTimeout(() => heart.remove(), 1000);
+  }
+}
+
+// Random choice helpers (no Math.random in component scope)
+function selectRandomOracleIndex(length: number) {
+  return Math.floor(Math.random() * length);
+}
+
+function selectRandomComplimentIndex(length: number) {
+  return Math.floor(Math.random() * length);
+}
+
 export default function UsContent() {
 
   const pageRef = useRef<HTMLDivElement>(null);
@@ -512,8 +590,9 @@ export default function UsContent() {
     }
   };
   
-  // Curtain entrance reveal state
-  const [curtainRevealed, setCurtainRevealed] = useState(false);
+  // Phased intro state machine (0 to 7. 0 = initial, 7 = completed)
+  const [introPhase, setIntroPhase] = useState(0);
+  const introTimersRef = useRef<NodeJS.Timeout[]>([]);
   
   // Ambient Music player states
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -561,7 +640,7 @@ export default function UsContent() {
   const [activeLyricIndex, setActiveLyricIndex] = useState(0);
 
   useEffect(() => {
-    let timer: any;
+    let timer: ReturnType<typeof setInterval> | undefined;
     if (isPlaying) {
       timer = setInterval(() => {
         const trackLyrics = LYRICS[currentTrackIndex] || [];
@@ -570,12 +649,10 @@ export default function UsContent() {
         }
       }, 5000);
     }
-    return () => clearInterval(timer);
+    return () => {
+      if (timer) clearInterval(timer);
+    };
   }, [isPlaying, currentTrackIndex]);
-
-  useEffect(() => {
-    setActiveLyricIndex(0);
-  }, [currentTrackIndex]);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -584,18 +661,39 @@ export default function UsContent() {
       audio.volume = audioVolume;
       audioRef.current = audio;
     }
-    const timer = setTimeout(() => {
-      setCurtainRevealed(true);
-    }, 350);
+
+    // Choreographed 6-phase 10-second cinematic intro sequence
+    const phases = [
+      { phase: 1, delay: 50 },      // Phase 1: Dust + Grain + projector warming
+      { phase: 2, delay: 2000 },    // Phase 2: Monogram crest fades in
+      { phase: 3, delay: 4000 },    // Phase 3: Tagline typewriter
+      { phase: 4, delay: 5500 },    // Phase 4: Light wash + lens flare + zoom-dissolve
+      { phase: 5, delay: 7000 },    // Phase 5: Velvet curtains slide apart + medallion split
+      { phase: 6, delay: 9000 },    // Phase 6: Letterbox slide-away
+      { phase: 7, delay: 10200 },   // Phase 7: Complete cleanup and unmount
+    ];
+
+    phases.forEach(({ phase, delay }) => {
+      const timer = setTimeout(() => {
+        setIntroPhase(phase);
+      }, delay);
+      introTimersRef.current.push(timer);
+    });
 
     return () => {
-      clearTimeout(timer);
+      introTimersRef.current.forEach(clearTimeout);
       if (audioRef.current) {
         audioRef.current.pause();
         audioRef.current = null;
       }
     };
   }, []);
+
+  const skipIntro = () => {
+    introTimersRef.current.forEach(clearTimeout);
+    introTimersRef.current = [];
+    setIntroPhase(7);
+  };
 
   const togglePlay = () => {
     if (!audioRef.current) return;
@@ -630,6 +728,7 @@ export default function UsContent() {
 
   const selectTrack = (index: number) => {
     setCurrentTrackIndex(index);
+    setActiveLyricIndex(0);
     if (audioRef.current) {
       audioRef.current.src = TRACKS[index].url;
       if (isPlaying) {
@@ -709,7 +808,7 @@ export default function UsContent() {
 
     setTimeout(() => {
       setOracleSpinning(false);
-      const randomIndex = Math.floor(Math.random() * ORACLE_PREDICTIONS.length);
+      const randomIndex = selectRandomOracleIndex(ORACLE_PREDICTIONS.length);
       setOracleResult(ORACLE_PREDICTIONS[randomIndex]);
     }, 1800);
   };
@@ -729,19 +828,8 @@ export default function UsContent() {
         }
         return next;
       });
-      // Spawn floating hearts
-      const heartCount = 8;
-      for (let i = 0; i < heartCount; i++) {
-        const heart = document.createElement("div");
-        heart.innerHTML = Math.random() > 0.5 ? "💖" : "✨";
-        heart.className = "us-heart-particle";
-        heart.style.left = `${e.clientX + (Math.random() - 0.5) * 40}px`;
-        heart.style.top = `${e.clientY + (Math.random() - 0.5) * 40}px`;
-        const rot = (Math.random() - 0.5) * 120;
-        heart.style.setProperty("--rot", `${rot}deg`);
-        document.body.appendChild(heart);
-        setTimeout(() => heart.remove(), 1000);
-      }
+      // Spawn floating hearts using the external module helper
+      spawnQuizHearts(e.clientX, e.clientY);
     } else {
       setQuizStreak(0);
       setIsQuizCardShaking(true);
@@ -826,32 +914,13 @@ export default function UsContent() {
     }
   }, [isDraggingStarSky, isDraggingValues]);
 
-  // Sparkle / Heart click burst
   const handlePromiseClick = (index: number, e: React.MouseEvent) => {
     const isChecked = checkedPromises.includes(index);
     if (!isChecked) {
       setCheckedPromises([...checkedPromises, index]);
       
-      // Spawn floating hearts
-      const heartCount = 6;
-      for (let i = 0; i < heartCount; i++) {
-        const heart = document.createElement("div");
-        heart.innerHTML = "❤️";
-        heart.className = "us-heart-particle";
-        heart.style.left = `${e.clientX + (Math.random() - 0.5) * 40}px`;
-        heart.style.top = `${e.clientY + (Math.random() - 0.5) * 40}px`;
-        
-        // Random drift and rotation
-        const rot = (Math.random() - 0.5) * 120;
-        heart.style.setProperty("--rot", `${rot}deg`);
-        
-        document.body.appendChild(heart);
-
-        // Cleanup
-        setTimeout(() => {
-          heart.remove();
-        }, 1000);
-      }
+      // Spawn floating hearts using the external module helper
+      spawnPromiseHearts(e.clientX, e.clientY);
     } else {
       setCheckedPromises(checkedPromises.filter((item) => item !== index));
     }
@@ -973,25 +1042,12 @@ export default function UsContent() {
   const handleJarClick = (e: React.MouseEvent) => {
     setIsJarAnimating(true);
     
-    // Choose random compliment
-    const randomIndex = Math.floor(Math.random() * COMPLIMENTS.length);
+    // Choose random compliment using external pure helper
+    const randomIndex = selectRandomComplimentIndex(COMPLIMENTS.length);
     setCurrentCompliment(COMPLIMENTS[randomIndex]);
 
-    // Spawn heart particles
-    const heartCount = 10;
-    for (let i = 0; i < heartCount; i++) {
-      const heart = document.createElement("div");
-      heart.innerHTML = Math.random() > 0.5 ? "💖" : "✨";
-      heart.className = "us-heart-particle";
-      heart.style.left = `${e.clientX + (Math.random() - 0.5) * 60}px`;
-      heart.style.top = `${e.clientY + (Math.random() - 0.5) * 60}px`;
-      
-      const rot = (Math.random() - 0.5) * 180;
-      heart.style.setProperty("--rot", `${rot}deg`);
-      
-      document.body.appendChild(heart);
-      setTimeout(() => heart.remove(), 1000);
-    }
+    // Spawn heart particles using external module helper
+    spawnJarHearts(e.clientX, e.clientY);
 
     setTimeout(() => {
       setIsJarAnimating(false);
@@ -1077,11 +1133,93 @@ export default function UsContent() {
 
   return (
     <div className="us-page" ref={pageRef}>
-      {/* Cinematic Curtain Reveal */}
-      <div className={`us-curtain-container ${curtainRevealed ? "reveal" : ""}`}>
-        <div className="us-curtain-panel us-curtain-left"></div>
-        <div className="us-curtain-panel us-curtain-right"></div>
-      </div>
+      {/* Cinematic Movie Intro & Velvet Curtain Reveal */}
+      {introPhase < 7 && (
+        <div className={`us-intro-overlay phase-${introPhase}`}>
+          {/* Film Grain */}
+          <div className="us-intro-grain" />
+
+          {/* Projector warming glow */}
+          <div className="us-intro-projector-glow" />
+
+          {/* Floating golden dust particles */}
+          <div className="us-intro-dust">
+            {DUST_PARTICLES_CONFIG.map((p, i) => (
+              <div
+                key={i}
+                className="us-intro-dust-particle"
+                style={
+                  {
+                    "--size": p.size,
+                    "--x": p.x,
+                    "--y": p.y,
+                    "--drift-x": p.driftX,
+                    "--drift-y": p.driftY,
+                    "--duration": p.duration,
+                    "--delay": p.delay,
+                    "--opacity": p.opacity,
+                  } as React.CSSProperties
+                }
+              />
+            ))}
+          </div>
+
+          {/* Monogram Crest (A ♥ R) */}
+          <div className="us-intro-crest">
+            <div className="us-intro-crest-bloom" />
+            <div className="us-intro-crest-circle">
+              <div className="us-intro-crest-inner">
+                <span>A</span>
+                <span className="text-[#e8475f]">♥</span>
+                <span>R</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Typewriter Tagline */}
+          <div className="us-intro-tagline">
+            <span className="us-intro-tagline-text">A Universe Made for Two</span>
+            <div className="us-intro-tagline-rule" />
+          </div>
+
+          {/* Horizontal Lens Flare */}
+          <div className="us-intro-flare" />
+
+          {/* Cinematic Letterbox Bars */}
+          <div className="us-intro-letterbox-top" />
+          <div className="us-intro-letterbox-bottom" />
+
+          {/* Velvet Curtain Reveal */}
+          <div className="us-curtain-container">
+            <div className="us-curtain-panel us-curtain-left">
+              <div className="us-curtain-fringe" />
+              <div className="us-curtain-medallion us-curtain-medallion-left">
+                <div className="us-curtain-medallion-circle">
+                  <svg className="us-curtain-medallion-svg" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+            <div className="us-curtain-panel us-curtain-right">
+              <div className="us-curtain-fringe" />
+              <div className="us-curtain-medallion us-curtain-medallion-right">
+                <div className="us-curtain-medallion-circle">
+                  <svg className="us-curtain-medallion-svg" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+            <div className="us-curtain-light-spill" />
+          </div>
+
+          {/* Skip Button */}
+          <button className="us-intro-skip" onClick={skipIntro}>
+            Skip Intro →
+          </button>
+        </div>
+      )}
 
       <StarfieldCanvas />
 
@@ -1497,7 +1635,7 @@ export default function UsContent() {
                 Constellation Aligned!
               </h3>
               <p className="text-[rgba(253,246,227,0.5)] text-xs uppercase tracking-widest font-bold mt-2">
-                "The Heart of Rekha & Akash"
+                &ldquo;The Heart of Rekha &amp; Akash&rdquo;
               </p>
               <p className="text-sm leading-relaxed text-[rgba(253,246,227,0.85)] mt-4">
                 Just like these stars, our lives have woven together to form a beautiful design in the vast sky. Written in the universe, bound together forever.
@@ -1525,7 +1663,7 @@ export default function UsContent() {
             How Well Do You Know Me?
           </h2>
           <p className="text-[rgba(253,246,227,0.6)] mt-4">
-            Test your knowledge about my favorite things, fears, and quirks. Let's see if we are perfectly aligned!
+            Test your knowledge about my favorite things, fears, and quirks. Let&apos;s see if we are perfectly aligned!
           </p>
         </div>
 
@@ -1730,7 +1868,7 @@ export default function UsContent() {
 
         {/* Cards Grid */}
         <div className="us-flipcards-grid px-4 us-reveal">
-          {FLIP_CARDS.filter((card) => flipCardsFilter === "All" || card.category === flipCardsFilter).map((card, idx) => {
+          {FLIP_CARDS.filter((card) => flipCardsFilter === "All" || card.category === flipCardsFilter).map((card) => {
             // Find global index in FLIP_CARDS array to track flip state consistently
             const globalIndex = FLIP_CARDS.indexOf(card);
             const isFlipped = flippedCardIds.includes(globalIndex);

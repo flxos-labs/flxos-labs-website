@@ -3601,33 +3601,559 @@ body:has(.us-page) {
   border-bottom-color: var(--us-rose);
 }
 
-/* Curtain Reveal Entrance */
-.us-curtain-container {
+/* ------------------------------------------------------------------ */
+/* Cinematic Movie Intro & Velvet Curtain Reveal                      */
+/* ------------------------------------------------------------------ */
+
+.us-intro-overlay {
   position: fixed;
   inset: 0;
   z-index: 99999;
-  pointer-events: none;
   display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: #030305;
+  transition: opacity 1.2s cubic-bezier(0.86, 0, 0.07, 1), 
+              visibility 1.2s step-end;
+  pointer-events: auto;
+}
+
+/* Cleanup phase (done) */
+.us-intro-overlay.phase-7 {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* Film grain effect specifically for the intro */
+.us-intro-grain {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.12) 1px, transparent 0),
+                    radial-gradient(rgba(255, 255, 255, 0.08) 2px, transparent 0);
+  background-size: 8px 8px, 16px 16px;
+  background-position: 0 0, 4px 4px;
+  opacity: 0.1;
+  pointer-events: none;
+  z-index: 10;
+  animation: us-grain-drift 6s steps(6) infinite;
+}
+
+/* Floating golden dust particles overlay */
+.us-intro-dust {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity 2s ease;
+}
+.phase-1 .us-intro-dust,
+.phase-2 .us-intro-dust,
+.phase-3 .us-intro-dust,
+.phase-4 .us-intro-dust {
+  opacity: 1;
+}
+
+.us-intro-dust-particle {
+  position: absolute;
+  width: var(--size);
+  height: var(--size);
+  left: var(--x);
+  top: var(--y);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(212, 168, 83, 0.8) 0%, rgba(212, 168, 83, 0) 70%);
+  opacity: 0;
+  animation: us-dust-drift var(--duration) ease-in-out var(--delay) infinite;
+}
+
+@keyframes us-dust-drift {
+  0% {
+    transform: translateY(0) translateX(0) scale(0.6);
+    opacity: 0;
+  }
+  20% {
+    opacity: var(--opacity);
+  }
+  80% {
+    opacity: var(--opacity);
+  }
+  100% {
+    transform: translateY(calc(-120px - var(--drift-y))) translateX(var(--drift-x)) scale(1.3);
+    opacity: 0;
+  }
+}
+
+/* Warm center projector glow */
+.us-intro-projector-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(1);
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(212, 168, 83, 0.18) 0%, rgba(232, 71, 95, 0.04) 50%, transparent 70%);
+  filter: blur(60px);
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0;
+  transition: opacity 2s ease, transform 3s ease, background 2s ease;
+}
+
+.phase-1 .us-intro-projector-glow {
+  opacity: 0.65;
+  transform: translate(-50%, -50%) scale(1.1);
+}
+.phase-2 .us-intro-projector-glow,
+.phase-3 .us-intro-projector-glow {
+  opacity: 0.85;
+  transform: translate(-50%, -50%) scale(1.3);
+}
+.phase-4 .us-intro-projector-glow {
+  opacity: 1;
+  background: radial-gradient(circle, rgba(212, 168, 83, 0.45) 0%, rgba(232, 71, 95, 0.18) 50%, transparent 70%);
+  transform: translate(-50%, -50%) scale(2.8);
+  filter: blur(85px);
+  transition: all 1.5s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* Ornate Monogram Crest */
+.us-intro-crest {
+  position: absolute;
+  top: 41%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.85);
+  width: 160px;
+  height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 6;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 1.5s cubic-bezier(0.25, 1, 0.5, 1), 
+              transform 1.8s cubic-bezier(0.25, 1, 0.5, 1),
+              filter 1.5s ease;
+}
+
+.phase-2 .us-intro-crest,
+.phase-3 .us-intro-crest {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.phase-4 .us-intro-crest {
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(1.3);
+  filter: blur(15px) brightness(1.5);
+}
+
+.us-intro-crest-circle {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 1px solid rgba(212, 168, 83, 0.25);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 35px rgba(212, 168, 83, 0.12), inset 0 0 15px rgba(212, 168, 83, 0.05);
+}
+
+.us-intro-crest-circle::before {
+  content: "";
+  position: absolute;
+  inset: 6px;
+  border-radius: 50%;
+  border: 1.5px dashed rgba(212, 168, 83, 0.45);
+  animation: us-spin 40s linear infinite;
+}
+
+.us-intro-crest-circle::after {
+  content: "";
+  position: absolute;
+  inset: -10px;
+  border-radius: 50%;
+  border: 1px solid rgba(212, 168, 83, 0.12);
+}
+
+.us-intro-crest-bloom {
+  position: absolute;
+  inset: -25px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(212, 168, 83, 0.28) 0%, transparent 70%);
+  filter: blur(12px);
+  z-index: -1;
+  animation: us-crest-pulse 3s infinite ease-in-out alternate;
+}
+
+@keyframes us-crest-pulse {
+  0% { transform: scale(0.95); opacity: 0.6; }
+  100% { transform: scale(1.06); opacity: 1; }
+}
+
+.us-intro-crest-inner {
+  font-family: Georgia, serif;
+  font-size: 1.95rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-shadow: 0 0 20px rgba(212, 168, 83, 0.5), 0 0 40px rgba(212, 168, 83, 0.2);
+  background: linear-gradient(135deg, #ffffff 0%, #ffdf9e 40%, #d4a853 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* Cinematic Tagline Text */
+.us-intro-tagline {
+  position: absolute;
+  top: 59%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  z-index: 6;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 1.5s ease, transform 1.8s ease, filter 1.5s ease;
+}
+
+.phase-3 .us-intro-tagline {
+  opacity: 1;
+}
+
+.phase-4 .us-intro-tagline {
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(1.12);
+  filter: blur(8px) brightness(1.3);
+}
+
+.us-intro-tagline-text {
+  font-family: var(--font-serif-display), Georgia, serif;
+  font-size: 1.15rem;
+  font-weight: 500;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  background: linear-gradient(180deg, #ffffff 0%, #ffe3ad 50%, #d4a853 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 15px;
+  display: block;
+  text-shadow: 0 0 25px rgba(212, 168, 83, 0.25);
+  white-space: nowrap;
+}
+
+.us-intro-tagline-rule {
+  width: 0%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(212, 168, 83, 0.55) 50%, transparent);
+  margin: 0 auto;
+  transition: width 1.8s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.phase-3 .us-intro-tagline-rule {
+  width: 240px;
+}
+
+/* Lens Flare Overlay */
+.us-intro-flare {
+  position: absolute;
+  top: 41%;
+  left: -150%;
+  width: 100%;
+  height: 4px;
+  background: radial-gradient(ellipse at center, rgba(255, 237, 194, 1) 0%, rgba(212, 168, 83, 0.5) 30%, rgba(212, 168, 83, 0) 70%);
+  box-shadow: 0 0 35px 8px rgba(212, 168, 83, 0.95), 0 0 60px 18px rgba(232, 71, 95, 0.45);
+  z-index: 7;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-50%) skewX(-45deg);
+}
+
+.phase-4 .us-intro-flare {
+  opacity: 1;
+  left: 150%;
+  transition: left 1.6s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.5s ease;
+}
+
+/* Velvet Curtains Container */
+.us-curtain-container {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  display: flex;
+  pointer-events: none;
   width: 100vw;
   height: 100vh;
 }
+
 .us-curtain-panel {
   flex: 1;
-  background: #050507;
   height: 100%;
-  transition: transform 1.5s cubic-bezier(0.85, 0, 0.15, 1);
+  position: relative;
+  background: 
+    repeating-linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.45) 0px,
+      rgba(0, 0, 0, 0.2) 30px,
+      rgba(255, 255, 255, 0.03) 60px,
+      rgba(0, 0, 0, 0.2) 90px,
+      rgba(0, 0, 0, 0.45) 120px
+    ),
+    radial-gradient(circle at 50% 25%, #420b17 0%, #150206 100%);
+  background-blend-mode: overlay;
+  box-shadow: 0 0 100px rgba(0, 0, 0, 0.95);
+  overflow: hidden;
+  transition: transform 2.4s cubic-bezier(0.77, 0, 0.175, 1);
+  z-index: 5;
 }
+
 .us-curtain-left {
-  transform-origin: left;
+  transform: translateX(0);
+  box-shadow: 20px 0 60px rgba(0, 0, 0, 0.9);
 }
+
 .us-curtain-right {
-  transform-origin: right;
+  transform: translateX(0);
+  box-shadow: -20px 0 60px rgba(0, 0, 0, 0.9);
 }
-.us-curtain-container.reveal .us-curtain-left {
-  transform: scaleX(0);
+
+/* Beautiful edge borders (meeting seam) */
+.us-curtain-left::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 3px;
+  height: 100%;
+  background: linear-gradient(to bottom, #d4a853 0%, #ffdf9e 30%, #d4a853 70%, #8c651b 100%);
+  box-shadow: 0 0 15px rgba(212, 168, 83, 0.85), 0 0 30px rgba(212, 168, 83, 0.35);
+  z-index: 10;
 }
-.us-curtain-container.reveal .us-curtain-right {
-  transform: scaleX(0);
+
+.us-curtain-right::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 3px;
+  height: 100%;
+  background: linear-gradient(to bottom, #d4a853 0%, #ffdf9e 30%, #d4a853 70%, #8c651b 100%);
+  box-shadow: 0 0 15px rgba(212, 168, 83, 0.85), 0 0 30px rgba(212, 168, 83, 0.35);
+  z-index: 10;
+}
+
+/* Bottom Gold Fringe (tassels) */
+.us-curtain-fringe {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 24px;
+  background: 
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.4), transparent 30%),
+    repeating-linear-gradient(
+      90deg,
+      #d4a853 0px,
+      #ffdf9e 2px,
+      #d4a853 4px,
+      #8c651b 6px,
+      #5c400d 8px
+    );
+  border-top: 2px solid #ffdf9e;
+  box-shadow: 0 -5px 20px rgba(212, 168, 83, 0.55), 0 10px 25px rgba(0, 0, 0, 0.85);
+  z-index: 10;
+}
+
+/* Split Medallion */
+.us-curtain-medallion {
+  position: absolute;
+  top: 50%;
+  width: 75px;
+  height: 150px;
+  transform: translateY(-50%);
+  z-index: 15;
+  pointer-events: none;
+}
+
+.us-curtain-medallion-left {
+  right: 0;
+}
+
+.us-curtain-medallion-right {
+  left: 0;
+}
+
+.us-curtain-medallion-circle {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background: rgba(14, 13, 20, 0.95);
+  backdrop-filter: blur(10px);
+  border: 2px solid #d4a853;
+  box-shadow: 
+    0 0 30px rgba(212, 168, 83, 0.45), 
+    inset 0 0 20px rgba(212, 168, 83, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 0;
+  animation: us-medallion-pulse 2.2s infinite ease-in-out alternate;
+}
+
+.us-curtain-medallion-left .us-curtain-medallion-circle {
+  right: -75px;
+  transform-origin: right center;
+}
+
+.us-curtain-medallion-right .us-curtain-medallion-circle {
+  left: -75px;
+  transform-origin: left center;
+}
+
+.us-curtain-medallion-svg {
+  width: 44px;
+  height: 44px;
+  color: #d4a853;
+  filter: drop-shadow(0 0 10px rgba(212, 168, 83, 0.75));
+}
+
+/* Opening states of curtains */
+.phase-5 .us-curtain-left,
+.phase-6 .us-curtain-left {
+  transform: translateX(-102%) skewY(1deg);
+}
+
+.phase-5 .us-curtain-right,
+.phase-6 .us-curtain-right {
+  transform: translateX(102%) skewY(-1deg);
+}
+
+/* Light Spill overlay behind opening curtains */
+.us-curtain-light-spill {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle, rgba(255, 252, 240, 0.75) 0%, rgba(212, 168, 83, 0.15) 50%, transparent 75%);
+  z-index: 3;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 1.8s ease;
+}
+
+.phase-5 .us-curtain-light-spill {
+  opacity: 1;
+}
+
+.phase-6 .us-curtain-light-spill {
+  opacity: 0;
+  transition: opacity 1.2s ease;
+}
+
+/* Cinematic Letterbox Bars */
+.us-intro-letterbox-top,
+.us-intro-letterbox-bottom {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 9vh;
+  background: #000000;
+  z-index: 8;
+  transition: transform 1.4s cubic-bezier(0.85, 0, 0.15, 1);
+  pointer-events: none;
+}
+
+.us-intro-letterbox-top {
+  top: 0;
+  transform: translateY(0);
+}
+
+.us-intro-letterbox-bottom {
+  bottom: 0;
+  transform: translateY(0);
+}
+
+.phase-6 .us-intro-letterbox-top {
+  transform: translateY(-100%);
+}
+
+.phase-6 .us-intro-letterbox-bottom {
+  transform: translateY(100%);
+}
+
+/* Skip Intro Button */
+.us-intro-skip {
+  position: absolute;
+  bottom: 13vh;
+  right: 3rem;
+  background: rgba(10, 10, 12, 0.55);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(212, 168, 83, 0.35);
+  color: rgba(253, 246, 227, 0.65);
+  padding: 0.65rem 1.35rem;
+  border-radius: 9999px;
+  font-family: var(--font-display), sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  cursor: pointer;
+  z-index: 100;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  pointer-events: auto;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.us-intro-skip:hover {
+  border-color: #d4a853;
+  color: #fdf6e3;
+  background: rgba(212, 168, 83, 0.15);
+  box-shadow: 0 4px 25px rgba(212, 168, 83, 0.3);
+  transform: translateY(-1.5px);
+}
+
+.us-intro-skip:active {
+  transform: translateY(0);
+}
+
+.phase-5 .us-intro-skip,
+.phase-6 .us-intro-skip {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.6s ease;
+}
+
+@media (max-width: 640px) {
+  .us-intro-crest {
+    width: 130px;
+    height: 130px;
+  }
+  .us-intro-crest-inner {
+    font-size: 1.6rem;
+  }
+  .us-intro-tagline-text {
+    font-size: 0.95rem;
+    letter-spacing: 0.3em;
+  }
+  .phase-3 .us-intro-tagline-rule {
+    width: 170px;
+  }
+  .us-intro-skip {
+    right: 50%;
+    transform: translateX(50%);
+    bottom: 12vh;
+  }
+  .us-intro-skip:hover {
+    transform: translateX(50%) translateY(-1px);
+  }
+  .us-intro-skip:active {
+    transform: translateX(50%) translateY(0);
+  }
 }
 
 /* Orbital Particle Ring */
