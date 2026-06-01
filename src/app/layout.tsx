@@ -1,10 +1,7 @@
 import type { Metadata } from "next";
 import { Figtree, JetBrains_Mono, Space_Grotesk, Playfair_Display, Cormorant_Garamond } from "next/font/google";
 import "./globals.css";
-import Link from "next/link";
-import CommandPalette from "../components/CommandPalette";
-import InteractiveBackground from "../components/InteractiveBackground";
-import Header from "../components/Header";
+import SiteLayout from "../components/SiteLayout";
 
 const fontDisplay = Space_Grotesk({
   variable: "--font-display",
@@ -59,34 +56,7 @@ export default function RootLayout({
             __html: `(function(){try{var t=localStorage.getItem('flxos-theme');if(t==='light'||t==='dark'){document.documentElement.dataset.theme=t;}else if(window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches){document.documentElement.dataset.theme='dark';}else{document.documentElement.dataset.theme='light';}}catch(e){} })();`,
           }}
         />
-        <InteractiveBackground />
-        <div className="site-shell">
-          <Header />
-          {children}
-          <footer className="site-footer">
-            <div className="site-footer-inner">
-              <div>
-                <span className="footer-brand">FlxOS Labs</span>
-                <p className="footer-copy">
-                  Modular OS for embedded devices and the desktop horizon.
-                </p>
-              </div>
-              <div className="footer-links">
-                <Link href="/#features">Features</Link>
-                <Link href="/docs">Docs</Link>
-                <Link href="/about">About</Link>
-                <a
-                  href="https://github.com/flxos-labs/flxos"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  GitHub
-                </a>
-              </div>
-            </div>
-          </footer>
-        </div>
-        <CommandPalette />
+        <SiteLayout>{children}</SiteLayout>
       </body>
     </html>
   );
