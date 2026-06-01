@@ -3707,21 +3707,22 @@ body:has(.us-page) {
   gap: 3px;
   height: 30px;
 }
-.us-equalizer-bar {
+.us-equalizer-container .us-equalizer-bar {
   width: 3px;
   height: 5px;
   background: var(--us-gold);
   border-radius: 3px;
   transition: height 0.15s ease;
 }
-.us-equalizer-active .us-equalizer-bar {
+.us-equalizer-container.us-equalizer-active .us-equalizer-bar,
+.us-equalizer-container .us-equalizer-active .us-equalizer-bar {
   animation: us-equalizer-bounce 0.8s ease infinite alternate;
 }
-.us-equalizer-bar:nth-child(2) { animation-delay: 0.15s; }
-.us-equalizer-bar:nth-child(3) { animation-delay: 0.3s; }
-.us-equalizer-bar:nth-child(4) { animation-delay: 0.05s; }
-.us-equalizer-bar:nth-child(5) { animation-delay: 0.2s; }
-.us-equalizer-bar:nth-child(6) { animation-delay: 0.4s; }
+.us-equalizer-container .us-equalizer-bar:nth-child(2) { animation-delay: 0.15s; }
+.us-equalizer-container .us-equalizer-bar:nth-child(3) { animation-delay: 0.3s; }
+.us-equalizer-container .us-equalizer-bar:nth-child(4) { animation-delay: 0.05s; }
+.us-equalizer-container .us-equalizer-bar:nth-child(5) { animation-delay: 0.2s; }
+.us-equalizer-container .us-equalizer-bar:nth-child(6) { animation-delay: 0.4s; }
 
 /* Letter handwriting animation classes */
 .handwriting-anim {

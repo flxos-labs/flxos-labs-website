@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Figtree, JetBrains_Mono, Space_Grotesk, Playfair_Display, Cormorant_Garamond } from "next/font/google";
+import { Figtree, JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import SiteLayout from "../components/SiteLayout";
 
@@ -21,19 +21,6 @@ const fontMono = JetBrains_Mono({
   display: "swap",
 });
 
-const fontSerifDisplay = Playfair_Display({
-  variable: "--font-serif-display",
-  subsets: ["latin"],
-  display: "swap",
-});
-
-const fontSerifBody = Cormorant_Garamond({
-  variable: "--font-serif-body",
-  subsets: ["latin"],
-  display: "swap",
-  weight: ["300", "400", "500", "600", "700"],
-});
-
 export const metadata: Metadata = {
   title: "FlxOS - Modular OS from ESP32 to Desktop",
   description:
@@ -48,7 +35,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${fontDisplay.variable} ${fontBody.variable} ${fontMono.variable} ${fontSerifDisplay.variable} ${fontSerifBody.variable}`}
+      className={`${fontDisplay.variable} ${fontBody.variable} ${fontMono.variable}`}
     >
       <body className="min-h-screen text-[color:var(--ink)]">
         <script

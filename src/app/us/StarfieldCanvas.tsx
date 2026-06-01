@@ -728,12 +728,15 @@ export default function StarfieldCanvas() {
       }
     };
 
+    const scrollContainer = document.querySelector(".us-page");
+    const scrollTarget = scrollContainer || window;
+
     const onScroll = () => {
-      scrollRef.current = window.scrollY;
+      scrollRef.current = scrollContainer ? scrollContainer.scrollTop : window.scrollY;
     };
 
     window.addEventListener("resize", handleResize);
-    window.addEventListener("scroll", onScroll, { passive: true });
+    scrollTarget.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("mousemove", onMouseMove);
     window.addEventListener("touchstart", onTouchMove, { passive: true });
     window.addEventListener("touchmove", onTouchMove, { passive: true });
@@ -744,7 +747,7 @@ export default function StarfieldCanvas() {
     return () => {
       cancelAnimationFrame(animationRef.current);
       window.removeEventListener("resize", handleResize);
-      window.removeEventListener("scroll", onScroll);
+      scrollTarget.removeEventListener("scroll", onScroll);
       window.removeEventListener("mousemove", onMouseMove);
       window.removeEventListener("touchstart", onTouchMove);
       window.removeEventListener("touchmove", onTouchMove);
