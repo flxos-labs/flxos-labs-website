@@ -4,6 +4,7 @@ import React, { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import StarfieldCanvas from "./StarfieldCanvas";
+import { Tilt3DCard } from "./Tilt3DCard";
 
 const SectionHeading = ({ eyebrow, title, description, roseGlow = false }: { eyebrow: string; title: string; description?: string; roseGlow?: boolean }) => {
   return (
@@ -1265,69 +1266,84 @@ export default function UsContent() {
 
       {/* Cinematic Hero */}
       <section className="us-hero relative overflow-hidden flex flex-col justify-center items-center">
-        {/* Orbital particle rings */}
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden select-none">
+        {/* Orbital particle rings with 3D orientation */}
+        <div className="us-orbital-rings-container absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden select-none">
           <div className="us-orbital-ring"></div>
           <div className="us-orbital-ring-outer"></div>
         </div>
 
-        <div className="text-center max-w-4xl px-6 z-10 select-none">
-          <p 
-            className="text-[#d4a853] tracking-[0.3em] text-xs font-bold uppercase mb-6 opacity-0 animate-fade-in"
-            style={{ animationDelay: "0.2s", animationFillMode: "forwards" }}
-          >
-            A Dedication to My Favorite Person
-          </p>
-          <h1 className="font-serif-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-medium mb-8 leading-tight tracking-wide text-white">
-            {"To the One Who Stole My Heart".split(" ").map((word, idx) => (
-              <span 
-                key={idx} 
-                className="inline-block mr-3 md:mr-4 opacity-0 animate-fade-in"
-                style={{ 
-                  animationDelay: `${idx * 0.12 + 0.4}s`,
-                  animationFillMode: "forwards"
-                }}
-              >
-                {word}
-              </span>
-            ))}
-          </h1>
-          <p 
-            className="text-lg sm:text-xl text-[rgba(253,246,227,0.7)] font-serif-body font-light leading-relaxed max-w-2xl mx-auto opacity-0 animate-fade-in"
-            style={{ animationDelay: "1.8s", animationFillMode: "forwards" }}
-          >
-            A small corner of the universe designed just for you, Rekha. A celebration of us.
-          </p>
-
-          <div 
-            className="opacity-0 animate-fade-in" 
-            style={{ animationDelay: "2.2s", animationFillMode: "forwards" }}
-          >
-            <button 
-              onClick={togglePlay}
-              className="mt-10 px-8 py-3.5 rounded-full border border-[rgba(212,168,83,0.25)] bg-[rgba(10,10,12,0.65)] backdrop-blur-md text-[#d4a853] hover:text-white hover:border-[#d4a853] hover:bg-[rgba(212,168,83,0.12)] transition-all duration-300 flex items-center gap-3.5 mx-auto shadow-xl z-20 group active:scale-95 cursor-pointer"
+        <Tilt3DCard 
+          maxTilt={8} 
+          perspective={1200} 
+          glowColor="rgba(212, 168, 83, 0.04)" 
+          className="text-center max-w-4xl px-6 z-10 select-none"
+        >
+          <div style={{ transformStyle: "preserve-3d" }}>
+            <p 
+              className="text-[#d4a853] tracking-[0.3em] text-xs font-bold uppercase mb-6 opacity-0 animate-fade-in"
+              style={{ animationDelay: "0.2s", animationFillMode: "forwards" }}
             >
-              <span className="relative flex h-3 w-3">
-                {isPlaying && (
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#d4a853] opacity-75"></span>
-                )}
-                <span className={`relative inline-flex rounded-full h-3 w-3 ${isPlaying ? "bg-[#d4a853]" : "bg-gray-500"}`}></span>
+              <span className="block" style={{ transform: "translateZ(30px)" }}>
+                A Dedication to My Favorite Person
               </span>
-              <span className="text-xs uppercase tracking-widest font-bold">
-                {isPlaying ? "Pause Ambient Music" : "Play Ambient Music"}
+            </p>
+            <h1 className="font-serif-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-medium mb-8 leading-tight tracking-wide text-white" style={{ transformStyle: "preserve-3d" }}>
+              <span className="block" style={{ transform: "translateZ(75px)" }}>
+                {"To the One Who Stole My Heart".split(" ").map((word, idx) => (
+                  <span 
+                    key={idx} 
+                    className="inline-block mr-3 md:mr-4 opacity-0 animate-fade-in"
+                    style={{ 
+                      animationDelay: `${idx * 0.12 + 0.4}s`,
+                      animationFillMode: "forwards"
+                    }}
+                  >
+                    {word}
+                  </span>
+                ))}
               </span>
-              {isPlaying ? (
-                <svg className="w-4 h-4 text-[#d4a853] group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
-                </svg>
-              ) : (
-                <svg className="w-4 h-4 text-[#d4a853] group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
-                </svg>
-              )}
-            </button>
+            </h1>
+            <p 
+              className="text-lg sm:text-xl text-[rgba(253,246,227,0.7)] font-serif-body font-light leading-relaxed max-w-2xl mx-auto opacity-0 animate-fade-in"
+              style={{ animationDelay: "1.8s", animationFillMode: "forwards" }}
+            >
+              <span className="block" style={{ transform: "translateZ(45px)" }}>
+                A small corner of the universe designed just for you, Rekha. A celebration of us.
+              </span>
+            </p>
+
+            <div 
+              className="opacity-0 animate-fade-in" 
+              style={{ animationDelay: "2.2s", animationFillMode: "forwards" }}
+            >
+              <span className="block" style={{ transform: "translateZ(55px)" }}>
+                <button 
+                  onClick={togglePlay}
+                  className="mt-10 px-8 py-3.5 rounded-full border border-[rgba(212,168,83,0.25)] bg-[rgba(10,10,12,0.65)] backdrop-blur-md text-[#d4a853] hover:text-white hover:border-[#d4a853] hover:bg-[rgba(212,168,83,0.12)] transition-all duration-300 flex items-center gap-3.5 mx-auto shadow-xl z-20 group active:scale-95 cursor-pointer"
+                >
+                  <span className="relative flex h-3 w-3">
+                    {isPlaying && (
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#d4a853] opacity-75"></span>
+                    )}
+                    <span className={`relative inline-flex rounded-full h-3 w-3 ${isPlaying ? "bg-[#d4a853]" : "bg-gray-500"}`}></span>
+                  </span>
+                  <span className="text-xs uppercase tracking-widest font-bold">
+                    {isPlaying ? "Pause Ambient Music" : "Play Ambient Music"}
+                  </span>
+                  {isPlaying ? (
+                    <svg className="w-4 h-4 text-[#d4a853] group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
+                    </svg>
+                  ) : (
+                    <svg className="w-4 h-4 text-[#d4a853] group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
+                    </svg>
+                  )}
+                </button>
+              </span>
+            </div>
           </div>
-        </div>
+        </Tilt3DCard>
 
         <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-[rgba(253,246,227,0.4)] animate-pulse">
           <span className="text-[10px] uppercase tracking-[0.25em] font-bold">Scroll to Begin</span>
@@ -1343,7 +1359,7 @@ export default function UsContent() {
       <section className="us-letter-section">
         <SectionHeading eyebrow="A Heartfelt Message" title="For Your Eyes Only" description="Click the golden wax seal to open the envelope and reveal the letter inside." />
 
-        <div className="us-envelope-wrapper us-reveal us-reveal-scale">
+        <div className="us-envelope-wrapper us-reveal us-reveal-3d">
           <div 
             className={`us-envelope ${isLetterOpen ? "open" : ""}`}
             onClick={() => setIsLetterOpen(!isLetterOpen)}
@@ -1389,22 +1405,29 @@ export default function UsContent() {
       <section className="us-player-section py-20">
         <SectionHeading eyebrow="Our Soundtrack" title="Echoes of Us" description="A curated selection of melodies that echo the rhythm of our hearts. Press play to spin the vinyl and read the lyrics." />
 
-        <div className="max-w-4xl mx-auto px-4 us-reveal us-reveal-scale us-reveal-stagger-1">
+        <div className="max-w-4xl mx-auto px-4 us-reveal us-reveal-3d us-reveal-stagger-1">
           <div className={`us-player-container ${isPlaying ? "playing" : ""}`}>
             {/* Player Visuals */}
             <div className="us-player-left">
-              <div className="us-vinyl-deck">
-                <div className="us-vinyl-jacket">
-                  <span className="font-display font-bold text-[#d4a853] text-[9px] uppercase tracking-widest mb-1">
-                    Rekha & Akash
-                  </span>
-                  <span className="text-[10px] text-[rgba(253,246,227,0.65)] font-serif-body italic truncate max-w-full">
-                    {TRACKS[currentTrackIndex].title}
-                  </span>
-                </div>
-                <div className="us-vinyl-record">
-                  <div className="us-vinyl-label">
-                    <div className="us-vinyl-label-center"></div>
+              <div className="us-vinyl-deck-3d">
+                <div className="us-vinyl-deck">
+                  <Tilt3DCard 
+                    className="us-vinyl-jacket" 
+                    style={{ position: "absolute" }} 
+                    maxTilt={15} 
+                    glowColor="rgba(212, 168, 83, 0.12)"
+                  >
+                    <span className="font-display font-bold text-[#d4a853] text-[9px] uppercase tracking-widest mb-1">
+                      Rekha & Akash
+                    </span>
+                    <span className="text-[10px] text-[rgba(253,246,227,0.65)] font-serif-body italic truncate max-w-full">
+                      {TRACKS[currentTrackIndex].title}
+                    </span>
+                  </Tilt3DCard>
+                  <div className="us-vinyl-record">
+                    <div className="us-vinyl-label">
+                      <div className="us-vinyl-label-center"></div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1530,15 +1553,17 @@ export default function UsContent() {
             return (
               <div 
                 key={event.date}
-                className={`us-timeline-item ${isLeft ? "left" : "right"}`}
+                className={`us-timeline-item ${isLeft ? "left" : "right"} us-reveal ${isLeft ? "us-reveal-3d-left" : "us-reveal-3d-right"}`}
               >
                 <div 
                   className="us-timeline-node"
                   onClick={() => setExpandedTimelineNode(isExpanded ? null : index)}
                 ></div>
-                <div 
+                <Tilt3DCard 
                   className={`us-timeline-card us-card-frosted group ${isExpanded ? "expanded" : ""}`}
                   onClick={() => setExpandedTimelineNode(isExpanded ? null : index)}
+                  maxTilt={8}
+                  glowColor="rgba(212, 168, 83, 0.12)"
                 >
                   <div className="flex justify-between items-center mb-3">
                     <span className="us-timeline-date">{event.date}</span>
@@ -1568,7 +1593,7 @@ export default function UsContent() {
                       &ldquo;{event.memory}&rdquo;
                     </p>
                   </div>
-                </div>
+                </Tilt3DCard>
               </div>
             );
           })}
@@ -1583,7 +1608,7 @@ export default function UsContent() {
 
         <div 
           ref={skyContainerRef}
-          className="us-sky-canvas-wrapper us-reveal us-reveal-scale"
+          className="us-sky-canvas-wrapper us-sky-canvas-wrapper-3d us-reveal us-reveal-scale"
           style={{ touchAction: "none", userSelect: "none" }}
           onPointerDown={handleSkyPointerDown}
           onPointerMove={handleSkyPointerMove}
@@ -1614,7 +1639,7 @@ export default function UsContent() {
                 style={{
                   left: `${star.x}%`,
                   top: `${star.y}%`,
-                  transform: `translate(-50%, -50%) ${isConnected ? "scale(1.3)" : "scale(1)"}`,
+                  transform: `translate(-50%, -50%) ${isConnected ? "scale(1.3) translateZ(15px)" : "scale(1) translateZ(0)"}`,
                 }}
                 onClick={() => {
                   handleStarClick(star.id);
@@ -1657,8 +1682,9 @@ export default function UsContent() {
       <section className="us-quiz-section">
         <SectionHeading eyebrow="Love Challenge" title="How Well Do You Know Me?" description="Test your knowledge about my favorite things, fears, and quirks. Let's see if we are perfectly aligned!" />
 
-        <div className="us-quiz-container px-4 us-reveal us-reveal-scale">
+        <div className="us-quiz-container px-4 us-reveal us-reveal-3d">
           <div className={`us-quiz-card us-card-gradient ${isQuizCardShaking ? 'shake' : ''}`}>
+            <Tilt3DCard className="w-full h-full" maxTilt={8} glowColor="rgba(232, 71, 95, 0.12)">
             <div className="us-quiz-progress-bar-bg">
               <div 
                 className="us-quiz-progress-bar" 
@@ -1823,6 +1849,7 @@ export default function UsContent() {
                 </button>
               </div>
             )}
+            </Tilt3DCard>
           </div>
         </div>
       </section>
@@ -1834,7 +1861,7 @@ export default function UsContent() {
         <SectionHeading eyebrow="Milestones & Dreams" title="Our Story Gallery" description="Click on the cards to flip them and reveal our deep memories, first impressions, and future plans together." />
 
         {/* Categories filter bar */}
-        <div className="us-flipcards-filter-bar px-4 us-reveal us-reveal-blur us-reveal-stagger-1">
+        <div className="us-flipcards-filter-bar px-4 us-reveal us-reveal-3d us-reveal-stagger-1">
           {(["All", "First Impressions", "Deep Realizations", "Future Dreams"] as const).map((category) => (
             <button
               key={category}
@@ -1847,7 +1874,7 @@ export default function UsContent() {
         </div>
 
         {/* Cards Grid */}
-        <div className="us-flipcards-grid px-4 us-reveal us-reveal-scale us-reveal-stagger-2">
+        <div className="us-flipcards-grid px-4 us-reveal us-reveal-3d us-reveal-stagger-2">
           {FLIP_CARDS.filter((card) => flipCardsFilter === "All" || card.category === flipCardsFilter).map((card) => {
             // Find global index in FLIP_CARDS array to track flip state consistently
             const globalIndex = FLIP_CARDS.indexOf(card);
@@ -1867,7 +1894,12 @@ export default function UsContent() {
               >
                 <div className="us-flipcard">
                   {/* Front Face */}
-                  <div className="us-flipcard-front">
+                  <Tilt3DCard 
+                    className="us-flipcard-front" 
+                    style={{ position: "absolute" }}
+                    maxTilt={12} 
+                    glowColor="rgba(212, 168, 83, 0.15)"
+                  >
                     <div className="flex justify-between items-start">
                       <span className="us-flipcard-category">{card.category}</span>
                       <span className="text-lg">{card.icon}</span>
@@ -1878,15 +1910,21 @@ export default function UsContent() {
                     <span className="us-flipcard-hint">
                       TAP TO REVEAL ANSWER
                     </span>
-                  </div>
+                  </Tilt3DCard>
 
                   {/* Back Face */}
-                  <div className="us-flipcard-back">
+                  <Tilt3DCard 
+                    className="us-flipcard-back" 
+                    style={{ position: "absolute" }}
+                    baseTransform="rotateY(180deg)"
+                    maxTilt={12} 
+                    glowColor="rgba(232, 71, 95, 0.15)"
+                  >
                     <span className="text-2xl mb-3">✨</span>
                     <p className="us-flipcard-answer">
                       {card.answer}
                     </p>
-                  </div>
+                  </Tilt3DCard>
                 </div>
               </div>
             );
@@ -1910,11 +1948,11 @@ export default function UsContent() {
       <section className="us-constellation-align-section py-20">
         <SectionHeading eyebrow="Value Constellation" title="Our Love Constellation" description="Select the values that connect our hearts. Toggle different pillars to weave the constellation network." roseGlow />
 
-        <div className="us-constellation-align-container max-w-4xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-10 items-center us-reveal us-reveal-scale">
+        <div className="us-constellation-align-container max-w-4xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 gap-10 items-center us-reveal us-reveal-3d">
           {/* Constellation SVG Interactive Visualizer */}
           <div 
             ref={valuesContainerRef}
-            className="us-align-visualizer relative aspect-square w-full max-w-[360px] mx-auto border border-[rgba(212,168,83,0.15)] rounded-full bg-[rgba(10,10,12,0.4)] overflow-hidden"
+            className="us-align-visualizer us-align-visualizer-3d relative aspect-square w-full max-w-[360px] mx-auto border border-[rgba(212,168,83,0.15)] rounded-full bg-[rgba(10,10,12,0.4)] overflow-hidden"
             style={{ touchAction: "none", userSelect: "none" }}
             onPointerDown={handleValuesPointerDown}
             onPointerMove={handleValuesPointerMove}
@@ -2137,9 +2175,14 @@ export default function UsContent() {
         </div>
 
         {/* Animated Love Stats Dashboard */}
-        <div className="us-stats-grid grid grid-cols-2 md:grid-cols-4 gap-4 mt-12 us-reveal us-reveal-scale us-reveal-stagger-1">
+        <div className="us-stats-grid grid grid-cols-2 md:grid-cols-4 gap-4 mt-12 us-reveal us-reveal-3d us-reveal-stagger-1">
           {LOVE_STATS.map((stat, i) => (
-            <div key={i} className="us-stat-card border border-[rgba(212,168,83,0.12)] bg-[rgba(18,18,22,0.4)] backdrop-blur-md p-5 rounded-2xl flex flex-col items-center text-center">
+            <Tilt3DCard 
+              key={i} 
+              className="us-stat-card border border-[rgba(212,168,83,0.12)] bg-[rgba(18,18,22,0.4)] backdrop-blur-md p-5 rounded-2xl flex flex-col items-center text-center"
+              maxTilt={10}
+              glowColor="rgba(212, 168, 83, 0.1)"
+            >
               <span className="text-2xl mb-2">{stat.icon}</span>
               <span className="text-2xl font-extrabold text-white font-display mb-1">{stat.val}</span>
               <span className="text-xs text-[rgba(253,246,227,0.5)] uppercase tracking-wider">{stat.label}</span>
@@ -2161,7 +2204,7 @@ export default function UsContent() {
                   />
                 </svg>
               </div>
-            </div>
+            </Tilt3DCard>
           ))}
         </div>
       </section>
@@ -2209,11 +2252,11 @@ export default function UsContent() {
       <section className="us-oracle-section py-20 bg-[rgba(10,10,12,0.3)]">
         <SectionHeading eyebrow="Celestial Oracle" title="The Cosmic Compass" description="Click the celestial compass to spin the rings of destiny and reveal a prediction of our beautiful future." />
 
-        <div className="max-w-md mx-auto text-center px-4 us-reveal us-reveal-scale">
-          <div className="relative w-48 h-48 mx-auto mb-8 cursor-pointer" onClick={spinCompass}>
-            <div className={`us-compass-outer border-2 border-[rgba(212,168,83,0.25)] rounded-full w-full h-full flex items-center justify-center ${oracleSpinning ? "us-spin-fast" : "us-spin-slow"}`}>
-              <div className="us-compass-middle border border-dashed border-[rgba(232,71,95,0.3)] rounded-full w-[85%] h-[85%] flex items-center justify-center">
-                <div className="us-compass-inner border border-[rgba(212,168,83,0.15)] rounded-full w-[70%] h-[70%] flex items-center justify-center bg-[rgba(10,10,12,0.6)]">
+        <div className="max-w-md mx-auto text-center px-4 us-reveal us-reveal-3d">
+          <div className="us-compass-container-3d relative w-48 h-48 mx-auto mb-8 cursor-pointer" onClick={spinCompass}>
+            <div className={`us-compass-outer us-compass-outer-3d border-2 border-[rgba(212,168,83,0.25)] rounded-full w-full h-full flex items-center justify-center ${oracleSpinning ? "us-spin-fast-gyro-outer" : "us-spin-slow"}`}>
+              <div className="us-compass-middle us-compass-middle-3d border border-dashed border-[rgba(232,71,95,0.3)] rounded-full w-[85%] h-[85%] flex items-center justify-center">
+                <div className="us-compass-inner us-compass-inner-3d border border-[rgba(212,168,83,0.15)] rounded-full w-[70%] h-[70%] flex items-center justify-center bg-[rgba(10,10,12,0.6)]">
                   <span className="text-3xl animate-pulse">💫</span>
                 </div>
               </div>
@@ -2221,8 +2264,9 @@ export default function UsContent() {
             <div 
               className="absolute top-1/2 left-1/2 w-1.5 h-36 bg-gradient-to-b from-[#e8475f] to-[#d4a853] rounded-full pointer-events-none" 
               style={{ 
-                transform: `translate(-50%, -50%) rotate(${oracleSpinning ? 1080 : 45}deg)`, 
-                transition: oracleSpinning ? "transform 1.8s cubic-bezier(0.1, 0.8, 0.1, 1)" : "transform 0.5s ease" 
+                transform: `translate(-50%, -50%) translateZ(20px) rotate(${oracleSpinning ? 1080 : 45}deg)`, 
+                transition: oracleSpinning ? "transform 1.8s cubic-bezier(0.1, 0.8, 0.1, 1)" : "transform 0.5s ease",
+                transformStyle: "preserve-3d"
               }}
             ></div>
           </div>
@@ -2256,15 +2300,17 @@ export default function UsContent() {
       <section className="us-deep-section">
         <SectionHeading eyebrow="Deep Revelations" title="Between the Lines" description="Click on a topic to uncover the deep and cute truths of our connection." />
 
-        <div className="us-deep-container px-4 us-reveal us-reveal-blur">
+        <div className="us-deep-container px-4 us-reveal us-reveal-3d">
           <div className="us-deep-cards-stack">
             {DEEP_QUESTIONS.map((item, idx) => {
               const isActive = activeDeepCardIndex === idx;
               return (
-                <div
+                <Tilt3DCard
                   key={idx}
                   className={`us-deep-card ${isActive ? "active" : ""}`}
                   onClick={() => setActiveDeepCardIndex(isActive ? null : idx)}
+                  maxTilt={6}
+                  glowColor="rgba(212, 168, 83, 0.1)"
                 >
                   <div className="us-deep-question-row">
                     <div className="flex items-center gap-3">
@@ -2280,14 +2326,16 @@ export default function UsContent() {
                       </p>
                     )}
                   </div>
-                </div>
+                </Tilt3DCard>
               );
             })}
 
             {/* Q52: The Moment to Relive - Special Finale Card */}
-            <div
+            <Tilt3DCard
               className={`us-deep-card border border-[rgba(232,71,95,0.25)] bg-[rgba(232,71,95,0.03)] ${activeDeepCardIndex === 99 ? "active" : ""}`}
               onClick={() => setActiveDeepCardIndex(activeDeepCardIndex === 99 ? null : 99)}
+              maxTilt={6}
+              glowColor="rgba(232, 71, 95, 0.12)"
             >
               <div className="us-deep-question-row">
                 <div className="flex items-center gap-3">
@@ -2303,7 +2351,7 @@ export default function UsContent() {
                   </p>
                 )}
               </div>
-            </div>
+            </Tilt3DCard>
           </div>
         </div>
       </section>
@@ -2372,7 +2420,7 @@ export default function UsContent() {
       <section className="us-reasons-section py-20">
         <SectionHeading eyebrow="Poetic Reflections" title="Reasons I Love You" description="Just a few of the countless ways you fill my life with light, beauty, and joy." />
 
-        <div className="w-full max-w-2xl mx-auto px-4 relative h-[440px] sm:h-[460px] flex flex-col justify-between items-center us-reveal us-reveal-scale">
+        <div className="w-full max-w-2xl mx-auto px-4 relative h-[440px] sm:h-[460px] flex flex-col justify-between items-center us-reveal us-reveal-3d">
           <div className="relative w-full h-[320px] sm:h-[350px]">
             {REASONS.map((reason, index) => {
               const total = REASONS.length;
@@ -2402,35 +2450,55 @@ export default function UsContent() {
                 opacityVal = 0.55;
               }
 
+              const CardContent = (
+                <div className={`w-full h-full flex flex-col justify-between transition-opacity duration-300 ${isActive ? "opacity-100" : "opacity-0 pointer-events-none"}`}>
+                  <div>
+                    <div className="flex justify-between items-center mb-4 sm:mb-6">
+                      <span className="font-mono text-xs font-bold text-[#d4a853] tracking-widest uppercase">
+                        Reason {reason.num}
+                      </span>
+                      <span className="text-xl opacity-60">✦</span>
+                    </div>
+                    <p className="font-serif-display italic text-lg sm:text-xl md:text-2xl text-white leading-relaxed mb-2 sm:mb-4">
+                      &ldquo;{reason.title}&rdquo;
+                    </p>
+                  </div>
+                  <p className="text-xs sm:text-sm text-[rgba(253,246,227,0.7)] font-serif-body leading-relaxed border-t border-[rgba(212,168,83,0.1)] pt-3 sm:pt-4">
+                    {reason.desc}
+                  </p>
+                </div>
+              );
+
+              if (isActive) {
+                return (
+                  <Tilt3DCard
+                    key={reason.num}
+                    maxTilt={10}
+                    glowColor="rgba(212, 168, 83, 0.15)"
+                    onClick={() => setActiveReasonIndex((prev) => (prev + 1) % total)}
+                    className="absolute inset-0 p-6 sm:p-8 md:p-10 rounded-3xl border border-[rgba(212,168,83,0.2)] flex flex-col justify-between text-left transition-all duration-500 cursor-pointer select-none us-card-gradient shadow-2xl"
+                    style={{
+                      transform: transformStyle,
+                      zIndex: zIndexVal,
+                      opacity: opacityVal,
+                    }}
+                  >
+                    {CardContent}
+                  </Tilt3DCard>
+                );
+              }
+
               return (
                 <div
                   key={reason.num}
-                  onClick={() => setActiveReasonIndex((prev) => (prev + 1) % total)}
-                  className={`absolute inset-0 p-6 sm:p-8 md:p-10 rounded-3xl border border-[rgba(212,168,83,0.2)] flex flex-col justify-between text-left transition-all duration-500 cursor-pointer select-none ${
-                    isActive ? "us-card-gradient shadow-2xl" : "us-card-frosted pointer-events-none"
-                  }`}
+                  className="absolute inset-0 p-6 sm:p-8 md:p-10 rounded-3xl border border-[rgba(212,168,83,0.2)] flex flex-col justify-between text-left transition-all duration-500 cursor-pointer select-none us-card-frosted pointer-events-none"
                   style={{
                     transform: transformStyle,
                     zIndex: zIndexVal,
                     opacity: opacityVal,
                   }}
                 >
-                  <div className={`w-full h-full flex flex-col justify-between transition-opacity duration-300 ${isActive ? "opacity-100" : "opacity-0 pointer-events-none"}`}>
-                    <div>
-                      <div className="flex justify-between items-center mb-4 sm:mb-6">
-                        <span className="font-mono text-xs font-bold text-[#d4a853] tracking-widest uppercase">
-                          Reason {reason.num}
-                        </span>
-                        <span className="text-xl opacity-60">✦</span>
-                      </div>
-                      <p className="font-serif-display italic text-lg sm:text-xl md:text-2xl text-white leading-relaxed mb-2 sm:mb-4">
-                        &ldquo;{reason.title}&rdquo;
-                      </p>
-                    </div>
-                    <p className="text-xs sm:text-sm text-[rgba(253,246,227,0.7)] font-serif-body leading-relaxed border-t border-[rgba(212,168,83,0.1)] pt-3 sm:pt-4">
-                      {reason.desc}
-                    </p>
-                  </div>
+                  {CardContent}
                 </div>
               );
             })}

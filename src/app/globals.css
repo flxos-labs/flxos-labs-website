@@ -4533,3 +4533,354 @@ body:has(.us-page) {
   30%, 100% { transform: translate(30%, 30%) rotate(30deg); }
 }
 
+
+/* ==========================================
+   3D IMMERSIVE EFFECTS FOR US PAGE
+   ========================================== */
+
+/* Global Perspective & Hardware Acceleration */
+.us-page {
+  perspective: 1400px;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.us-page section,
+.us-page div,
+.us-page svg {
+  transform-style: preserve-3d;
+}
+
+/* 3D Parallax Scroll Reveals */
+.us-reveal-3d {
+  opacity: 0;
+  transform: perspective(1200px) translateZ(-100px) rotateX(12deg) translateY(50px);
+  transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+.us-reveal-3d.revealed {
+  opacity: 1;
+  transform: perspective(1200px) translateZ(0) rotateX(0deg) translateY(0);
+}
+
+.us-reveal-3d-left {
+  opacity: 0;
+  transform: perspective(1200px) rotateY(18deg) translateX(-80px) translateZ(-40px);
+  transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+.us-reveal-3d-left.revealed {
+  opacity: 1;
+  transform: perspective(1200px) rotateY(0deg) translateX(0) translateZ(0);
+}
+
+.us-reveal-3d-right {
+  opacity: 0;
+  transform: perspective(1200px) rotateY(-18deg) translateX(80px) translateZ(-40px);
+  transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+.us-reveal-3d-right.revealed {
+  opacity: 1;
+  transform: perspective(1200px) rotateY(0deg) translateX(0) translateZ(0);
+}
+
+/* 3D Envelope & Wax Seal Upgrades */
+.us-envelope-wrapper {
+  perspective: 1200px !important;
+}
+
+.us-envelope {
+  transform-style: preserve-3d;
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.7), 0 0 40px rgba(212, 168, 83, 0.05);
+}
+
+/* Add Fold Crease Shadow overlay to flap */
+.us-envelope-flap::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 100%);
+  opacity: 0;
+  transition: opacity 0.6s ease;
+  pointer-events: none;
+}
+.us-envelope.open .us-envelope-flap::after {
+  opacity: 0.65;
+}
+
+/* Paper emerging with a slight rotateX angle and depth offset */
+.us-envelope.open .us-envelope-paper {
+  transform: translateY(-135px) scale(1.05) rotateX(-6deg) translateZ(20px) !important;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 35px rgba(212, 168, 83, 0.25);
+  border-color: rgba(212, 168, 83, 0.35);
+}
+
+/* Wax Seal POP and wobble */
+.us-wax-seal {
+  transform: translateX(-50%) translateZ(25px) scale(1);
+  transform-style: preserve-3d;
+}
+.us-wax-seal:hover {
+  transform: translateX(-50%) translateZ(35px) scale(1.1) rotate(5deg);
+  animation: us-seal-wobble 1.5s ease-in-out infinite alternate;
+}
+@keyframes us-seal-wobble {
+  0% { transform: translateX(-50%) translateZ(35px) scale(1.1) rotate(-4deg); }
+  100% { transform: translateX(-50%) translateZ(35px) scale(1.1) rotate(6deg); }
+}
+
+/* 3D Flip Cards Gallery (Enhanced) */
+.us-flipcard-container {
+  perspective: 1400px !important;
+}
+
+.us-flipcard {
+  transform-style: preserve-3d;
+  transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.2) !important;
+}
+
+/* Lift cards in 3D on hover */
+.us-flipcard-container:hover .us-flipcard {
+  transform: translateY(-10px) translateZ(40px);
+}
+
+.us-flipcard-container.flipped:hover .us-flipcard {
+  transform: rotateY(180deg) translateY(-10px) translateZ(40px);
+}
+
+/* Shadows that shift/skew during 3D flip */
+.us-flipcard-front,
+.us-flipcard-back {
+  transition: box-shadow 0.6s ease, border-color 0.6s ease, transform-style 0.6s;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  transform-style: preserve-3d;
+}
+
+.us-flipcard-container:hover .us-flipcard-front {
+  box-shadow: -15px 25px 45px rgba(0, 0, 0, 0.55), 0 0 15px rgba(212, 168, 83, 0.1);
+  border-color: rgba(212, 168, 83, 0.35);
+}
+
+.us-flipcard-container.flipped:hover .us-flipcard-back {
+  box-shadow: 15px 25px 45px rgba(0, 0, 0, 0.55), 0 0 15px rgba(232, 71, 95, 0.1);
+  border-color: rgba(232, 71, 95, 0.35);
+}
+
+/* 3D Cosmic Compass Oracle (Gyroscopic multi-axis spins) */
+.us-compass-container-3d {
+  perspective: 1000px;
+  transform-style: preserve-3d;
+  transform: rotateX(32deg) rotateY(-12deg);
+  transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+}
+.us-compass-container-3d:hover {
+  transform: rotateX(20deg) rotateY(-6deg) translateZ(15px);
+}
+
+.us-compass-outer-3d {
+  transform-style: preserve-3d;
+}
+
+.us-compass-middle-3d {
+  transform-style: preserve-3d;
+  animation: us-gyro-middle 25s linear infinite;
+}
+
+.us-compass-inner-3d {
+  transform-style: preserve-3d;
+  animation: us-gyro-inner 16s linear infinite;
+}
+
+/* Spin Fast overrides for gyroscopic effect */
+.us-spin-fast-gyro-outer {
+  animation: us-spin-fast-outer 1.8s cubic-bezier(0.1, 0.8, 0.1, 1) forwards;
+}
+
+.us-spin-fast-gyro-middle {
+  animation: us-spin-fast-middle 1.8s cubic-bezier(0.1, 0.8, 0.1, 1) forwards;
+}
+
+.us-spin-fast-gyro-inner {
+  animation: us-spin-fast-inner 1.8s cubic-bezier(0.1, 0.8, 0.1, 1) forwards;
+}
+
+@keyframes us-gyro-middle {
+  0% { transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg); }
+  100% { transform: rotateX(12deg) rotateY(360deg) rotateZ(-360deg); }
+}
+
+@keyframes us-gyro-inner {
+  0% { transform: rotateX(0deg) rotateY(0deg) rotateZ(360deg); }
+  100% { transform: rotateX(-15deg) rotateY(-360deg) rotateZ(0deg); }
+}
+
+@keyframes us-spin-fast-outer {
+  0% { transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg); }
+  100% { transform: rotateX(15deg) rotateY(360deg) rotateZ(1080deg); }
+}
+
+@keyframes us-spin-fast-middle {
+  0% { transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg); }
+  100% { transform: rotateX(360deg) rotateY(-15deg) rotateZ(-1080deg); }
+}
+
+@keyframes us-spin-fast-inner {
+  0% { transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg); }
+  100% { transform: rotateX(-360deg) rotateY(360deg) rotateZ(1440deg); }
+}
+
+/* 3D Music Player Vinyl Deck */
+.us-vinyl-deck-3d {
+  perspective: 1200px;
+  transform-style: preserve-3d;
+}
+
+.us-vinyl-deck-3d .us-vinyl-deck {
+  transform: rotateX(16deg) rotateY(-10deg);
+  transform-style: preserve-3d;
+  transition: transform 0.7s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.us-vinyl-deck-3d:hover .us-vinyl-deck {
+  transform: rotateX(8deg) rotateY(-4deg) translateZ(15px);
+}
+
+/* 3D Floating Ambient Elements on gold dividers */
+.us-divider-gold {
+  position: relative;
+  overflow: visible !important;
+}
+
+.us-divider-gold::before,
+.us-divider-gold::after {
+  content: '❤️';
+  position: absolute;
+  font-size: 14px;
+  opacity: 0;
+  pointer-events: none;
+  animation: us-float-heart 6s ease-in-out infinite;
+  z-index: 5;
+}
+
+.us-divider-gold::before {
+  left: 15%;
+  animation-delay: 0s;
+}
+
+.us-divider-gold::after {
+  right: 15%;
+  content: '✨';
+  color: var(--us-gold);
+  font-size: 12px;
+  animation-delay: 3s;
+}
+
+@keyframes us-float-heart {
+  0% {
+    transform: translateY(10px) rotateX(0deg) rotateY(0deg) translateZ(-50px) scale(0.6);
+    opacity: 0;
+  }
+  30% {
+    opacity: 0.65;
+  }
+  70% {
+    opacity: 0.65;
+  }
+  100% {
+    transform: translateY(-80px) rotateX(180deg) rotateY(360deg) translateZ(100px) scale(1.1);
+    opacity: 0;
+  }
+}
+
+/* 3D Photo Collage (Converging photo frames) */
+.us-collage {
+  perspective: 1400px;
+  transform-style: preserve-3d;
+  display: flex;
+  justify-content: center;
+  gap: 2.5rem;
+}
+
+.us-collage-item:nth-child(1) {
+  transform: perspective(1000px) rotateY(10deg) rotateX(4deg) translateZ(0);
+  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.7s ease;
+}
+
+.us-collage-item:nth-child(2) {
+  transform: perspective(1000px) rotateY(-10deg) rotateX(4deg) translateZ(0);
+  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.7s ease;
+}
+
+.us-collage-item:nth-child(1):hover {
+  transform: perspective(1000px) rotateY(-2deg) rotateX(2deg) translateZ(30px) scale(1.08);
+  z-index: 20;
+  box-shadow: -15px 30px 60px rgba(0, 0, 0, 0.75), 0 0 20px rgba(212, 168, 83, 0.15);
+}
+
+.us-collage-item:nth-child(2):hover {
+  transform: perspective(1000px) rotateY(2deg) rotateX(2deg) translateZ(30px) scale(1.08);
+  z-index: 20;
+  box-shadow: 15px 30px 60px rgba(0, 0, 0, 0.75), 0 0 20px rgba(232, 71, 95, 0.15);
+}
+
+/* 3D Constellations & Value Canvas disc */
+.us-sky-canvas-wrapper-3d {
+  perspective: 1200px;
+  transform-style: preserve-3d;
+  transform: rotateX(8deg);
+  transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+}
+.us-sky-canvas-wrapper-3d:hover {
+  transform: rotateX(4deg) translateZ(5px);
+}
+
+.us-sky-star {
+  transform-style: preserve-3d;
+  transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), background-color 0.3s;
+}
+
+.us-align-visualizer-3d {
+  perspective: 1200px;
+  transform-style: preserve-3d;
+  transform: rotateX(18deg) rotateY(-6deg);
+  transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+}
+.us-align-visualizer-3d:hover {
+  transform: rotateX(8deg) rotateY(-2deg) translateZ(15px);
+}
+
+/* 3D Orbital Rings container in Hero */
+.us-orbital-rings-container {
+  perspective: 1200px;
+  transform-style: preserve-3d;
+  transform: rotateX(72deg) rotateY(12deg) translateZ(-40px);
+}
+
+/* Accessibility / Reduced Motion overrides */
+@media (prefers-reduced-motion: reduce) {
+  .us-reveal-3d,
+  .us-reveal-3d-left,
+  .us-reveal-3d-right,
+  .us-envelope,
+  .us-envelope-paper,
+  .us-wax-seal,
+  .us-flipcard-container:hover .us-flipcard,
+  .us-flipcard-container.flipped:hover .us-flipcard,
+  .us-compass-container-3d,
+  .us-compass-middle-3d,
+  .us-compass-inner-3d,
+  .us-vinyl-deck-3d .us-vinyl-deck,
+  .us-divider-gold::before,
+  .us-divider-gold::after,
+  .us-collage-item,
+  .us-sky-canvas-wrapper-3d,
+  .us-align-visualizer-3d,
+  .us-orbital-rings-container {
+    transform: none !important;
+    perspective: none !important;
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
