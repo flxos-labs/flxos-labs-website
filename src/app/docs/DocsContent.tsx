@@ -175,22 +175,71 @@ export default function DocsContent() {
               Complete guide to installing, configuring, and developing with FlxOS.
             </p>
 
-            {/* Mobile search / navigation shortcut */}
-            <button
-              onClick={() => window.dispatchEvent(new CustomEvent("open-mobile-drawer"))}
-              className="w-full md:hidden flex items-center justify-between bg-[rgba(var(--surface-rgb),0.55)] border border-[color:var(--border-muted)] hover:border-[color:var(--accent)] transition-all rounded-xl py-2.5 px-4 text-xs font-semibold text-[color:var(--muted)] shadow-sm hover:shadow-md cursor-pointer text-left !mt-5"
-            >
-              <div className="flex items-center gap-2.5">
-                <svg className="w-4 h-4 text-[color:var(--muted)]" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                  <circle cx="11" cy="11" r="8"/>
-                  <path d="m21 21-4.3-4.3"/>
-                </svg>
-                <span>Search or navigate docs...</span>
-              </div>
-              <span className="text-[10px] bg-[color:var(--surface-2)] border border-[color:var(--border-faint)] rounded-lg py-0.5 px-2 font-mono text-[color:var(--muted)] font-semibold">
-                Menu
+            {/* Mobile search & inline navigation */}
+            <div className="w-full md:hidden space-y-3 bg-[rgba(var(--surface-rgb),0.35)] border border-[color:var(--border-faint)] rounded-2xl p-4 !mt-5 shadow-sm text-left">
+              <span className="text-[10px] uppercase tracking-wider font-bold text-[color:var(--muted)] block px-0.5">
+                Table of Contents
               </span>
-            </button>
+              
+              {/* Search Box */}
+              <div className="relative">
+                <span className="absolute left-3 top-2.5 text-[color:var(--muted)]">
+                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                    <circle cx="11" cy="11" r="8"/>
+                    <path d="m21 21-4.3-4.3"/>
+                  </svg>
+                </span>
+                <input
+                  type="text"
+                  placeholder="Search sections..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full bg-[rgba(var(--surface-rgb),0.5)] border border-[color:var(--border-muted)] rounded-xl py-1.5 pl-8 pr-7 text-xs focus:outline-none focus:ring-1 focus:ring-[color:var(--accent)] focus:border-[color:var(--accent)] font-medium"
+                />
+                {searchQuery && (
+                  <button
+                    onClick={() => setSearchQuery("")}
+                    className="absolute right-3 top-2 text-sm text-[color:var(--muted)] hover:text-[color:var(--ink)]"
+                    aria-label="Clear search"
+                  >
+                    ×
+                  </button>
+                )}
+              </div>
+
+              {/* List of sections */}
+              <div className="space-y-3 pt-1.5 max-h-[220px] overflow-y-auto pr-1">
+                {filteredSidebar.length > 0 ? (
+                  filteredSidebar.map((section, idx) => (
+                    <div key={idx} className="space-y-1">
+                      <span className="text-[9px] uppercase tracking-wider font-bold text-[color:var(--muted)] block px-0.5">
+                        {section.title}
+                      </span>
+                      <div className="grid grid-cols-2 gap-1.5 pl-1.5 border-l border-[color:var(--border-faint)]">
+                        {section.links.map((link) => {
+                          const isActive = activeSection === link.id;
+                          return (
+                            <button
+                              key={link.id}
+                              onClick={() => scrollTo(link.id)}
+                              className={`text-left py-1 px-1.5 text-[11px] font-semibold rounded-lg transition-all truncate ${
+                                isActive
+                                  ? "text-[color:var(--accent)] bg-[rgba(231,111,81,0.06)]"
+                                  : "text-[color:var(--muted)] hover:text-[color:var(--ink)] hover:bg-[rgba(var(--surface-rgb),0.8)]"
+                              }`}
+                            >
+                              {link.label}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-xs text-[color:var(--muted)] italic px-0.5">No sections found.</p>
+                )}
+              </div>
+            </div>
           </header>
 
           {/* Section: Installation */}

@@ -64,20 +64,6 @@ export default function Header() {
     };
   }, []);
 
-  // Listen to open mobile drawer event and focus the search input
-  useEffect(() => {
-    const handleOpenDrawer = () => {
-      setMobileMenuOpen(true);
-      setTimeout(() => {
-        const searchInput = document.getElementById("mobile-docs-search") as HTMLInputElement;
-        searchInput?.focus();
-      }, 150);
-    };
-    window.addEventListener("open-mobile-drawer", handleOpenDrawer);
-    return () => {
-      window.removeEventListener("open-mobile-drawer", handleOpenDrawer);
-    };
-  }, []);
 
   const handleDocsLinkClick = (id: string) => {
     setMobileMenuOpen(false);
