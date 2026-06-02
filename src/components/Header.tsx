@@ -10,13 +10,34 @@ import { sidebarData } from "@/lib/docs-menu";
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeDocsSection, setActiveDocsSection] = useState("installation");
+  const [docsSearchQuery, setDocsSearchQuery] = useState("");
   const pathname = usePathname();
   const isDocsPage = pathname.startsWith("/docs");
+
+  const handleCloseMobileMenu = () => {
+    setMobileMenuOpen(false);
+    setDocsSearchQuery("");
+  };
+
+  const filteredSidebar = sidebarData
+    .map((section) => {
+      const matchedLinks = section.links.filter(
+        (link) =>
+          link.label.toLowerCase().includes(docsSearchQuery.toLowerCase()) ||
+          link.id.toLowerCase().includes(docsSearchQuery.toLowerCase())
+      );
+      return {
+        ...section,
+        links: matchedLinks,
+      };
+    })
+    .filter((section) => section.links.length > 0);
 
   // Close mobile menu when pathname changes (e.g. page navigation)
   useEffect(() => {
     const handle = requestAnimationFrame(() => {
       setMobileMenuOpen(false);
+      setDocsSearchQuery("");
     });
     return () => cancelAnimationFrame(handle);
   }, [pathname]);
@@ -45,6 +66,7 @@ export default function Header() {
 
   const handleDocsLinkClick = (id: string) => {
     setMobileMenuOpen(false);
+    setDocsSearchQuery("");
     const element = document.getElementById(id);
     if (element) {
       element.scrollIntoView({ behavior: "smooth" });
@@ -135,13 +157,13 @@ export default function Header() {
       </header>
 
       {/* Mobile Navigation Drawer Overlay */}
-      <div className={`mobile-drawer-backdrop ${mobileMenuOpen ? "active" : ""}`} onClick={() => setMobileMenuOpen(false)} />
+      <div className={`mobile-drawer-backdrop ${mobileMenuOpen ? "active" : ""}`} onClick={handleCloseMobileMenu} />
       
       <div className={`mobile-drawer ${mobileMenuOpen ? "active" : ""}`} role="dialog" aria-modal="true" aria-label="Mobile Navigation">
         <div className="mobile-drawer-header">
           <span className="drawer-title">Navigation</span>
           <button
-            onClick={() => setMobileMenuOpen(false)}
+            onClick={handleCloseMobileMenu}
             className="drawer-close"
             aria-label="Close menu"
           >
@@ -149,13 +171,13 @@ export default function Header() {
           </button>
         </div>
         <nav className="mobile-drawer-nav overflow-y-auto max-h-[calc(100vh-140px)] pr-1 pb-6">
-          <Link href="/#features" className="drawer-link" onClick={() => setMobileMenuOpen(false)}>
+          <Link href="/#features" className="drawer-link" onClick={handleCloseMobileMenu}>
             Features
           </Link>
-          <Link href="/docs" className="drawer-link" onClick={() => setMobileMenuOpen(false)}>
+          <Link href="/docs" className="drawer-link" onClick={handleCloseMobileMenu}>
             Docs
           </Link>
-          <Link href="/about" className="drawer-link" onClick={() => setMobileMenuOpen(false)}>
+          <Link href="/about" className="drawer-link" onClick={handleCloseMobileMenu}>
             About
           </Link>
           <a
@@ -163,11 +185,11 @@ export default function Header() {
             className="drawer-link"
             target="_blank"
             rel="noopener noreferrer"
-            onClick={() => setMobileMenuOpen(false)}
+            onClick={handleCloseMobileMenu}
           >
             GitHub
           </a>
-          <Link href="/us" className="drawer-link" style={{ color: "#e8475f" }} onClick={() => setMobileMenuOpen(false)}>
+          <Link href="/us" className="drawer-link" style={{ color: "#e8475f" }} onClick={handleCloseMobileMenu}>
             For Us ❤️
           </Link>
           <div className="drawer-divider" />
@@ -176,7 +198,7 @@ export default function Header() {
             href="https://github.com/flxos-labs/flxos"
             target="_blank"
             rel="noopener noreferrer"
-            onClick={() => setMobileMenuOpen(false)}
+            onClick={handleCloseMobileMenu}
           >
             Star on GitHub
           </a>
@@ -185,31 +207,62 @@ export default function Header() {
             <>
               <div className="drawer-divider" />
               <span className="drawer-title mb-2 block">Docs Sections</span>
-              {sidebarData.map((section, idx) => (
-                <div key={idx} className="space-y-1 mt-2">
-                  <span className="text-[10px] uppercase tracking-wider font-bold text-[color:var(--muted)] block px-1">
-                    {section.title}
-                  </span>
-                  <div className="flex flex-col gap-1 pl-2 border-l border-[color:var(--border-faint)]">
-                    {section.links.map((link) => {
-                      const isActive = activeDocsSection === link.id;
-                      return (
-                        <button
-                          key={link.id}
-                          onClick={() => handleDocsLinkClick(link.id)}
-                          className={`w-full text-left py-1 px-2 text-xs font-semibold rounded-lg transition-all ${
-                            isActive
-                              ? "text-[color:var(--accent)] bg-[rgba(231,111,81,0.06)]"
-                              : "text-[color:var(--muted)] hover:text-[color:var(--ink)] hover:bg-[rgba(var(--surface-rgb),0.8)]"
-                          }`}
-                        >
-                          {link.label}
-                        </button>
-                      );
-                    })}
+              
+              {/* Docs Mobile Search Input */}
+              <div className="relative mb-4 px-1">
+                <span className="absolute left-3.5 top-2.5 text-[color:var(--muted)]">
+                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                    <circle cx="11" cy="11" r="8" />
+                    <path d="m21 21-4.3-4.3" />
+                  </svg>
+                </span>
+                <input
+                  type="text"
+                  placeholder="Search docs sections..."
+                  value={docsSearchQuery}
+                  onChange={(e) => setDocsSearchQuery(e.target.value)}
+                  className="w-full bg-[rgba(var(--surface-rgb),0.5)] border border-[color:var(--border-muted)] rounded-xl py-1.5 pl-8 pr-7 text-[11px] focus:outline-none focus:ring-1 focus:ring-[color:var(--accent)] focus:border-[color:var(--accent)] font-medium"
+                />
+                {docsSearchQuery && (
+                  <button
+                    onClick={() => setDocsSearchQuery("")}
+                    className="absolute right-3.5 top-2 text-sm text-[color:var(--muted)] hover:text-[color:var(--ink)]"
+                    aria-label="Clear search"
+                  >
+                    ×
+                  </button>
+                )}
+              </div>
+
+              {filteredSidebar.length > 0 ? (
+                filteredSidebar.map((section, idx) => (
+                  <div key={idx} className="space-y-1 mt-2">
+                    <span className="text-[10px] uppercase tracking-wider font-bold text-[color:var(--muted)] block px-1">
+                      {section.title}
+                    </span>
+                    <div className="flex flex-col gap-1 pl-2 border-l border-[color:var(--border-faint)]">
+                      {section.links.map((link) => {
+                        const isActive = activeDocsSection === link.id;
+                        return (
+                          <button
+                            key={link.id}
+                            onClick={() => handleDocsLinkClick(link.id)}
+                            className={`w-full text-left py-1 px-2 text-xs font-semibold rounded-lg transition-all ${
+                              isActive
+                                ? "text-[color:var(--accent)] bg-[rgba(231,111,81,0.06)]"
+                                : "text-[color:var(--muted)] hover:text-[color:var(--ink)] hover:bg-[rgba(var(--surface-rgb),0.8)]"
+                            }`}
+                          >
+                            {link.label}
+                          </button>
+                        );
+                      })}
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))
+              ) : (
+                <p className="text-xs text-[color:var(--muted)] italic px-1">No sections found.</p>
+              )}
             </>
           )}
         </nav>
