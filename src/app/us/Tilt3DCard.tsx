@@ -28,13 +28,13 @@ export function Tilt3DCard({
   const { rotateX, rotateY, x, y, isHovering } = useMouse3D(ref, { maxTilt });
 
   const cardStyle: React.CSSProperties = {
+    position: "relative",
     ...style,
     transform: isHovering
       ? `perspective(${perspective}px) ${baseTransform} rotateX(${rotateX}deg) rotateY(${rotateY}deg)`
       : `perspective(${perspective}px) ${baseTransform} rotateX(0deg) rotateY(0deg)`,
     transition: isHovering ? "transform 0.05s linear" : "transform 0.5s cubic-bezier(0.25, 1, 0.5, 1)",
     transformStyle: "preserve-3d",
-    position: "relative",
   };
 
   const glowStyle: React.CSSProperties = {
