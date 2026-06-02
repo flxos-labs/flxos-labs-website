@@ -4313,74 +4313,227 @@ body:has(.us-page) {
   to { stroke-dashoffset: 0; }
 }
 
-/* Horizontal desktop timeline styles */
+/* Vertical desktop timeline styles */
 @media (min-width: 769px) {
   .us-timeline {
-    display: flex !important;
-    flex-direction: row !important;
-    overflow-x: auto !important;
-    overflow-y: hidden !important;
-    padding: 3rem 1.5rem !important;
-    gap: 2.5rem !important;
-    max-width: 100% !important;
-    scroll-behavior: smooth !important;
+    display: block !important;
+    max-width: 1050px !important;
+    margin: 4rem auto 0 !important;
+    padding: 0 1.5rem !important;
     position: relative !important;
+    overflow-x: visible !important;
+    overflow-y: visible !important;
   }
+  
   .us-timeline::before {
-    display: none !important; /* Hide vertical line */
-  }
-  .us-timeline-horizontal-line {
+    display: block !important;
+    content: "" !important;
     position: absolute !important;
-    top: 3.5rem !important;
-    left: 2rem !important;
-    right: 2rem !important;
-    height: 2px !important;
-    background: linear-gradient(90deg, transparent 0%, rgba(212, 168, 83, 0.4) 15%, rgba(232, 71, 95, 0.4) 85%, transparent 100%) !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    left: 50% !important;
+    width: 3px !important;
+    background: linear-gradient(
+      to bottom,
+      rgba(212, 168, 83, 0.2) 0%,
+      var(--us-gold) 25%,
+      var(--us-rose) 50%,
+      var(--us-gold) 75%,
+      rgba(212, 168, 83, 0.2) 100%
+    ) !important;
+    background-size: 100% 400px !important;
+    transform: translateX(-50%) !important;
+    animation: timeline-line-flow 8s linear infinite !important;
     z-index: 1 !important;
-    pointer-events: none !important;
   }
+
+  @keyframes timeline-line-flow {
+    from {
+      background-position: 0 0;
+    }
+    to {
+      background-position: 0 400px;
+    }
+  }
+
+  .us-timeline-horizontal-line {
+    display: none !important;
+  }
+
   .us-timeline-item {
-    width: 290px !important;
-    flex-shrink: 0 !important;
-    padding: 0 !important;
-    left: auto !important;
+    width: 50% !important;
+    padding: 2.5rem 3.5rem !important;
+    box-sizing: border-box !important;
+    position: relative !important;
+    display: block !important;
+    min-height: 250px !important;
+  }
+
+  .us-timeline-item.left {
+    left: 0 !important;
+    right: auto !important;
+    text-align: right !important;
+  }
+
+  .us-timeline-item.right {
+    left: 50% !important;
     right: auto !important;
     text-align: left !important;
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: flex-start !important;
   }
+
+  /* Node styling on desktop */
   .us-timeline-node {
-    position: relative !important;
-    top: 0.75rem !important;
-    left: 45% !important;
-    transform: translate(-50%, 0) !important;
+    position: absolute !important;
+    top: 3.5rem !important;
+    width: 18px !important;
+    height: 18px !important;
+    border-radius: 50% !important;
+    background: var(--us-gold) !important;
+    border: 4px solid #0a0a0c !important;
     z-index: 5 !important;
-    margin-bottom: 2rem !important;
+    transform: none !important;
+    margin-bottom: 0 !important;
+    animation: node-pulse 2s infinite alternate ease-in-out !important;
   }
-  .us-timeline-node:hover {
-    transform: translate(-50%, 0) scale(1.3) !important;
+
+  @keyframes node-pulse {
+    0% {
+      box-shadow: 0 0 0 4px rgba(212, 168, 83, 0.25), 0 0 10px var(--us-gold);
+    }
+    100% {
+      box-shadow: 0 0 0 8px rgba(212, 168, 83, 0.45), 0 0 20px var(--us-gold);
+    }
   }
+
+  .us-timeline-item.left .us-timeline-node {
+    right: -9px !important;
+    left: auto !important;
+  }
+
+  .us-timeline-item.right .us-timeline-node {
+    left: -9px !important;
+    right: auto !important;
+  }
+
+  .us-timeline-item:hover .us-timeline-node {
+    transform: scale(1.4) !important;
+    background: var(--us-rose) !important;
+    box-shadow: 0 0 0 6px rgba(232, 71, 95, 0.4), 0 0 25px var(--us-rose), 0 0 40px var(--us-gold) !important;
+    animation: none !important;
+  }
+
+  /* Increase Card Size & Make More Dynamic */
   .us-timeline-card {
     width: 100% !important;
     box-sizing: border-box !important;
+    text-align: left !important; /* Keep content left-aligned for premium readability */
+    padding: 2.25rem !important; /* Increased padding from 1.5rem */
+    background: linear-gradient(135deg, rgba(24, 23, 29, 0.8) 0%, rgba(10, 10, 12, 0.9) 100%) !important;
+    border: 1px solid rgba(212, 168, 83, 0.18) !important;
+    border-radius: 1.5rem !important;
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.55) !important;
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1) !important;
   }
-  /* Scrollbar styling for horizontal timeline */
-  .us-timeline::-webkit-scrollbar {
-    height: 6px;
+
+  .us-timeline-card:hover {
+    transform: translateY(-8px) scale(1.03) !important;
+    border-color: rgba(212, 168, 83, 0.5) !important;
+    background: linear-gradient(135deg, rgba(28, 27, 34, 0.85) 0%, rgba(14, 14, 17, 0.95) 100%) !important;
+    box-shadow: 
+      0 25px 55px rgba(0, 0, 0, 0.75), 
+      0 0 30px rgba(212, 168, 83, 0.25), 
+      0 0 45px rgba(232, 71, 95, 0.15) !important;
+    backdrop-filter: blur(20px) !important;
   }
-  .us-timeline::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.02);
-    border-radius: 10px;
+
+  .us-timeline-title {
+    font-size: 1.35rem !important; /* Increased from 1.2rem */
+    margin-bottom: 0.75rem !important;
   }
-  .us-timeline::-webkit-scrollbar-thumb {
-    background: rgba(212, 168, 83, 0.2);
-    border-radius: 10px;
+
+  .us-timeline-desc {
+    font-size: 0.95rem !important; /* Increased from 0.9rem */
+    line-height: 1.6 !important;
   }
-  .us-timeline::-webkit-scrollbar-thumb:hover {
-    background: rgba(232, 71, 95, 0.4);
+
+  /* Vector SVG illustration frame styles */
+  .us-timeline-illustration-container {
+    width: 100% !important;
+    height: 7.5rem !important; /* equivalent to h-30, increased from h-24 */
+    border-radius: 0.75rem !important;
+    background: rgba(255, 255, 255, 0.02) !important;
+    border: 1px solid rgba(212, 168, 83, 0.12) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin-bottom: 1.25rem !important;
+    overflow: hidden !important;
+    position: relative !important;
+    transition: all 0.4s ease !important;
+  }
+
+  .us-timeline-illustration-container::before {
+    content: "" !important;
+    position: absolute !important;
+    inset: 0 !important;
+    background: radial-gradient(circle, rgba(212, 168, 83, 0.06) 0%, transparent 70%) !important;
+    transition: opacity 0.4s ease !important;
+  }
+
+  .us-timeline-card:hover .us-timeline-illustration-container {
+    border-color: rgba(212, 168, 83, 0.3) !important;
+    background: rgba(255, 255, 255, 0.04) !important;
+  }
+
+  .us-timeline-card:hover .us-timeline-illustration-container::before {
+    background: radial-gradient(circle, rgba(232, 71, 95, 0.12) 0%, transparent 75%) !important;
+  }
+
+  .us-timeline-illustration-container svg {
+    width: 2.25rem !important;
+    height: 2.25rem !important;
+    color: var(--us-gold) !important;
+    opacity: 0.55 !important;
+    z-index: 10 !important;
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+  }
+
+  .us-timeline-card:hover .us-timeline-illustration-container svg {
+    opacity: 1 !important;
+    color: var(--us-gold-light) !important;
+    transform: scale(1.22) rotate(5deg) !important;
+    filter: drop-shadow(0 0 10px rgba(212, 168, 83, 0.55)) !important;
+  }
+
+  /* Memory drawer styles inside vertical card */
+  .us-memory-details {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.6s cubic-bezier(0.16, 1, 0.3, 1), margin-top 0.4s ease, opacity 0.4s ease !important;
+    margin-top: 0;
+    font-size: 0.9rem !important;
+    color: rgba(253, 246, 227, 0.85) !important;
+    border-top: 1px solid rgba(212, 168, 83, 0) !important;
+    padding-top: 0;
+    opacity: 0 !important;
+  }
+
+  .us-timeline-card.expanded .us-memory-details {
+    max-height: 200px !important;
+    margin-top: 1.25rem !important;
+    padding-top: 1.25rem !important;
+    border-top-color: rgba(212, 168, 83, 0.2) !important;
+    opacity: 1 !important;
+  }
+
+  .us-memory-details p {
+    position: relative !important;
+    padding-left: 1.25rem !important;
+    border-left: 2px solid var(--us-rose) !important;
+    line-height: 1.6 !important;
   }
 }
+
 
 /* ------------------------------------------------------------------ */
 /* Premium Upgrades & Animations for Romance Page                     */

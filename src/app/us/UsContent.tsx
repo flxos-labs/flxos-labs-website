@@ -1406,10 +1406,7 @@ export default function UsContent() {
       <section className="us-timeline-section py-20 bg-[rgba(10,10,12,0.5)]">
         <SectionHeading eyebrow="Our Chapters" title="Our Story So Far" description="Click on individual milestone cards to unlock deeper memories and reflections." />
 
-        <div className="us-timeline us-reveal us-reveal-blur relative flex md:flex-row flex-col">
-          {/* Horizontal line for desktop */}
-          <div className="us-timeline-horizontal-line hidden md:block"></div>
-
+        <div className="us-timeline us-reveal us-reveal-blur relative">
           {TIMELINE_EVENTS.map((event, index) => {
             const isLeft = index % 2 === 0;
             const isExpanded = expandedTimelineNode === index;
@@ -1427,8 +1424,8 @@ export default function UsContent() {
                 <Tilt3DCard 
                   className={`us-timeline-card us-card-frosted group ${isExpanded ? "expanded" : ""}`}
                   onClick={() => setExpandedTimelineNode(isExpanded ? null : index)}
-                  maxTilt={8}
-                  glowColor="rgba(212, 168, 83, 0.12)"
+                  maxTilt={10}
+                  glowColor="rgba(212, 168, 83, 0.16)"
                 >
                   <div className="flex justify-between items-center mb-3">
                     <span className="us-timeline-date">{event.date}</span>
@@ -1440,9 +1437,8 @@ export default function UsContent() {
                   </div>
                   
                   {/* Styled Vector SVG Header Illustration Frame */}
-                  <div className="w-full h-24 rounded-lg bg-[rgba(255,255,255,0.02)] border border-[rgba(212,168,83,0.12)] flex items-center justify-center mb-4 group-hover:border-[rgba(212,168,83,0.3)] transition-colors overflow-hidden relative">
-                    <div className="absolute inset-0 bg-radial-gradient(circle, rgba(212,168,83,0.05)_0%, transparent_70%)"></div>
-                    <svg className="w-9 h-9 text-[#d4a853] opacity-50 group-hover:opacity-100 transition-opacity z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div className="us-timeline-illustration-container">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       {index === 0 && <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />}
                       {index === 1 && <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />}
                       {index === 2 && <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />}
