@@ -5,14 +5,20 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import ThemeToggle from "./ThemeToggle";
 import { lockScroll, unlockScroll } from "../lib/scrollLock";
+import { sidebarData } from "@/lib/docs-menu";
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [activeDocsSection, setActiveDocsSection] = useState("installation");
   const pathname = usePathname();
+  const isDocsPage = pathname.startsWith("/docs");
 
   // Close mobile menu when pathname changes (e.g. page navigation)
   useEffect(() => {
-    setMobileMenuOpen(false);
+    const handle = requestAnimationFrame(() => {
+      setMobileMenuOpen(false);
+    });
+    return () => cancelAnimationFrame(handle);
   }, [pathname]);
 
   // Prevent scroll when mobile menu is open
@@ -24,6 +30,26 @@ export default function Header() {
       };
     }
   }, [mobileMenuOpen]);
+
+  // Listen to active section changed event from DocsContent scrollspy
+  useEffect(() => {
+    const handleSectionChange = (e: Event) => {
+      const customEvent = e as CustomEvent<string>;
+      setActiveDocsSection(customEvent.detail);
+    };
+    window.addEventListener("active-section-changed", handleSectionChange);
+    return () => {
+      window.removeEventListener("active-section-changed", handleSectionChange);
+    };
+  }, []);
+
+  const handleDocsLinkClick = (id: string) => {
+    setMobileMenuOpen(false);
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
   const toggleCommandPalette = () => {
     window.dispatchEvent(new CustomEvent("toggle-command-palette"));
@@ -122,7 +148,7 @@ export default function Header() {
             ×
           </button>
         </div>
-        <nav className="mobile-drawer-nav">
+        <nav className="mobile-drawer-nav overflow-y-auto max-h-[calc(100vh-140px)] pr-1 pb-6">
           <Link href="/#features" className="drawer-link" onClick={() => setMobileMenuOpen(false)}>
             Features
           </Link>
@@ -154,6 +180,38 @@ export default function Header() {
           >
             Star on GitHub
           </a>
+
+          {isDocsPage && (
+            <>
+              <div className="drawer-divider" />
+              <span className="drawer-title mb-2 block">Docs Sections</span>
+              {sidebarData.map((section, idx) => (
+                <div key={idx} className="space-y-1 mt-2">
+                  <span className="text-[10px] uppercase tracking-wider font-bold text-[color:var(--muted)] block px-1">
+                    {section.title}
+                  </span>
+                  <div className="flex flex-col gap-1 pl-2 border-l border-[color:var(--border-faint)]">
+                    {section.links.map((link) => {
+                      const isActive = activeDocsSection === link.id;
+                      return (
+                        <button
+                          key={link.id}
+                          onClick={() => handleDocsLinkClick(link.id)}
+                          className={`w-full text-left py-1 px-2 text-xs font-semibold rounded-lg transition-all ${
+                            isActive
+                              ? "text-[color:var(--accent)] bg-[rgba(231,111,81,0.06)]"
+                              : "text-[color:var(--muted)] hover:text-[color:var(--ink)] hover:bg-[rgba(var(--surface-rgb),0.8)]"
+                          }`}
+                        >
+                          {link.label}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              ))}
+            </>
+          )}
         </nav>
       </div>
     </>

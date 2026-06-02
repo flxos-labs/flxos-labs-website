@@ -2,58 +2,13 @@
 
 import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
-
-interface SidebarLink {
-  id: string;
-  label: string;
-}
-
-interface SidebarSection {
-  title: string;
-  links: SidebarLink[];
-}
+import { sidebarData } from "@/lib/docs-menu";
 
 export default function DocsContent() {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeSection, setActiveSection] = useState("installation");
   const [copiedBlock, setCopiedBlock] = useState<string | null>(null);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
-
-  // Sidebar structure
-  const sidebarData: SidebarSection[] = [
-    {
-      title: "Getting Started",
-      links: [
-        { id: "installation", label: "Installation" },
-        { id: "quick-start", label: "Quick Start" },
-        { id: "prerequisites", label: "Prerequisites" },
-      ],
-    },
-    {
-      title: "Architecture",
-      links: [
-        { id: "overview", label: "System Overview" },
-        { id: "directory", label: "Directory Structure" },
-        { id: "modules", label: "Core Modules" },
-      ],
-    },
-    {
-      title: "Development",
-      links: [
-        { id: "building", label: "Building" },
-        { id: "configuration", label: "Configuration" },
-        { id: "apps", label: "Creating Apps" },
-      ],
-    },
-    {
-      title: "Reference",
-      links: [
-        { id: "api", label: "API Reference" },
-        { id: "troubleshooting", label: "Troubleshooting" },
-      ],
-    },
-  ];
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -97,6 +52,11 @@ export default function DocsContent() {
     return () => observer.disconnect();
   }, []);
 
+  // Dispatch custom event to notify layout header about the active section
+  useEffect(() => {
+    window.dispatchEvent(new CustomEvent("active-section-changed", { detail: activeSection }));
+  }, [activeSection]);
+
   // Clipboard copy handler
   const copyToClipboard = (text: string, id: string) => {
     navigator.clipboard.writeText(text).then(() => {
@@ -111,7 +71,6 @@ export default function DocsContent() {
     if (element) {
       element.scrollIntoView({ behavior: "smooth" });
       setActiveSection(id);
-      setMobileMenuOpen(false);
     }
   };
 
@@ -137,28 +96,11 @@ export default function DocsContent() {
         <span className="orb orb-3 opacity-30" />
       </div>
 
-      {/* Mobile top-bar */}
-      <div className="md:hidden sticky top-[57px] z-40 bg-[rgba(var(--surface-rgb),0.9)] backdrop-blur-md border-b border-[color:var(--border-faint)] px-6 py-2.5 flex items-center justify-between">
-        <button
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="flex items-center gap-2 text-xs font-semibold text-[color:var(--muted)] hover:text-[color:var(--ink)]"
-          aria-label="Toggle navigation drawer"
-        >
-          <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M4 6h16M4 12h16M4 18h16" /></svg>
-          <span>Menu</span>
-        </button>
-        <span className="text-xs font-semibold text-[color:var(--accent)] capitalize">
-          {activeSection.replace("-", " ")}
-        </span>
-      </div>
-
       <div className="mx-auto max-w-6xl px-6 py-10 md:py-16 grid gap-10 md:grid-cols-[250px_1fr]">
         
-        {/* Sidebar Nav (Desktop & Mobile Drawer) */}
+        {/* Sidebar Nav (Desktop Only) */}
         <aside
-          className={`fixed md:sticky z-40 md:z-10 bg-[color:var(--surface)] md:bg-transparent border-r border-[color:var(--border-faint)] md:border-none p-6 md:p-0 w-[280px] max-w-[calc(100vw-32px)] md:w-auto transition-all duration-300 ${
-            mobileMenuOpen ? "left-0" : "-left-[290px] md:left-0"
-          }`}
+          className="hidden md:block md:sticky z-10 w-auto"
           style={{ height: "calc(100vh - 100px)", top: "100px" }}
         >
           {/* Search Box */}
@@ -219,14 +161,6 @@ export default function DocsContent() {
             )}
           </div>
         </aside>
-
-        {/* Backdrop for Mobile */}
-        {mobileMenuOpen && (
-          <div
-            onClick={() => setMobileMenuOpen(false)}
-            className="fixed inset-0 top-[100px] bg-black/20 backdrop-blur-xs z-30 md:hidden"
-          />
-        )}
 
         {/* Main Content Area */}
         <div className="space-y-16 max-w-3xl">
