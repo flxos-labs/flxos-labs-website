@@ -222,14 +222,14 @@ export default function DocsContent() {
                       <span className="text-[9px] uppercase tracking-wider font-bold text-[color:var(--muted)] block px-0.5">
                         {section.title}
                       </span>
-                      <div className="grid grid-cols-2 gap-1.5 pl-1.5 border-l border-[color:var(--border-faint)]">
+                      <div className="flex flex-col gap-1 pl-2 border-l border-[color:var(--border-faint)]">
                         {section.links.map((link) => {
                           const isActive = activeSection === link.id;
                           return (
                             <button
                               key={link.id}
                               onClick={() => scrollTo(link.id)}
-                              className={`text-left py-1 px-1.5 text-[11px] font-semibold rounded-lg transition-all truncate ${
+                              className={`w-full text-left py-1 px-2 text-[11px] font-semibold rounded-lg transition-all ${
                                 isActive
                                   ? "text-[color:var(--accent)] bg-[rgba(231,111,81,0.06)]"
                                   : "text-[color:var(--muted)] hover:text-[color:var(--ink)] hover:bg-[rgba(var(--surface-rgb),0.8)]"
