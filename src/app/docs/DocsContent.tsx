@@ -7,6 +7,7 @@ import { sidebarData } from "@/lib/docs-menu";
 export default function DocsContent() {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeSection, setActiveSection] = useState("installation");
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [copiedBlock, setCopiedBlock] = useState<string | null>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
@@ -193,6 +194,8 @@ export default function DocsContent() {
                   type="text"
                   placeholder="Search sections..."
                   value={searchQuery}
+                  onFocus={() => setIsSearchFocused(true)}
+                  onBlur={() => setTimeout(() => setIsSearchFocused(false), 200)}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="w-full bg-[rgba(var(--surface-rgb),0.5)] border border-[color:var(--border-muted)] rounded-xl py-1.5 pl-8 pr-7 text-xs focus:outline-none focus:ring-1 focus:ring-[color:var(--accent)] focus:border-[color:var(--accent)] font-medium"
                 />
@@ -208,7 +211,11 @@ export default function DocsContent() {
               </div>
 
               {/* List of sections */}
-              <div className="space-y-3 pt-1.5 max-h-[220px] overflow-y-auto pr-1">
+              <div className={`space-y-3 overflow-y-auto pr-1 transition-all duration-300 ${
+                isSearchFocused || searchQuery.length > 0
+                  ? "max-h-[220px] pt-1.5 opacity-100 mt-3"
+                  : "max-h-0 pt-0 opacity-0 mt-0 pointer-events-none"
+              }`}>
                 {filteredSidebar.length > 0 ? (
                   filteredSidebar.map((section, idx) => (
                     <div key={idx} className="space-y-1">

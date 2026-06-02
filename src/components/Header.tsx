@@ -5,39 +5,19 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import ThemeToggle from "./ThemeToggle";
 import { lockScroll, unlockScroll } from "../lib/scrollLock";
-import { sidebarData } from "@/lib/docs-menu";
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [activeDocsSection, setActiveDocsSection] = useState("installation");
-  const [docsSearchQuery, setDocsSearchQuery] = useState("");
   const pathname = usePathname();
-  const isDocsPage = pathname.startsWith("/docs");
 
   const handleCloseMobileMenu = () => {
     setMobileMenuOpen(false);
-    setDocsSearchQuery("");
   };
-
-  const filteredSidebar = sidebarData
-    .map((section) => {
-      const matchedLinks = section.links.filter(
-        (link) =>
-          link.label.toLowerCase().includes(docsSearchQuery.toLowerCase()) ||
-          link.id.toLowerCase().includes(docsSearchQuery.toLowerCase())
-      );
-      return {
-        ...section,
-        links: matchedLinks,
-      };
-    })
-    .filter((section) => section.links.length > 0);
 
   // Close mobile menu when pathname changes (e.g. page navigation)
   useEffect(() => {
     const handle = requestAnimationFrame(() => {
       setMobileMenuOpen(false);
-      setDocsSearchQuery("");
     });
     return () => cancelAnimationFrame(handle);
   }, [pathname]);
@@ -51,28 +31,6 @@ export default function Header() {
       };
     }
   }, [mobileMenuOpen]);
-
-  // Listen to active section changed event from DocsContent scrollspy
-  useEffect(() => {
-    const handleSectionChange = (e: Event) => {
-      const customEvent = e as CustomEvent<string>;
-      setActiveDocsSection(customEvent.detail);
-    };
-    window.addEventListener("active-section-changed", handleSectionChange);
-    return () => {
-      window.removeEventListener("active-section-changed", handleSectionChange);
-    };
-  }, []);
-
-
-  const handleDocsLinkClick = (id: string) => {
-    setMobileMenuOpen(false);
-    setDocsSearchQuery("");
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-    }
-  };
 
   const toggleCommandPalette = () => {
     window.dispatchEvent(new CustomEvent("toggle-command-palette"));
@@ -204,69 +162,7 @@ export default function Header() {
             Star on GitHub
           </a>
 
-          {isDocsPage && (
-            <>
-              <div className="drawer-divider" />
-              <span className="drawer-title mb-2 block">Docs Sections</span>
-              
-              {/* Docs Mobile Search Input */}
-              <div className="relative mb-4 px-1">
-                <span className="absolute left-3.5 top-2.5 text-[color:var(--muted)]">
-                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                    <circle cx="11" cy="11" r="8" />
-                    <path d="m21 21-4.3-4.3" />
-                  </svg>
-                </span>
-                <input
-                  id="mobile-docs-search"
-                  type="text"
-                  placeholder="Search docs sections..."
-                  value={docsSearchQuery}
-                  onChange={(e) => setDocsSearchQuery(e.target.value)}
-                  className="w-full bg-[rgba(var(--surface-rgb),0.5)] border border-[color:var(--border-muted)] rounded-xl py-1.5 pl-8 pr-7 text-[11px] focus:outline-none focus:ring-1 focus:ring-[color:var(--accent)] focus:border-[color:var(--accent)] font-medium"
-                />
-                {docsSearchQuery && (
-                  <button
-                    onClick={() => setDocsSearchQuery("")}
-                    className="absolute right-3.5 top-2 text-sm text-[color:var(--muted)] hover:text-[color:var(--ink)]"
-                    aria-label="Clear search"
-                  >
-                    ×
-                  </button>
-                )}
-              </div>
 
-              {filteredSidebar.length > 0 ? (
-                filteredSidebar.map((section, idx) => (
-                  <div key={idx} className="space-y-1 mt-2">
-                    <span className="text-[10px] uppercase tracking-wider font-bold text-[color:var(--muted)] block px-1">
-                      {section.title}
-                    </span>
-                    <div className="flex flex-col gap-1 pl-2 border-l border-[color:var(--border-faint)]">
-                      {section.links.map((link) => {
-                        const isActive = activeDocsSection === link.id;
-                        return (
-                          <button
-                            key={link.id}
-                            onClick={() => handleDocsLinkClick(link.id)}
-                            className={`w-full text-left py-1 px-2 text-xs font-semibold rounded-lg transition-all ${
-                              isActive
-                                ? "text-[color:var(--accent)] bg-[rgba(231,111,81,0.06)]"
-                                : "text-[color:var(--muted)] hover:text-[color:var(--ink)] hover:bg-[rgba(var(--surface-rgb),0.8)]"
-                            }`}
-                          >
-                            {link.label}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-                ))
-              ) : (
-                <p className="text-xs text-[color:var(--muted)] italic px-1">No sections found.</p>
-              )}
-            </>
-          )}
         </nav>
       </div>
     </>
