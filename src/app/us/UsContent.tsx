@@ -1958,11 +1958,18 @@ export default function UsContent() {
             <div className="us-counter-title">Our Time in the Universe</div>
 
             {/* Pulsing ECG Heartbeat SVG Line */}
-            <div className="w-full h-10 my-4 relative overflow-hidden opacity-60">
+            <div className="w-full h-12 my-4 relative overflow-hidden opacity-80">
               <svg className="w-full h-full stroke-[#e8475f]" viewBox="0 0 400 60" fill="none" preserveAspectRatio="none">
+                {/* Background static heartbeat line for depth */}
+                <path
+                  stroke="rgba(255, 255, 255, 0.05)"
+                  strokeWidth="2"
+                  d="M 0 30 L 140 30 L 148 10 L 156 50 L 164 0 L 172 60 L 180 30 L 188 30 L 400 30"
+                />
+                {/* Active traveling pulse path */}
                 <path
                   className="us-ecg-path"
-                  strokeWidth="3"
+                  strokeWidth="3.5"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   d="M 0 30 L 140 30 L 148 10 L 156 50 L 164 0 L 172 60 L 180 30 L 188 30 L 400 30"
@@ -2024,8 +2031,8 @@ export default function UsContent() {
                   onClick={(e) => handlePromiseClick(index, e)}
                 >
                   <div className="us-promise-check">
-                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
+                    <svg className="w-3 h-3 fill-current" viewBox="0 0 24 24">
+                      <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
                     </svg>
                   </div>
                   <span className="us-promise-text text-left">{promise}</span>
@@ -2049,21 +2056,22 @@ export default function UsContent() {
               <span className="text-xs text-[rgba(253,246,227,0.5)] uppercase tracking-wider">{stat.label}</span>
               
               {/* Circular progress SVG ring */}
-              <div className="w-10 h-10 mt-3 relative">
-                <svg className="w-full h-full transform -rotate-90">
-                  <circle cx="20" cy="20" r="16" stroke="rgba(255,255,255,0.03)" strokeWidth="3" fill="transparent" />
+              <div className="w-14 h-14 mt-4 relative flex items-center justify-center">
+                <svg className="w-full h-full transform -rotate-90 absolute inset-0">
+                  <circle cx="28" cy="28" r="23" stroke="rgba(255,255,255,0.03)" strokeWidth="3.5" fill="transparent" />
                   <circle
-                    cx="20"
-                    cy="20"
-                    r="16"
+                    cx="28"
+                    cy="28"
+                    r="23"
                     stroke="url(#rose-gold-glow-values)"
-                    strokeWidth="3"
+                    strokeWidth="3.5"
                     fill="transparent"
-                    strokeDasharray={100.53}
-                    strokeDashoffset={100.53 - (100.53 * stat.percent) / 100}
+                    strokeDasharray={144.51}
+                    strokeDashoffset={144.51 - (144.51 * stat.percent) / 100}
                     className="transition-all duration-1000 ease-out"
                   />
                 </svg>
+                <span className="text-[10px] font-bold text-[#e8475f] z-10 animate-pulse">❤️</span>
               </div>
             </Tilt3DCard>
           ))}
