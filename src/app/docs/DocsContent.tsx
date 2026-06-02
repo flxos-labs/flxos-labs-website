@@ -174,6 +174,23 @@ export default function DocsContent() {
             <p className="text-md text-[color:var(--muted)] leading-relaxed">
               Complete guide to installing, configuring, and developing with FlxOS.
             </p>
+
+            {/* Mobile search / navigation shortcut */}
+            <button
+              onClick={() => window.dispatchEvent(new CustomEvent("open-mobile-drawer"))}
+              className="w-full md:hidden flex items-center justify-between bg-[rgba(var(--surface-rgb),0.55)] border border-[color:var(--border-muted)] hover:border-[color:var(--accent)] transition-all rounded-xl py-2.5 px-4 text-xs font-semibold text-[color:var(--muted)] shadow-sm hover:shadow-md cursor-pointer text-left !mt-5"
+            >
+              <div className="flex items-center gap-2.5">
+                <svg className="w-4 h-4 text-[color:var(--muted)]" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                  <circle cx="11" cy="11" r="8"/>
+                  <path d="m21 21-4.3-4.3"/>
+                </svg>
+                <span>Search or navigate docs...</span>
+              </div>
+              <span className="text-[10px] bg-[color:var(--surface-2)] border border-[color:var(--border-faint)] rounded-lg py-0.5 px-2 font-mono text-[color:var(--muted)] font-semibold">
+                Menu
+              </span>
+            </button>
           </header>
 
           {/* Section: Installation */}
