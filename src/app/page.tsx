@@ -13,8 +13,8 @@ export default function Home() {
           <span className="orb orb-2 opacity-60" />
           <span className="orb orb-3 opacity-60" />
         </div>
-        <div className="mx-auto flex w-full max-w-6xl flex-col gap-12 px-6 pb-20 pt-16 lg:grid lg:grid-cols-[1.15fr_0.85fr] lg:items-center lg:pt-24">
-          <div className="space-y-6">
+        <div className="mx-auto flex w-full max-w-6xl flex-col gap-12 px-6 pb-20 pt-16 lg:grid lg:grid-cols-[1.15fr_0.85fr] lg:items-start lg:pt-24">
+          <div className="space-y-6 order-2 lg:order-1">
             <p className="section-eyebrow">FlxOS Labs</p>
             <h1 className="font-display text-4xl leading-tight text-[color:var(--ink)] md:text-5xl">
               Modular OS from <PlatformCycler /> to the desktop horizon.
@@ -66,7 +66,7 @@ export default function Home() {
               <span className="chip">Python</span>
             </div>
           </div>
-          <div className="relative w-full">
+          <div className="relative w-full order-1 lg:order-2 lg:pt-10">
             <DeviceSlideshow />
           </div>
         </div>

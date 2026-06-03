@@ -112,6 +112,7 @@ export default function StarfieldCanvas() {
   const mouseRef = useRef<{ x: number; y: number; active: boolean; px: number; py: number }>({
     x: -9999, y: -9999, active: false, px: -9999, py: -9999,
   });
+  const scrollRef = useRef<number>(0);
 
   const initStars = useCallback((w: number, h: number) => {
     const isMobile = w < 768;
@@ -300,6 +301,7 @@ export default function StarfieldCanvas() {
     const time = Date.now();
     const mouse = mouseRef.current;
     const isMobile = w < 768;
+    const scrollY = scrollRef.current;
 
     // 1. Draw drifting ambient nebulae/gas clouds
     ctx.globalCompositeOperation = "screen";
@@ -315,7 +317,13 @@ export default function StarfieldCanvas() {
       }
       
       n.x = n.baseX + swayX + px;
-      n.y = n.baseY + swayY + py;
+      
+      // Scroll parallax wrapping so nebulae show up across scrolling sections
+      let displayY = n.baseY + swayY + py - scrollY * 0.12;
+      displayY = ((displayY + n.radius) % (h + n.radius * 2));
+      if (displayY < 0) displayY += h + n.radius * 2;
+      displayY -= n.radius;
+      n.y = displayY;
       
       const pulse = Math.sin(time * 0.0004 + n.swayOffsetX) * 0.15 + 0.85;
       n.opacity += (n.maxOpacity * pulse - n.opacity) * 0.02;
@@ -331,6 +339,42 @@ export default function StarfieldCanvas() {
       ctx.arc(n.x, n.y, n.radius, 0, Math.PI * 2);
       ctx.fill();
     }
+    
+    // 1.5 Draw Aurora Borealis (wavy ribbon cosmic lights)
+    const auroraHeight = Math.min(h * 0.45, 320);
+    const segments = 16;
+    const step = w / segments;
+    
+    for (let bIndex = 0; bIndex < 2; bIndex++) {
+      ctx.beginPath();
+      const rgb = bIndex === 0 ? [20, 180, 140] : [140, 60, 190]; // Emerald green vs Indigo purple
+      const speed = bIndex === 0 ? 0.0004 : 0.00025;
+      const amplitude = 30;
+      
+      for (let i = 0; i <= segments; i++) {
+        const x = i * step;
+        const wave1 = Math.sin(time * speed + i * 0.35) * amplitude;
+        const wave2 = Math.cos(time * (speed * 1.3) - i * 0.2) * (amplitude * 0.4);
+        const y = (h * 0.1) + wave1 + wave2 + (bIndex * 35) - scrollY * 0.08; // subtle scroll parallax
+        
+        if (i === 0) {
+          ctx.moveTo(x, y);
+        } else {
+          ctx.lineTo(x, y);
+        }
+      }
+      
+      const grad = ctx.createLinearGradient(0, 0, 0, auroraHeight);
+      grad.addColorStop(0, `rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, 0)`);
+      grad.addColorStop(0.35, `rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, 0.14)`);
+      grad.addColorStop(0.65, `rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, 0.04)`);
+      grad.addColorStop(1, "rgba(0, 0, 0, 0)");
+      
+      ctx.strokeStyle = grad;
+      ctx.lineWidth = 55 + bIndex * 15;
+      ctx.stroke();
+    }
+    
     ctx.globalCompositeOperation = "source-over";
 
     // 2. Draw drifting background stars and their constellations
@@ -351,6 +395,13 @@ export default function StarfieldCanvas() {
       
       p.x = p.baseX + sway + px;
       
+      // Parallax wrapping scroll translation based on layer
+      const parallaxFactor = p.layer === "near" ? 0.38 : p.layer === "mid" ? 0.22 : 0.08;
+      let displayY = p.y - scrollY * parallaxFactor;
+      displayY = ((displayY + 20) % (h + 40));
+      if (displayY < 0) displayY += h + 40;
+      displayY -= 20;
+      
       if (p.y + p.size < -10) {
         p.y = h + p.size + Math.random() * 30;
         p.baseX = Math.random() * w;
@@ -368,11 +419,11 @@ export default function StarfieldCanvas() {
       
       return {
         x: p.x,
-        y: p.y + (mouse.x !== -9999 ? (mouse.y - h / 2) * (p.layer === "near" ? 0.03 : p.layer === "mid" ? 0.015 : 0.007) : 0),
+        y: displayY + (mouse.x !== -9999 ? (mouse.y - h / 2) * (p.layer === "near" ? 0.03 : p.layer === "mid" ? 0.015 : 0.007) : 0),
         p
       };
     });
-
+ 
     // Draw Constellation lines (connections between nearby stars in same layer)
     ctx.lineWidth = 0.5;
     const maxLineDist = isMobile ? 80 : 105;
@@ -406,7 +457,7 @@ export default function StarfieldCanvas() {
         }
       }
     }
-
+ 
     // Draw the actual stars
     for (const sc of starCoords) {
       const p = sc.p;
@@ -431,7 +482,7 @@ export default function StarfieldCanvas() {
       ctx.arc(sc.x, sc.y, p.size * 0.4, 0, Math.PI * 2);
       ctx.fill();
     }
-
+ 
     // 3. Draw rising bokeh shapes and soft heart orbs
     const bokeh = bokehRef.current;
     for (const b of bokeh) {
@@ -446,6 +497,12 @@ export default function StarfieldCanvas() {
       }
       
       b.x = b.baseX + sway + px;
+      
+      // Parallax wrapping for bokeh
+      let displayY = b.y - scrollY * 0.28;
+      displayY = ((displayY + 50) % (h + 100));
+      if (displayY < 0) displayY += h + 100;
+      displayY -= 50;
       
       if (b.y + b.size < -50) {
         b.y = h + b.size + Math.random() * 50;
@@ -462,7 +519,7 @@ export default function StarfieldCanvas() {
         b.alpha += (targetAlpha - b.alpha) * 0.02;
       }
       
-      const drawY = b.y + py;
+      const drawY = displayY + py;
       const [r, g, bColor] = b.color;
       ctx.globalAlpha = Math.max(0, b.alpha);
       
@@ -671,7 +728,15 @@ export default function StarfieldCanvas() {
       }
     };
 
+    const scrollContainer = document.querySelector(".us-page");
+    const scrollTarget = scrollContainer || window;
+
+    const onScroll = () => {
+      scrollRef.current = scrollContainer ? scrollContainer.scrollTop : window.scrollY;
+    };
+
     window.addEventListener("resize", handleResize);
+    scrollTarget.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("mousemove", onMouseMove);
     window.addEventListener("touchstart", onTouchMove, { passive: true });
     window.addEventListener("touchmove", onTouchMove, { passive: true });
@@ -682,6 +747,7 @@ export default function StarfieldCanvas() {
     return () => {
       cancelAnimationFrame(animationRef.current);
       window.removeEventListener("resize", handleResize);
+      scrollTarget.removeEventListener("scroll", onScroll);
       window.removeEventListener("mousemove", onMouseMove);
       window.removeEventListener("touchstart", onTouchMove);
       window.removeEventListener("touchmove", onTouchMove);

@@ -10,9 +10,16 @@ export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
 
+  const handleCloseMobileMenu = () => {
+    setMobileMenuOpen(false);
+  };
+
   // Close mobile menu when pathname changes (e.g. page navigation)
   useEffect(() => {
-    setMobileMenuOpen(false);
+    const handle = requestAnimationFrame(() => {
+      setMobileMenuOpen(false);
+    });
+    return () => cancelAnimationFrame(handle);
   }, [pathname]);
 
   // Prevent scroll when mobile menu is open
@@ -109,27 +116,27 @@ export default function Header() {
       </header>
 
       {/* Mobile Navigation Drawer Overlay */}
-      <div className={`mobile-drawer-backdrop ${mobileMenuOpen ? "active" : ""}`} onClick={() => setMobileMenuOpen(false)} />
+      <div className={`mobile-drawer-backdrop ${mobileMenuOpen ? "active" : ""}`} onClick={handleCloseMobileMenu} />
       
       <div className={`mobile-drawer ${mobileMenuOpen ? "active" : ""}`} role="dialog" aria-modal="true" aria-label="Mobile Navigation">
         <div className="mobile-drawer-header">
           <span className="drawer-title">Navigation</span>
           <button
-            onClick={() => setMobileMenuOpen(false)}
+            onClick={handleCloseMobileMenu}
             className="drawer-close"
             aria-label="Close menu"
           >
             ×
           </button>
         </div>
-        <nav className="mobile-drawer-nav">
-          <Link href="/#features" className="drawer-link" onClick={() => setMobileMenuOpen(false)}>
+        <nav className="mobile-drawer-nav overflow-y-auto max-h-[calc(100vh-140px)] pr-1 pb-6">
+          <Link href="/#features" className="drawer-link" onClick={handleCloseMobileMenu}>
             Features
           </Link>
-          <Link href="/docs" className="drawer-link" onClick={() => setMobileMenuOpen(false)}>
+          <Link href="/docs" className="drawer-link" onClick={handleCloseMobileMenu}>
             Docs
           </Link>
-          <Link href="/about" className="drawer-link" onClick={() => setMobileMenuOpen(false)}>
+          <Link href="/about" className="drawer-link" onClick={handleCloseMobileMenu}>
             About
           </Link>
           <a
@@ -137,11 +144,11 @@ export default function Header() {
             className="drawer-link"
             target="_blank"
             rel="noopener noreferrer"
-            onClick={() => setMobileMenuOpen(false)}
+            onClick={handleCloseMobileMenu}
           >
             GitHub
           </a>
-          <Link href="/us" className="drawer-link" style={{ color: "#e8475f" }} onClick={() => setMobileMenuOpen(false)}>
+          <Link href="/us" className="drawer-link" style={{ color: "#e8475f" }} onClick={handleCloseMobileMenu}>
             For Us ❤️
           </Link>
           <div className="drawer-divider" />
@@ -150,10 +157,12 @@ export default function Header() {
             href="https://github.com/flxos-labs/flxos"
             target="_blank"
             rel="noopener noreferrer"
-            onClick={() => setMobileMenuOpen(false)}
+            onClick={handleCloseMobileMenu}
           >
             Star on GitHub
           </a>
+
+
         </nav>
       </div>
     </>

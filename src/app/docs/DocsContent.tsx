@@ -2,58 +2,14 @@
 
 import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
-
-interface SidebarLink {
-  id: string;
-  label: string;
-}
-
-interface SidebarSection {
-  title: string;
-  links: SidebarLink[];
-}
+import { sidebarData } from "@/lib/docs-menu";
 
 export default function DocsContent() {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeSection, setActiveSection] = useState("installation");
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [copiedBlock, setCopiedBlock] = useState<string | null>(null);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
-
-  // Sidebar structure
-  const sidebarData: SidebarSection[] = [
-    {
-      title: "Getting Started",
-      links: [
-        { id: "installation", label: "Installation" },
-        { id: "quick-start", label: "Quick Start" },
-        { id: "prerequisites", label: "Prerequisites" },
-      ],
-    },
-    {
-      title: "Architecture",
-      links: [
-        { id: "overview", label: "System Overview" },
-        { id: "directory", label: "Directory Structure" },
-        { id: "modules", label: "Core Modules" },
-      ],
-    },
-    {
-      title: "Development",
-      links: [
-        { id: "building", label: "Building" },
-        { id: "configuration", label: "Configuration" },
-        { id: "apps", label: "Creating Apps" },
-      ],
-    },
-    {
-      title: "Reference",
-      links: [
-        { id: "api", label: "API Reference" },
-        { id: "troubleshooting", label: "Troubleshooting" },
-      ],
-    },
-  ];
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -97,6 +53,11 @@ export default function DocsContent() {
     return () => observer.disconnect();
   }, []);
 
+  // Dispatch custom event to notify layout header about the active section
+  useEffect(() => {
+    window.dispatchEvent(new CustomEvent("active-section-changed", { detail: activeSection }));
+  }, [activeSection]);
+
   // Clipboard copy handler
   const copyToClipboard = (text: string, id: string) => {
     navigator.clipboard.writeText(text).then(() => {
@@ -111,7 +72,6 @@ export default function DocsContent() {
     if (element) {
       element.scrollIntoView({ behavior: "smooth" });
       setActiveSection(id);
-      setMobileMenuOpen(false);
     }
   };
 
@@ -129,7 +89,7 @@ export default function DocsContent() {
   }).filter((section) => section.links.length > 0);
 
   return (
-    <main className="relative min-h-screen overflow-hidden text-[color:var(--ink)]">
+    <main className="relative min-h-screen text-[color:var(--ink)]">
       {/* Hero Orbs background */}
       <div className="hero-orbs" aria-hidden="true">
         <span className="orb orb-1 opacity-40" />
@@ -137,28 +97,11 @@ export default function DocsContent() {
         <span className="orb orb-3 opacity-30" />
       </div>
 
-      {/* Mobile top-bar */}
-      <div className="md:hidden sticky top-[57px] z-40 bg-[rgba(var(--surface-rgb),0.9)] backdrop-blur-md border-b border-[color:var(--border-faint)] px-6 py-2.5 flex items-center justify-between">
-        <button
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="flex items-center gap-2 text-xs font-semibold text-[color:var(--muted)] hover:text-[color:var(--ink)]"
-          aria-label="Toggle navigation drawer"
-        >
-          <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M4 6h16M4 12h16M4 18h16" /></svg>
-          <span>Menu</span>
-        </button>
-        <span className="text-xs font-semibold text-[color:var(--accent)] capitalize">
-          {activeSection.replace("-", " ")}
-        </span>
-      </div>
-
       <div className="mx-auto max-w-6xl px-6 py-10 md:py-16 grid gap-10 md:grid-cols-[250px_1fr]">
         
-        {/* Sidebar Nav (Desktop & Mobile Drawer) */}
+        {/* Sidebar Nav (Desktop Only) */}
         <aside
-          className={`fixed md:sticky z-40 md:z-10 bg-[color:var(--surface)] md:bg-transparent border-r border-[color:var(--border-faint)] md:border-none p-6 md:p-0 w-[280px] max-w-[calc(100vw-32px)] md:w-auto transition-all duration-300 ${
-            mobileMenuOpen ? "left-0" : "-left-[290px] md:left-0"
-          }`}
+          className="hidden md:block md:sticky z-10 w-auto self-start"
           style={{ height: "calc(100vh - 100px)", top: "100px" }}
         >
           {/* Search Box */}
@@ -220,16 +163,8 @@ export default function DocsContent() {
           </div>
         </aside>
 
-        {/* Backdrop for Mobile */}
-        {mobileMenuOpen && (
-          <div
-            onClick={() => setMobileMenuOpen(false)}
-            className="fixed inset-0 top-[100px] bg-black/20 backdrop-blur-xs z-30 md:hidden"
-          />
-        )}
-
         {/* Main Content Area */}
-        <div className="space-y-16 max-w-3xl">
+        <div className="space-y-16 max-w-3xl min-w-0">
           <header className="space-y-3">
             <nav className="flex items-center gap-2 text-xs text-[color:var(--muted)] font-medium" aria-label="Breadcrumb">
               <Link href="/" className="hover:text-[color:var(--ink)] transition-colors">Home</Link>
@@ -240,6 +175,78 @@ export default function DocsContent() {
             <p className="text-md text-[color:var(--muted)] leading-relaxed">
               Complete guide to installing, configuring, and developing with FlxOS.
             </p>
+
+            {/* Mobile search & inline navigation */}
+            <div className="w-full md:hidden space-y-3 bg-[rgba(var(--surface-rgb),0.35)] border border-[color:var(--border-faint)] rounded-2xl p-4 !mt-5 shadow-sm text-left">
+              <span className="text-[10px] uppercase tracking-wider font-bold text-[color:var(--muted)] block px-0.5">
+                Table of Contents
+              </span>
+              
+              {/* Search Box */}
+              <div className="relative">
+                <span className="absolute left-3 top-2.5 text-[color:var(--muted)]">
+                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                    <circle cx="11" cy="11" r="8"/>
+                    <path d="m21 21-4.3-4.3"/>
+                  </svg>
+                </span>
+                <input
+                  type="text"
+                  placeholder="Search sections..."
+                  value={searchQuery}
+                  onFocus={() => setIsSearchFocused(true)}
+                  onBlur={() => setTimeout(() => setIsSearchFocused(false), 200)}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full bg-[rgba(var(--surface-rgb),0.5)] border border-[color:var(--border-muted)] rounded-xl py-1.5 pl-8 pr-7 text-xs focus:outline-none focus:ring-1 focus:ring-[color:var(--accent)] focus:border-[color:var(--accent)] font-medium"
+                />
+                {searchQuery && (
+                  <button
+                    onClick={() => setSearchQuery("")}
+                    className="absolute right-3 top-2 text-sm text-[color:var(--muted)] hover:text-[color:var(--ink)]"
+                    aria-label="Clear search"
+                  >
+                    ×
+                  </button>
+                )}
+              </div>
+
+              {/* List of sections */}
+              <div className={`space-y-3 overflow-y-auto pr-1 transition-all duration-300 ${
+                isSearchFocused || searchQuery.length > 0
+                  ? "max-h-[220px] pt-1.5 opacity-100 mt-3"
+                  : "max-h-0 pt-0 opacity-0 mt-0 pointer-events-none"
+              }`}>
+                {filteredSidebar.length > 0 ? (
+                  filteredSidebar.map((section, idx) => (
+                    <div key={idx} className="space-y-1">
+                      <span className="text-[9px] uppercase tracking-wider font-bold text-[color:var(--muted)] block px-0.5">
+                        {section.title}
+                      </span>
+                      <div className="flex flex-col gap-1 pl-2 border-l border-[color:var(--border-faint)]">
+                        {section.links.map((link) => {
+                          const isActive = activeSection === link.id;
+                          return (
+                            <button
+                              key={link.id}
+                              onClick={() => scrollTo(link.id)}
+                              className={`w-full text-left py-1 px-2 text-[11px] font-semibold rounded-lg transition-all ${
+                                isActive
+                                  ? "text-[color:var(--accent)] bg-[rgba(231,111,81,0.06)]"
+                                  : "text-[color:var(--muted)] hover:text-[color:var(--ink)] hover:bg-[rgba(var(--surface-rgb),0.8)]"
+                              }`}
+                            >
+                              {link.label}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-xs text-[color:var(--muted)] italic px-0.5">No sections found.</p>
+                )}
+              </div>
+            </div>
           </header>
 
           {/* Section: Installation */}
@@ -388,7 +395,7 @@ python flxos.py flash --port /dev/ttyUSB0`}</code>
               <svg className="w-5 h-5 text-[color:var(--accent-2)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
               Directory Structure
             </h2>
-            <div className="bg-[color:var(--surface-2)] border border-[color:var(--border-faint)] rounded-xl p-4 overflow-x-auto text-xs leading-relaxed font-mono">
+            <pre className="bg-[color:var(--surface-2)] border border-[color:var(--border-faint)] rounded-xl p-4 overflow-x-auto text-xs leading-relaxed font-mono text-[color:var(--ink)]">
               <code>{`flxos/
 ├── Applications/    # User-facing apps (calendar, files, text editor, settings, ...)
 ├── Apps/            # App framework and lifecycle management
@@ -404,7 +411,7 @@ python flxos.py flash --port /dev/ttyUSB0`}</code>
 ├── UI/              # LVGL UI framework, themes
 ├── flxos.py         # Main CLI build tool
 └── CMakeLists.txt   # Top-level CMake project file`}</code>
-            </div>
+            </pre>
           </section>
 
           {/* Section: Core Modules */}
@@ -488,10 +495,10 @@ python flxos.py flash --port /dev/ttyUSB0`}</code>
             <p className="text-sm text-[color:var(--muted)] leading-relaxed">
               FlxOS uses a declarative YAML profile system instead of traditional Espressif menuconfig for platform definitions. This maps displays, peripherals, and storage blocks cleanly.
             </p>
-            <div className="bg-[color:var(--surface-2)] border border-[color:var(--border-faint)] rounded-xl p-4 overflow-x-auto text-xs font-mono">
+            <pre className="bg-[color:var(--surface-2)] border border-[color:var(--border-faint)] rounded-xl p-4 overflow-x-auto text-xs font-mono text-[color:var(--ink)]">
               <code>{`python flxos.py list
 python flxos.py diff a b --json`}</code>
-            </div>
+            </pre>
             <h3 className="text-sm font-bold pt-2">Key Profile Mappings:</h3>
             <ul className="list-disc pl-5 text-xs text-[color:var(--muted)] space-y-1">
               <li><strong>SoC Target:</strong> Chip configuration and memory partitioning.</li>
