@@ -89,7 +89,7 @@ export default function DocsContent() {
   }).filter((section) => section.links.length > 0);
 
   return (
-    <main className="relative min-h-screen overflow-hidden text-[color:var(--ink)]">
+    <main className="relative min-h-screen text-[color:var(--ink)]">
       {/* Hero Orbs background */}
       <div className="hero-orbs" aria-hidden="true">
         <span className="orb orb-1 opacity-40" />
