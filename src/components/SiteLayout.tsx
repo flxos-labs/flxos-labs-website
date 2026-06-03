@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import { usePathname } from "next/navigation";
 import Header from "./Header";
 import CommandPalette from "./CommandPalette";
 import InteractiveBackground from "./InteractiveBackground";
@@ -12,12 +11,6 @@ interface SiteLayoutProps {
 }
 
 export default function SiteLayout({ children }: SiteLayoutProps) {
-  const pathname = usePathname();
-  const isUsPage = pathname === "/us" || pathname.startsWith("/us/");
-
-  if (isUsPage) {
-    return <>{children}</>;
-  }
 
   return (
     <>
