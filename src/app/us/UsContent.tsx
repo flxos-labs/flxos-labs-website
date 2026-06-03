@@ -36,49 +36,6 @@ interface Reason {
   desc: string;
 }
 
-const REASONS: Reason[] = [
-  {
-    num: "01",
-    title: "Your Smile Rewrites My Worst Days",
-    desc: "No matter how heavy the day feels, the moment you smile, everything else fades into the background. It is my guiding light.",
-  },
-  {
-    num: "02",
-    title: "You Make Silence Feel Like Poetry",
-    desc: "With you, quiet spaces aren't empty. They are filled with an unspoken understanding and a deep, comforting peace that words could never capture.",
-  },
-  {
-    num: "03",
-    title: "Your Courage Inspires My Ambition",
-    desc: "The grace and resilience you show in the face of challenges makes me want to grow, push my boundaries, and be the best version of myself.",
-  },
-  {
-    num: "04",
-    title: "You See the Me I'm Still Becoming",
-    desc: "You don't just love me for who I am today; you believe in the person I am striving to become, guiding me gently with your patience.",
-  },
-  {
-    num: "05",
-    title: "Your Laughter Is My Favorite Sound",
-    desc: "It's a melody that instantly lifts my spirit. Hearing you laugh is the sweetest reminder of the pure joy we bring into each other's lives.",
-  },
-  {
-    num: "06",
-    title: "You Turn Ordinary Into Extraordinary",
-    desc: "A simple walk, a quiet evening, or a routine errand becomes an adventure when I'm by your side. You bring magic to the mundane.",
-  },
-  {
-    num: "07",
-    title: "Your Heart Knows Mine Before I Speak",
-    desc: "We have a connection that transcends spoken language. You can read my thoughts in a glance and feel my emotions before I even explain them.",
-  },
-  {
-    num: "08",
-    title: "You Are My Calm in Every Storm",
-    desc: "When the world is chaotic and loud, you are my safe harbor. In your arms, I find a stillness and peace that keeps me centered.",
-  },
-];
-
 interface TimelineEvent {
   date: string;
   title: string;
@@ -86,55 +43,32 @@ interface TimelineEvent {
   memory: string;
 }
 
-const TIMELINE_EVENTS: TimelineEvent[] = [
-  {
-    date: "1st Year, 1st Sem",
-    title: "Classroom Chemistry",
-    desc: "First time sitting right next to you during our semester exam.",
-    memory: "I could barely concentrate on the paper. Having you sit next to me was the best kind of distraction, and where my silent admiration for you truly began."
-  },
-  {
-    date: "April 9, 2026",
-    title: "Our First Chat",
-    desc: "The night we started chatting and couldn't stop.",
-    memory: "A simple text message that sparked a conversation lasting hours. We connected instantly, talking about everything and realizing how beautifully our minds aligned."
-  },
-  {
-    date: "April 10, 2026",
-    title: "Holding Your Hand",
-    desc: "The moment our fingers laced together for the first time.",
-    memory: "A quiet, gentle touch that sent sparks through my heart. Lacing my fingers with yours, I felt an overwhelming sense of calm, knowing I never wanted to let go."
-  },
-  {
-    date: "Today & Beyond",
-    title: "Hand in Hand, Always",
-    desc: "Looking forward to every tomorrow, knowing we'll face it together.",
-    memory: "Building our dreams, making promises, and loving you more with every single passing second. Our infinity starts here."
-  }
-];
+interface QuizQuestion {
+  question: string;
+  correctAnswer: string;
+  options: string[];
+  emoji: string;
+}
 
-const COMPLIMENTS = [
-  "You have a heart of pure gold, and being loved by you is my greatest fortune.",
-  "Your laughter is my favorite song, and your smile is my daily inspiration.",
-  "You make the hardest days feel light and the simplest moments feel like magic.",
-  "I love the way you look at the world with such kindness and courage.",
-  "You are my safe haven, my peace, and my anchor in every storm.",
-  "Thank you for believing in the person I am still striving to become.",
-  "I fall in love with you all over again, every single time I see your face.",
-  "You are the poetry I never knew how to write, and the song I always want to sing.",
-  "With you, silence is comfortable, laughter is easy, and love is limitless.",
-  "You are the best part of my today, and the only tomorrow I will ever need.",
-  "Your kindness is a light that makes the entire world a warmer place.",
-  "I adore the quiet way you understand my thoughts before I even speak them."
-];
+interface FlipCardData {
+  category: "First Impressions" | "Deep Realizations" | "Future Dreams";
+  question: string;
+  answer: string;
+  icon: string;
+}
 
-const PROMISES = [
-  "To always choose you, in every season of life.",
-  "To cherish the quiet mornings and laugh in the wild storms.",
-  "To support your dreams as if they were my own.",
-  "To never let the spark fade, and grow old with you.",
-  "To hold your hand through every twist and turn."
-];
+interface DeepQuestionData {
+  question: string;
+  answer: string;
+  icon: string;
+}
+
+interface LoveStat {
+  label: string;
+  val: string;
+  percent: number;
+  icon: string;
+}
 
 interface StarNode {
   id: number;
@@ -172,283 +106,20 @@ const LOVE_VALUES: LoveValue[] = [
   { id: "kindness", label: "Kindness", icon: "🌸", x: 80, y: 35, description: "The soft, protective warmth in every look and spoken word." }
 ];
 
-const ORACLE_PREDICTIONS = [
-  "A lifetime of warm hugs, hot cocoa, and late-night laughing fits is in your stars. ☕✨",
-  "A cozy trip to a hidden cabin in the woods awaits you, complete with a fireplace and endless stories. 🌲🏡",
-  "Your love constellation predicts a surprise date night filled with your favorite sweet treats. 🍫❤️",
-  "The cosmic alignment shows Akash making you a cup of tea exactly when you need it most. 🍵💫",
-  "A future afternoon spent walking hand-in-hand through a sunlit flower garden is written in your stars. 🌸☀️",
-  "The stars declare that you will find magic in the most ordinary of Tuesdays. 💫🗓️",
-  "An unexpected moment of shared eye contact will make your heart skip a beat all over again. 👀💖",
-  "A quiet Sunday morning with zero alarms and endless comfort is predicted for your horizon. ☕🛋️"
-];
-
-interface LoveStat {
-  label: string;
-  val: string;
-  percent: number;
-  icon: string;
+interface SecureData {
+  REASONS: Reason[];
+  TIMELINE_EVENTS: TimelineEvent[];
+  COMPLIMENTS: string[];
+  PROMISES: string[];
+  FUTURE_LETTER_CONTENT: string;
+  QUIZ_QUESTIONS: QuizQuestion[];
+  FLIP_CARDS: FlipCardData[];
+  DEEP_QUESTIONS: DeepQuestionData[];
+  ORACLE_PREDICTIONS: string[];
+  LOVE_STATS: LoveStat[];
+  ENVELOPE_LETTER_PARAGRAPHS: string[];
 }
 
-const LOVE_STATS: LoveStat[] = [
-  { label: "Days Admiring You", val: "100%", percent: 100, icon: "👀" },
-  { label: "Laughter Shared", val: "Infinite", percent: 100, icon: "😂" },
-  { label: "Tea Envisioned", val: "10,000+", percent: 95, icon: "☕" },
-  { label: "Hugs Needed Daily", val: "∞", percent: 100, icon: "🤗" }
-];
-
-const FUTURE_LETTER_CONTENT = `My Dearest Rekha,
-
-As you read this scroll, know that my heart is, and will always be, anchored in yours. I wrote this message as a small promise to our future—a promise that no matter how many chapters we write, how many days pass, or how much the world changes around us, my devotion to you will remain constant.
-
-I look forward to all the tomorrows we haven't seen yet. To the ordinary mornings, the sudden adventures, the quiet evenings, and the dreams we are building day by day. You are my greatest miracle in this vast universe, and I am infinitely grateful to walk this path hand-in-hand with you.
-
-Yours forever and always,
-Akash`;
-
-interface QuizQuestion {
-  question: string;
-  correctAnswer: string;
-  options: string[];
-  emoji: string;
-}
-
-const QUIZ_QUESTIONS: QuizQuestion[] = [
-  {
-    question: "What is my absolute favorite watch brand?",
-    correctAnswer: "Rolex",
-    options: ["Casio (Retro Gold)", "Rolex", "Apple Watch (Boring!)", "Sundial (Ancient Style)"],
-    emoji: "⌚"
-  },
-  {
-    question: "If I could eat only one gourmet breakfast forever, what is it?",
-    correctAnswer: "Scrambled Eggs with Smoked Trout and Crème Fraîche",
-    options: ["Plain Instant Maggi", "Over-salted Rolled Oats", "Scrambled Eggs with Smoked Trout and Crème Fraîche", "Burnt Toast & black coffee"],
-    emoji: "🍳"
-  },
-  {
-    question: "What is my absolute favorite color?",
-    correctAnswer: "White",
-    options: ["Glitter Gold", "White", "Hot Pink", "RGB Rainbow Glow"],
-    emoji: "🎨"
-  },
-  {
-    question: "Which movie is my absolute favorite cosmic adventure?",
-    correctAnswer: "Interstellar",
-    options: ["The Emoji Movie", "Interstellar", "Twilight Saga: New Moon", "Barbie (2023)"],
-    emoji: "🚀"
-  },
-  {
-    question: "What song is my favorite classic track?",
-    correctAnswer: "Faded",
-    options: ["Baby Shark", "Rick Astley - Never Gonna Give You Up", "Faded", "Crazy Frog Theme"],
-    emoji: "🎵"
-  },
-  {
-    question: "Which mobile brand do I use and love?",
-    correctAnswer: "Xiaomi",
-    options: ["Nokia 3310 (Unbreakable)", "Xiaomi", "Banana Phone", "Tin Can & String"],
-    emoji: "📱"
-  },
-  {
-    question: "Where is my dream destination to visit?",
-    correctAnswer: "Japan",
-    options: ["Bermuda Triangle", "Japan", "The Exam Hall (Never!)", "Crowded Subway Station"],
-    emoji: "🌸"
-  },
-  {
-    question: "Which fruit reigns supreme in my heart?",
-    correctAnswer: "Mango",
-    options: ["Mango", "Durian (Smelly King)", "Sour Lemon", "Plastic Decorative Grape"],
-    emoji: "🥭"
-  },
-  {
-    question: "What is my favorite brand of chocolate?",
-    correctAnswer: "Feastables",
-    options: ["Feastables", "Dark Cocoa 99% (Tears)", "Sugar-Free Raisin Bar", "Cardboard Surprise"],
-    emoji: "🍫"
-  },
-  {
-    question: "Which virtual universe do I enjoy exploring in games?",
-    correctAnswer: "Genshin Impact",
-    options: ["Minesweeper Classic", "Genshin Impact", "Flappy Bird", "Tic Tac Toe (Hard Mode)"],
-    emoji: "🎮"
-  },
-  {
-    question: "What is my favorite subject of all time?",
-    correctAnswer: "Computer Science Engineering",
-    options: ["Computer Science Engineering", "Advanced Calculus of Pain", "Syllabus Analysis 101", "History of Sand"],
-    emoji: "💻"
-  },
-  {
-    question: "Which actor's charismatic performance is my favorite?",
-    correctAnswer: "Robert Downey Jr.",
-    options: ["Peppa Pig", "Robert Downey Jr.", "Shrek", "Minion Bob"],
-    emoji: "🕶️"
-  },
-  {
-    question: "Which hypercar brand makes my heart race?",
-    correctAnswer: "Koenigsegg",
-    options: ["Koenigsegg", "Rusty Tricycle", "Wooden Bull Cart", "Broken Skateboards"],
-    emoji: "🏎️"
-  },
-  {
-    question: "What is my absolute favorite application?",
-    correctAnswer: "Claude",
-    options: ["Claude", "Flappy Bird Clones", "System Settings UI", "Battery Saver App"],
-    emoji: "🧠"
-  },
-  {
-    question: "What is my absolute biggest fear in life?",
-    correctAnswer: "Failing to get you",
-    options: ["Failing to get you", "Spiders in the closet", "Eating bitter gourd", "Losing my gaming saves"],
-    emoji: "🥺"
-  }
-];
-
-interface FlipCardData {
-  category: "First Impressions" | "Deep Realizations" | "Future Dreams";
-  question: string;
-  answer: string;
-  icon: string;
-}
-
-const FLIP_CARDS: FlipCardData[] = [
-  {
-    category: "First Impressions",
-    question: "What was my absolute first impression of you?",
-    answer: "You were so incredibly cute and spoke so nicely that I was instantly charmed! 🥰",
-    icon: "🌸"
-  },
-  {
-    category: "First Impressions",
-    question: "What is my most favorite memory with you?",
-    answer: "Spending beautiful, uninterrupted time together on your birthday. 🎂✨",
-    icon: "💖"
-  },
-  {
-    category: "First Impressions",
-    question: "What is it about you that always makes me smile?",
-    answer: "The genuine, unconditional care and warmth you show me every day. 💕",
-    icon: "😊"
-  },
-  {
-    category: "First Impressions",
-    question: "What is our absolute funniest moment together?",
-    answer: "The fun, quiet, and playful times we shared in the library! 📚🤫",
-    icon: "🤭"
-  },
-  {
-    category: "First Impressions",
-    question: "Which country's beauty must we explore together?",
-    answer: "Japan! Walking hand-in-hand under the cherry blossoms. 🌸🇯🇵",
-    icon: "🗼"
-  },
-  {
-    category: "Deep Realizations",
-    question: "When did I realize that my heart truly loved you?",
-    answer: "The exact moment when I kindly asked to help you, and our souls just aligned. ✨",
-    icon: "🌟"
-  },
-  {
-    category: "Deep Realizations",
-    question: "What is the one thing you do that makes me feel most loved?",
-    answer: "Your undivided attention. It makes the rest of the universe fade away. 💫",
-    icon: "🎯"
-  },
-  {
-    category: "Deep Realizations",
-    question: "What small thing do I do that comforts you the most?",
-    answer: "Holding my hand gently and comforting me in quiet, soft moments. 🤝❤️",
-    icon: "☕"
-  },
-  {
-    category: "Deep Realizations",
-    question: "How do I describe our beautiful relationship?",
-    answer: "A profound understanding and a constant fire keeping each other motivated! 🔥",
-    icon: "🚀"
-  },
-  {
-    category: "Deep Realizations",
-    question: "What do I admire most about you?",
-    answer: "How beautifully and deeply you listen to me when I share my mind. 👂💖",
-    icon: "🏆"
-  },
-  {
-    category: "Future Dreams",
-    question: "What is my ultimate dream life with you?",
-    answer: "Living together in a big, warm house, caring for each other without a single worry. 🏡💫",
-    icon: "🏰"
-  },
-  {
-    category: "Future Dreams",
-    question: "Where do I see us 5 years from now?",
-    answer: "Building a massive empire and products together that positively impact billions of lives! 🌍💼",
-    icon: "📈"
-  },
-  {
-    category: "Future Dreams",
-    question: "What kind of home do I want us to build together?",
-    answer: "A beautiful home that satisfies all our needs and constantly reminds us of our mission. 🗝️🌱",
-    icon: "🛋️"
-  },
-  {
-    category: "Future Dreams",
-    question: "What major goals should we achieve together?",
-    answer: "Build a revolutionary company, explore every beautiful corner of the world, and grow old together. 🗺️🤝",
-    icon: "🎯"
-  },
-  {
-    category: "Future Dreams",
-    question: "What crazy adventure must we try one day?",
-    answer: "Trekking all the way to the majestic Everest Base Camp! 🏔️🥾",
-    icon: "🦅"
-  }
-];
-
-interface DeepQuestionData {
-  question: string;
-  answer: string;
-  icon: string;
-}
-
-const DEEP_QUESTIONS: DeepQuestionData[] = [
-  {
-    question: "What is my biggest fear when it comes to relationships?",
-    answer: "My ultimate biggest fear is losing you. You are my absolute anchor in this life.",
-    icon: "⚓"
-  },
-  {
-    question: "What is the greatest lesson that love has taught me?",
-    answer: "Staying calm, grounded, and immensely patient through all seasons of life.",
-    icon: "⏳"
-  },
-  {
-    question: "What is the single thing that helps me trust someone deeply?",
-    answer: "Their absolute openness and direct transparency with me.",
-    icon: "🔓"
-  },
-  {
-    question: "What does a truly healthy relationship mean to me?",
-    answer: "Constantly pushing and supporting each other to achieve our highest goals.",
-    icon: "📈"
-  },
-  {
-    question: "Which beautiful song always reminds me of you?",
-    answer: "Alone by Alan Walker. It captures my thoughts so perfectly.",
-    icon: "🎵"
-  },
-  {
-    question: "What is a sweet nickname that I secretly adore?",
-    answer: "Moonlight. It describes your soft, bright guide in my dark nights.",
-    icon: "🌙"
-  },
-  {
-    question: "What is one small, subtle thing about me that you love?",
-    answer: "How deeply and effortlessly you understand my mind.",
-    icon: "🧩"
-  }
-];
 
 const TypewriterText = ({ text }: { text: string }) => {
   const [displayedText, setDisplayedText] = useState("");
@@ -585,9 +256,41 @@ function selectRandomComplimentIndex(length: number) {
 }
 
 export default function UsContent() {
+  const [secureData, setSecureData] = useState<SecureData | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
 
   const pageRef = useRef<HTMLDivElement>(null);
   const [isLetterOpen, setIsLetterOpen] = useState(false);
+
+  useEffect(() => {
+    const fetchSecureContent = async () => {
+      const token = localStorage.getItem("us_page_auth_v1");
+      if (!token) {
+        setLoadError("Unauthorized access.");
+        setIsLoading(false);
+        return;
+      }
+      try {
+        const res = await fetch("/api/us/content", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const data = await res.json();
+        if (data.success) {
+          setSecureData(data.data);
+        } else {
+          setLoadError(data.error || "Failed to load content.");
+        }
+      } catch (err) {
+        setLoadError("Connection error.");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchSecureContent();
+  }, []);
   const [expandedTimelineNode, setExpandedTimelineNode] = useState<number | null>(null);
 
   const getDaysAgo = (dateStr: string) => {
@@ -827,22 +530,22 @@ export default function UsContent() {
   const [activeReasonIndex, setActiveReasonIndex] = useState(0);
 
   const spinCompass = () => {
-    if (oracleSpinning) return;
+    if (oracleSpinning || !secureData) return;
     setOracleSpinning(true);
     setOracleResult(null);
 
     setTimeout(() => {
       setOracleSpinning(false);
-      const randomIndex = selectRandomOracleIndex(ORACLE_PREDICTIONS.length);
-      setOracleResult(ORACLE_PREDICTIONS[randomIndex]);
+      const randomIndex = selectRandomOracleIndex(secureData.ORACLE_PREDICTIONS.length);
+      setOracleResult(secureData.ORACLE_PREDICTIONS[randomIndex]);
     }, 1800);
   };
 
   const handleQuizAnswer = (option: string, e: React.MouseEvent) => {
-    if (selectedQuizAnswer) return;
+    if (selectedQuizAnswer || !secureData) return;
 
     setSelectedQuizAnswer(option);
-    const isCorrect = option === QUIZ_QUESTIONS[quizIndex].correctAnswer;
+    const isCorrect = option === secureData.QUIZ_QUESTIONS[quizIndex].correctAnswer;
 
     if (isCorrect) {
       setQuizScore((prev) => prev + 1);
@@ -863,7 +566,7 @@ export default function UsContent() {
 
     setTimeout(() => {
       setSelectedQuizAnswer(null);
-      if (quizIndex + 1 < QUIZ_QUESTIONS.length) {
+      if (quizIndex + 1 < secureData.QUIZ_QUESTIONS.length) {
         setQuizIndex((prev) => prev + 1);
       } else {
         setQuizPhase('results');
@@ -1083,11 +786,12 @@ export default function UsContent() {
 
   // Compliment Jar click
   const handleJarClick = (e: React.MouseEvent) => {
+    if (!secureData) return;
     setIsJarAnimating(true);
     
     // Choose random compliment using external pure helper
-    const randomIndex = selectRandomComplimentIndex(COMPLIMENTS.length);
-    setCurrentCompliment(COMPLIMENTS[randomIndex]);
+    const randomIndex = selectRandomComplimentIndex(secureData.COMPLIMENTS.length);
+    setCurrentCompliment(secureData.COMPLIMENTS[randomIndex]);
 
     // Spawn heart particles using external module helper
     spawnJarHearts(e.clientX, e.clientY);
@@ -1173,6 +877,37 @@ export default function UsContent() {
 
     return lines;
   };
+
+  if (isLoading) {
+    return (
+      <div className="us-auth-loading">
+        <StarfieldCanvas />
+        <div className="us-auth-loading-spinner" />
+      </div>
+    );
+  }
+
+  if (loadError || !secureData) {
+    return (
+      <div className="us-auth-screen flex flex-col items-center justify-center text-center p-6">
+        <StarfieldCanvas />
+        <div className="us-auth-card border border-[rgba(232,71,95,0.25)] p-8 max-w-sm rounded-2xl bg-[rgba(18,18,22,0.65)] backdrop-blur-md">
+          <div className="text-4xl mb-4">💔</div>
+          <h2 className="text-xl font-bold text-white mb-2">Access Denied</h2>
+          <p className="text-sm text-[rgba(253,246,227,0.6)] mb-6">{loadError || "Could not retrieve session details."}</p>
+          <button 
+            onClick={() => {
+              localStorage.removeItem("us_page_auth_v1");
+              window.location.reload();
+            }}
+            className="px-6 py-2 border border-[#d4a853] text-[#d4a853] hover:bg-[#d4a853] hover:text-black rounded-full text-xs uppercase font-bold tracking-widest transition-all active:scale-95"
+          >
+            Go Back
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={`us-page ${introPhase < 7 ? "intro-active" : ""}`} ref={pageRef}>
@@ -1376,15 +1111,15 @@ export default function UsContent() {
                 </span>
                 {isLetterOpen ? (
                   <>
-                    <p className="text-xs sm:text-sm leading-relaxed text-[#d4a853] mb-3">
-                      Rekha, from the moment our paths crossed, the world seemed to shift into a warmer, more vibrant focus. You brought a quiet grace and an undeniable magic into my life that I didn&apos;t know I was searching for, but now cannot imagine living without.
-                    </p>
-                    <p className="text-xs sm:text-sm leading-relaxed text-[#df7859] mb-3">
-                      In the noise of the everyday, you are my sanctuary. The ease with which we share both laughter and comfortable silence is a rare gift that I cherish more with each passing day. You have this beautiful way of turning ordinary moments into extraordinary memories.
-                    </p>
-                    <p className="text-xs sm:text-sm leading-relaxed text-[#e8475f]">
-                      Thank you for being my constant anchor, my source of inspiration, and the keeper of my heart. I promise to stand by you through every season, celebrating your triumphs, supporting your dreams, and loving you more fiercely with every beat of my heart.
-                    </p>
+                    {secureData.ENVELOPE_LETTER_PARAGRAPHS.map((para, index) => {
+                      const colors = ["text-[#d4a853]", "text-[#df7859]", "text-[#e8475f]"];
+                      const color = colors[index % colors.length];
+                      return (
+                        <p key={index} className={`text-xs sm:text-sm leading-relaxed ${color} mb-3`}>
+                          {para}
+                        </p>
+                      );
+                    })}
                   </>
                 ) : (
                   <p className="text-xs sm:text-sm text-transparent">.</p>
@@ -1407,7 +1142,7 @@ export default function UsContent() {
         <SectionHeading eyebrow="Our Chapters" title="Our Story So Far" description="Click on individual milestone cards to unlock deeper memories and reflections." />
 
         <div className="us-timeline us-reveal us-reveal-blur relative">
-          {TIMELINE_EVENTS.map((event, index) => {
+          {secureData.TIMELINE_EVENTS.map((event, index) => {
             const isLeft = index % 2 === 0;
             const isExpanded = expandedTimelineNode === index;
             const daysAgo = getDaysAgo(event.date);
@@ -1549,7 +1284,7 @@ export default function UsContent() {
             <div className="us-quiz-progress-bar-bg">
               <div 
                 className="us-quiz-progress-bar" 
-                style={{ width: `${quizPhase === 'playing' ? ((quizIndex + 1) / QUIZ_QUESTIONS.length) * 100 : quizPhase === 'results' ? 100 : 0}%` }}
+                style={{ width: `${quizPhase === 'playing' ? ((quizIndex + 1) / secureData.QUIZ_QUESTIONS.length) * 100 : quizPhase === 'results' ? 100 : 0}%` }}
               ></div>
             </div>
 
@@ -1576,7 +1311,7 @@ export default function UsContent() {
             {quizPhase === 'playing' && (
               <div key={`quiz-q-${quizIndex}`} className="animate-fade-in">
                 <div className="flex justify-between items-center mb-6 text-xs font-bold text-[rgba(253,246,227,0.5)]">
-                  <span>QUESTION {quizIndex + 1} OF {QUIZ_QUESTIONS.length}</span>
+                  <span>QUESTION {quizIndex + 1} OF {secureData.QUIZ_QUESTIONS.length}</span>
                   {quizStreak > 0 && (
                     <span className="flex items-center gap-1 text-[#e8475f] animate-pulse">
                       🔥 STREAK: {quizStreak}
@@ -1586,16 +1321,16 @@ export default function UsContent() {
                 </div>
 
                 <div className="text-center py-4">
-                  <span className="text-4xl block mb-3">{QUIZ_QUESTIONS[quizIndex].emoji}</span>
+                  <span className="text-4xl block mb-3">{secureData.QUIZ_QUESTIONS[quizIndex].emoji}</span>
                   <h3 className="font-display font-bold text-lg sm:text-xl text-white leading-relaxed">
-                    {QUIZ_QUESTIONS[quizIndex].question}
+                    {secureData.QUIZ_QUESTIONS[quizIndex].question}
                   </h3>
                 </div>
 
                 <div className="us-quiz-options-grid">
-                  {QUIZ_QUESTIONS[quizIndex].options.map((option) => {
+                  {secureData.QUIZ_QUESTIONS[quizIndex].options.map((option) => {
                     const isSelected = selectedQuizAnswer === option;
-                    const isCorrect = option === QUIZ_QUESTIONS[quizIndex].correctAnswer;
+                    const isCorrect = option === secureData.QUIZ_QUESTIONS[quizIndex].correctAnswer;
                     const hasAnswered = selectedQuizAnswer !== null;
 
                     let btnClass = "";
@@ -1627,7 +1362,7 @@ export default function UsContent() {
                     <polygon 
                       points="50,5 95,25 95,75 50,95 5,75 5,25" 
                       fill="none" 
-                      stroke={quizScore === QUIZ_QUESTIONS.length ? "url(#gold-badge-grad)" : quizScore >= 12 ? "url(#rose-badge-grad)" : "#d4a853"} 
+                      stroke={quizScore === secureData.QUIZ_QUESTIONS.length ? "url(#gold-badge-grad)" : quizScore >= 12 ? "url(#rose-badge-grad)" : "#d4a853"} 
                       strokeWidth="2.5"
                     />
                     <polygon 
@@ -1637,7 +1372,7 @@ export default function UsContent() {
                       strokeWidth="1"
                     />
                     <text x="50%" y="56%" dominantBaseline="middle" textAnchor="middle" fontSize="30">
-                      {quizScore === QUIZ_QUESTIONS.length ? "👑" : quizScore >= 12 ? "💝" : "✨"}
+                      {quizScore === secureData.QUIZ_QUESTIONS.length ? "👑" : quizScore >= 12 ? "💝" : "✨"}
                     </text>
                     <defs>
                       <linearGradient id="gold-badge-grad" x1="0" y1="0" x2="1" y2="1">
@@ -1653,22 +1388,22 @@ export default function UsContent() {
                 </div>
 
                 <span className="text-[10px] text-[#d4a853] uppercase font-bold tracking-[0.25em] block mb-1">
-                  {quizScore === QUIZ_QUESTIONS.length ? "Cosmic Soulmate" :
+                  {quizScore === secureData.QUIZ_QUESTIONS.length ? "Cosmic Soulmate" :
                    quizScore >= 12 ? "Celestial Partner" :
                    quizScore >= 8 ? "Kindred Spirit" : "Perfect Match"}
                 </span>
 
                 <h3 className="us-quiz-result-header mb-2 font-mono">
-                  {quizScore} / {QUIZ_QUESTIONS.length}
+                  {quizScore} / {secureData.QUIZ_QUESTIONS.length}
                 </h3>
                 <p className="text-sm font-bold text-white mb-4">
-                  {quizScore === QUIZ_QUESTIONS.length ? "Soulmate Status Aligned! 💫" :
+                  {quizScore === secureData.QUIZ_QUESTIONS.length ? "Soulmate Status Aligned! 💫" :
                    quizScore >= 12 ? "Practically Joined at the Soul! 🥰" :
                    quizScore >= 8 ? "Beautiful Connection! 😊" :
                    "Let's Continue Learning Each Other! 💕"}
                 </p>
                 <p className="text-xs text-[rgba(253,246,227,0.6)] leading-relaxed mb-6 max-w-sm mx-auto">
-                  {quizScore === QUIZ_QUESTIONS.length ? "You know every single little detail about me. My heart is perfectly safe with you." :
+                  {quizScore === secureData.QUIZ_QUESTIONS.length ? "You know every single little detail about me. My heart is perfectly safe with you." :
                    quizScore >= 12 ? "You know me incredibly well! We are perfectly in sync and understand each other's worlds." :
                    quizScore >= 8 ? "You know so much about me, and the parts you missed are just more beautiful things to discover together." :
                    "Every day is a beautiful adventure of getting to know each other. I love sharing my world with you."}
@@ -1736,9 +1471,9 @@ export default function UsContent() {
 
         {/* Cards Grid */}
         <div className="us-flipcards-grid px-4 us-reveal us-reveal-3d us-reveal-stagger-2">
-          {FLIP_CARDS.filter((card) => flipCardsFilter === "All" || card.category === flipCardsFilter).map((card) => {
+          {secureData.FLIP_CARDS.filter((card) => flipCardsFilter === "All" || card.category === flipCardsFilter).map((card) => {
             // Find global index in FLIP_CARDS array to track flip state consistently
-            const globalIndex = FLIP_CARDS.indexOf(card);
+            const globalIndex = secureData.FLIP_CARDS.indexOf(card);
             const isFlipped = flippedCardIds.includes(globalIndex);
 
             return (
@@ -1794,8 +1529,8 @@ export default function UsContent() {
 
         {/* Progress Tracker */}
         <div className="text-center mt-8 text-xs font-bold tracking-widest text-[rgba(253,246,227,0.45)] uppercase us-reveal">
-          REVEALED {flippedCardIds.length} OF {FLIP_CARDS.length} CARDS
-          {flippedCardIds.length === FLIP_CARDS.length && (
+          REVEALED {flippedCardIds.length} OF {secureData.FLIP_CARDS.length} CARDS
+          {flippedCardIds.length === secureData.FLIP_CARDS.length && (
             <span className="text-[#e8475f] block mt-2 animate-bounce">
               ❤️ Perfect! You have read our entire story from beginning to tomorrow!
             </span>
@@ -2022,7 +1757,7 @@ export default function UsContent() {
             <p className="text-xs text-[rgba(253,246,227,0.5)] mb-2 text-left">
               Click a promise to seal it with a heart checkbox.
             </p>
-            {PROMISES.map((promise, index) => {
+            {secureData.PROMISES.map((promise, index) => {
               const isChecked = checkedPromises.includes(index);
               return (
                 <div 
@@ -2044,7 +1779,7 @@ export default function UsContent() {
 
         {/* Animated Love Stats Dashboard */}
         <div className="us-stats-grid grid grid-cols-2 md:grid-cols-4 gap-4 mt-12 us-reveal us-reveal-3d us-reveal-stagger-1">
-          {LOVE_STATS.map((stat, i) => (
+          {secureData.LOVE_STATS.map((stat, i) => (
             <Tilt3DCard 
               key={i} 
               className="us-stat-card border border-[rgba(212,168,83,0.12)] bg-[rgba(18,18,22,0.4)] backdrop-blur-md p-5 rounded-2xl flex flex-col items-center text-center"
@@ -2171,7 +1906,7 @@ export default function UsContent() {
 
         <div className="us-deep-container px-4 us-reveal us-reveal-3d">
           <div className="us-deep-cards-stack">
-            {DEEP_QUESTIONS.map((item, idx) => {
+            {secureData.DEEP_QUESTIONS.map((item, idx) => {
               const isActive = activeDeepCardIndex === idx;
               return (
                 <Tilt3DCard
@@ -2253,7 +1988,7 @@ export default function UsContent() {
                   A Promise for the Future
                 </span>
                 <p className="font-serif italic text-sm leading-relaxed mb-4 whitespace-pre-line text-[#4e3b27]">
-                  {FUTURE_LETTER_CONTENT}
+                  {secureData.FUTURE_LETTER_CONTENT}
                 </p>
               </div>
             )}
@@ -2291,8 +2026,8 @@ export default function UsContent() {
 
         <div className="w-full max-w-2xl mx-auto px-4 relative h-[440px] sm:h-[460px] flex flex-col justify-between items-center us-reveal us-reveal-3d">
           <div className="relative w-full h-[320px] sm:h-[350px]">
-            {REASONS.map((reason, index) => {
-              const total = REASONS.length;
+            {secureData.REASONS.map((reason, index) => {
+              const total = secureData.REASONS.length;
               const offset = (index - activeReasonIndex + total) % total;
               const isActive = offset === 0;
               const isBehind = offset === 1;
@@ -2376,17 +2111,17 @@ export default function UsContent() {
           {/* Controls */}
           <div className="flex items-center gap-6 mt-6 z-40">
             <button
-              onClick={() => setActiveReasonIndex((prev) => (prev - 1 + REASONS.length) % REASONS.length)}
+              onClick={() => setActiveReasonIndex((prev) => (prev - 1 + secureData.REASONS.length) % secureData.REASONS.length)}
               className="w-10 h-10 rounded-full border border-[rgba(212,168,83,0.25)] flex items-center justify-center text-[#d4a853] hover:text-white hover:border-[#d4a853] bg-[rgba(10,10,12,0.4)] transition-all active:scale-90 cursor-pointer"
               aria-label="Previous Reason"
             >
               ◀
             </button>
             <span className="font-mono text-xs font-bold tracking-widest text-[rgba(253,246,227,0.5)]">
-              {activeReasonIndex + 1} OF {REASONS.length}
+              {activeReasonIndex + 1} OF {secureData.REASONS.length}
             </span>
             <button
-              onClick={() => setActiveReasonIndex((prev) => (prev + 1) % REASONS.length)}
+              onClick={() => setActiveReasonIndex((prev) => (prev + 1) % secureData.REASONS.length)}
               className="w-10 h-10 rounded-full border border-[rgba(212,168,83,0.25)] flex items-center justify-center text-[#d4a853] hover:text-white hover:border-[#d4a853] bg-[rgba(10,10,12,0.4)] transition-all active:scale-90 cursor-pointer"
               aria-label="Next Reason"
             >
