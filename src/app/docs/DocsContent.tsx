@@ -164,7 +164,7 @@ export default function DocsContent() {
         </aside>
 
         {/* Main Content Area */}
-        <div className="space-y-16 max-w-3xl">
+        <div className="space-y-16 max-w-3xl min-w-0">
           <header className="space-y-3">
             <nav className="flex items-center gap-2 text-xs text-[color:var(--muted)] font-medium" aria-label="Breadcrumb">
               <Link href="/" className="hover:text-[color:var(--ink)] transition-colors">Home</Link>
@@ -395,7 +395,7 @@ python flxos.py flash --port /dev/ttyUSB0`}</code>
               <svg className="w-5 h-5 text-[color:var(--accent-2)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
               Directory Structure
             </h2>
-            <div className="bg-[color:var(--surface-2)] border border-[color:var(--border-faint)] rounded-xl p-4 overflow-x-auto text-xs leading-relaxed font-mono">
+            <pre className="bg-[color:var(--surface-2)] border border-[color:var(--border-faint)] rounded-xl p-4 overflow-x-auto text-xs leading-relaxed font-mono text-[color:var(--ink)]">
               <code>{`flxos/
 ├── Applications/    # User-facing apps (calendar, files, text editor, settings, ...)
 ├── Apps/            # App framework and lifecycle management
@@ -411,7 +411,7 @@ python flxos.py flash --port /dev/ttyUSB0`}</code>
 ├── UI/              # LVGL UI framework, themes
 ├── flxos.py         # Main CLI build tool
 └── CMakeLists.txt   # Top-level CMake project file`}</code>
-            </div>
+            </pre>
           </section>
 
           {/* Section: Core Modules */}
@@ -495,10 +495,10 @@ python flxos.py flash --port /dev/ttyUSB0`}</code>
             <p className="text-sm text-[color:var(--muted)] leading-relaxed">
               FlxOS uses a declarative YAML profile system instead of traditional Espressif menuconfig for platform definitions. This maps displays, peripherals, and storage blocks cleanly.
             </p>
-            <div className="bg-[color:var(--surface-2)] border border-[color:var(--border-faint)] rounded-xl p-4 overflow-x-auto text-xs font-mono">
+            <pre className="bg-[color:var(--surface-2)] border border-[color:var(--border-faint)] rounded-xl p-4 overflow-x-auto text-xs font-mono text-[color:var(--ink)]">
               <code>{`python flxos.py list
 python flxos.py diff a b --json`}</code>
-            </div>
+            </pre>
             <h3 className="text-sm font-bold pt-2">Key Profile Mappings:</h3>
             <ul className="list-disc pl-5 text-xs text-[color:var(--muted)] space-y-1">
               <li><strong>SoC Target:</strong> Chip configuration and memory partitioning.</li>
