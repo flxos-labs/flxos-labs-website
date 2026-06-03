@@ -101,7 +101,7 @@ export default function DocsContent() {
         
         {/* Sidebar Nav (Desktop Only) */}
         <aside
-          className="hidden md:block md:sticky z-10 w-auto"
+          className="hidden md:block md:sticky z-10 w-auto self-start"
           style={{ height: "calc(100vh - 100px)", top: "100px" }}
         >
           {/* Search Box */}
