@@ -24,47 +24,22 @@ function spawnParticles(x: number, y: number, count = 12) {
   }
 }
 
+export const UsAuthContext = React.createContext<string | null>(null);
+
 export default function UsAuthGate({ children }: UsAuthGateProps) {
   const [authState, setAuthState] = useState<"loading" | "locked" | "unlocking" | "unlocked">("loading");
   const [passcode, setPasscode] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isShaking, setIsShaking] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [authToken, setAuthToken] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
 
-  // Check localStorage and verify token on mount
+  // Directly set to locked on mount to force password authentication on every refresh/visit
   useEffect(() => {
-    const verifyStoredToken = async () => {
-      const storedToken = localStorage.getItem(AUTH_STORAGE_KEY);
-      if (!storedToken) {
-        setAuthState("locked");
-        setTimeout(() => inputRef.current?.focus(), 400);
-        return;
-      }
-
-      try {
-        const res = await fetch("/api/us/auth", {
-          headers: {
-            Authorization: `Bearer ${storedToken}`,
-          },
-        });
-        const data = await res.json();
-        if (data.success) {
-          setAuthState("unlocked");
-        } else {
-          localStorage.removeItem(AUTH_STORAGE_KEY);
-          setAuthState("locked");
-          setTimeout(() => inputRef.current?.focus(), 400);
-        }
-      } catch {
-        localStorage.removeItem(AUTH_STORAGE_KEY);
-        setAuthState("locked");
-        setTimeout(() => inputRef.current?.focus(), 400);
-      }
-    };
-
-    verifyStoredToken();
+    setAuthState("locked");
+    setTimeout(() => inputRef.current?.focus(), 400);
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -84,8 +59,8 @@ export default function UsAuthGate({ children }: UsAuthGateProps) {
       const data = await res.json();
 
       if (data.success && data.token) {
-        // Store auth token in localStorage
-        localStorage.setItem(AUTH_STORAGE_KEY, data.token);
+        // Set token in state (in-memory only)
+        setAuthToken(data.token);
 
         // Spawn celebration particles from center of card
         const card = cardRef.current;
@@ -131,13 +106,18 @@ export default function UsAuthGate({ children }: UsAuthGateProps) {
     );
   }
 
-  // Unlocked — render children with fade-in
+  // Unlocked — render children with fade-in wrapped in Provider
   if (authState === "unlocked") {
-    return <>{children}</>;
+    return (
+      <UsAuthContext.Provider value={authToken}>
+        {children}
+      </UsAuthContext.Provider>
+    );
   }
 
   // Lock screen (locked + unlocking)
   return (
+    <UsAuthContext.Provider value={authToken}>
     <div className={`us-auth-screen ${authState === "unlocking" ? "us-auth-screen--unlocking" : ""}`}>
       <StarfieldCanvas />
 
@@ -233,5 +213,6 @@ export default function UsAuthGate({ children }: UsAuthGateProps) {
         <div className="us-auth-star us-auth-star--3">✦</div>
       </div>
     </div>
+    </UsAuthContext.Provider>
   );
 }

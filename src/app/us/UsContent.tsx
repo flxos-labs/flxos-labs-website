@@ -1,10 +1,11 @@
 "use client";
 
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useContext } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import StarfieldCanvas from "./StarfieldCanvas";
 import { Tilt3DCard } from "./Tilt3DCard";
+import { UsAuthContext } from "./UsAuthGate";
 
 const SectionHeading = ({ eyebrow, title, description, roseGlow = false }: { eyebrow: string; title: string; description?: string; roseGlow?: boolean }) => {
   return (
@@ -256,6 +257,7 @@ function selectRandomComplimentIndex(length: number) {
 }
 
 export default function UsContent() {
+  const token = useContext(UsAuthContext);
   const [secureData, setSecureData] = useState<SecureData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
@@ -265,7 +267,6 @@ export default function UsContent() {
 
   useEffect(() => {
     const fetchSecureContent = async () => {
-      const token = localStorage.getItem("us_page_auth_v1");
       if (!token) {
         setLoadError("Unauthorized access.");
         setIsLoading(false);
@@ -290,7 +291,7 @@ export default function UsContent() {
       }
     };
     fetchSecureContent();
-  }, []);
+  }, [token]);
   const [expandedTimelineNode, setExpandedTimelineNode] = useState<number | null>(null);
 
   const getDaysAgo = (dateStr: string) => {
