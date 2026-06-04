@@ -39,7 +39,7 @@ flxos-labs/
 ├── .gitignore
 ├── CONTEXT.md                          # ← THIS FILE
 ├── README.md                           # Basic setup instructions
-├── next.config.ts                      # Image remote patterns (github.com avatar)
+├── next.config.ts                      # Image remote patterns (GitHub CDN avatar)
 ├── tsconfig.json                       # TS config (ES2017, bundler resolution, @/* alias)
 ├── eslint.config.mjs                   # ESLint flat config
 ├── postcss.config.mjs                  # PostCSS with @tailwindcss/postcss
