@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import styles from "./ThemeToggle.module.css";
 
 type Theme = "light" | "dark";
 
@@ -31,6 +32,9 @@ export default function ThemeToggle() {
     }
 
     applyTheme(initialTheme);
+    // The first client render hydrates with a safe fallback, then syncs to
+    // localStorage/system preference once browser APIs are available.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setTheme(initialTheme);
     const media = window.matchMedia("(prefers-color-scheme: dark)");
     const handleChange = (event: MediaQueryListEvent) => {
@@ -65,13 +69,13 @@ export default function ThemeToggle() {
   return (
     <button
       type="button"
-      className="theme-toggle"
+      className={styles.toggle}
       onClick={toggleTheme}
       aria-pressed={isDark}
       aria-label={`Switch to ${isDark ? "light" : "dark"} mode`}
       title={`Switch to ${isDark ? "light" : "dark"} mode`}
     >
-      <span className="theme-toggle-icon" aria-hidden="true">
+      <span className={styles.icon} aria-hidden="true">
         {isDark ? (
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z" />
@@ -83,7 +87,7 @@ export default function ThemeToggle() {
           </svg>
         )}
       </span>
-      <span className="theme-toggle-label">{isDark ? "Dark" : "Light"}</span>
+      <span className={styles.label}>{isDark ? "Dark" : "Light"}</span>
     </button>
   );
 }

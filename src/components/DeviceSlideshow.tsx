@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import styles from "./DeviceSlideshow.module.css";
 
 interface Slide {
   src: string;
@@ -51,7 +52,7 @@ export default function DeviceSlideshow() {
   return (
     <div className="relative w-full max-w-lg lg:max-w-xl mx-auto">
       {/* Device Frame Card */}
-      <div className="device-card relative aspect-[4/3] w-full overflow-hidden">
+      <div className={`${styles.deviceCard} relative aspect-[4/3] w-full overflow-hidden`}>
         {slides.map((slide, idx) => {
           const isActive = idx === activeIdx;
           return (
@@ -75,7 +76,7 @@ export default function DeviceSlideshow() {
       </div>
 
       {/* Synchronized Caption Card */}
-      <div className="caption-card absolute left-4 right-4 bottom-4 md:left-auto md:right-[-20px] md:bottom-[-25px] w-auto md:w-72 bg-[rgba(var(--surface-rgb),0.92)] border border-[rgba(0,0,0,0.08)] backdrop-blur-md p-4 rounded-2xl shadow-xl z-20 space-y-1 transition-all duration-300">
+      <div className={`${styles.captionCard} absolute left-4 right-4 bottom-4 md:left-auto md:right-[-20px] md:bottom-[-25px] w-auto md:w-72 bg-[rgba(var(--surface-rgb),0.92)] border border-[rgba(0,0,0,0.08)] backdrop-blur-md p-4 rounded-2xl shadow-xl z-20 space-y-1 transition-all duration-300`}>
         <div className="flex items-center gap-1.5 pb-1 border-b border-[rgba(0,0,0,0.03)]">
           <span className="w-2 h-2 rounded-full bg-[color:var(--accent)] animate-pulse" />
           <p className="font-display text-xs font-extrabold text-[color:var(--ink)] transition-colors">

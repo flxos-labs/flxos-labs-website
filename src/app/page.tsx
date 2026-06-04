@@ -3,19 +3,21 @@ import DeviceSlideshow from "../components/DeviceSlideshow";
 import CopyCommand from "../components/CopyCommand";
 import Image from "next/image";
 import Link from "next/link";
+import buttonStyles from "../components/Buttons.module.css";
+import styles from "./page.module.css";
 
 export default function Home() {
   return (
     <main className="relative">
       <section className="relative overflow-hidden">
-        <div className="hero-orbs" aria-hidden="true">
-          <span className="orb orb-1 opacity-60" />
-          <span className="orb orb-2 opacity-60" />
-          <span className="orb orb-3 opacity-60" />
+        <div className={styles.heroOrbs} aria-hidden="true">
+          <span className={`${styles.orb} ${styles.orb1} opacity-60`} />
+          <span className={`${styles.orb} ${styles.orb2} opacity-60`} />
+          <span className={`${styles.orb} ${styles.orb3} opacity-60`} />
         </div>
         <div className="mx-auto flex w-full max-w-6xl flex-col gap-12 px-6 pb-20 pt-16 lg:grid lg:grid-cols-[1.15fr_0.85fr] lg:items-start lg:pt-24">
           <div className="space-y-6 order-2 lg:order-1">
-            <p className="section-eyebrow">FlxOS Labs</p>
+            <p className={styles.eyebrow}>FlxOS Labs</p>
             <h1 className="font-display text-4xl leading-tight text-[color:var(--ink)] md:text-5xl">
               Modular OS from <PlatformCycler /> to the desktop horizon.
             </h1>
@@ -25,11 +27,11 @@ export default function Home() {
               One repo, one CLI, many form factors.
             </p>
             <div className="flex flex-wrap gap-3">
-              <Link className="btn-primary" href="/#cta">
+              <Link className={buttonStyles.primary} href="/#cta">
                 Get started
               </Link>
               <a
-                className="btn-secondary"
+                className={buttonStyles.secondary}
                 href="https://github.com/flxos-labs/flxos"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -38,32 +40,32 @@ export default function Home() {
               </a>
             </div>
             <CopyCommand command={"git clone https://github.com/flxos-labs/flxos && cd flxos && flxos init"} />
-            <div className="hero-highlights">
-              <div className="highlight-card">
-                <p className="highlight-title">Profile graph</p>
-                <p className="highlight-copy">
+            <div className={styles.heroHighlights}>
+              <div className={styles.highlightCard}>
+                <p className={styles.highlightTitle}>Profile graph</p>
+                <p className={styles.highlightCopy}>
                   Define board, display, and input defaults in a single profile.
                 </p>
               </div>
-              <div className="highlight-card">
-                <p className="highlight-title">GUI foundation</p>
-                <p className="highlight-copy">
+              <div className={styles.highlightCard}>
+                <p className={styles.highlightTitle}>GUI foundation</p>
+                <p className={styles.highlightCopy}>
                   LVGL plus tuned drivers for responsive, crisp interfaces.
                 </p>
               </div>
-              <div className="highlight-card">
-                <p className="highlight-title">Desktop horizon</p>
-                <p className="highlight-copy">
+              <div className={styles.highlightCard}>
+                <p className={styles.highlightTitle}>Desktop horizon</p>
+                <p className={styles.highlightCopy}>
                   Carry the same design language into simulators and desktop shells.
                 </p>
               </div>
             </div>
             <div className="flex flex-wrap gap-2 text-xs text-[color:var(--muted)]">
-              <span className="chip">ESP-IDF</span>
-              <span className="chip">LVGL</span>
-              <span className="chip">LovyanGFX</span>
-              <span className="chip">CMake</span>
-              <span className="chip">Python</span>
+              <span className={styles.chip}>ESP-IDF</span>
+              <span className={styles.chip}>LVGL</span>
+              <span className={styles.chip}>LovyanGFX</span>
+              <span className={styles.chip}>CMake</span>
+              <span className={styles.chip}>Python</span>
             </div>
           </div>
           <div className="relative w-full order-1 lg:order-2 lg:pt-10">
@@ -73,39 +75,39 @@ export default function Home() {
       </section>
 
       <section id="workflow" className="mx-auto w-full max-w-6xl px-6 pb-20">
-        <div className="section-header">
+        <div className={styles.sectionHeader}>
           <h2 className="font-display text-3xl">The build loop</h2>
           <p className="text-[color:var(--muted)]">
             Move from a profile to hardware in a short loop and keep the same
             foundation as you scale the interface.
           </p>
         </div>
-        <div className="workflow-grid">
-          <div className="workflow-step">
-            <span className="workflow-step-number">01</span>
+        <div className={styles.workflowGrid}>
+          <div className={styles.workflowStep}>
+            <span className={styles.workflowStepNumber}>01</span>
             <h3 className="font-display text-lg">Pick a profile</h3>
             <p className="text-sm text-[color:var(--muted)]">
               Start with a board preset that bundles display, input, and storage
               defaults.
             </p>
           </div>
-          <div className="workflow-step">
-            <span className="workflow-step-number">02</span>
+          <div className={styles.workflowStep}>
+            <span className={styles.workflowStepNumber}>02</span>
             <h3 className="font-display text-lg">Compose modules</h3>
             <p className="text-sm text-[color:var(--muted)]">
               Add UI, connectivity, and app layers without forking core
               services.
             </p>
           </div>
-          <div className="workflow-step">
-            <span className="workflow-step-number">03</span>
+          <div className={styles.workflowStep}>
+            <span className={styles.workflowStepNumber}>03</span>
             <h3 className="font-display text-lg">Build and flash</h3>
             <p className="text-sm text-[color:var(--muted)]">
               Generate the image and deploy to hardware in one repeatable flow.
             </p>
           </div>
-          <div className="workflow-step">
-            <span className="workflow-step-number">04</span>
+          <div className={styles.workflowStep}>
+            <span className={styles.workflowStepNumber}>04</span>
             <h3 className="font-display text-lg">Refine the surface</h3>
             <p className="text-sm text-[color:var(--muted)]">
               Tune visuals, animations, and layouts while the config stays
@@ -116,73 +118,73 @@ export default function Home() {
       </section>
 
       <section id="hardware" className="mx-auto w-full max-w-6xl px-6 pb-20">
-        <div className="section-header">
+        <div className={styles.sectionHeader}>
           <h2 className="font-display text-3xl">Hardware in the lab</h2>
           <p className="text-[color:var(--muted)]">
             Real devices running FlxOS, captured on LilyGo T-HMI prototypes.
           </p>
         </div>
-        <div className="hardware-grid">
-          <figure className="hardware-card">
+        <div className={styles.hardwareGrid}>
+          <figure className={styles.hardwareCard}>
             <Image
               src="/images/hardware/lilygo-thmi-systeminfo-app.jpg"
               alt="LilyGo T-HMI system info screen"
               fill
               sizes="(max-width: 768px) 100vw, 66vw"
-              className="hardware-photo"
+              className={styles.hardwarePhoto}
             />
-            <figcaption className="hardware-caption">
-              <span className="hardware-label">LilyGo T-HMI</span>
-              <span className="hardware-title">System info on-device</span>
-              <span className="hardware-meta">
+            <figcaption className={styles.hardwareCaption}>
+              <span className={styles.hardwareLabel}>LilyGo T-HMI</span>
+              <span className={styles.hardwareTitle}>System info on-device</span>
+              <span className={styles.hardwareMeta}>
                 Live diagnostics, sensor readouts, and UI timing.
               </span>
             </figcaption>
           </figure>
-          <figure className="hardware-card">
+          <figure className={styles.hardwareCard}>
             <Image
               src="/images/hardware/lilygo-thmi-calculator-app.jpg"
               alt="Calculator app on LilyGo T-HMI"
               fill
               sizes="(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 33vw"
-              className="hardware-photo"
+              className={styles.hardwarePhoto}
             />
-            <figcaption className="hardware-caption">
-              <span className="hardware-label">Input demo</span>
-              <span className="hardware-title">Calculator app</span>
+            <figcaption className={styles.hardwareCaption}>
+              <span className={styles.hardwareLabel}>Input demo</span>
+              <span className={styles.hardwareTitle}>Calculator app</span>
             </figcaption>
           </figure>
-          <figure className="hardware-card">
+          <figure className={styles.hardwareCard}>
             <Image
               src="/images/hardware/lilygo-thmi-notification-panel.jpg"
               alt="Notification panel on LilyGo T-HMI"
               fill
               sizes="(max-width: 768px) 50vw, 33vw"
-              className="hardware-photo"
+              className={styles.hardwarePhoto}
             />
-            <figcaption className="hardware-caption">
-              <span className="hardware-label">Status layer</span>
-              <span className="hardware-title">Notification panel</span>
+            <figcaption className={styles.hardwareCaption}>
+              <span className={styles.hardwareLabel}>Status layer</span>
+              <span className={styles.hardwareTitle}>Notification panel</span>
             </figcaption>
           </figure>
-          <figure className="hardware-card">
+          <figure className={styles.hardwareCard}>
             <Image
               src="/images/hardware/lilygo-thmi-quickaccess-panel.jpg"
               alt="Quick access panel on LilyGo T-HMI"
               fill
               sizes="(max-width: 768px) 50vw, 33vw"
-              className="hardware-photo"
+              className={styles.hardwarePhoto}
             />
-            <figcaption className="hardware-caption">
-              <span className="hardware-label">Controls</span>
-              <span className="hardware-title">Quick access panel</span>
+            <figcaption className={styles.hardwareCaption}>
+              <span className={styles.hardwareLabel}>Controls</span>
+              <span className={styles.hardwareTitle}>Quick access panel</span>
             </figcaption>
           </figure>
         </div>
       </section>
 
       <section id="features" className="mx-auto w-full max-w-6xl px-6 pb-20">
-        <div className="section-header">
+        <div className={styles.sectionHeader}>
           <h2 className="font-display text-3xl">Built for real deployments</h2>
           <p className="text-[color:var(--muted)]">
             FlxOS focuses on repeatable builds, clean architecture, and visuals
@@ -190,21 +192,21 @@ export default function Home() {
           </p>
         </div>
         <div className="grid gap-6 md:grid-cols-3">
-          <div className="feature-card">
+          <div className={styles.featureCard}>
             <h3 className="font-display text-lg">Profile-first builds</h3>
             <p className="text-sm text-[color:var(--muted)]">
               Select a board profile once and compile, flash, and release with
               one command.
             </p>
           </div>
-          <div className="feature-card">
+          <div className={styles.featureCard}>
             <h3 className="font-display text-lg">Rich GUI foundation</h3>
             <p className="text-sm text-[color:var(--muted)]">
               LVGL plus optimized drivers deliver polished screens and fluid
               animations.
             </p>
           </div>
-          <div className="feature-card">
+          <div className={styles.featureCard}>
             <h3 className="font-display text-lg">Desktop trajectory</h3>
             <p className="text-sm text-[color:var(--muted)]">
               Same design language scales from microcontrollers to desktop
@@ -215,49 +217,49 @@ export default function Home() {
       </section>
 
       <section id="stack" className="mx-auto w-full max-w-6xl px-6 pb-20">
-        <div className="section-header">
+        <div className={styles.sectionHeader}>
           <h2 className="font-display text-3xl">Stack at a glance</h2>
           <p className="text-[color:var(--muted)]">
             A tight core focused on stability, UI performance, and consistent
             tooling.
           </p>
         </div>
-        <div className="stack-grid">
+        <div className={styles.stackGrid}>
           <div>
-            <p className="stack-label">Core</p>
-            <p className="stack-value">ESP-IDF, CMake, Python CLI</p>
+            <p className={styles.stackLabel}>Core</p>
+            <p className={styles.stackValue}>ESP-IDF, CMake, Python CLI</p>
           </div>
           <div>
-            <p className="stack-label">UI Layer</p>
-            <p className="stack-value">LVGL, LovyanGFX, input drivers</p>
+            <p className={styles.stackLabel}>UI Layer</p>
+            <p className={styles.stackValue}>LVGL, LovyanGFX, input drivers</p>
           </div>
           <div>
-            <p className="stack-label">Roadmap</p>
-            <p className="stack-value">Desktop simulator, plugins, theming</p>
+            <p className={styles.stackLabel}>Roadmap</p>
+            <p className={styles.stackValue}>Desktop simulator, plugins, theming</p>
           </div>
         </div>
       </section>
 
       <section id="cta" className="mx-auto w-full max-w-6xl px-6 pb-24">
-        <div className="cta-panel">
+        <div className={styles.ctaPanel}>
           <div>
-            <p className="section-eyebrow">Start in minutes</p>
+            <p className={styles.eyebrow}>Start in minutes</p>
             <h2 className="font-display text-3xl">Clone, select, build.</h2>
             <p className="text-[color:var(--muted)]">
               Use the guided CLI to pick a board profile and flash your first
               build without stitching toolchains together.
             </p>
           </div>
-          <div className="cta-actions">
+          <div className={styles.ctaActions}>
             <a
-              className="btn-primary"
+              className={buttonStyles.primary}
               href="https://github.com/flxos-labs/flxos"
               target="_blank"
               rel="noopener noreferrer"
             >
               Open repository
             </a>
-            <Link className="btn-ghost" href="/#features">
+            <Link className={buttonStyles.ghost} href="/#features">
               Learn the stack
             </Link>
           </div>

@@ -5,6 +5,7 @@ import Header from "./Header";
 import CommandPalette from "./CommandPalette";
 import InteractiveBackground from "./InteractiveBackground";
 import Link from "next/link";
+import styles from "./SiteLayout.module.css";
 
 interface SiteLayoutProps {
   children: React.ReactNode;
@@ -15,18 +16,18 @@ export default function SiteLayout({ children }: SiteLayoutProps) {
   return (
     <>
       <InteractiveBackground />
-      <div className="site-shell">
+      <div className={styles.shell}>
         <Header />
         {children}
-        <footer className="site-footer">
-          <div className="site-footer-inner">
+        <footer className={styles.footer}>
+          <div className={styles.footerInner}>
             <div>
-              <span className="footer-brand">FlxOS Labs</span>
-              <p className="footer-copy">
+              <span className={styles.footerBrand}>FlxOS Labs</span>
+              <p className={styles.footerCopy}>
                 Modular OS for embedded devices and the desktop horizon.
               </p>
             </div>
-            <div className="footer-links">
+            <div className={styles.footerLinks}>
               <Link href="/#features">Features</Link>
               <Link href="/docs">Docs</Link>
               <Link href="/about">About</Link>

@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import buttonStyles from "@/components/Buttons.module.css";
+import styles from "./AboutContent.module.css";
 
 interface GithubStats {
   commits: string;
@@ -88,10 +90,10 @@ export default function AboutContent() {
   return (
     <main className="relative min-h-screen overflow-hidden">
       {/* Hero Orbs background */}
-      <div className="hero-orbs" aria-hidden="true">
-        <span className="orb orb-1 opacity-40" />
-        <span className="orb orb-2 opacity-35" />
-        <span className="orb orb-3 opacity-30" />
+      <div className={styles.heroOrbs} aria-hidden="true">
+        <span className={`${styles.orb} ${styles.orb1} opacity-40`} />
+        <span className={`${styles.orb} ${styles.orb2} opacity-35`} />
+        <span className={`${styles.orb} ${styles.orb3} opacity-30`} />
       </div>
 
       {/* ── Hero ── */}
@@ -102,7 +104,7 @@ export default function AboutContent() {
             <span>/</span>
             <span>About</span>
           </nav>
-          <p className="section-eyebrow">The Story</p>
+          <p className={styles.eyebrow}>The Story</p>
           <h1 className="font-display text-4xl md:text-5xl lg:text-6xl leading-tight text-[color:var(--ink)] max-w-4xl">
             We believe embedded software deserves{" "}
             <span className="bg-gradient-to-r from-[color:var(--accent)] to-[color:var(--accent-3)] bg-clip-text text-transparent">
@@ -113,19 +115,19 @@ export default function AboutContent() {
             FlxOS Labs is on a mission to make microcontrollers feel like first-class computing platforms — with rich interfaces, clean APIs, and zero boilerplate.
           </p>
           <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 pt-2 text-xs">
-            <span className="chip gap-1.5 font-medium">
+            <span className={`${styles.chip} gap-1.5 font-medium`}>
               <svg className="w-3.5 h-3.5 text-[color:var(--accent)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><rect x="2" y="2" width="20" height="20" rx="4" /><rect x="6" y="6" width="12" height="12" rx="1" /></svg>
               ESP32 / ESP-IDF
             </span>
-            <span className="chip gap-1.5 font-medium">
+            <span className={`${styles.chip} gap-1.5 font-medium`}>
               <svg className="w-3.5 h-3.5 text-[color:var(--accent)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 2 12 2ZM12 22V12" /><path d="M12 12L19.07 4.92999" /><path d="M12 12L4.92999 4.92999" /><path d="M12 12H22" /><path d="M12 12H2" /></svg>
               LVGL 9
             </span>
-            <span className="chip gap-1.5 font-medium">
+            <span className={`${styles.chip} gap-1.5 font-medium`}>
               <svg className="w-3.5 h-3.5 text-[color:var(--accent)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" /></svg>
               60 FPS Graphics
             </span>
-            <span className="chip gap-1.5 font-medium">
+            <span className={`${styles.chip} gap-1.5 font-medium`}>
               <svg className="w-3.5 h-3.5 text-[color:var(--accent)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /></svg>
               AGPL-3.0
             </span>
@@ -135,13 +137,13 @@ export default function AboutContent() {
 
       {/* ── Core Team ── */}
       <section className="mx-auto max-w-6xl px-6 pb-20">
-        <div className="section-header text-center md:text-left">
-          <p className="section-eyebrow">The Team</p>
+        <div className={`${styles.sectionHeader} text-center md:text-left`}>
+          <p className={styles.eyebrow}>The Team</p>
           <h2 className="font-display text-3xl">The minds behind FlxOS</h2>
         </div>
         <div className="space-y-8">
           {/* Akash's Card */}
-          <div className="feature-card grid gap-8 p-6 md:p-10 md:grid-cols-[200px_1fr] items-center">
+          <div className={`${styles.featureCard} grid gap-8 p-6 md:p-10 md:grid-cols-[200px_1fr] items-center`}>
             <div className="relative mx-auto md:mx-0 w-36 h-36 md:w-44 md:h-44 rounded-2xl overflow-hidden bg-[color:var(--surface-2)] border border-[color:var(--border-muted)] flex items-center justify-center shadow-lg group">
               <Image
                 className="object-cover group-hover:scale-105 transition-transform duration-300"
@@ -199,7 +201,7 @@ export default function AboutContent() {
           </div>
 
           {/* Rekha's Card */}
-          <div className="feature-card grid gap-8 p-6 md:p-10 md:grid-cols-[200px_1fr] items-center">
+          <div className={`${styles.featureCard} grid gap-8 p-6 md:p-10 md:grid-cols-[200px_1fr] items-center`}>
             <div className="relative mx-auto md:mx-0 w-36 h-36 md:w-44 md:h-44 rounded-2xl overflow-hidden bg-[color:var(--surface-2)] border border-[color:var(--border-muted)] flex items-center justify-center shadow-lg group">
               <Image
                 className="object-cover group-hover:scale-105 transition-transform duration-300"
@@ -261,15 +263,15 @@ export default function AboutContent() {
             </p>
           </div>
           <div className="grid gap-4 sm:grid-cols-3 md:grid-cols-1">
-            <div className="feature-card p-5 text-center md:text-left">
+            <div className={`${styles.featureCard} p-5 text-center md:text-left`}>
               <span className="block font-display text-3xl font-extrabold text-[color:var(--accent)]">7+</span>
               <span className="text-xs text-[color:var(--muted)] font-semibold uppercase tracking-wide">Core System Modules</span>
             </div>
-            <div className="feature-card p-5 text-center md:text-left">
+            <div className={`${styles.featureCard} p-5 text-center md:text-left`}>
               <span className="block font-display text-3xl font-extrabold text-[color:var(--accent-2)]">Open</span>
               <span className="text-xs text-[color:var(--muted)] font-semibold uppercase tracking-wide">Source &amp; Free</span>
             </div>
-            <div className="feature-card p-5 text-center md:text-left">
+            <div className={`${styles.featureCard} p-5 text-center md:text-left`}>
               <span className="block font-display text-xl font-extrabold text-[color:var(--accent-3)]">AGPL-3.0</span>
               <span className="text-xs text-[color:var(--muted)] font-semibold uppercase tracking-wide">Permissive Copyleft</span>
             </div>
@@ -279,8 +281,8 @@ export default function AboutContent() {
 
       {/* ── Timeline (History) ── */}
       <section className="mx-auto max-w-6xl px-6 pb-20">
-        <div className="section-header text-center md:text-left">
-          <p className="section-eyebrow">Milestones</p>
+        <div className={`${styles.sectionHeader} text-center md:text-left`}>
+          <p className={styles.eyebrow}>Milestones</p>
           <h2 className="font-display text-3xl">Project Story</h2>
         </div>
         <div className="relative pl-6 border-l-2 border-[color:var(--border-faint)] space-y-12 max-w-3xl ml-2">
@@ -316,34 +318,34 @@ export default function AboutContent() {
 
       {/* ── Technology Philosophy ── */}
       <section className="mx-auto max-w-6xl px-6 pb-20">
-        <div className="section-header text-center">
-          <p className="section-eyebrow">Principles</p>
+        <div className={`${styles.sectionHeader} text-center`}>
+          <p className={styles.eyebrow}>Principles</p>
           <h2 className="font-display text-3xl">Technology Philosophy</h2>
           <p className="text-sm text-[color:var(--muted)]">Core principles that guide every design decision in FlxOS</p>
         </div>
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4 pt-6">
-          <div className="feature-card space-y-2">
+          <div className={`${styles.featureCard} space-y-2`}>
             <div className="w-10 h-10 rounded-xl bg-orange-500/10 flex items-center justify-center text-orange-500 font-bold">M</div>
             <h3 className="font-display text-lg font-bold">Modularity First</h3>
             <p className="text-xs text-[color:var(--muted)] leading-relaxed">
               Every component is designed to be independent and reusable. Apps, system services, and drivers are cleanly separated, making the codebase maintainable and extensible.
             </p>
           </div>
-          <div className="feature-card space-y-2">
+          <div className={`${styles.featureCard} space-y-2`}>
             <div className="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-500 font-bold">P</div>
             <h3 className="font-display text-lg font-bold">Performance Matters</h3>
             <p className="text-xs text-[color:var(--muted)] leading-relaxed">
               We optimize for efficiency without sacrificing features. Hardware acceleration, smart memory management, and FreeRTOS scheduling ensure smooth operation on resource-constrained devices.
             </p>
           </div>
-          <div className="feature-card space-y-2">
+          <div className={`${styles.featureCard} space-y-2`}>
             <div className="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center text-amber-500 font-bold">D</div>
             <h3 className="font-display text-lg font-bold">Developer Experience</h3>
             <p className="text-xs text-[color:var(--muted)] leading-relaxed">
               Creating apps should be straightforward. Our API is designed to be intuitive, with clear patterns and comprehensive examples that get developers productive quickly.
             </p>
           </div>
-          <div className="feature-card space-y-2">
+          <div className={`${styles.featureCard} space-y-2`}>
             <div className="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-500 font-bold">O</div>
             <h3 className="font-display text-lg font-bold">Open Collaboration</h3>
             <p className="text-xs text-[color:var(--muted)] leading-relaxed">
@@ -355,12 +357,12 @@ export default function AboutContent() {
 
       {/* ── Roadmap ── */}
       <section className="mx-auto max-w-6xl px-6 pb-20">
-        <div className="section-header text-center">
-          <p className="section-eyebrow">Roadmap</p>
+        <div className={`${styles.sectionHeader} text-center`}>
+          <p className={styles.eyebrow}>Roadmap</p>
           <h2 className="font-display text-3xl">Our Vision for FlxOS</h2>
         </div>
         <div className="grid gap-6 md:grid-cols-3 pt-6">
-          <div className="feature-card border-t-4 border-[color:var(--accent)] space-y-4">
+          <div className={`${styles.featureCard} border-t-4 border-[color:var(--accent)] space-y-4`}>
             <div className="flex justify-between items-center">
               <span className="text-[10px] px-2 py-0.5 rounded-full bg-[color:var(--accent)] text-black font-bold uppercase">Current</span>
               <span className="font-display font-bold text-sm">v0.1.0</span>
@@ -372,7 +374,7 @@ export default function AboutContent() {
               <li className="flex items-center gap-2"><svg className="w-3.5 h-3.5 text-emerald-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M20 6 9 17l-5-5" /></svg> LVGL UI integration</li>
             </ul>
           </div>
-          <div className="feature-card border-t-4 border-[color:var(--accent-2)] space-y-4">
+          <div className={`${styles.featureCard} border-t-4 border-[color:var(--accent-2)] space-y-4`}>
             <div className="flex justify-between items-center">
               <span className="text-[10px] px-2 py-0.5 rounded-full bg-[color:var(--accent-2)] text-black font-bold uppercase">Next</span>
               <span className="font-display font-bold text-sm">v1.0</span>
@@ -384,7 +386,7 @@ export default function AboutContent() {
               <li className="flex items-center gap-2"><span className="w-2.5 h-2.5 rounded-full border border-gray-400" /> Native plugin system</li>
             </ul>
           </div>
-          <div className="feature-card border-t-4 border-[color:var(--accent-3)] space-y-4">
+          <div className={`${styles.featureCard} border-t-4 border-[color:var(--accent-3)] space-y-4`}>
             <div className="flex justify-between items-center">
               <span className="text-[10px] px-2 py-0.5 rounded-full bg-[color:var(--accent-3)] text-black font-bold uppercase">Future</span>
               <span className="font-display font-bold text-sm">v2.0</span>
@@ -401,7 +403,7 @@ export default function AboutContent() {
 
       {/* ── FAQ Accordion ── */}
       <section className="mx-auto max-w-4xl px-6 pb-20">
-        <div className="section-header text-center">
+        <div className={`${styles.sectionHeader} text-center`}>
           <h2 className="font-display text-3xl">Frequently Asked Questions</h2>
           <p className="text-sm text-[color:var(--muted)]">Everything you need to know about FlxOS</p>
         </div>
@@ -448,9 +450,9 @@ export default function AboutContent() {
 
       {/* ── Join the Journey CTA ── */}
       <section className="mx-auto max-w-6xl px-6 pb-24">
-        <div className="cta-panel text-center md:text-left flex flex-col md:flex-row md:items-center justify-between gap-8">
+        <div className={`${styles.ctaPanel} text-center md:text-left flex flex-col md:flex-row md:items-center justify-between gap-8`}>
           <div className="space-y-3">
-            <p className="section-eyebrow">Join the Journey</p>
+            <p className={styles.eyebrow}>Join the Journey</p>
             <h2 className="font-display text-3xl font-bold">Help us shape embedded computing.</h2>
             <p className="text-sm text-[color:var(--muted)] max-w-xl">
               Star our GitHub repository, report issues, or contribute code. Every single contribution helps build the modular operating system of the future.
@@ -461,12 +463,12 @@ export default function AboutContent() {
               href="https://github.com/flxos-labs/flxos"
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-primary gap-2"
+              className={`${buttonStyles.primary} gap-2`}
             >
               <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
               <span>Star on GitHub</span>
             </a>
-            <Link href="/docs" className="btn-secondary gap-2">
+            <Link href="/docs" className={`${buttonStyles.secondary} gap-2`}>
               <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/><path d="M6 6h10M6 10h10M6 14h6"/></svg>
               <span>Read the Docs</span>
             </Link>

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import ThemeToggle from "./ThemeToggle";
 import { lockScroll, unlockScroll } from "../lib/scrollLock";
+import styles from "./Header.module.css";
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -38,28 +39,28 @@ export default function Header() {
 
   return (
     <>
-      <header className="site-header">
-        <div className="site-header-inner">
-          <Link className="brand" href="/" aria-label="FlxOS home">
-            <span className="brand-mark" aria-hidden="true">
+      <header className={styles.header}>
+        <div className={styles.inner}>
+          <Link className={styles.brand} href="/" aria-label="FlxOS home">
+            <span className={styles.brandMark} aria-hidden="true">
               F
             </span>
-            <span className="brand-text">FlxOS</span>
+            <span className={styles.brandText}>FlxOS</span>
           </Link>
 
           {/* Desktop Nav */}
-          <nav className="site-nav" aria-label="Primary">
-            <Link className="nav-link" href="/#features">
+          <nav className={styles.nav} aria-label="Primary">
+            <Link className={styles.navLink} href="/#features">
               Features
             </Link>
-            <Link className="nav-link" href="/docs">
+            <Link className={styles.navLink} href="/docs">
               Docs
             </Link>
-            <Link className="nav-link" href="/about">
+            <Link className={styles.navLink} href="/about">
               About
             </Link>
             <a
-              className="nav-link"
+              className={styles.navLink}
               href="https://github.com/flxos-labs/flxos"
               target="_blank"
               rel="noopener noreferrer"
@@ -69,11 +70,11 @@ export default function Header() {
           </nav>
 
           {/* Header Actions */}
-          <div className="site-header-actions">
+          <div className={styles.actions}>
             {/* Search Button for Mobile (opens Command Palette) */}
             <button
               onClick={toggleCommandPalette}
-              className="mobile-search-btn"
+              className={styles.mobileSearchButton}
               aria-label="Open search palette"
               title="Search documentation and commands"
             >
@@ -87,7 +88,7 @@ export default function Header() {
 
             {/* Desktop Star on GitHub */}
             <a
-              className="cta-pill desktop-cta"
+              className={`${styles.ctaPill} ${styles.desktopCta}`}
               href="https://github.com/flxos-labs/flxos"
               target="_blank"
               rel="noopener noreferrer"
@@ -98,12 +99,12 @@ export default function Header() {
             {/* Mobile Hamburger Toggle */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className={`hamburger ${mobileMenuOpen ? "active" : ""}`}
+              className={`${styles.hamburger} ${mobileMenuOpen ? styles.hamburgerActive : ""}`}
               aria-label="Toggle navigation menu"
               aria-expanded={mobileMenuOpen}
             >
-              <span className="hamburger-box">
-                <span className="hamburger-inner"></span>
+              <span className={styles.hamburgerBox}>
+                <span className={styles.hamburgerInner}></span>
               </span>
             </button>
           </div>
@@ -111,41 +112,41 @@ export default function Header() {
       </header>
 
       {/* Mobile Navigation Drawer Overlay */}
-      <div className={`mobile-drawer-backdrop ${mobileMenuOpen ? "active" : ""}`} onClick={handleCloseMobileMenu} />
+      <div className={`${styles.drawerBackdrop} ${mobileMenuOpen ? styles.drawerBackdropActive : ""}`} onClick={handleCloseMobileMenu} />
       
-      <div className={`mobile-drawer ${mobileMenuOpen ? "active" : ""}`} role="dialog" aria-modal="true" aria-label="Mobile Navigation">
-        <div className="mobile-drawer-header">
-          <span className="drawer-title">Navigation</span>
+      <div className={`${styles.mobileDrawer} ${mobileMenuOpen ? styles.mobileDrawerActive : ""}`} role="dialog" aria-modal="true" aria-label="Mobile Navigation">
+        <div className={styles.mobileDrawerHeader}>
+          <span className={styles.drawerTitle}>Navigation</span>
           <button
             onClick={handleCloseMobileMenu}
-            className="drawer-close"
+            className={styles.drawerClose}
             aria-label="Close menu"
           >
             ×
           </button>
         </div>
-        <nav className="mobile-drawer-nav overflow-y-auto max-h-[calc(100vh-140px)] pr-1 pb-6">
-          <Link href="/#features" className="drawer-link" onClick={handleCloseMobileMenu}>
+        <nav className={`${styles.mobileDrawerNav} overflow-y-auto max-h-[calc(100vh-140px)] pr-1 pb-6`}>
+          <Link href="/#features" className={styles.drawerLink} onClick={handleCloseMobileMenu}>
             Features
           </Link>
-          <Link href="/docs" className="drawer-link" onClick={handleCloseMobileMenu}>
+          <Link href="/docs" className={styles.drawerLink} onClick={handleCloseMobileMenu}>
             Docs
           </Link>
-          <Link href="/about" className="drawer-link" onClick={handleCloseMobileMenu}>
+          <Link href="/about" className={styles.drawerLink} onClick={handleCloseMobileMenu}>
             About
           </Link>
           <a
             href="https://github.com/flxos-labs/flxos"
-            className="drawer-link"
+            className={styles.drawerLink}
             target="_blank"
             rel="noopener noreferrer"
             onClick={handleCloseMobileMenu}
           >
             GitHub
           </a>
-          <div className="drawer-divider" />
+          <div className={styles.drawerDivider} />
           <a
-            className="drawer-cta"
+            className={styles.drawerCta}
             href="https://github.com/flxos-labs/flxos"
             target="_blank"
             rel="noopener noreferrer"
