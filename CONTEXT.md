@@ -12,7 +12,7 @@
 FlxOS Labs is the **marketing & showcase website** for the FlxOS project — a modular, profile-driven operating system spanning ESP32 microcontrollers to desktop platforms. It serves as the landing page, documentation hub, and feature showcase for the open-source community.
 
 > [!NOTE]
-> The private romantic dedication page (`/us`) was successfully migrated to a standalone repository (`solid-pancake`) on June 3, 2026. This repository is now 100% dedicated to FlxOS OS marketing and public-facing documentation.
+> The private romantic dedication page (`/us`) was successfully migrated to a standalone repository (`solid-pancake`) on June 3, 2026. This repository is now 100% dedicated to FlxOS marketing and public-facing documentation.
 
 ---
 
@@ -50,33 +50,41 @@ flxos-labs/
 │   ├── sitemap.xml
 │   └── images/
 │       ├── hardware/                   # 5 LilyGo T-HMI device photos (.jpg)
-│       ├── screenshots/                # 20 FlxOS desktop simulator screenshots (.png, .webp)
+│       ├── screenshots/                # 32 FlxOS desktop simulator screenshots (.png, .webp)
 │       └── og-image.png                # OpenGraph social share image
 │
 └── src/
     ├── app/
     │   ├── layout.tsx                  # Root layout — fonts, theme script, SiteLayout wrapper
-    │   ├── globals.css                 # Master stylesheet (~930 lines) — design tokens, components
+    │   ├── globals.css                 # Global stylesheet (~110 lines) — Tailwind base directives and design tokens
+    │   ├── page.module.css             # Page-specific styles (~320 lines)
     │   ├── page.tsx                    # Home page — hero, workflow, hardware, features, stack, CTA
     │   ├── not-found.tsx               # Custom 404 page
     │   ├── favicon.ico
     │   │
     │   ├── about/
     │   │   ├── page.tsx                # Metadata + AboutContent
-    │   │   └── AboutContent.tsx        # About page client component (478 lines)
+    │   │   ├── AboutContent.module.css # Component-scoped styles (~125 lines)
+    │   │   └── AboutContent.tsx        # About page client component (480 lines)
     │   │
     │   └── docs/
     │       ├── page.tsx                # Metadata + DocsContent
-    │       └── DocsContent.tsx         # Documentation page client component (632 lines)
+    │       ├── DocsContent.module.css  # Component-scoped styles (~90 lines)
+    │       └── DocsContent.tsx         # Documentation page client component (641 lines)
     │
     ├── components/                     # Shared UI components
+    │   ├── SiteLayout.module.css       # Layout shell styles
     │   ├── SiteLayout.tsx              # Shell wrapper — renders header, background, footer, command palette
+    │   ├── Header.module.css           # Header navigation styles (~310 lines)
     │   ├── Header.tsx                  # Nav bar — desktop + mobile drawer, theme toggle, command palette trigger
     │   ├── CommandPalette.tsx          # Ctrl+K command palette — search & navigate
     │   ├── InteractiveBackground.tsx   # Animated background for main site (496 lines)
+    │   ├── DeviceSlideshow.module.css  # Slideshow styles
     │   ├── DeviceSlideshow.tsx         # Hero section device screenshot slideshow
+    │   ├── ThemeToggle.module.css      # Theme toggle button styles
     │   ├── ThemeToggle.tsx             # Light/dark theme switcher
     │   ├── PlatformCycler.tsx          # Animated "ESP32" text cycler in hero heading
+    │   ├── Buttons.module.css          # Button variant styles (primary, secondary, ghost)
     │   └── CopyCommand.tsx             # Click-to-copy CLI command component
     │
     └── lib/                            # Shared utilities
@@ -89,11 +97,11 @@ flxos-labs/
 
 | Metric                    | Value       |
 | :------------------------ | :---------- |
-| **Total source files**    | 19          |
-| **Total lines of code**   | ~3,500      |
-| **Largest file**          | `globals.css` (934 lines) |
-| **Largest component**     | `DocsContent.tsx` (632 lines) |
-| **Image assets**          | 26 files    |
+| **Total source files**    | 27          |
+| **Total lines of code**   | ~4,100      |
+| **Largest file**          | `DocsContent.tsx` (641 lines) |
+| **Largest component**     | `DocsContent.tsx` (641 lines) |
+| **Image assets**          | 38 files    |
 
 ---
 
@@ -127,15 +135,11 @@ RootLayout (layout.tsx)
 
 ## 🎨 Styling Conventions
 
-### CSS Organization (`globals.css` — 934 lines)
+### CSS Organization
 
-The global stylesheet contains:
-1. **Tailwind directives** (`@import "tailwindcss"`)
-2. **CSS custom properties** (design tokens for light/dark themes)
-3. **Base resets and typography**
-4. **Component-specific styles** (`.site-header`, `.brand`, `.btn-primary`, etc.)
-5. **Animations** (`@keyframes` for float, reveal-up, page transitions)
-6. **Responsive breakpoints** (mobile-first with `@media` queries)
+The styling system is split between:
+1. **Global stylesheet (`globals.css` — ~110 lines)** containing Tailwind base imports, theme-based CSS variables (design tokens), and body resets.
+2. **Component-scoped CSS Modules (`*.module.css`)** containing component-specific layouts, styles, and custom `@keyframes` animations.
 
 ### Naming Patterns
 
@@ -200,7 +204,6 @@ RootLayout
 ## 🚧 Current Status & Known State
 
 ### Known Areas for Improvement
-- `globals.css` (934 lines) — could benefit from splitting into per-page CSS modules
 - No automated tests exist
 - No CI/CD pipeline configured
 

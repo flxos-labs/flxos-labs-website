@@ -7,7 +7,11 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "github.com",
         pathname: "/Itsmeakash248.png",
-        search: "?size=200",
+      },
+      {
+        protocol: "https",
+        hostname: "github.com",
+        pathname: "/rekha290907.png",
       },
     ],
   },

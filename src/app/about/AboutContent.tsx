@@ -147,7 +147,7 @@ export default function AboutContent() {
             <div className="relative mx-auto md:mx-0 w-36 h-36 md:w-44 md:h-44 rounded-2xl overflow-hidden bg-[color:var(--surface-2)] border border-[color:var(--border-muted)] flex items-center justify-center shadow-lg group">
               <Image
                 className="object-cover group-hover:scale-105 transition-transform duration-300"
-                src="/images/me.jpg"
+                src="https://github.com/Itsmeakash248.png"
                 alt="Akash — Creator of FlxOS"
                 fill
                 sizes="(max-width: 768px) 144px, 176px"
@@ -205,7 +205,7 @@ export default function AboutContent() {
             <div className="relative mx-auto md:mx-0 w-36 h-36 md:w-44 md:h-44 rounded-2xl overflow-hidden bg-[color:var(--surface-2)] border border-[color:var(--border-muted)] flex items-center justify-center shadow-lg group">
               <Image
                 className="object-cover group-hover:scale-105 transition-transform duration-300"
-                src="/images/her.jpg"
+                src="https://github.com/rekha290907.png"
                 alt="Rekha — UI/UX Designer &amp; Frontend Developer, FlxOS Labs"
                 fill
                 sizes="(max-width: 768px) 144px, 176px"
@@ -450,7 +450,7 @@ export default function AboutContent() {
 
       {/* ── Join the Journey CTA ── */}
       <section className="mx-auto max-w-6xl px-6 pb-24">
-        <div className={`${styles.ctaPanel} text-center md:text-left flex flex-col md:flex-row md:items-center justify-between gap-8`}>
+        <div className={`${styles.ctaPanel} text-center md:text-left`}>
           <div className="space-y-3">
             <p className={styles.eyebrow}>Join the Journey</p>
             <h2 className="font-display text-3xl font-bold">Help us shape embedded computing.</h2>
