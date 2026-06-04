@@ -3,6 +3,8 @@
 import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import { sidebarData } from "@/lib/docs-menu";
+import buttonStyles from "@/components/Buttons.module.css";
+import styles from "./DocsContent.module.css";
 
 export default function DocsContent() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -32,7 +34,7 @@ export default function DocsContent() {
 
   // Scrollspy to update active sidebar link
   useEffect(() => {
-    const sections = document.querySelectorAll(".doc-section");
+    const sections = document.querySelectorAll(`.${styles.docSection}`);
     const observerOptions = {
       root: null,
       rootMargin: "-20% 0px -60% 0px", // triggers when section is in middle of viewport
@@ -91,10 +93,10 @@ export default function DocsContent() {
   return (
     <main className="relative min-h-screen text-[color:var(--ink)]">
       {/* Hero Orbs background */}
-      <div className="hero-orbs" aria-hidden="true">
-        <span className="orb orb-1 opacity-40" />
-        <span className="orb orb-2 opacity-35" />
-        <span className="orb orb-3 opacity-30" />
+      <div className={styles.heroOrbs} aria-hidden="true">
+        <span className={`${styles.orb} ${styles.orb1} opacity-40`} />
+        <span className={`${styles.orb} ${styles.orb2} opacity-35`} />
+        <span className={`${styles.orb} ${styles.orb3} opacity-30`} />
       </div>
 
       <div className="mx-auto max-w-6xl px-6 py-10 md:py-16 grid gap-10 md:grid-cols-[250px_1fr]">
@@ -250,7 +252,7 @@ export default function DocsContent() {
           </header>
 
           {/* Section: Installation */}
-          <section id="installation" className="doc-section space-y-4 pt-4 scroll-mt-24">
+          <section id="installation" className={`${styles.docSection} space-y-4 pt-4 scroll-mt-24`}>
             <h2 className="font-display text-2xl font-bold flex items-center gap-2.5">
               <svg className="w-5 h-5 text-[color:var(--accent)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
               Installation
@@ -276,7 +278,7 @@ cd flxos`}</code>
           </section>
 
           {/* Section: Quick Start */}
-          <section id="quick-start" className="doc-section space-y-6 scroll-mt-24">
+          <section id="quick-start" className={`${styles.docSection} space-y-6 scroll-mt-24`}>
             <h2 className="font-display text-2xl font-bold flex items-center gap-2.5">
               <svg className="w-5 h-5 text-[color:var(--accent-2)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="m12 3-1.912 5.886H3.877l5.016 3.644L6.98 18.416 12 14.772l5.019 3.644-1.913-4.886 5.016-3.644h-6.211L12 3z"/></svg>
               Quick Start
@@ -329,13 +331,13 @@ python flxos.py flash --port /dev/ttyUSB0`}</code>
           </section>
 
           {/* Section: Prerequisites */}
-          <section id="prerequisites" className="doc-section space-y-6 scroll-mt-24">
+          <section id="prerequisites" className={`${styles.docSection} space-y-6 scroll-mt-24`}>
             <h2 className="font-display text-2xl font-bold flex items-center gap-2.5">
               <svg className="w-5 h-5 text-[color:var(--accent-3)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
               Prerequisites
             </h2>
             <div className="grid gap-6 sm:grid-cols-2">
-              <div className="feature-card p-5 space-y-3">
+              <div className={`${styles.featureCard} p-5 space-y-3`}>
                 <h4 className="text-sm font-bold text-[color:var(--accent-2)]">Required Software</h4>
                 <ul className="space-y-2 text-xs text-[color:var(--muted)]">
                   <li><strong>ESP-IDF v5.5+</strong> (Official Espressif SDK)</li>
@@ -344,7 +346,7 @@ python flxos.py flash --port /dev/ttyUSB0`}</code>
                   <li><strong>Python 3.10+</strong> (Script execution core)</li>
                 </ul>
               </div>
-              <div className="feature-card p-5 space-y-3">
+              <div className={`${styles.featureCard} p-5 space-y-3`}>
                 <h4 className="text-sm font-bold text-[color:var(--accent)]">Supported Hardware</h4>
                 <ul className="space-y-2 text-xs text-[color:var(--muted)]">
                   <li>ESP32 &amp; ESP32-S3 (all footprints)</li>
@@ -357,7 +359,7 @@ python flxos.py flash --port /dev/ttyUSB0`}</code>
           </section>
 
           {/* Section: System Overview */}
-          <section id="overview" className="doc-section space-y-4 scroll-mt-24">
+          <section id="overview" className={`${styles.docSection} space-y-4 scroll-mt-24`}>
             <h2 className="font-display text-2xl font-bold flex items-center gap-2.5">
               <svg className="w-5 h-5 text-[color:var(--accent)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
               System Overview
@@ -390,7 +392,7 @@ python flxos.py flash --port /dev/ttyUSB0`}</code>
           </section>
 
           {/* Section: Directory Structure */}
-          <section id="directory" className="doc-section space-y-4 scroll-mt-24">
+          <section id="directory" className={`${styles.docSection} space-y-4 scroll-mt-24`}>
             <h2 className="font-display text-2xl font-bold flex items-center gap-2.5">
               <svg className="w-5 h-5 text-[color:var(--accent-2)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
               Directory Structure
@@ -415,34 +417,34 @@ python flxos.py flash --port /dev/ttyUSB0`}</code>
           </section>
 
           {/* Section: Core Modules */}
-          <section id="modules" className="doc-section space-y-4 scroll-mt-24">
+          <section id="modules" className={`${styles.docSection} space-y-4 scroll-mt-24`}>
             <h2 className="font-display text-2xl font-bold flex items-center gap-2.5">
               <svg className="w-5 h-5 text-[color:var(--accent-3)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 2 12 2ZM12 22V12" /><path d="M12 12L19.07 4.92999" /><path d="M12 12L4.92999 4.92999" /><path d="M12 12H22" /><path d="M12 12H2" /></svg>
               Core Modules
             </h2>
             <div className="grid gap-4 sm:grid-cols-2">
-              <div className="feature-card p-4 space-y-2">
+              <div className={`${styles.featureCard} p-4 space-y-2`}>
                 <h4 className="text-sm font-bold">Hardware Abstraction (HAL)</h4>
                 <p className="text-xs text-[color:var(--muted)] leading-relaxed">
                   Unified interface wrapping display drivers, touch controller coordinates, and storage blocks in a simple, profile-driven configuration.
                 </p>
                 <code className="block text-[10px] text-[color:var(--accent)] font-semibold">HalModule/</code>
               </div>
-              <div className="feature-card p-4 space-y-2">
+              <div className={`${styles.featureCard} p-4 space-y-2`}>
                 <h4 className="text-sm font-bold">UI &amp; App Framework</h4>
                 <p className="text-xs text-[color:var(--muted)] leading-relaxed">
                   Provides standard event loops, screen containers, lifecycle events (create, resume, pause), and modular window bounds.
                 </p>
                 <code className="block text-[10px] text-[color:var(--accent-2)] font-semibold">UI/ &amp; Apps/</code>
               </div>
-              <div className="feature-card p-4 space-y-2">
+              <div className={`${styles.featureCard} p-4 space-y-2`}>
                 <h4 className="text-sm font-bold">Connectivity</h4>
                 <p className="text-xs text-[color:var(--muted)] leading-relaxed">
                   Wi-Fi manager with automated connection retries, background scan, and custom network state emitters.
                 </p>
                 <code className="block text-[10px] text-[color:var(--accent-3)] font-semibold">Connectivity/</code>
               </div>
-              <div className="feature-card p-4 space-y-2">
+              <div className={`${styles.featureCard} p-4 space-y-2`}>
                 <h4 className="text-sm font-bold">Applications</h4>
                 <p className="text-xs text-[color:var(--muted)] leading-relaxed">
                   Ships complete embedded apps (Files browser, Text Editor, Calendar widget, Settings controller, System Information).
@@ -453,7 +455,7 @@ python flxos.py flash --port /dev/ttyUSB0`}</code>
           </section>
 
           {/* Section: Building */}
-          <section id="building" className="doc-section space-y-4 scroll-mt-24">
+          <section id="building" className={`${styles.docSection} space-y-4 scroll-mt-24`}>
             <h2 className="font-display text-2xl font-bold flex items-center gap-2.5">
               <svg className="w-5 h-5 text-[color:var(--accent)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
               Building
@@ -487,7 +489,7 @@ python flxos.py flash --port /dev/ttyUSB0`}</code>
           </section>
 
           {/* Section: Configuration */}
-          <section id="configuration" className="doc-section space-y-4 scroll-mt-24">
+          <section id="configuration" className={`${styles.docSection} space-y-4 scroll-mt-24`}>
             <h2 className="font-display text-2xl font-bold flex items-center gap-2.5">
               <svg className="w-5 h-5 text-[color:var(--accent-2)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
               Configuration
@@ -509,7 +511,7 @@ python flxos.py diff a b --json`}</code>
           </section>
 
           {/* Section: Creating Apps */}
-          <section id="apps" className="doc-section space-y-4 scroll-mt-24">
+          <section id="apps" className={`${styles.docSection} space-y-4 scroll-mt-24`}>
             <h2 className="font-display text-2xl font-bold flex items-center gap-2.5">
               <svg className="w-5 h-5 text-[color:var(--accent-3)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M12 5v14M5 12h14"/></svg>
               Creating Apps
@@ -555,7 +557,7 @@ public:
           </section>
 
           {/* Section: API Reference */}
-          <section id="api" className="doc-section space-y-4 scroll-mt-24">
+          <section id="api" className={`${styles.docSection} space-y-4 scroll-mt-24`}>
             <h2 className="font-display text-2xl font-bold flex items-center gap-2.5">
               <svg className="w-5 h-5 text-[color:var(--accent)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="m18 16 4-4-4-4M6 8l-4 4 4 4M14.5 4l-5 16"/></svg>
               API Reference
@@ -568,7 +570,7 @@ public:
                 href="https://github.com/flxos-labs/flxos/tree/main/Core"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn-primary gap-2"
+                className={`${buttonStyles.primary} gap-2`}
               >
                 <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14 21 3"/></svg>
                 <span>Browse Header Directory</span>
@@ -577,7 +579,7 @@ public:
           </section>
 
           {/* Section: Troubleshooting */}
-          <section id="troubleshooting" className="doc-section space-y-6 scroll-mt-24 pb-16">
+          <section id="troubleshooting" className={`${styles.docSection} space-y-6 scroll-mt-24 pb-16`}>
             <h2 className="font-display text-2xl font-bold flex items-center gap-2.5">
               <svg className="w-5 h-5 text-[color:var(--accent-2)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
               Troubleshooting
@@ -624,7 +626,7 @@ public:
                 href="https://github.com/flxos-labs/flxos/issues"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn-secondary text-xs gap-2 py-2 px-4 border border-[rgba(42,157,143,0.25)] hover:bg-[rgba(42,157,143,0.08)]"
+                className={`${buttonStyles.secondary} text-xs gap-2 py-2 px-4 border border-[rgba(42,157,143,0.25)] hover:bg-[rgba(42,157,143,0.08)]`}
               >
                 <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10zM12 8v4M12 16h.01" /></svg>
                 <span>Report an Issue</span>

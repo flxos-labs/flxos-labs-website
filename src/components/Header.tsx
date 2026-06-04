@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import ThemeToggle from "./ThemeToggle";
 import { lockScroll, unlockScroll } from "../lib/scrollLock";
+import styles from "./Header.module.css";
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -38,47 +39,42 @@ export default function Header() {
 
   return (
     <>
-      <header className="site-header">
-        <div className="site-header-inner">
-          <Link className="brand" href="/" aria-label="FlxOS home">
-            <span className="brand-mark" aria-hidden="true">
+      <header className={styles.header}>
+        <div className={styles.inner}>
+          <Link className={styles.brand} href="/" aria-label="FlxOS home">
+            <span className={styles.brandMark} aria-hidden="true">
               F
             </span>
-            <span className="brand-text">FlxOS</span>
+            <span className={styles.brandText}>FlxOS</span>
           </Link>
 
           {/* Desktop Nav */}
-          <nav className="site-nav" aria-label="Primary">
-            <Link className="nav-link" href="/#features">
+          <nav className={styles.nav} aria-label="Primary">
+            <Link className={styles.navLink} href="/#features">
               Features
             </Link>
-            <Link className="nav-link" href="/docs">
+            <Link className={styles.navLink} href="/docs">
               Docs
             </Link>
-            <Link className="nav-link" href="/about">
+            <Link className={styles.navLink} href="/about">
               About
             </Link>
             <a
-              className="nav-link"
+              className={styles.navLink}
               href="https://github.com/flxos-labs/flxos"
               target="_blank"
               rel="noopener noreferrer"
             >
               GitHub
             </a>
-            <Link className="nav-link us-nav-heart" href="/us" title="For Us" aria-label="For Us">
-              <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24" style={{ display: "inline-block", verticalAlign: "middle" }}>
-                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-              </svg>
-            </Link>
           </nav>
 
           {/* Header Actions */}
-          <div className="site-header-actions">
+          <div className={styles.actions}>
             {/* Search Button for Mobile (opens Command Palette) */}
             <button
               onClick={toggleCommandPalette}
-              className="mobile-search-btn"
+              className={styles.mobileSearchButton}
               aria-label="Open search palette"
               title="Search documentation and commands"
             >
@@ -92,7 +88,7 @@ export default function Header() {
 
             {/* Desktop Star on GitHub */}
             <a
-              className="cta-pill desktop-cta"
+              className={`${styles.ctaPill} ${styles.desktopCta}`}
               href="https://github.com/flxos-labs/flxos"
               target="_blank"
               rel="noopener noreferrer"
@@ -103,12 +99,12 @@ export default function Header() {
             {/* Mobile Hamburger Toggle */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className={`hamburger ${mobileMenuOpen ? "active" : ""}`}
+              className={`${styles.hamburger} ${mobileMenuOpen ? styles.hamburgerActive : ""}`}
               aria-label="Toggle navigation menu"
               aria-expanded={mobileMenuOpen}
             >
-              <span className="hamburger-box">
-                <span className="hamburger-inner"></span>
+              <span className={styles.hamburgerBox}>
+                <span className={styles.hamburgerInner}></span>
               </span>
             </button>
           </div>
@@ -116,44 +112,41 @@ export default function Header() {
       </header>
 
       {/* Mobile Navigation Drawer Overlay */}
-      <div className={`mobile-drawer-backdrop ${mobileMenuOpen ? "active" : ""}`} onClick={handleCloseMobileMenu} />
+      <div className={`${styles.drawerBackdrop} ${mobileMenuOpen ? styles.drawerBackdropActive : ""}`} onClick={handleCloseMobileMenu} />
       
-      <div className={`mobile-drawer ${mobileMenuOpen ? "active" : ""}`} role="dialog" aria-modal="true" aria-label="Mobile Navigation">
-        <div className="mobile-drawer-header">
-          <span className="drawer-title">Navigation</span>
+      <div className={`${styles.mobileDrawer} ${mobileMenuOpen ? styles.mobileDrawerActive : ""}`} role="dialog" aria-modal="true" aria-label="Mobile Navigation">
+        <div className={styles.mobileDrawerHeader}>
+          <span className={styles.drawerTitle}>Navigation</span>
           <button
             onClick={handleCloseMobileMenu}
-            className="drawer-close"
+            className={styles.drawerClose}
             aria-label="Close menu"
           >
             ×
           </button>
         </div>
-        <nav className="mobile-drawer-nav overflow-y-auto max-h-[calc(100vh-140px)] pr-1 pb-6">
-          <Link href="/#features" className="drawer-link" onClick={handleCloseMobileMenu}>
+        <nav className={`${styles.mobileDrawerNav} overflow-y-auto max-h-[calc(100vh-140px)] pr-1 pb-6`}>
+          <Link href="/#features" className={styles.drawerLink} onClick={handleCloseMobileMenu}>
             Features
           </Link>
-          <Link href="/docs" className="drawer-link" onClick={handleCloseMobileMenu}>
+          <Link href="/docs" className={styles.drawerLink} onClick={handleCloseMobileMenu}>
             Docs
           </Link>
-          <Link href="/about" className="drawer-link" onClick={handleCloseMobileMenu}>
+          <Link href="/about" className={styles.drawerLink} onClick={handleCloseMobileMenu}>
             About
           </Link>
           <a
             href="https://github.com/flxos-labs/flxos"
-            className="drawer-link"
+            className={styles.drawerLink}
             target="_blank"
             rel="noopener noreferrer"
             onClick={handleCloseMobileMenu}
           >
             GitHub
           </a>
-          <Link href="/us" className="drawer-link" style={{ color: "#e8475f" }} onClick={handleCloseMobileMenu}>
-            For Us ❤️
-          </Link>
-          <div className="drawer-divider" />
+          <div className={styles.drawerDivider} />
           <a
-            className="drawer-cta"
+            className={styles.drawerCta}
             href="https://github.com/flxos-labs/flxos"
             target="_blank"
             rel="noopener noreferrer"

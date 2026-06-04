@@ -1,0 +1,49 @@
+.shell {
+  min-height: 100vh;
+  position: relative;
+  overflow-x: clip;
+}
+
+.shell::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(50% 50% at 20% 15%, var(--romantic-bg-1), transparent 60%),
+    radial-gradient(40% 40% at 80% 20%, var(--romantic-bg-2), transparent 55%),
+    radial-gradient(45% 45% at 70% 85%, var(--romantic-bg-3), transparent 60%),
+    linear-gradient(120deg, rgba(var(--surface-rgb), 0.3), rgba(var(--surface-rgb), 0));
+}
+
+.footer {
+  border-top: 1px solid var(--border-faint);
+  padding: 2.5rem 0 3rem;
+}
+
+.footerInner {
+  margin: 0 auto;
+  display: flex;
+  max-width: 72rem;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 0 1.5rem;
+}
+
+.footerBrand {
+  font-family: var(--font-display), "Segoe UI", sans-serif;
+  font-weight: 700;
+}
+
+.footerCopy {
+  color: var(--muted);
+  margin-top: 0.4rem;
+}
+
+.footerLinks {
+  display: flex;
+  gap: 1.5rem;
+  color: var(--muted);
+  font-weight: 600;
+}
