@@ -10,9 +10,9 @@
   inset: 0;
   z-index: -1;
   background:
-    radial-gradient(50% 50% at 20% 15%, var(--romantic-bg-1), transparent 60%),
-    radial-gradient(40% 40% at 80% 20%, var(--romantic-bg-2), transparent 55%),
-    radial-gradient(45% 45% at 70% 85%, var(--romantic-bg-3), transparent 60%),
+    radial-gradient(50% 50% at 20% 15%, var(--theme-glow-1), transparent 60%),
+    radial-gradient(40% 40% at 80% 20%, var(--theme-glow-2), transparent 55%),
+    radial-gradient(45% 45% at 70% 85%, var(--theme-glow-3), transparent 60%),
     linear-gradient(120deg, rgba(var(--surface-rgb), 0.3), rgba(var(--surface-rgb), 0));
 }
 

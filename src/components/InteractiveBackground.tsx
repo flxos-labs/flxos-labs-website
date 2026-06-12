@@ -5,7 +5,7 @@ import { useEffect, useRef, useCallback } from "react";
 /* ------------------------------------------------------------------ */
 /* Types                                                              */
 /* ------------------------------------------------------------------ */
-type ParticleShape = "heart" | "bokeh" | "petal" | "shimmer";
+type ParticleShape = "plus" | "bokeh" | "square" | "shimmer";
 type DepthLayer = "far" | "mid" | "near";
 
 interface AmbientParticle {
@@ -39,67 +39,45 @@ interface SparkleParticle {
   alpha: number;
   life: number;
   maxLife: number;
-  type: "heart" | "sparkle";
+  type: "plus" | "sparkle";
 }
 
 /* ------------------------------------------------------------------ */
 /* Palettes                                                           */
 /* ------------------------------------------------------------------ */
 const LIGHT_PALETTE: [number, number, number][] = [
-  [255, 105, 135], // Rich rose
-  [255, 143, 163], // Soft rose pink
-  [255, 179, 193], // Pastel pink
-  [255, 200, 221], // Sweet pink
-  [245, 183, 177], // Dusty rose
-  [250, 210, 160], // Warm champagne gold
-  [255, 218, 233], // Blush
-  [230, 190, 255], // Soft lavender
+  [42, 157, 143],  // Teal
+  [34, 150, 243],  // Cyan/Blue
+  [99, 102, 241],  // Indigo
+  [233, 196, 106], // Warm Gold
+  [231, 111, 81],  // Coral
 ];
 
 const DARK_PALETTE: [number, number, number][] = [
-  [255, 77, 109],  // Vivid rose
-  [255, 112, 150], // Soft magenta
-  [220, 50, 90],   // Deep pink
-  [180, 40, 80],   // Wine rose
-  [140, 20, 60],   // Dark crimson
-  [255, 195, 112], // Soft warm gold
-  [200, 150, 255], // Twilight purple
-  [255, 140, 180], // Warm pink glow
+  [42, 157, 143],  // Teal
+  [0, 212, 255],   // Electric Cyan
+  [129, 140, 248], // Indigo
+  [244, 162, 97],  // Warm Orange
+  [233, 196, 106], // Warm Gold
 ];
 
 /* ------------------------------------------------------------------ */
 /* Shape drawing helpers                                              */
 /* ------------------------------------------------------------------ */
-function drawHeart(ctx: CanvasRenderingContext2D, x: number, y: number, size: number) {
+function drawPlus(ctx: CanvasRenderingContext2D, x: number, y: number, size: number) {
+  const halfThickness = size * 0.18;
   ctx.beginPath();
-  ctx.moveTo(x, y + size * 0.25);
-  ctx.bezierCurveTo(
-    x - size * 0.6, y - size * 0.45,
-    x - size * 1.1, y + size * 0.25,
-    x, y + size * 0.95
-  );
-  ctx.bezierCurveTo(
-    x + size * 1.1, y + size * 0.25,
-    x + size * 0.6, y - size * 0.45,
-    x, y + size * 0.25
-  );
+  // Horizontal bar
+  ctx.rect(x - size, y - halfThickness, size * 2, halfThickness * 2);
+  // Vertical bar
+  ctx.rect(x - halfThickness, y - size, halfThickness * 2, size * 2);
   ctx.closePath();
   ctx.fill();
 }
 
-function drawPetal(ctx: CanvasRenderingContext2D, x: number, y: number, size: number) {
+function drawSquare(ctx: CanvasRenderingContext2D, x: number, y: number, size: number) {
   ctx.beginPath();
-  ctx.moveTo(x, y - size * 0.8);
-  ctx.bezierCurveTo(
-    x + size * 0.7, y - size * 0.3,
-    x + size * 0.5, y + size * 0.6,
-    x, y + size * 0.8
-  );
-  ctx.bezierCurveTo(
-    x - size * 0.5, y + size * 0.6,
-    x - size * 0.7, y - size * 0.3,
-    x, y - size * 0.8
-  );
+  ctx.rect(x - size, y - size, size * 2, size * 2);
   ctx.closePath();
   ctx.fill();
 }
@@ -166,18 +144,18 @@ export default function InteractiveBackground() {
       const count = isMobile ? cfg.mobileCount : cfg.count;
 
       for (let i = 0; i < count; i++) {
-        // Distribute shapes: hearts ~40%, bokeh ~30%, petals ~20%, shimmer ~10%
+        // Distribute shapes: plus ~40%, bokeh ~30%, square ~20%, shimmer ~10%
         const roll = Math.random();
         let shape: ParticleShape;
-        if (roll < 0.4) shape = "heart";
+        if (roll < 0.4) shape = "plus";
         else if (roll < 0.7) shape = "bokeh";
-        else if (roll < 0.9) shape = "petal";
+        else if (roll < 0.9) shape = "square";
         else shape = "shimmer";
 
         let baseSize: number;
         switch (shape) {
-          case "heart":   baseSize = Math.random() * 10 + 5; break;
-          case "petal":   baseSize = Math.random() * 8 + 4; break;
+          case "plus":    baseSize = Math.random() * 8 + 4; break;
+          case "square":  baseSize = Math.random() * 7 + 3; break;
           case "bokeh":   baseSize = Math.random() * 70 + 25; break;
           case "shimmer": baseSize = Math.random() * 3 + 1.5; break;
         }
@@ -185,8 +163,8 @@ export default function InteractiveBackground() {
 
         let baseMaxAlpha: number;
         switch (shape) {
-          case "heart":   baseMaxAlpha = Math.random() * 0.22 + 0.08; break;
-          case "petal":   baseMaxAlpha = Math.random() * 0.18 + 0.06; break;
+          case "plus":    baseMaxAlpha = Math.random() * 0.18 + 0.06; break;
+          case "square":  baseMaxAlpha = Math.random() * 0.16 + 0.05; break;
           case "bokeh":   baseMaxAlpha = Math.random() * 0.07 + 0.02; break;
           case "shimmer": baseMaxAlpha = Math.random() * 0.6 + 0.3; break;
         }
@@ -251,8 +229,8 @@ export default function InteractiveBackground() {
     const newSparks: SparkleParticle[] = [];
 
     for (let i = 0; i < count; i++) {
-      const type = Math.random() > 0.4 ? "sparkle" : "heart";
-      const size = type === "heart" ? Math.random() * 7 + 4 : Math.random() * 5 + 3;
+      const type = Math.random() > 0.4 ? "sparkle" : "plus";
+      const size = type === "plus" ? Math.random() * 6 + 3 : Math.random() * 5 + 3;
       const maxLife = Math.random() * 45 + 35;
       const color = palette[Math.floor(Math.random() * palette.length)];
 
@@ -353,7 +331,7 @@ export default function InteractiveBackground() {
         ctx.arc(p.x, p.y, p.size * 0.5, 0, Math.PI * 2);
         ctx.fill();
       } else {
-        // Heart or Petal — apply rotation
+        // Plus or Square — apply rotation
         ctx.save();
         ctx.translate(p.x, p.y);
         ctx.rotate(p.rotation);
@@ -370,10 +348,10 @@ export default function InteractiveBackground() {
 
         // The shape itself
         ctx.fillStyle = `rgba(${r}, ${g}, ${b}, 0.85)`;
-        if (p.shape === "heart") {
-          drawHeart(ctx, 0, 0, p.size);
+        if (p.shape === "plus") {
+          drawPlus(ctx, 0, 0, p.size);
         } else {
-          drawPetal(ctx, 0, 0, p.size);
+          drawSquare(ctx, 0, 0, p.size);
         }
 
         ctx.restore();
@@ -402,8 +380,8 @@ export default function InteractiveBackground() {
       ctx.fillStyle = `rgb(${s.color[0]}, ${s.color[1]}, ${s.color[2]})`;
       ctx.globalAlpha = s.alpha * 0.8;
 
-      if (s.type === "heart") {
-        drawHeart(ctx, s.x, s.y, currentSize);
+      if (s.type === "plus") {
+        drawPlus(ctx, s.x, s.y, currentSize);
       } else {
         drawSparkle(ctx, s.x, s.y, currentSize);
       }
