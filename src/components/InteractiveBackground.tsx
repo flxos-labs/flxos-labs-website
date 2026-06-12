@@ -250,7 +250,7 @@ export default function InteractiveBackground() {
       });
     }
 
-    if (sparkParticlesRef.current.length < 150) {
+    if (sparkParticlesRef.current.length < 80) {
       sparkParticlesRef.current.push(...newSparks);
     }
   }, []);
@@ -403,8 +403,8 @@ export default function InteractiveBackground() {
 
       if (mouse.active) {
         const dist = Math.hypot(mx - mouse.px, my - mouse.py);
-        if (dist > 6) {
-          spawnSparkles(mx, my, Math.min(Math.floor(dist / 4), 4));
+        if (dist > 12) {
+          spawnSparkles(mx, my, Math.min(Math.floor(dist / 12), 2));
           mouseRef.current.px = mx;
           mouseRef.current.py = my;
         }
