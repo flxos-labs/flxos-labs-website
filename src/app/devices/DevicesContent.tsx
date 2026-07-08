@@ -789,6 +789,7 @@ export default function DevicesContent() {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className={styles.searchInput}
+              aria-label="Search devices"
             />
           </div>
 

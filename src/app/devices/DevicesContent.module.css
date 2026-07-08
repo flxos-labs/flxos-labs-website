@@ -45,15 +45,6 @@
   color: var(--muted);
 }
 
-.chip {
-  display: inline-flex;
-  align-items: center;
-  border-radius: 999px;
-  padding: 0.35rem 0.8rem;
-  border: 1px solid var(--border-muted);
-  background: rgba(var(--surface-rgb), 0.7);
-}
-
 .searchWrapper {
   position: relative;
   width: 100%;
@@ -268,3 +259,10 @@
     transform: translateY(-20px) scale(1.05);
   }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .orb {
+    animation: none;
+  }
+}
+
