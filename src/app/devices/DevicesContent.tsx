@@ -714,6 +714,7 @@ export default function DevicesContent() {
   const [search, setSearch] = useState("");
   const [selectedVendor, setSelectedVendor] = useState("All");
   const [selectedStatus, setSelectedStatus] = useState("All");
+  const [selectedTest, setSelectedTest] = useState("All");
 
   const vendors = useMemo(() => {
     const list = new Set(DEVICES_DATA.map((d) => d.vendor));
@@ -723,25 +724,25 @@ export default function DevicesContent() {
   const filteredDevices = useMemo(() => {
     return DEVICES_DATA.filter((device) => {
       const isTested = TESTED_DEVICES.includes(device.id);
-      const matchesTestedTag = isTested
-        ? "tested".includes(search.toLowerCase())
-        : "not tested".includes(search.toLowerCase()) && search.toLowerCase() !== "tested";
-
       const matchesSearch =
         device.name.toLowerCase().includes(search.toLowerCase()) ||
         device.id.toLowerCase().includes(search.toLowerCase()) ||
         device.target.toLowerCase().includes(search.toLowerCase()) ||
         device.display.toLowerCase().includes(search.toLowerCase()) ||
         device.touch.toLowerCase().includes(search.toLowerCase()) ||
-        matchesTestedTag ||
         device.tags.some(tag => tag.toLowerCase().includes(search.toLowerCase()));
 
       const matchesVendor = selectedVendor === "All" || device.vendor === selectedVendor;
       const matchesStatus = selectedStatus === "All" || device.status === selectedStatus;
 
-      return matchesSearch && matchesVendor && matchesStatus;
+      const matchesTest =
+        selectedTest === "All" ||
+        (selectedTest === "tested" && isTested) ||
+        (selectedTest === "not-tested" && !isTested);
+
+      return matchesSearch && matchesVendor && matchesStatus && matchesTest;
     });
-  }, [search, selectedVendor, selectedStatus]);
+  }, [search, selectedVendor, selectedStatus, selectedTest]);
 
   const countLabel = useMemo(() => {
     if (filteredDevices.length === DEVICES_DATA.length) {
@@ -782,7 +783,7 @@ export default function DevicesContent() {
 
       {/* ── Filters & Search ── */}
       <section className="mx-auto max-w-6xl px-6 pb-6">
-        <div className="grid gap-6 md:grid-cols-[1fr_auto] items-center mb-8">
+        <div className="grid gap-6 lg:grid-cols-[1fr_auto_auto] md:grid-cols-[1fr_auto] items-center mb-8">
           {/* Search Input */}
           <div className={styles.searchWrapper}>
             <span className={styles.searchIcon}>
@@ -820,6 +821,28 @@ export default function DevicesContent() {
               className={`${styles.tabButton} ${selectedStatus === "incubating" ? styles.tabButtonActive : ""}`}
             >
               Incubating
+            </button>
+          </div>
+
+          {/* Test Support Filter */}
+          <div className="flex gap-2">
+            <button
+              onClick={() => setSelectedTest("All")}
+              className={`${styles.tabButton} ${selectedTest === "All" ? styles.tabButtonActive : ""}`}
+            >
+              All Support
+            </button>
+            <button
+              onClick={() => setSelectedTest("tested")}
+              className={`${styles.tabButton} ${selectedTest === "tested" ? styles.tabButtonActive : ""}`}
+            >
+              Tested
+            </button>
+            <button
+              onClick={() => setSelectedTest("not-tested")}
+              className={`${styles.tabButton} ${selectedTest === "not-tested" ? styles.tabButtonActive : ""}`}
+            >
+              Not Tested
             </button>
           </div>
         </div>
@@ -929,6 +952,7 @@ export default function DevicesContent() {
                 setSearch("");
                 setSelectedVendor("All");
                 setSelectedStatus("All");
+                setSelectedTest("All");
               }}
               className="mt-3 text-xs text-[color:var(--accent)] font-bold hover:underline"
             >
