@@ -825,21 +825,24 @@ export default function DevicesContent() {
           </div>
 
           {/* Test Support Filter */}
-          <div className="flex gap-2">
+          <div className="flex gap-2" role="group" aria-label="Test support filter">
             <button
               onClick={() => setSelectedTest("All")}
+              aria-pressed={selectedTest === "All"}
               className={`${styles.tabButton} ${selectedTest === "All" ? styles.tabButtonActive : ""}`}
             >
               All Support
             </button>
             <button
               onClick={() => setSelectedTest("tested")}
+              aria-pressed={selectedTest === "tested"}
               className={`${styles.tabButton} ${selectedTest === "tested" ? styles.tabButtonActive : ""}`}
             >
               Tested
             </button>
             <button
               onClick={() => setSelectedTest("not-tested")}
+              aria-pressed={selectedTest === "not-tested"}
               className={`${styles.tabButton} ${selectedTest === "not-tested" ? styles.tabButtonActive : ""}`}
             >
               Not Tested
