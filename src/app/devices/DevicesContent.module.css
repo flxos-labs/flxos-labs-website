@@ -251,6 +251,16 @@
   border: 1px solid var(--border-faint);
 }
 
+.tagPillTested {
+  background: rgba(42, 157, 143, 0.1);
+  color: var(--accent-2);
+  border-color: rgba(42, 157, 143, 0.25);
+}
+
+.tagPillNotTested {
+  opacity: 0.85;
+}
+
 @keyframes float {
   0%, 100% {
     transform: translateY(0) scale(1);

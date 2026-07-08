@@ -4,6 +4,8 @@ import { useState, useMemo } from "react";
 import Link from "next/link";
 import styles from "./DevicesContent.module.css";
 
+const TESTED_DEVICES = ["esp32s3-ili9341-xpt", "lilygo-t-hmi"];
+
 interface Device {
   id: string;
   vendor: string;
@@ -720,12 +722,15 @@ export default function DevicesContent() {
 
   const filteredDevices = useMemo(() => {
     return DEVICES_DATA.filter((device) => {
+      const isTested = TESTED_DEVICES.includes(device.id);
+      const testedTag = isTested ? "tested" : "not tested";
       const matchesSearch =
         device.name.toLowerCase().includes(search.toLowerCase()) ||
         device.id.toLowerCase().includes(search.toLowerCase()) ||
         device.target.toLowerCase().includes(search.toLowerCase()) ||
         device.display.toLowerCase().includes(search.toLowerCase()) ||
         device.touch.toLowerCase().includes(search.toLowerCase()) ||
+        testedTag.includes(search.toLowerCase()) ||
         device.tags.some(tag => tag.toLowerCase().includes(search.toLowerCase()));
 
       const matchesVendor = selectedVendor === "All" || device.vendor === selectedVendor;
@@ -892,6 +897,13 @@ export default function DevicesContent() {
                 )}
 
                 <div className={styles.tagPills}>
+                  <span
+                    className={`${styles.tagPill} ${
+                      TESTED_DEVICES.includes(device.id) ? styles.tagPillTested : styles.tagPillNotTested
+                    }`}
+                  >
+                    {TESTED_DEVICES.includes(device.id) ? "tested" : "not tested"}
+                  </span>
                   {device.tags.map((tag) => (
                     <span key={tag} className={styles.tagPill}>
                       {tag}
