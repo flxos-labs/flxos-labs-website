@@ -53,6 +53,9 @@ export default function Header() {
             <Link className={styles.navLink} href="/#features">
               Features
             </Link>
+            <Link className={styles.navLink} href="/devices">
+              Devices
+            </Link>
             <Link className={styles.navLink} href="/docs">
               Docs
             </Link>
@@ -128,6 +131,9 @@ export default function Header() {
         <nav className={`${styles.mobileDrawerNav} overflow-y-auto max-h-[calc(100vh-140px)] pr-1 pb-6`}>
           <Link href="/#features" className={styles.drawerLink} onClick={handleCloseMobileMenu}>
             Features
+          </Link>
+          <Link href="/devices" className={styles.drawerLink} onClick={handleCloseMobileMenu}>
+            Devices
           </Link>
           <Link href="/docs" className={styles.drawerLink} onClick={handleCloseMobileMenu}>
             Docs

@@ -54,6 +54,14 @@ export default function CommandPalette() {
       ),
     },
     {
+      label: "Supported Devices",
+      sub: "Compatibility status and specs for all 49 hardware profiles",
+      href: "/devices",
+      icon: (
+        <svg className="w-4.5 h-4.5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+      ),
+    },
+    {
       label: "About FlxOS Labs",
       sub: "Read our story, creator profile, and milestones",
       href: "/about",
