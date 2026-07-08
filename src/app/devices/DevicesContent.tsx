@@ -723,14 +723,17 @@ export default function DevicesContent() {
   const filteredDevices = useMemo(() => {
     return DEVICES_DATA.filter((device) => {
       const isTested = TESTED_DEVICES.includes(device.id);
-      const testedTag = isTested ? "tested" : "not tested";
+      const matchesTestedTag = isTested
+        ? "tested".includes(search.toLowerCase())
+        : "not tested".includes(search.toLowerCase()) && search.toLowerCase() !== "tested";
+
       const matchesSearch =
         device.name.toLowerCase().includes(search.toLowerCase()) ||
         device.id.toLowerCase().includes(search.toLowerCase()) ||
         device.target.toLowerCase().includes(search.toLowerCase()) ||
         device.display.toLowerCase().includes(search.toLowerCase()) ||
         device.touch.toLowerCase().includes(search.toLowerCase()) ||
-        testedTag.includes(search.toLowerCase()) ||
+        matchesTestedTag ||
         device.tags.some(tag => tag.toLowerCase().includes(search.toLowerCase()));
 
       const matchesVendor = selectedVendor === "All" || device.vendor === selectedVendor;
