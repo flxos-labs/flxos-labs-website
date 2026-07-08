@@ -4,6 +4,8 @@ import { useState, useMemo } from "react";
 import Link from "next/link";
 import styles from "./DevicesContent.module.css";
 
+const TESTED_DEVICES = ["esp32s3-ili9341-xpt", "lilygo-t-hmi"];
+
 interface Device {
   id: string;
   vendor: string;
@@ -712,6 +714,7 @@ export default function DevicesContent() {
   const [search, setSearch] = useState("");
   const [selectedVendor, setSelectedVendor] = useState("All");
   const [selectedStatus, setSelectedStatus] = useState("All");
+  const [selectedTest, setSelectedTest] = useState("All");
 
   const vendors = useMemo(() => {
     const list = new Set(DEVICES_DATA.map((d) => d.vendor));
@@ -720,6 +723,7 @@ export default function DevicesContent() {
 
   const filteredDevices = useMemo(() => {
     return DEVICES_DATA.filter((device) => {
+      const isTested = TESTED_DEVICES.includes(device.id);
       const matchesSearch =
         device.name.toLowerCase().includes(search.toLowerCase()) ||
         device.id.toLowerCase().includes(search.toLowerCase()) ||
@@ -731,9 +735,14 @@ export default function DevicesContent() {
       const matchesVendor = selectedVendor === "All" || device.vendor === selectedVendor;
       const matchesStatus = selectedStatus === "All" || device.status === selectedStatus;
 
-      return matchesSearch && matchesVendor && matchesStatus;
+      const matchesTest =
+        selectedTest === "All" ||
+        (selectedTest === "tested" && isTested) ||
+        (selectedTest === "not-tested" && !isTested);
+
+      return matchesSearch && matchesVendor && matchesStatus && matchesTest;
     });
-  }, [search, selectedVendor, selectedStatus]);
+  }, [search, selectedVendor, selectedStatus, selectedTest]);
 
   const countLabel = useMemo(() => {
     if (filteredDevices.length === DEVICES_DATA.length) {
@@ -774,7 +783,7 @@ export default function DevicesContent() {
 
       {/* ── Filters & Search ── */}
       <section className="mx-auto max-w-6xl px-6 pb-6">
-        <div className="grid gap-6 md:grid-cols-[1fr_auto] items-center mb-8">
+        <div className="grid gap-6 lg:grid-cols-[1fr_auto_auto] md:grid-cols-[1fr_auto] items-center mb-8">
           {/* Search Input */}
           <div className={styles.searchWrapper}>
             <span className={styles.searchIcon}>
@@ -814,6 +823,31 @@ export default function DevicesContent() {
               Incubating
             </button>
           </div>
+
+          {/* Test Support Filter */}
+          <div className="flex gap-2" role="group" aria-label="Test support filter">
+            <button
+              onClick={() => setSelectedTest("All")}
+              aria-pressed={selectedTest === "All"}
+              className={`${styles.tabButton} ${selectedTest === "All" ? styles.tabButtonActive : ""}`}
+            >
+              All Support
+            </button>
+            <button
+              onClick={() => setSelectedTest("tested")}
+              aria-pressed={selectedTest === "tested"}
+              className={`${styles.tabButton} ${selectedTest === "tested" ? styles.tabButtonActive : ""}`}
+            >
+              Tested
+            </button>
+            <button
+              onClick={() => setSelectedTest("not-tested")}
+              aria-pressed={selectedTest === "not-tested"}
+              className={`${styles.tabButton} ${selectedTest === "not-tested" ? styles.tabButtonActive : ""}`}
+            >
+              Not Tested
+            </button>
+          </div>
         </div>
 
         {/* Vendor/Category Filter Tabs */}
@@ -846,13 +880,22 @@ export default function DevicesContent() {
                     <span className={styles.vendorName}>{device.vendor}</span>
                     <h3 className={styles.deviceName}>{device.name}</h3>
                   </div>
-                  <span
-                    className={`${styles.statusBadge} ${
-                      device.status === "stable" ? styles.statusBadgeStable : styles.statusBadgeIncubating
-                    }`}
-                  >
-                    {device.status}
-                  </span>
+                  <div className="flex flex-col items-end gap-1.5 shrink-0">
+                    <span
+                      className={`${styles.statusBadge} ${
+                        device.status === "stable" ? styles.statusBadgeStable : styles.statusBadgeIncubating
+                      }`}
+                    >
+                      {device.status}
+                    </span>
+                    <span
+                      className={`${styles.statusBadge} ${
+                        TESTED_DEVICES.includes(device.id) ? styles.statusBadgeTested : styles.statusBadgeNotTested
+                      }`}
+                    >
+                      {TESTED_DEVICES.includes(device.id) ? "tested" : "not tested"}
+                    </span>
+                  </div>
                 </div>
 
                 <div className="space-y-1 mb-4">
@@ -912,6 +955,7 @@ export default function DevicesContent() {
                 setSearch("");
                 setSelectedVendor("All");
                 setSelectedStatus("All");
+                setSelectedTest("All");
               }}
               className="mt-3 text-xs text-[color:var(--accent)] font-bold hover:underline"
             >

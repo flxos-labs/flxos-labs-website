@@ -178,7 +178,8 @@
   letter-spacing: 0.05em;
 }
 
-.statusBadgeStable {
+.statusBadgeStable,
+.statusBadgeTested {
   background: rgba(42, 157, 143, 0.15);
   color: var(--accent-2);
   border: 1px solid rgba(42, 157, 143, 0.25);
@@ -192,6 +193,12 @@
 
 :global([data-theme="dark"]) .statusBadgeIncubating {
   color: var(--accent-3);
+}
+
+.statusBadgeNotTested {
+  background: rgba(92, 95, 102, 0.1);
+  color: var(--muted);
+  border: 1px solid var(--border-muted);
 }
 
 .specRow {
