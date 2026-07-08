@@ -194,6 +194,18 @@
   color: var(--accent-3);
 }
 
+.statusBadgeTested {
+  background: rgba(42, 157, 143, 0.15);
+  color: var(--accent-2);
+  border: 1px solid rgba(42, 157, 143, 0.25);
+}
+
+.statusBadgeNotTested {
+  background: rgba(92, 95, 102, 0.1);
+  color: var(--muted);
+  border: 1px solid var(--border-muted);
+}
+
 .specRow {
   display: flex;
   justify-content: space-between;
@@ -249,16 +261,6 @@
   background: var(--surface-2);
   color: var(--muted);
   border: 1px solid var(--border-faint);
-}
-
-.tagPillTested {
-  background: rgba(42, 157, 143, 0.1);
-  color: var(--accent-2);
-  border-color: rgba(42, 157, 143, 0.25);
-}
-
-.tagPillNotTested {
-  opacity: 0.85;
 }
 
 @keyframes float {

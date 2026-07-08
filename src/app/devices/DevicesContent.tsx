@@ -851,13 +851,22 @@ export default function DevicesContent() {
                     <span className={styles.vendorName}>{device.vendor}</span>
                     <h3 className={styles.deviceName}>{device.name}</h3>
                   </div>
-                  <span
-                    className={`${styles.statusBadge} ${
-                      device.status === "stable" ? styles.statusBadgeStable : styles.statusBadgeIncubating
-                    }`}
-                  >
-                    {device.status}
-                  </span>
+                  <div className="flex flex-col items-end gap-1.5 shrink-0">
+                    <span
+                      className={`${styles.statusBadge} ${
+                        device.status === "stable" ? styles.statusBadgeStable : styles.statusBadgeIncubating
+                      }`}
+                    >
+                      {device.status}
+                    </span>
+                    <span
+                      className={`${styles.statusBadge} ${
+                        TESTED_DEVICES.includes(device.id) ? styles.statusBadgeTested : styles.statusBadgeNotTested
+                      }`}
+                    >
+                      {TESTED_DEVICES.includes(device.id) ? "tested" : "not tested"}
+                    </span>
+                  </div>
                 </div>
 
                 <div className="space-y-1 mb-4">
@@ -897,13 +906,6 @@ export default function DevicesContent() {
                 )}
 
                 <div className={styles.tagPills}>
-                  <span
-                    className={`${styles.tagPill} ${
-                      TESTED_DEVICES.includes(device.id) ? styles.tagPillTested : styles.tagPillNotTested
-                    }`}
-                  >
-                    {TESTED_DEVICES.includes(device.id) ? "tested" : "not tested"}
-                  </span>
                   {device.tags.map((tag) => (
                     <span key={tag} className={styles.tagPill}>
                       {tag}
