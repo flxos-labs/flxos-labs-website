@@ -492,3 +492,7 @@
   text-align: center;
 }
 
+:global(esp-web-install-button:not(:defined)) {
+  display: none;
+}
+
