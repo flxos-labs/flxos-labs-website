@@ -1066,8 +1066,9 @@ export default function DevicesContent() {
 
       {/* ── ESP Web Tools Loader ── */}
       <Script
-        src="https://unpkg.com/esp-web-tools@10/dist/web-install-button.js"
+        src="https://unpkg.com/esp-web-tools@10/dist/web/install-button.js"
         strategy="afterInteractive"
+        type="module"
       />
 
       {/* ── Web Flasher Modal ── */}
