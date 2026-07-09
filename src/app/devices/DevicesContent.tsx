@@ -822,6 +822,14 @@ export default function DevicesContent() {
     return `Showing ${filteredDevices.length} of ${DEVICES_DATA.length} devices`;
   }, [filteredDevices]);
 
+  const manifestUrl = useMemo(() => {
+    if (!activeFlashRelease) return "";
+    if (typeof window !== "undefined" && (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1")) {
+      return `/releases/${activeFlashRelease.manifest}`;
+    }
+    return `https://cdn.jsdelivr.net/gh/flxos-labs/flxos@releases/releases/${activeFlashRelease.manifest}`;
+  }, [activeFlashRelease]);
+
   return (
     <main className="relative min-h-screen overflow-hidden">
       {/* Glow Orbs background */}
@@ -1131,7 +1139,7 @@ export default function DevicesContent() {
               {isClient ? (
                 /* Web component integration (Client-only to avoid SSR hydration mismatch) */
                 <esp-web-install-button
-                  manifest={`https://cdn.jsdelivr.net/gh/flxos-labs/flxos@releases/releases/${activeFlashRelease.manifest}`}
+                  manifest={manifestUrl}
                 >
                   <button slot="activate" className={styles.modalFlashButton}>
                     <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
