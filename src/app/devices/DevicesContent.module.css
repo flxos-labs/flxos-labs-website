@@ -486,7 +486,7 @@
 }
 
 /* Esp Web Install Button overrides */
-esp-web-install-button {
+:global(esp-web-install-button) {
   display: block;
   width: 100%;
   text-align: center;
