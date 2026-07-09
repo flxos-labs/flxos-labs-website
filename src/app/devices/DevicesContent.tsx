@@ -1,8 +1,52 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
+import Script from "next/script";
+import { lockScroll, unlockScroll } from "../../lib/scrollLock";
 import styles from "./DevicesContent.module.css";
+
+declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+      'esp-web-install-button': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement> & {
+        manifest?: string;
+      }, HTMLElement>;
+    }
+  }
+}
+
+interface Release {
+  profile: string;
+  target: string;
+  version: string;
+  name: string;
+  manifest: string;
+  tags: string[];
+  incubating: boolean;
+  warning_message: string | null;
+}
+
+const MOCK_RELEASES: Release[] = [
+  {
+    profile: "generic-esp32s3",
+    target: "esp32s3",
+    version: "0.1.0",
+    name: "FlxOS for Generic ESP32-S3 (Headless)",
+    manifest: "flxos-generic-esp32s3-v0.1.0-cdn/manifest.json",
+    tags: ["headless"],
+    incubating: false,
+    warning_message: null
+  },
+  {
+    profile: "lilygo-t-hmi",
+    target: "esp32s3",
+    version: "0.1.0",
+    name: "FlxOS for LilyGO T-HMI",
+    manifest: "flxos-lilygo-t-hmi-v0.1.0-cdn/manifest.json",
+    tags: ["tested"],
+  }
+];
 
 const TESTED_DEVICES = ["esp32s3-ili9341-xpt", "lilygo-t-hmi"];
 
@@ -715,6 +759,39 @@ export default function DevicesContent() {
   const [selectedVendor, setSelectedVendor] = useState("All");
   const [selectedStatus, setSelectedStatus] = useState("All");
   const [selectedTest, setSelectedTest] = useState("All");
+  
+  const [releases, setReleases] = useState<Release[]>([]);
+  const [loadingReleases, setLoadingReleases] = useState(true);
+  const [activeFlashRelease, setActiveFlashRelease] = useState<Release | null>(null);
+
+  useEffect(() => {
+    fetch("https://raw.githubusercontent.com/flxos-labs/flxos/releases/releases/index.json")
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`Failed to fetch index.json: ${res.status}`);
+        }
+        return res.json();
+      })
+      .then((data) => {
+        setReleases(data);
+        setLoadingReleases(false);
+      })
+      .catch((err) => {
+        console.warn("Could not load releases from GitHub. Falling back to local mock data for testing:", err);
+        setReleases(MOCK_RELEASES);
+        setLoadingReleases(false);
+      });
+  }, []);
+
+  // Prevent scroll when flashing modal is open
+  useEffect(() => {
+    if (activeFlashRelease) {
+      lockScroll();
+      return () => {
+        unlockScroll();
+      };
+    }
+  }, [activeFlashRelease]);
 
   const vendors = useMemo(() => {
     const list = new Set(DEVICES_DATA.map((d) => d.vendor));
@@ -941,6 +1018,34 @@ export default function DevicesContent() {
                     </span>
                   ))}
                 </div>
+
+                {(() => {
+                  const matchingRelease = releases.find((r) => r.profile === device.id);
+                  if (matchingRelease) {
+                    return (
+                      <button
+                        onClick={() => setActiveFlashRelease(matchingRelease)}
+                        className={styles.cardFlashButton}
+                      >
+                        <svg
+                          className="w-4 h-4 mr-2"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2.5"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"
+                          />
+                        </svg>
+                        Flash from Web
+                      </button>
+                    );
+                  }
+                  return null;
+                })()}
               </div>
             ))}
           </div>
@@ -964,6 +1069,101 @@ export default function DevicesContent() {
           </div>
         )}
       </section>
+
+      {/* ── ESP Web Tools Loader ── */}
+      <Script
+        src="https://unpkg.com/esp-web-tools@10/dist/web-install-button.js"
+        strategy="afterInteractive"
+      />
+
+      {/* ── Web Flasher Modal ── */}
+      {activeFlashRelease && (
+        <div className={styles.modalOverlay}>
+          <div
+            className={styles.modalBackdrop}
+            onClick={() => setActiveFlashRelease(null)}
+          />
+          <div className={styles.modalContent}>
+            <button
+              className={styles.modalCloseButton}
+              onClick={() => setActiveFlashRelease(null)}
+              aria-label="Close modal"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+
+            <div className="text-center mb-6">
+              <span className={styles.modalEyebrow}>Firmware Installer</span>
+              <h2 className={styles.modalTitle}>Flash FlxOS</h2>
+              <p className={styles.modalSubtitle}>
+                Install <strong>v{activeFlashRelease.version}</strong> directly to your device via serial connection.
+              </p>
+            </div>
+
+            {/* Warning / Notes */}
+            {activeFlashRelease.warning_message && (
+              <div className={styles.modalWarning}>
+                <svg className="w-5 h-5 text-amber-500 shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+                <div className="text-xs font-semibold leading-relaxed text-amber-800 dark:text-amber-200">
+                  {activeFlashRelease.warning_message}
+                </div>
+              </div>
+            )}
+
+            <div className="space-y-4 mb-6">
+              <h4 className="text-xs font-bold text-[color:var(--ink)] uppercase tracking-wider">Instructions:</h4>
+              <ol className={styles.instructionList}>
+                <li>
+                  <span className={styles.stepNumber}>1</span>
+                  <p>Connect the device to your computer using a high-quality data USB cable.</p>
+                </li>
+                <li>
+                  <span className={styles.stepNumber}>2</span>
+                  <p>Hold down the <strong>BOOT / IO0</strong> button (if available) while connecting, or press it to enter flashing mode.</p>
+                </li>
+                <li>
+                  <span className={styles.stepNumber}>3</span>
+                  <p>Click <strong>Start Flashing</strong>, select the correct COM/Serial port from the browser list, and confirm.</p>
+                </li>
+              </ol>
+            </div>
+
+            <div className="flex flex-col items-center justify-center p-6 border border-dashed border-[color:var(--border-muted)] rounded-2xl bg-[rgba(var(--surface-rgb),0.3)]">
+              {/* Web component integration */}
+              <esp-web-install-button
+                manifest={`https://cdn.jsdelivr.net/gh/flxos-labs/flxos@releases/releases/${activeFlashRelease.manifest}`}
+              >
+                <button slot="activate" className={styles.modalFlashButton}>
+                  <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
+                  </svg>
+                  Start Flashing
+                </button>
+                <div slot="unsupported" className={styles.unsupportedAlert}>
+                  <svg className="w-5 h-5 shrink-0 text-red-500" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                  </svg>
+                  <p className="text-xs leading-relaxed font-semibold">
+                    Browser compatibility issue: Web Serial is not supported. Please use <strong>Google Chrome</strong> or <strong>Microsoft Edge</strong> on a desktop computer.
+                  </p>
+                </div>
+                <div slot="not-allowed" className={styles.unsupportedAlert}>
+                  <svg className="w-5 h-5 shrink-0 text-red-500" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                  </svg>
+                  <p className="text-xs leading-relaxed font-semibold">
+                    Secure context required: Flashing is only permitted over HTTPS or localhost connections.
+                  </p>
+                </div>
+              </esp-web-install-button>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
 }
