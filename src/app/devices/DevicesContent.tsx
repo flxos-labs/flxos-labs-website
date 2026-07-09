@@ -45,6 +45,8 @@ const MOCK_RELEASES: Release[] = [
     name: "FlxOS for LilyGO T-HMI",
     manifest: "flxos-lilygo-t-hmi-v0.1.0-cdn/manifest.json",
     tags: ["tested"],
+    incubating: false,
+    warning_message: null
   }
 ];
 
