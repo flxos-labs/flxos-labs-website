@@ -756,9 +756,13 @@ export default function DevicesContent() {
   const [loadingReleases, setLoadingReleases] = useState(true);
   const [activeFlashRelease, setActiveFlashRelease] = useState<Release | null>(null);
   const [isClient, setIsClient] = useState(false);
+  const [flasherScriptLoaded, setFlasherScriptLoaded] = useState(false);
 
   useEffect(() => {
     setIsClient(true);
+    if (typeof window !== "undefined" && window.customElements && window.customElements.get("esp-web-install-button")) {
+      setFlasherScriptLoaded(true);
+    }
     fetch("https://raw.githubusercontent.com/flxos-labs/flxos/releases/releases/index.json")
       .then((res) => {
         if (!res.ok) {
@@ -777,10 +781,17 @@ export default function DevicesContent() {
             typeof item.profile === "string" &&
             typeof item.name === "string" &&
             typeof item.version === "string" &&
-            typeof item.manifest === "string"
+            typeof item.manifest === "string" &&
+            (item.warning_message === undefined ||
+              item.warning_message === null ||
+              typeof item.warning_message === "string") &&
+            (item.incubating === undefined ||
+              typeof item.incubating === "boolean") &&
+            (item.tags === undefined ||
+              (Array.isArray(item.tags) && item.tags.every((t: any) => typeof t === "string")))
         );
         if (!isValid) {
-          throw new Error("Response elements are missing required fields (profile, name, version, manifest)");
+          throw new Error("Response elements has invalid schema or missing required fields");
         }
         setReleases(data);
         setLoadingReleases(false);
@@ -1089,6 +1100,8 @@ export default function DevicesContent() {
             type="module"
             integrity="sha384-DLSRQX8nILUsYRCKoOL+FvGRis5HoNA+9ak4QYqreENR9UVDIXUSoZrdt1Ibty96"
             crossOrigin="anonymous"
+            onLoad={() => setFlasherScriptLoaded(true)}
+            onError={(e) => console.error("Failed to load esp-web-tools script:", e)}
           />
 
           <div className={styles.modalOverlay}>
@@ -1146,7 +1159,7 @@ export default function DevicesContent() {
             </div>
 
             <div className="flex flex-col items-center justify-center p-6 border border-dashed border-[color:var(--border-muted)] rounded-2xl bg-[rgba(var(--surface-rgb),0.3)] w-full">
-              {isClient ? (
+              {isClient && flasherScriptLoaded ? (
                 /* Web component integration (Client-only to avoid SSR hydration mismatch) */
                 <esp-web-install-button
                   manifest={`https://cdn.jsdelivr.net/gh/flxos-labs/flxos@releases/releases/${activeFlashRelease.manifest}`}
