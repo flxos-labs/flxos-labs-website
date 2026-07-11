@@ -788,7 +788,7 @@ export default function DevicesContent() {
             (item.incubating === undefined ||
               typeof item.incubating === "boolean") &&
             (item.tags === undefined ||
-              (Array.isArray(item.tags) && item.tags.every((t: any) => typeof t === "string")))
+              (Array.isArray(item.tags) && item.tags.every((t: unknown) => typeof t === "string")))
         );
         if (!isValid) {
           throw new Error("Response elements has invalid schema or missing required fields");
