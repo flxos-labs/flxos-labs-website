@@ -17,29 +17,6 @@ interface Release {
   warning_message: string | null;
 }
 
-const MOCK_RELEASES: Release[] = [
-  {
-    profile: "generic-esp32s3",
-    target: "esp32s3",
-    version: "0.1.0",
-    name: "FlxOS for Generic ESP32-S3 (Headless)",
-    manifest: "flxos-generic-esp32s3-v0.1.0-cdn/manifest.json",
-    tags: ["headless"],
-    incubating: false,
-    warning_message: null
-  },
-  {
-    profile: "lilygo-t-hmi",
-    target: "esp32s3",
-    version: "0.1.0",
-    name: "FlxOS for LilyGO T-HMI",
-    manifest: "flxos-lilygo-t-hmi-v0.1.0-cdn/manifest.json",
-    tags: ["tested"],
-    incubating: false,
-    warning_message: null
-  }
-];
-
 const TESTED_DEVICES = ["esp32s3-ili9341-xpt", "lilygo-t-hmi"];
 
 interface Device {
@@ -753,13 +730,13 @@ export default function DevicesContent() {
   const [selectedTest, setSelectedTest] = useState("All");
   
   const [releases, setReleases] = useState<Release[]>([]);
-  const [loadingReleases, setLoadingReleases] = useState(true);
   const [activeFlashRelease, setActiveFlashRelease] = useState<Release | null>(null);
   const [isClient, setIsClient] = useState(false);
   const [flasherScriptLoaded, setFlasherScriptLoaded] = useState(false);
   const [flasherScriptError, setFlasherScriptError] = useState(false);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsClient(true);
     if (typeof window !== "undefined" && window.customElements && window.customElements.get("esp-web-install-button")) {
       setFlasherScriptLoaded(true);
@@ -795,12 +772,10 @@ export default function DevicesContent() {
           throw new Error("Response elements has invalid schema or missing required fields");
         }
         setReleases(data);
-        setLoadingReleases(false);
       })
       .catch((err) => {
-        console.warn("Could not load releases from GitHub. Falling back to local mock data for testing:", err);
-        setReleases(MOCK_RELEASES);
-        setLoadingReleases(false);
+        console.error("Could not load releases from GitHub:", err);
+        setReleases([]);
       });
   }, []);
 
@@ -812,6 +787,7 @@ export default function DevicesContent() {
         unlockScroll();
       };
     } else {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setFlasherScriptError(false);
     }
   }, [activeFlashRelease]);
