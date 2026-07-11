@@ -5,6 +5,7 @@ import Link from "next/link";
 import Script from "next/script";
 import { lockScroll, unlockScroll } from "../../lib/scrollLock";
 import styles from "./DevicesContent.module.css";
+import mockReleasesData from "./index.json";
 
 interface Release {
   profile: string;
@@ -17,28 +18,7 @@ interface Release {
   warning_message: string | null;
 }
 
-const MOCK_RELEASES: Release[] = [
-  {
-    profile: "generic-esp32s3",
-    target: "esp32s3",
-    version: "0.1.0",
-    name: "FlxOS for Generic ESP32-S3 (Headless)",
-    manifest: "flxos-generic-esp32s3-v0.1.0-cdn/manifest.json",
-    tags: ["headless"],
-    incubating: false,
-    warning_message: null
-  },
-  {
-    profile: "lilygo-t-hmi",
-    target: "esp32s3",
-    version: "0.1.0",
-    name: "FlxOS for LilyGO T-HMI",
-    manifest: "flxos-lilygo-t-hmi-v0.1.0-cdn/manifest.json",
-    tags: ["tested"],
-    incubating: false,
-    warning_message: null
-  }
-];
+const MOCK_RELEASES: Release[] = mockReleasesData as Release[];
 
 const TESTED_DEVICES = ["esp32s3-ili9341-xpt", "lilygo-t-hmi"];
 
