@@ -268,7 +268,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .orb {
+  .orb,
+  .modalContent {
     animation: none;
   }
 }

@@ -767,6 +767,21 @@ export default function DevicesContent() {
         return res.json();
       })
       .then((data) => {
+        if (!Array.isArray(data)) {
+          throw new Error("Response is not an array");
+        }
+        const isValid = data.every(
+          (item) =>
+            item &&
+            typeof item === "object" &&
+            typeof item.profile === "string" &&
+            typeof item.name === "string" &&
+            typeof item.version === "string" &&
+            typeof item.manifest === "string"
+        );
+        if (!isValid) {
+          throw new Error("Response elements are missing required fields (profile, name, version, manifest)");
+        }
         setReleases(data);
         setLoadingReleases(false);
       })
@@ -1064,38 +1079,41 @@ export default function DevicesContent() {
         )}
       </section>
 
-      {/* ── ESP Web Tools Loader ── */}
-      <Script
-        src="https://unpkg.com/esp-web-tools@10/dist/web/install-button.js"
-        strategy="afterInteractive"
-        type="module"
-      />
-
       {/* ── Web Flasher Modal ── */}
       {activeFlashRelease && (
-        <div className={styles.modalOverlay}>
-          <div
-            className={styles.modalBackdrop}
-            onClick={() => setActiveFlashRelease(null)}
+        <>
+          {/* ── ESP Web Tools Loader (Loaded dynamically when flashing is initiated) ── */}
+          <Script
+            src="https://unpkg.com/esp-web-tools@10.2.1/dist/web/install-button.js"
+            strategy="afterInteractive"
+            type="module"
+            integrity="sha384-DLSRQX8nILUsYRCKoOL+FvGRis5HoNA+9ak4QYqreENR9UVDIXUSoZrdt1Ibty96"
+            crossOrigin="anonymous"
           />
-          <div className={styles.modalContent}>
-            <button
-              className={styles.modalCloseButton}
-              onClick={() => setActiveFlashRelease(null)}
-              aria-label="Close modal"
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
 
-            <div className="text-center mb-6">
-              <span className={styles.modalEyebrow}>Firmware Installer</span>
-              <h2 className={styles.modalTitle}>Flash FlxOS</h2>
-              <p className={styles.modalSubtitle}>
-                Install <strong>v{activeFlashRelease.version}</strong> directly to your device via serial connection.
-              </p>
-            </div>
+          <div className={styles.modalOverlay}>
+            <div
+              className={styles.modalBackdrop}
+              onClick={() => setActiveFlashRelease(null)}
+            />
+            <div className={styles.modalContent}>
+              <button
+                className={styles.modalCloseButton}
+                onClick={() => setActiveFlashRelease(null)}
+                aria-label="Close modal"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+
+              <div className="text-center mb-6">
+                <span className={styles.modalEyebrow}>Firmware Installer</span>
+                <h2 className={styles.modalTitle}>Flash {activeFlashRelease.name}</h2>
+                <p className={styles.modalSubtitle}>
+                  Install <strong>v{activeFlashRelease.version}</strong> ({activeFlashRelease.profile}) directly to your device via serial connection.
+                </p>
+              </div>
 
             {/* Warning / Notes */}
             {activeFlashRelease.warning_message && (
@@ -1164,7 +1182,8 @@ export default function DevicesContent() {
             </div>
           </div>
         </div>
-      )}
+      </>
+    )}
     </main>
   );
 }
