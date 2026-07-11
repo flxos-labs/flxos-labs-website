@@ -1,8 +1,44 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
+import Script from "next/script";
+import { lockScroll, unlockScroll } from "../../lib/scrollLock";
 import styles from "./DevicesContent.module.css";
+
+interface Release {
+  profile: string;
+  target: string;
+  version: string;
+  name: string;
+  manifest: string;
+  tags: string[];
+  incubating: boolean;
+  warning_message: string | null;
+}
+
+const MOCK_RELEASES: Release[] = [
+  {
+    profile: "generic-esp32s3",
+    target: "esp32s3",
+    version: "0.1.0",
+    name: "FlxOS for Generic ESP32-S3 (Headless)",
+    manifest: "flxos-generic-esp32s3-v0.1.0-cdn/manifest.json",
+    tags: ["headless"],
+    incubating: false,
+    warning_message: null
+  },
+  {
+    profile: "lilygo-t-hmi",
+    target: "esp32s3",
+    version: "0.1.0",
+    name: "FlxOS for LilyGO T-HMI",
+    manifest: "flxos-lilygo-t-hmi-v0.1.0-cdn/manifest.json",
+    tags: ["tested"],
+    incubating: false,
+    warning_message: null
+  }
+];
 
 const TESTED_DEVICES = ["esp32s3-ili9341-xpt", "lilygo-t-hmi"];
 
@@ -715,6 +751,70 @@ export default function DevicesContent() {
   const [selectedVendor, setSelectedVendor] = useState("All");
   const [selectedStatus, setSelectedStatus] = useState("All");
   const [selectedTest, setSelectedTest] = useState("All");
+  
+  const [releases, setReleases] = useState<Release[]>([]);
+  const [loadingReleases, setLoadingReleases] = useState(true);
+  const [activeFlashRelease, setActiveFlashRelease] = useState<Release | null>(null);
+  const [isClient, setIsClient] = useState(false);
+  const [flasherScriptLoaded, setFlasherScriptLoaded] = useState(false);
+  const [flasherScriptError, setFlasherScriptError] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+    if (typeof window !== "undefined" && window.customElements && window.customElements.get("esp-web-install-button")) {
+      setFlasherScriptLoaded(true);
+    }
+    fetch("https://raw.githubusercontent.com/flxos-labs/flxos/releases/releases/index.json")
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`Failed to fetch index.json: ${res.status}`);
+        }
+        return res.json();
+      })
+      .then((data) => {
+        if (!Array.isArray(data)) {
+          throw new Error("Response is not an array");
+        }
+        const isValid = data.every(
+          (item) =>
+            item &&
+            typeof item === "object" &&
+            typeof item.profile === "string" &&
+            typeof item.name === "string" &&
+            typeof item.version === "string" &&
+            typeof item.manifest === "string" &&
+            (item.warning_message === undefined ||
+              item.warning_message === null ||
+              typeof item.warning_message === "string") &&
+            (item.incubating === undefined ||
+              typeof item.incubating === "boolean") &&
+            (item.tags === undefined ||
+              (Array.isArray(item.tags) && item.tags.every((t: unknown) => typeof t === "string")))
+        );
+        if (!isValid) {
+          throw new Error("Response elements has invalid schema or missing required fields");
+        }
+        setReleases(data);
+        setLoadingReleases(false);
+      })
+      .catch((err) => {
+        console.warn("Could not load releases from GitHub. Falling back to local mock data for testing:", err);
+        setReleases(MOCK_RELEASES);
+        setLoadingReleases(false);
+      });
+  }, []);
+
+  // Prevent scroll when flashing modal is open
+  useEffect(() => {
+    if (activeFlashRelease) {
+      lockScroll();
+      return () => {
+        unlockScroll();
+      };
+    } else {
+      setFlasherScriptError(false);
+    }
+  }, [activeFlashRelease]);
 
   const vendors = useMemo(() => {
     const list = new Set(DEVICES_DATA.map((d) => d.vendor));
@@ -941,6 +1041,44 @@ export default function DevicesContent() {
                     </span>
                   ))}
                 </div>
+
+                {(() => {
+                  const matchingRelease = releases.find((r) => r.profile === device.id);
+                  if (matchingRelease) {
+                    return (
+                      <>
+                        <button
+                          onClick={() => setActiveFlashRelease(matchingRelease)}
+                          className={styles.cardFlashButton}
+                        >
+                          <svg
+                            className="w-4 h-4 mr-2"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2.5"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"
+                            />
+                          </svg>
+                          Flash from Web
+                        </button>
+                        {matchingRelease.incubating && (
+                          <div className="text-[10px] font-semibold text-amber-600 dark:text-amber-400 mt-1.5 flex items-center justify-center gap-1 bg-amber-500/10 border border-amber-500/20 py-1 px-2.5 rounded-lg">
+                            <svg className="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                            </svg>
+                            Incubating Release (Experimental)
+                          </div>
+                        )}
+                      </>
+                    );
+                  }
+                  return null;
+                })()}
               </div>
             ))}
           </div>
@@ -964,6 +1102,152 @@ export default function DevicesContent() {
           </div>
         )}
       </section>
+
+      {/* ── Web Flasher Modal ── */}
+      {activeFlashRelease && (
+        <>
+          {/* ── ESP Web Tools Loader (Loaded dynamically when flashing is initiated) ── */}
+          <Script
+            src="https://unpkg.com/esp-web-tools@10.2.1/dist/web/install-button.js"
+            strategy="afterInteractive"
+            type="module"
+            integrity="sha384-DLSRQX8nILUsYRCKoOL+FvGRis5HoNA+9ak4QYqreENR9UVDIXUSoZrdt1Ibty96"
+            crossOrigin="anonymous"
+            onLoad={() => {
+              setFlasherScriptLoaded(true);
+              setFlasherScriptError(false);
+            }}
+            onError={(e) => {
+              console.error("Failed to load esp-web-tools script:", e);
+              setFlasherScriptError(true);
+            }}
+          />
+
+          <div className={styles.modalOverlay}>
+            <div
+              className={styles.modalBackdrop}
+              onClick={() => setActiveFlashRelease(null)}
+            />
+            <div className={styles.modalContent}>
+              <button
+                className={styles.modalCloseButton}
+                onClick={() => setActiveFlashRelease(null)}
+                aria-label="Close modal"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+
+              <div className="text-center mb-6">
+                <span className={styles.modalEyebrow}>Firmware Installer</span>
+                <h2 className={styles.modalTitle}>Flash {activeFlashRelease.name}</h2>
+                <p className={styles.modalSubtitle}>
+                  Install <strong>v{activeFlashRelease.version}</strong> ({activeFlashRelease.profile}) directly to your device via serial connection.
+                </p>
+              </div>
+
+            {/* Warning / Notes */}
+            {(activeFlashRelease.warning_message || activeFlashRelease.incubating) && (
+              <div className={styles.modalWarning}>
+                <svg className="w-5 h-5 text-amber-500 shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+                <div className="text-xs font-semibold leading-relaxed text-amber-800 dark:text-amber-200 space-y-1">
+                  {activeFlashRelease.incubating && (
+                    <p>
+                      <strong>Notice:</strong> This release is currently in incubating phase (experimental/unstable).
+                    </p>
+                  )}
+                  {activeFlashRelease.warning_message && (
+                    <p>{activeFlashRelease.warning_message}</p>
+                  )}
+                </div>
+              </div>
+            )}
+
+            <div className="space-y-4 mb-6">
+              <h4 className="text-xs font-bold text-[color:var(--ink)] uppercase tracking-wider">Instructions:</h4>
+              <ol className={styles.instructionList}>
+                <li>
+                  <span className={styles.stepNumber}>1</span>
+                  <p>Connect the device to your computer using a high-quality data USB cable.</p>
+                </li>
+                <li>
+                  <span className={styles.stepNumber}>2</span>
+                  <p>Hold down the <strong>BOOT / IO0</strong> button (if available) while connecting, or press it to enter flashing mode.</p>
+                </li>
+                <li>
+                  <span className={styles.stepNumber}>3</span>
+                  <p>Click <strong>Start Flashing</strong>, select the correct COM/Serial port from the browser list, and confirm.</p>
+                </li>
+              </ol>
+            </div>
+
+            <div className="flex flex-col items-center justify-center p-6 border border-dashed border-[color:var(--border-muted)] rounded-2xl bg-[rgba(var(--surface-rgb),0.3)] w-full">
+              {flasherScriptError ? (
+                <div className="text-center space-y-3">
+                  <p className="text-xs font-semibold text-red-500">
+                    Failed to load the firmware installer script.
+                  </p>
+                  <p className="text-xs text-[color:var(--muted)] max-w-xs leading-relaxed">
+                    You can try reloading the page, or download the manifest directly to flash manually.
+                  </p>
+                  <div className="flex gap-3 justify-center">
+                    <button
+                      onClick={() => window.location.reload()}
+                      className="px-3 py-1.5 text-xs font-bold text-white bg-[color:var(--accent)] rounded-lg hover:brightness-110"
+                    >
+                      Reload Page
+                    </button>
+                    <a
+                      href={`https://cdn.jsdelivr.net/gh/flxos-labs/flxos@releases/releases/${activeFlashRelease.manifest}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="px-3 py-1.5 text-xs font-bold text-[color:var(--ink)] bg-[color:var(--surface-2)] border border-[color:var(--border-muted)] rounded-lg hover:bg-[color:var(--surface-3)]"
+                    >
+                      View Manifest
+                    </a>
+                  </div>
+                </div>
+              ) : isClient && flasherScriptLoaded ? (
+                /* Web component integration (Client-only to avoid SSR hydration mismatch) */
+                <esp-web-install-button
+                  manifest={`https://cdn.jsdelivr.net/gh/flxos-labs/flxos@releases/releases/${activeFlashRelease.manifest}`}
+                >
+                  <button slot="activate" className={styles.modalFlashButton}>
+                    <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
+                    </svg>
+                    Start Flashing
+                  </button>
+                  <div slot="unsupported" className={styles.unsupportedAlert}>
+                    <svg className="w-5 h-5 shrink-0 text-red-500" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                    <p className="text-xs leading-relaxed font-semibold">
+                      Browser compatibility issue: Web Serial is not supported. Please use <strong>Google Chrome</strong> or <strong>Microsoft Edge</strong> on a desktop computer.
+                    </p>
+                  </div>
+                  <div slot="not-allowed" className={styles.unsupportedAlert}>
+                    <svg className="w-5 h-5 shrink-0 text-red-500" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                    <p className="text-xs leading-relaxed font-semibold">
+                      Secure context required: Flashing is only permitted over HTTPS or localhost connections.
+                    </p>
+                  </div>
+                </esp-web-install-button>
+              ) : (
+                <button className={styles.modalFlashButton} disabled>
+                  Loading Installer...
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      </>
+    )}
     </main>
   );
 }

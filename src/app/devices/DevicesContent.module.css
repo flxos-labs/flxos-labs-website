@@ -268,8 +268,232 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .orb {
+  .orb,
+  .modalContent {
     animation: none;
   }
+}
+
+/* Card Flash Button */
+.cardFlashButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin-top: 1rem;
+  padding: 0.65rem 1rem;
+  font-family: var(--font-body), sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #fff;
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-3) 100%);
+  border: none;
+  border-radius: 0.85rem;
+  box-shadow: 0 4px 12px rgba(231, 111, 81, 0.2);
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cardFlashButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(231, 111, 81, 0.35);
+  filter: brightness(1.05);
+}
+
+.cardFlashButton:active {
+  transform: translateY(0);
+}
+
+/* Modal Styling */
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+.modalBackdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(6px);
+}
+
+.modalContent {
+  position: relative;
+  width: 100%;
+  max-width: 32rem; /* Max-w-lg */
+  background: rgba(var(--surface-rgb), 0.9);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--border-muted);
+  box-shadow: 0 24px 60px var(--shadow);
+  border-radius: 2rem;
+  padding: 2.25rem;
+  z-index: 10;
+  overflow-y: auto;
+  max-height: 90vh;
+  animation: modalReveal 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes modalReveal {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.modalCloseButton {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  color: var(--muted);
+  background: var(--surface-2);
+  border: 1px solid var(--border-faint);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.modalCloseButton:hover {
+  color: var(--ink);
+  background: rgba(var(--surface-rgb), 0.95);
+  border-color: var(--border-muted);
+}
+
+.modalEyebrow {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.modalTitle {
+  font-family: var(--font-display), sans-serif;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--ink);
+  margin-top: 0.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.modalSubtitle {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.modalWarning {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  padding: 1rem;
+  border-radius: 1rem;
+  background: rgba(233, 196, 106, 0.1);
+  border: 1px solid rgba(233, 196, 106, 0.25);
+  margin-bottom: 1.5rem;
+}
+
+.instructionList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.instructionList li {
+  display: flex;
+  gap: 0.85rem;
+  align-items: flex-start;
+}
+
+.stepNumber {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--accent);
+  background: rgba(var(--surface-rgb), 0.6);
+  border: 1px solid var(--border-muted);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.instructionList p {
+  font-size: 0.8rem;
+  line-height: 1.4;
+  color: var(--muted);
+  margin: 0;
+}
+
+.instructionList strong {
+  color: var(--ink);
+}
+
+/* Modal Flashing Button inside ESP Web Tools */
+.modalFlashButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.85rem 2rem;
+  font-family: var(--font-body), sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #fff;
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-3) 100%);
+  border: none;
+  border-radius: 1rem;
+  box-shadow: 0 6px 18px rgba(231, 111, 81, 0.25);
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modalFlashButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(231, 111, 81, 0.4);
+  filter: brightness(1.08);
+}
+
+.modalFlashButton:active {
+  transform: translateY(0);
+}
+
+.unsupportedAlert {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  padding: 1rem;
+  border-radius: 1rem;
+  background: rgba(231, 111, 81, 0.08);
+  border: 1px solid rgba(231, 111, 81, 0.2);
+  color: var(--ink);
+  text-align: left;
+}
+
+/* Esp Web Install Button overrides */
+:global(esp-web-install-button) {
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+
+:global(esp-web-install-button:not(:defined)) {
+  display: none;
 }
 
