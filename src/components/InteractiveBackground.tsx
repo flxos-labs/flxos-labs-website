@@ -256,7 +256,7 @@ export default function InteractiveBackground() {
   }, []);
 
   /* ---------- Animation Loop ---------- */
-  const animate = useCallback(() => {
+  const animate = useCallback(function animateLoop() {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
@@ -388,7 +388,7 @@ export default function InteractiveBackground() {
     }
 
     ctx.globalAlpha = 1;
-    animationRef.current = requestAnimationFrame(animate);
+    animationRef.current = requestAnimationFrame(animateLoop);
   }, []);
 
   /* ---------- Lifecycle ---------- */

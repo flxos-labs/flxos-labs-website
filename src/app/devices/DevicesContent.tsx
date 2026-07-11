@@ -730,13 +730,13 @@ export default function DevicesContent() {
   const [selectedTest, setSelectedTest] = useState("All");
   
   const [releases, setReleases] = useState<Release[]>([]);
-  const [loadingReleases, setLoadingReleases] = useState(true);
   const [activeFlashRelease, setActiveFlashRelease] = useState<Release | null>(null);
   const [isClient, setIsClient] = useState(false);
   const [flasherScriptLoaded, setFlasherScriptLoaded] = useState(false);
   const [flasherScriptError, setFlasherScriptError] = useState(false);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsClient(true);
     if (typeof window !== "undefined" && window.customElements && window.customElements.get("esp-web-install-button")) {
       setFlasherScriptLoaded(true);
@@ -772,12 +772,10 @@ export default function DevicesContent() {
           throw new Error("Response elements has invalid schema or missing required fields");
         }
         setReleases(data);
-        setLoadingReleases(false);
       })
       .catch((err) => {
         console.error("Could not load releases from GitHub:", err);
         setReleases([]);
-        setLoadingReleases(false);
       });
   }, []);
 
@@ -789,6 +787,7 @@ export default function DevicesContent() {
         unlockScroll();
       };
     } else {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setFlasherScriptError(false);
     }
   }, [activeFlashRelease]);
