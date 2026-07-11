@@ -757,6 +757,7 @@ export default function DevicesContent() {
   const [activeFlashRelease, setActiveFlashRelease] = useState<Release | null>(null);
   const [isClient, setIsClient] = useState(false);
   const [flasherScriptLoaded, setFlasherScriptLoaded] = useState(false);
+  const [flasherScriptError, setFlasherScriptError] = useState(false);
 
   useEffect(() => {
     setIsClient(true);
@@ -810,6 +811,8 @@ export default function DevicesContent() {
       return () => {
         unlockScroll();
       };
+    } else {
+      setFlasherScriptError(false);
     }
   }, [activeFlashRelease]);
 
@@ -1043,25 +1046,35 @@ export default function DevicesContent() {
                   const matchingRelease = releases.find((r) => r.profile === device.id);
                   if (matchingRelease) {
                     return (
-                      <button
-                        onClick={() => setActiveFlashRelease(matchingRelease)}
-                        className={styles.cardFlashButton}
-                      >
-                        <svg
-                          className="w-4 h-4 mr-2"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2.5"
-                          viewBox="0 0 24 24"
+                      <>
+                        <button
+                          onClick={() => setActiveFlashRelease(matchingRelease)}
+                          className={styles.cardFlashButton}
                         >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"
-                          />
-                        </svg>
-                        Flash from Web
-                      </button>
+                          <svg
+                            className="w-4 h-4 mr-2"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2.5"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"
+                            />
+                          </svg>
+                          Flash from Web
+                        </button>
+                        {matchingRelease.incubating && (
+                          <div className="text-[10px] font-semibold text-amber-600 dark:text-amber-400 mt-1.5 flex items-center justify-center gap-1 bg-amber-500/10 border border-amber-500/20 py-1 px-2.5 rounded-lg">
+                            <svg className="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                            </svg>
+                            Incubating Release (Experimental)
+                          </div>
+                        )}
+                      </>
                     );
                   }
                   return null;
@@ -1100,8 +1113,14 @@ export default function DevicesContent() {
             type="module"
             integrity="sha384-DLSRQX8nILUsYRCKoOL+FvGRis5HoNA+9ak4QYqreENR9UVDIXUSoZrdt1Ibty96"
             crossOrigin="anonymous"
-            onLoad={() => setFlasherScriptLoaded(true)}
-            onError={(e) => console.error("Failed to load esp-web-tools script:", e)}
+            onLoad={() => {
+              setFlasherScriptLoaded(true);
+              setFlasherScriptError(false);
+            }}
+            onError={(e) => {
+              console.error("Failed to load esp-web-tools script:", e);
+              setFlasherScriptError(true);
+            }}
           />
 
           <div className={styles.modalOverlay}>
@@ -1129,13 +1148,20 @@ export default function DevicesContent() {
               </div>
 
             {/* Warning / Notes */}
-            {activeFlashRelease.warning_message && (
+            {(activeFlashRelease.warning_message || activeFlashRelease.incubating) && (
               <div className={styles.modalWarning}>
                 <svg className="w-5 h-5 text-amber-500 shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                 </svg>
-                <div className="text-xs font-semibold leading-relaxed text-amber-800 dark:text-amber-200">
-                  {activeFlashRelease.warning_message}
+                <div className="text-xs font-semibold leading-relaxed text-amber-800 dark:text-amber-200 space-y-1">
+                  {activeFlashRelease.incubating && (
+                    <p>
+                      <strong>Notice:</strong> This release is currently in incubating phase (experimental/unstable).
+                    </p>
+                  )}
+                  {activeFlashRelease.warning_message && (
+                    <p>{activeFlashRelease.warning_message}</p>
+                  )}
                 </div>
               </div>
             )}
@@ -1159,7 +1185,32 @@ export default function DevicesContent() {
             </div>
 
             <div className="flex flex-col items-center justify-center p-6 border border-dashed border-[color:var(--border-muted)] rounded-2xl bg-[rgba(var(--surface-rgb),0.3)] w-full">
-              {isClient && flasherScriptLoaded ? (
+              {flasherScriptError ? (
+                <div className="text-center space-y-3">
+                  <p className="text-xs font-semibold text-red-500">
+                    Failed to load the firmware installer script.
+                  </p>
+                  <p className="text-xs text-[color:var(--muted)] max-w-xs leading-relaxed">
+                    You can try reloading the page, or download the manifest directly to flash manually.
+                  </p>
+                  <div className="flex gap-3 justify-center">
+                    <button
+                      onClick={() => window.location.reload()}
+                      className="px-3 py-1.5 text-xs font-bold text-white bg-[color:var(--accent)] rounded-lg hover:brightness-110"
+                    >
+                      Reload Page
+                    </button>
+                    <a
+                      href={`https://cdn.jsdelivr.net/gh/flxos-labs/flxos@releases/releases/${activeFlashRelease.manifest}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="px-3 py-1.5 text-xs font-bold text-[color:var(--ink)] bg-[color:var(--surface-2)] border border-[color:var(--border-muted)] rounded-lg hover:bg-[color:var(--surface-3)]"
+                    >
+                      View Manifest
+                    </a>
+                  </div>
+                </div>
+              ) : isClient && flasherScriptLoaded ? (
                 /* Web component integration (Client-only to avoid SSR hydration mismatch) */
                 <esp-web-install-button
                   manifest={`https://cdn.jsdelivr.net/gh/flxos-labs/flxos@releases/releases/${activeFlashRelease.manifest}`}
