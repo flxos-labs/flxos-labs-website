@@ -5,7 +5,6 @@ import Link from "next/link";
 import Script from "next/script";
 import { lockScroll, unlockScroll } from "../../lib/scrollLock";
 import styles from "./DevicesContent.module.css";
-import mockReleasesData from "./index.json";
 
 interface Release {
   profile: string;
@@ -17,8 +16,6 @@ interface Release {
   incubating: boolean;
   warning_message: string | null;
 }
-
-const MOCK_RELEASES: Release[] = mockReleasesData as Release[];
 
 const TESTED_DEVICES = ["esp32s3-ili9341-xpt", "lilygo-t-hmi"];
 
@@ -778,8 +775,8 @@ export default function DevicesContent() {
         setLoadingReleases(false);
       })
       .catch((err) => {
-        console.warn("Could not load releases from GitHub. Falling back to local mock data for testing:", err);
-        setReleases(MOCK_RELEASES);
+        console.error("Could not load releases from GitHub:", err);
+        setReleases([]);
         setLoadingReleases(false);
       });
   }, []);
