@@ -56,13 +56,12 @@ export default function FlxOSSimulator() {
   
   // Status Bar & Settings states
   const [systemTime, setSystemTime] = useState("");
-  const [wifiEnabled, setWifiEnabled] = useState(true);
   const [wifiConnected, setWifiConnected] = useState(true);
   const [showWifiModal, setShowWifiModal] = useState(false);
   const [wifiPassword, setWifiPassword] = useState("");
   const [wifiError, setWifiError] = useState("");
   const [brightness, setBrightness] = useState(85);
-  const [volume, setVolume] = useState(60);
+  const [minimizedApps, setMinimizedApps] = useState<string[]>([]);
   
   // Screen Rotated State
   const [isRotated, setIsRotated] = useState(false);
@@ -99,7 +98,6 @@ export default function FlxOSSimulator() {
     "/flash/readme.md": "### Features:\n- EventBus\n- Window Manager (Dwindle)\n- App Framework\n- Services orchestration",
     "/sdcard/todo.txt": "- Implement hardware watchdog\n- Add ESP-NOW mesh router\n- Optimise LovyanGFX DMA queue\n- Prepare for release",
   });
-  const [currentDir, setCurrentDir] = useState<"/flash" | "/sdcard">("/flash");
   const [filesPath, setFilesPath] = useState("A:/");
   
   // App specific states
@@ -211,6 +209,7 @@ export default function FlxOSSimulator() {
 
   const openApp = (appId: string) => {
     setShowLauncher(false);
+    setMinimizedApps((prev) => prev.filter((id) => id !== appId));
     if (openApps.includes(appId)) {
       setFocusedApp(appId);
       return;
@@ -235,12 +234,28 @@ export default function FlxOSSimulator() {
     }
   };
 
-  const closeApp = (appId: string) => {
-    setOpenApps((prev) => prev.filter((id) => id !== appId));
-    if (focusedApp === appId) {
-      const remaining = openApps.filter((id) => id !== appId);
+  const minimizeApp = (appId: string) => {
+    setMinimizedApps((prev) => {
+      const nextMinimized = prev.includes(appId) ? prev : [...prev, appId];
+      const remaining = openApps.filter((id) => id !== appId && !nextMinimized.includes(id));
       setFocusedApp(remaining.length > 0 ? remaining[remaining.length - 1] : null);
-    }
+      return nextMinimized;
+    });
+  };
+
+  const closeApp = (appId: string) => {
+    setOpenApps((prevOpen) => {
+      const nextOpen = prevOpen.filter((id) => id !== appId);
+      setMinimizedApps((prevMin) => {
+        const nextMin = prevMin.filter((id) => id !== appId);
+        if (focusedApp === appId) {
+          const remaining = nextOpen.filter((id) => !nextMin.includes(id));
+          setFocusedApp(remaining.length > 0 ? remaining[remaining.length - 1] : null);
+        }
+        return nextMin;
+      });
+      return nextOpen;
+    });
     if (appId === "editor") {
       setKeyboardOpen(false);
     }
@@ -275,7 +290,8 @@ export default function FlxOSSimulator() {
     return rects;
   };
 
-  const dwindleRects = getDwindleRects(openApps.length);
+  const visibleApps = openApps.filter((id) => !minimizedApps.includes(id));
+  const dwindleRects = getDwindleRects(visibleApps.length);
 
   // Dragging event handlers
   const handleDragStart = (e: MouseEvent<HTMLDivElement>, appId: string) => {
@@ -338,12 +354,18 @@ export default function FlxOSSimulator() {
       setShowWifiModal(false);
       setWifiPassword("");
       setNotifCount((prev) => prev + 1);
+      
+      const d = new Date();
+      const hrs = String(d.getHours()).padStart(2, "0");
+      const mins = String(d.getMinutes()).padStart(2, "0");
+      const currentTime = `${hrs}:${mins}`;
+
       setNotifications((prev) => [
         { 
           id: Date.now(), 
           title: "WiFi Connected", 
           desc: "Successfully connected to FlxOS_Labs_IoT.", 
-          time: systemTime 
+          time: currentTime 
         },
         ...prev
       ]);
@@ -428,7 +450,15 @@ export default function FlxOSSimulator() {
     e.stopPropagation();
     setSelectedFileRow(path);
     setShowFileMenu(path);
-    setFileMenuPos({ x: 100, y: 70 });
+    const rect = (e.currentTarget as HTMLElement).closest(`.${styles.filesApp}`)?.getBoundingClientRect();
+    if (rect) {
+      setFileMenuPos({
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top,
+      });
+    } else {
+      setFileMenuPos({ x: e.clientX, y: e.clientY });
+    }
   };
 
   // Simulated Screenshot Action
@@ -650,7 +680,7 @@ export default function FlxOSSimulator() {
                   setShowFileMenu(null);
                 }}
               >
-                {openApps.map((appId, idx) => {
+                {visibleApps.map((appId, idx) => {
                   const app = APPS.find((a) => a.id === appId);
                   if (!app) return null;
                   
@@ -701,7 +731,7 @@ export default function FlxOSSimulator() {
                         <div className={styles.windowControls}>
                           <button 
                             className={styles.windowBtn}
-                            onClick={(e) => { e.stopPropagation(); closeApp(appId); }}
+                            onClick={(e) => { e.stopPropagation(); minimizeApp(appId); }}
                           >
                             v
                           </button>
@@ -1054,7 +1084,7 @@ export default function FlxOSSimulator() {
                                   <div className="flex-1 bg-yellow-400" />
                                   <div className="flex-1 bg-cyan-400" />
                                   <div className="flex-1 bg-emerald-500" />
-                                  <div className="flex-1 bg-magenta-500" style={{ backgroundColor: "#d81b60" }} />
+                                  <div className="flex-1" style={{ backgroundColor: "#d81b60" }} />
                                   <div className="flex-1 bg-red-500" />
                                   <div className="flex-1 bg-blue-600" />
                                   <div className="flex-1 bg-black" />
