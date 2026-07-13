@@ -160,8 +160,8 @@ export default function FlxOSSimulator() {
         clearInterval(interval);
         setTimeout(() => {
           setBooting(false);
-          setOpenApps(["telemetry", "settings"]);
-          setFocusedApp("telemetry");
+          setOpenApps([]);
+          setFocusedApp(null);
         }, 500);
       }
     }, 120);

@@ -31,6 +31,9 @@ export default function Home() {
               <Link className={buttonStyles.primary} href="/#cta">
                 Get started
               </Link>
+              <Link className={buttonStyles.secondary} href="/#simulator">
+                🎮 Try OS
+              </Link>
               <a
                 className={buttonStyles.secondary}
                 href="https://github.com/flxos-labs/flxos"
