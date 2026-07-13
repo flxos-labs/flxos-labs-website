@@ -1,5 +1,5 @@
 import PlatformCycler from "../components/PlatformCycler";
-import DeviceSlideshow from "../components/DeviceSlideshow";
+import ShowcaseSwitcher from "../components/ShowcaseSwitcher";
 import CopyCommand from "../components/CopyCommand";
 import Image from "next/image";
 import Link from "next/link";
@@ -69,7 +69,7 @@ export default function Home() {
             </div>
           </div>
           <div className="relative w-full order-1 lg:order-2 lg:pt-10">
-            <DeviceSlideshow />
+            <ShowcaseSwitcher />
           </div>
         </div>
       </section>
