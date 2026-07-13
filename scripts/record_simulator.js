@@ -21,10 +21,9 @@ async function record() {
 
   console.log('Launching headless browser...');
   const browser = await chromium.launch({ headless: true });
-  let recordInterval;
   let isRecording = true;
-  let isCapturing = false;
   let frameCount = 0;
+  let capturePromise;
 
   try {
     const context = await browser.newContext({
@@ -43,22 +42,34 @@ async function record() {
     const simulator = page.locator('div[class*="deviceFrame"]').first();
     await simulator.scrollIntoViewIfNeeded();
 
-    console.log('Starting asynchronous frame capture...');
-    recordInterval = setInterval(async () => {
-      if (!isRecording || isCapturing) return;
-      isCapturing = true;
-      try {
-        const tempPath = path.join(FRAME_DIR, `temp.png`);
-        await simulator.screenshot({ path: tempPath });
-        frameCount++;
-        const framePath = path.join(FRAME_DIR, `frame_${String(frameCount).padStart(3, '0')}.png`);
-        fs.renameSync(tempPath, framePath);
-      } catch (e) {
-        // Ignore transient capture errors during layout changes
-      } finally {
-        isCapturing = false;
+    console.log('Starting frame capture loop...');
+    capturePromise = (async () => {
+      while (isRecording) {
+        const tickStart = Date.now();
+        try {
+          frameCount++;
+          const currentFramePath = path.join(FRAME_DIR, `frame_${String(frameCount).padStart(3, '0')}.png`);
+          await simulator.screenshot({ path: currentFramePath });
+          
+          const duration = Date.now() - tickStart;
+          const framesToFill = Math.max(1, Math.round(duration / FRAME_DELAY));
+          
+          for (let i = 1; i < framesToFill; i++) {
+            frameCount++;
+            const duplicatePath = path.join(FRAME_DIR, `frame_${String(frameCount).padStart(3, '0')}.png`);
+            fs.copyFileSync(currentFramePath, duplicatePath);
+          }
+          
+          const remainingDelay = FRAME_DELAY - duration;
+          if (remainingDelay > 0 && isRecording) {
+            await sleep(remainingDelay);
+          }
+        } catch (e) {
+          // If screenshot fails, sleep to prevent CPU spin
+          await sleep(FRAME_DELAY);
+        }
       }
-    }, FRAME_DELAY);
+    })();
 
     console.log('Step 1: Wait 1 second (showing campfire wallpaper)...');
     await sleep(1000);
@@ -121,11 +132,8 @@ async function record() {
     console.log('Execution completed. Ending recording loop...');
   } finally {
     isRecording = false;
-    if (recordInterval) {
-      clearInterval(recordInterval);
-    }
-    while (isCapturing) {
-      await sleep(50);
+    if (capturePromise) {
+      await capturePromise;
     }
     console.log(`Captured ${frameCount} frames in total. Closing browser...`);
     await browser.close();
