@@ -82,7 +82,7 @@ export default function Home() {
             Experience the modular FlxOS shell, run CLI commands in the terminal, check real-time telemetry, and explore the virtual filesystem directly in your browser.
           </p>
         </div>
-        <div className="max-w-3xl mx-auto">
+        <div className="max-w-2xl mx-auto">
           <FlxOSSimulator />
         </div>
       </section>
