@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     description:
       "Learn about FlxOS Labs - building the future of embedded desktop experiences. Open source under AGPL-3.0.",
     type: "website",
-    url: "https://flxos-labs.github.io/about/",
+    url: "https://flxos-labs.vercel.app/about/",
   },
 };
 

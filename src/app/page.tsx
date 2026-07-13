@@ -1,5 +1,6 @@
 import PlatformCycler from "../components/PlatformCycler";
 import DeviceSlideshow from "../components/DeviceSlideshow";
+import FlxOSSimulator from "../components/FlxOSSimulator";
 import CopyCommand from "../components/CopyCommand";
 import Image from "next/image";
 import Link from "next/link";
@@ -29,6 +30,9 @@ export default function Home() {
             <div className="flex flex-wrap gap-3">
               <Link className={buttonStyles.primary} href="/#cta">
                 Get started
+              </Link>
+              <Link className={buttonStyles.secondary} href="/#simulator">
+                🎮 Try OS
               </Link>
               <a
                 className={buttonStyles.secondary}
@@ -71,6 +75,21 @@ export default function Home() {
           <div className="relative w-full order-1 lg:order-2 lg:pt-10">
             <DeviceSlideshow />
           </div>
+        </div>
+      </section>
+
+      <section id="simulator" className="mx-auto w-full max-w-6xl px-6 pb-20">
+        <div className={styles.sectionHeader}>
+          <h2 className="font-display text-3xl">Interactive Simulator</h2>
+          <p className="text-[color:var(--muted)]">
+            Experience the modular FlxOS shell, run CLI commands in the terminal, check real-time telemetry, and explore the virtual filesystem directly in your browser.
+          </p>
+        </div>
+        <div className="max-w-md mx-auto">
+          <FlxOSSimulator />
+          <p className="text-[10px] text-center text-[color:var(--muted)] mt-3">
+            ⚠️ <strong>Note:</strong> This is a browser-based web simulator demonstrating the user interface and features of FlxOS, not the actual OS running on embedded microcontrollers.
+          </p>
         </div>
       </section>
 

@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     description:
       "Explore FlxOS hardware compatibility status across 49 supported developer boards and modules.",
     type: "website",
-    url: "https://flxos-labs.github.io/devices/",
+    url: "https://flxos-labs.vercel.app/devices/",
   },
 };
 

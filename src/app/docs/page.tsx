@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     description:
       "Complete documentation for FlxOS - installation, configuration, API reference, and troubleshooting guides.",
     type: "website",
-    url: "https://flxos-labs.github.io/docs/",
+    url: "https://flxos-labs.vercel.app/docs/",
   },
 };
 

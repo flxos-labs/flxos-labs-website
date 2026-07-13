@@ -3,7 +3,6 @@
 import React from "react";
 import Header from "./Header";
 import CommandPalette from "./CommandPalette";
-import InteractiveBackground from "./InteractiveBackground";
 import Link from "next/link";
 import styles from "./SiteLayout.module.css";
 
@@ -15,7 +14,6 @@ export default function SiteLayout({ children }: SiteLayoutProps) {
 
   return (
     <>
-      <InteractiveBackground />
       <div className={styles.shell}>
         <Header />
         {children}

@@ -1,0 +1,1119 @@
+/* FlxOS Simulator CSS Module */
+
+.container {
+  width: 100%;
+  max-width: 100%;
+  animation: revealUp 0.8s ease both;
+}
+
+/* Outer Device Frame (LilyGo T-HMI / Tablet Mockup) */
+.deviceFrame {
+  position: relative;
+  width: 100%;
+  background: #18191e;
+  border-radius: 1.5rem;
+  padding: 14px; /* Bezel */
+  box-shadow: 
+    0 20px 45px -10px rgba(0, 0, 0, 0.5),
+    inset 0 1px 1px rgba(255, 255, 255, 0.1),
+    inset 0 -2px 6px rgba(0, 0, 0, 0.5);
+  border: 3px solid #282930;
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+/* Inner Screen Container */
+.screen {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 0.75rem;
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.9);
+  user-select: none;
+  transition: transform 0.3s ease;
+  
+  /* DEFAULT THEME: Material Light Variables */
+  --app-bg: #ffffff;
+  --app-text: #111111;
+  --app-header-bg: #e4e4e6;
+  --app-border: rgba(0, 0, 0, 0.15);
+  --app-border-subtle: rgba(0, 0, 0, 0.08);
+  --app-tab-bg: #f4f4f6;
+  --app-item-bg: rgba(0, 0, 0, 0.03);
+  --app-item-hover: rgba(56, 81, 197, 0.08);
+  
+  background: #000000;
+  font-family: var(--font-body), system-ui, sans-serif;
+  color: var(--app-text);
+}
+
+/* Screen Rotation classes */
+.rotated {
+  transform: rotate(90deg) scale(0.75);
+}
+
+/* LED Indicator Light */
+.led {
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #10b981; /* Green active */
+  box-shadow: 0 0 6px #10b981;
+  transition: background 0.3s;
+  z-index: 10;
+}
+
+.ledBooting {
+  background: #f59e0b; /* Amber warning */
+  box-shadow: 0 0 6px #f59e0b;
+  animation: pulse 1s infinite alternate;
+}
+
+/* Camera Flash Overlay */
+.flashOverlay {
+  position: absolute;
+  inset: 0;
+  background: #ffffff;
+  z-index: 500;
+  pointer-events: none;
+  animation: flashFade 0.3s ease-out both;
+}
+
+/* Boot Screen Styling */
+.bootScreen {
+  background: #000000;
+  width: 100%;
+  height: 100%;
+  padding: 1.2rem;
+  font-family: var(--font-mono), monospace;
+  font-size: 10px;
+  line-height: 1.4;
+  color: #10b981;
+  overflow-y: auto;
+  text-align: left;
+}
+
+.cursor {
+  display: inline-block;
+  width: 5px;
+  height: 10px;
+  background: currentColor;
+  margin-left: 2px;
+  animation: blink 0.8s steps(2) infinite;
+}
+
+/* Desktop Interface */
+.desktop {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  transition: all 0.5s ease;
+}
+
+/* Status Bar */
+.statusBar {
+  height: 24px;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 10px;
+  font-size: 10px;
+  font-weight: 700;
+  color: #333333;
+  z-index: 100;
+  cursor: pointer;
+}
+
+.statusBarItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Notification Panel */
+.notificationPanel {
+  position: absolute;
+  top: 24px;
+  left: 6px;
+  right: 6px;
+  background: var(--app-bg);
+  border: 1.5px solid var(--app-border);
+  border-top: none;
+  border-radius: 0 0 10px 10px;
+  padding: 10px 12px 14px 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  z-index: 200;
+  animation: slideDownPanel 0.25s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.panelHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.panelTitle {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--app-text);
+}
+
+.clearBtn {
+  background: #3851c5;
+  color: #ffffff;
+  border: none;
+  font-size: 8px;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.clearBtn:hover {
+  background: #2e43ab;
+}
+
+.panelList {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 120px;
+  overflow-y: auto;
+}
+
+.panelItem {
+  background: var(--app-bg);
+  border: 1px solid var(--app-border-subtle);
+  border-radius: 6px;
+  padding: 6px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+}
+
+.panelItemContent {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.panelItemIcon {
+  font-size: 11px;
+}
+
+.panelItemText {
+  display: flex;
+  flex-direction: column;
+}
+
+.panelItemTitle {
+  font-size: 9.5px;
+  font-weight: 800;
+  color: var(--app-text);
+}
+
+.panelItemTime {
+  font-size: 8px;
+  color: #888888;
+  font-weight: 500;
+}
+
+.panelItemDesc {
+  font-size: 8px;
+  color: #777777;
+  font-family: var(--font-mono), monospace;
+  margin-top: 1px;
+}
+
+.panelItemClose {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #3851c5;
+  color: #ffffff;
+  border: none;
+  font-size: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.panelCloseTab {
+  display: flex;
+  justify-content: center;
+  margin-top: 8px;
+  cursor: pointer;
+  color: #888;
+}
+
+/* Control Center / Quick Access Panel (Bottom Up) */
+.quickAccessPanel {
+  position: absolute;
+  bottom: 42px;
+  left: 6px;
+  right: 6px;
+  background: var(--app-bg);
+  border: 1.5px solid var(--app-border);
+  border-bottom: none;
+  border-radius: 10px 10px 0 0;
+  padding: 12px;
+  box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.15);
+  z-index: 200;
+  animation: slideUpPanel 0.25s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.qaHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.qaTitle {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--app-text);
+}
+
+.qaSettingsBtn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 11px;
+  color: var(--app-text);
+}
+
+.qaButtonsRow {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 14px;
+}
+
+.qaButtonCol {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+}
+
+.qaCircleBtn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  color: #ffffff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+  transition: transform 0.15s;
+}
+
+.qaCircleBtn:hover {
+  transform: scale(1.05);
+}
+
+.circleMaterial { background: #f2ab27; }
+.circleRotation { background: #3498db; }
+.circleScreenshot { background: #3851c5; }
+
+.qaButtonLabel {
+  font-size: 9px;
+  font-weight: 800;
+  color: var(--app-text);
+  margin-top: 4px;
+}
+
+.qsSliderRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 4px;
+  font-size: 10px;
+  color: var(--app-text);
+}
+
+.qsSlider {
+  flex: 1;
+  height: 5px;
+  border-radius: 2.5px;
+  background: rgba(0, 0, 0, 0.1);
+  appearance: none;
+  outline: none;
+  cursor: pointer;
+}
+
+.qsSlider::-webkit-slider-thumb {
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #3851c5;
+}
+
+/* Window Manager Workspace */
+.workspace {
+  flex: 1;
+  position: relative;
+  padding: 6px;
+  overflow: hidden;
+}
+
+/* App Launcher Drawer Overlay */
+.appLauncher {
+  position: absolute;
+  top: auto;
+  bottom: 42px;
+  left: 6px;
+  width: 160px;
+  background: var(--app-bg);
+  border: 1.5px solid var(--app-border);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  z-index: 190;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
+  animation: slideLauncher 0.2s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.launcherTitle {
+  font-family: var(--font-body), sans-serif;
+  font-size: 11px;
+  font-weight: 800;
+  margin-bottom: 8px;
+  border-bottom: 1.5px solid var(--app-border-subtle);
+  padding-bottom: 4px;
+  color: var(--app-text);
+}
+
+.launcherGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.launcherItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: 6px;
+  background: #3851c5;
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.launcherItem:hover {
+  opacity: 0.9;
+}
+
+.launcherIcon {
+  font-size: 11px;
+}
+
+.launcherLabel {
+  flex: 1;
+}
+
+/* Window Component styling */
+.window {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  background: var(--app-bg);
+  border: 1.5px solid var(--app-border);
+  border-radius: 8px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+  overflow: hidden;
+  z-index: 50;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  color: var(--app-text);
+}
+
+.windowActive {
+  z-index: 60;
+  border: 2px solid #f2ab27; /* Focused yellow border by default */
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.windowHeader {
+  height: 28px;
+  background: var(--app-header-bg);
+  border-bottom: 1.5px solid var(--app-border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 8px;
+  cursor: move;
+}
+
+.windowTitle {
+  font-size: 10px;
+  font-weight: 800;
+  color: var(--app-text);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.windowControls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.windowBtn {
+  width: 14px;
+  height: 14px;
+  border-radius: 4px;
+  border: none;
+  background: #3851c5;
+  color: #ffffff;
+  font-size: 7px;
+  font-weight: 900;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.windowBtn:hover {
+  background: #2e43ab;
+}
+
+.windowBody {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+  background: var(--app-bg);
+}
+
+/* Apps Core Screens */
+.appContent {
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  font-size: 10px;
+  color: var(--app-text);
+}
+
+/* System Info App */
+.telemetryApp {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--app-bg);
+}
+
+.appTabs {
+  display: flex;
+  border-bottom: 1.5px solid var(--app-border-subtle);
+  background: var(--app-tab-bg);
+}
+
+.tabItem {
+  flex: 1;
+  text-align: center;
+  padding: 6px 0;
+  font-size: 9px;
+  font-weight: 700;
+  color: #777777;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+}
+
+.tabActive {
+  color: #3851c5;
+  border-bottom-color: #3851c5;
+  background: var(--app-bg);
+}
+
+.tabContent {
+  flex: 1;
+  padding: 10px;
+  overflow-y: auto;
+}
+
+.groupHeader {
+  background: var(--app-header-bg);
+  padding: 3px 6px;
+  font-size: 9px;
+  font-weight: 800;
+  color: var(--app-text);
+  margin-bottom: 6px;
+  border-radius: 3px;
+  opacity: 0.95;
+}
+
+.infoRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 6px;
+  font-size: 9.5px;
+  border-bottom: 1px solid var(--app-border-subtle);
+}
+
+.infoIcon {
+  font-size: 10px;
+  width: 12px;
+  text-align: center;
+}
+
+.progressLabel {
+  display: flex;
+  justify-content: space-between;
+  font-size: 9px;
+  margin-bottom: 2px;
+}
+
+.progressBarBg {
+  width: 100%;
+  height: 5px;
+  background: var(--app-tab-bg);
+  border-radius: 2.5px;
+  overflow: hidden;
+  margin-bottom: 6px;
+}
+
+.progressBar {
+  height: 100%;
+  background: #3851c5;
+  transition: width 0.3s;
+}
+
+/* Files App */
+.filesApp {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--app-bg);
+}
+
+.filesToolbar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px;
+  border-bottom: 1.5px solid var(--app-border-subtle);
+  background: var(--app-tab-bg);
+}
+
+.filesToolbarBtn {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  background: #3851c5;
+  color: #fff;
+  border: none;
+  font-size: 10px;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.filesPath {
+  font-size: 9px;
+  font-weight: 800;
+  color: var(--app-text);
+  margin-left: 4px;
+}
+
+.filesContent {
+  flex: 1;
+  overflow-y: auto;
+  background: var(--app-bg);
+}
+
+.filesList {
+  display: flex;
+  flex-direction: column;
+}
+
+.fileRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--app-border-subtle);
+  cursor: pointer;
+  transition: background 0.1s;
+}
+
+.fileRow:hover {
+  background: var(--app-item-bg);
+}
+
+.fileRowSelected {
+  background: var(--app-item-hover) !important;
+}
+
+.fileMeta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--app-text);
+}
+
+.fileMenuBtn {
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 10px;
+  color: var(--app-text);
+  opacity: 0.6;
+}
+
+.fileMenuBtn:hover {
+  opacity: 1;
+}
+
+/* Dropdown context menu */
+.contextMenu {
+  position: absolute;
+  background: var(--app-bg);
+  border: 1px solid var(--app-border);
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 120;
+  width: 80px;
+  padding: 3px 0;
+}
+
+.contextMenuItem {
+  padding: 5px 10px;
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--app-text);
+  cursor: pointer;
+  transition: background 0.1s;
+}
+
+.contextMenuItem:hover {
+  background: var(--app-tab-bg);
+  color: #3851c5;
+}
+
+/* Tools App */
+.toolsApp {
+  padding: 10px;
+  background: var(--app-bg);
+}
+
+.toolsList {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.toolsRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  background: var(--app-item-bg);
+  border-radius: 5px;
+  font-size: 9.5px;
+  font-weight: 700;
+  color: var(--app-text);
+  cursor: pointer;
+  transition: background 0.1s;
+}
+
+.toolsRow:hover {
+  background: var(--app-item-hover);
+}
+
+/* Text Editor App */
+.editorApp {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--app-bg);
+}
+
+.editorToolbar {
+  height: 26px;
+  background: var(--app-tab-bg);
+  border-bottom: 1.5px solid var(--app-border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 8px;
+}
+
+.editorInput {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  padding: 8px;
+  color: var(--app-text);
+  font-family: var(--font-mono), monospace;
+  font-size: 10px;
+  line-height: 1.4;
+  resize: none;
+}
+
+/* Calculator App */
+.calcApp {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--app-bg);
+}
+
+.calcScreen {
+  padding: 12px 8px;
+  text-align: right;
+  font-family: var(--font-mono), monospace;
+  font-size: 16px;
+  color: var(--app-text);
+  background: var(--app-tab-bg);
+  border-bottom: 1px solid var(--app-border-subtle);
+  font-weight: 800;
+}
+
+.calcGrid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--app-border-subtle);
+}
+
+.calcBtn {
+  background: var(--app-bg);
+  border: none;
+  color: var(--app-text);
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+
+.calcBtn:hover {
+  background: var(--app-tab-bg);
+}
+
+.calcBtnOp {
+  background: var(--app-tab-bg);
+  opacity: 0.9;
+  color: #3851c5;
+}
+
+.calcBtnOp:hover {
+  opacity: 1;
+}
+
+.calcBtnEqual {
+  background: #3851c5;
+  color: #fff;
+}
+
+.calcBtnEqual:hover {
+  background: #2e43ab;
+}
+
+/* Settings App */
+.settingsApp {
+  height: 100%;
+  background: var(--app-bg);
+}
+
+.settingsList {
+  display: flex;
+  flex-direction: column;
+}
+
+.settingsRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--app-border-subtle);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--app-text);
+  cursor: pointer;
+  background: var(--app-bg);
+  transition: background 0.1s;
+}
+
+.settingsRow:hover {
+  background: var(--app-item-bg);
+}
+
+.settingsControl {
+  margin-left: auto;
+}
+
+/* Virtual Keyboard */
+.keyboard {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #f0f0f4;
+  border-top: 1.5px solid rgba(0, 0, 0, 0.15);
+  padding: 4px;
+  z-index: 150;
+  transform: translateY(100%);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.keyboardOpen {
+  transform: translateY(0);
+}
+
+.kbRow {
+  display: flex;
+  justify-content: center;
+  gap: 3px;
+  margin-bottom: 3px;
+}
+
+.kbKey {
+  flex: 1;
+  max-width: 24px;
+  height: 24px;
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 4px;
+  color: #111;
+  font-size: 9px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+}
+
+.kbKey:active {
+  background: #e4e4e6;
+}
+
+.kbKeyWide {
+  flex: 1.4;
+  max-width: none;
+}
+
+.kbKeySpace {
+  flex: 4;
+  max-width: 100px;
+}
+
+/* Bottom App Dock */
+.dock {
+  height: 42px;
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-top: 1.5px solid rgba(0, 0, 0, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 10px;
+  z-index: 80;
+  border-radius: 0 0 0.75rem 0.75rem;
+}
+
+.dockItem {
+  position: relative;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  background: #3851c5; /* Default blue for launcher and widgets */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.15s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.dockItem:hover {
+  transform: translateY(-2px);
+}
+
+/* Dock Button Color Roles matching Screenshots */
+.dockShortcuts {
+  display: flex;
+  gap: 6px;
+}
+
+.dockItemActive {
+  background: #f2ab27 !important; /* Active yellow */
+}
+
+.dockItemActiveMagenta {
+  background: #d81b60 !important; /* Focused magenta */
+}
+
+.dockItemOpen {
+  background: #d8defa !important; /* Open but background */
+}
+
+.dockItemOpen * {
+  color: #3851c5 !important;
+}
+
+/* Hyprland Dark Theme Variables Overrides */
+.hyprTheme {
+  /* Hyprland Dark Theme Variables */
+  --app-bg: #17181e;
+  --app-text: #eeeeee;
+  --app-header-bg: #23242a;
+  --app-border: rgba(255, 255, 255, 0.15);
+  --app-border-subtle: rgba(255, 255, 255, 0.06);
+  --app-tab-bg: #1f2026;
+  --app-item-bg: rgba(255, 255, 255, 0.04);
+  --app-item-hover: rgba(0, 188, 212, 0.12);
+}
+
+.hyprTheme .statusBar {
+  background: rgba(15, 16, 21, 0.7);
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+}
+
+.hyprTheme .dock {
+  background: rgba(0, 188, 212, 0.75); /* Dark cyan background dock */
+  border-top-color: rgba(255, 255, 255, 0.15);
+}
+
+.hyprTheme .windowActive {
+  border-color: #00bcd4; /* Focused cyan */
+}
+
+.hyprTheme .tabActive {
+  color: #00bcd4;
+  border-bottom-color: #00bcd4;
+}
+
+.hyprTheme .calcBtnOp {
+  color: #00bcd4;
+  background: rgba(0, 188, 212, 0.15);
+}
+
+.hyprTheme .calcBtnEqual {
+  background: #00bcd4;
+  color: #000;
+}
+
+.hyprTheme .calcBtnEqual:hover {
+  background: #00acc1;
+}
+
+.hyprTheme .circleMaterial { background: #00bcd4; color: #000; }
+
+.hyprTheme .qsSlider::-webkit-slider-thumb {
+  background: #00bcd4;
+}
+
+.hyprTheme .panelItemClose {
+  background: #00bcd4;
+  color: #000;
+}
+
+.hyprTheme .launcherItem {
+  background: #00bcd4;
+  color: #000;
+}
+
+/* Animations */
+@keyframes slideLauncher {
+  from {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideDownPanel {
+  from {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideUpPanel {
+  from {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes pulse {
+  from { opacity: 0.5; }
+  to { opacity: 1; }
+}
+
+@keyframes blink {
+  from, to { opacity: 0; }
+  50% { opacity: 1; }
+}
+
+@keyframes subtleFlicker {
+  0% { opacity: 0.76; }
+  50% { opacity: 0.8; }
+  100% { opacity: 0.76; }
+}
+
+@keyframes revealUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes flashFade {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
