@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef, MouseEvent } from "react";
+import { useEffect, useState, useRef, MouseEvent, useReducer } from "react";
 import styles from "./FlxOSSimulator.module.css";
 
 // App definitions
@@ -47,12 +47,106 @@ const INITIAL_LOGS = [
   "FlxOS Boot completed. Transitioning to shell..."
 ];
 
+interface WindowState {
+  openApps: string[];
+  minimizedApps: string[];
+  focusedApp: string | null;
+  focusHistory: string[];
+}
+
+type WindowAction =
+  | { type: "OPEN_APP"; appId: string }
+  | { type: "CLOSE_APP"; appId: string }
+  | { type: "MINIMIZE_APP"; appId: string }
+  | { type: "FOCUS_APP"; appId: string }
+  | { type: "RESET" };
+
+const initialWindowState: WindowState = {
+  openApps: [],
+  minimizedApps: [],
+  focusedApp: null,
+  focusHistory: [],
+};
+
+function windowReducer(state: WindowState, action: WindowAction): WindowState {
+  switch (action.type) {
+    case "OPEN_APP": {
+      const { appId } = action;
+      const nextOpen = state.openApps.includes(appId)
+        ? state.openApps
+        : [...state.openApps, appId];
+      const nextMinimized = state.minimizedApps.filter((id) => id !== appId);
+      const nextHistory = state.focusHistory.filter((id) => id !== appId);
+      nextHistory.push(appId);
+      return {
+        openApps: nextOpen,
+        minimizedApps: nextMinimized,
+        focusedApp: appId,
+        focusHistory: nextHistory,
+      };
+    }
+    case "CLOSE_APP": {
+      const { appId } = action;
+      const nextOpen = state.openApps.filter((id) => id !== appId);
+      const nextMinimized = state.minimizedApps.filter((id) => id !== appId);
+      const nextHistory = state.focusHistory.filter((id) => id !== appId);
+      
+      let nextFocused = state.focusedApp;
+      if (state.focusedApp === appId) {
+        const remaining = nextHistory.filter((id) => nextOpen.includes(id) && !nextMinimized.includes(id));
+        nextFocused = remaining.length > 0 ? remaining[remaining.length - 1] : null;
+      }
+      return {
+        openApps: nextOpen,
+        minimizedApps: nextMinimized,
+        focusedApp: nextFocused,
+        focusHistory: nextHistory,
+      };
+    }
+    case "MINIMIZE_APP": {
+      const { appId } = action;
+      const nextMinimized = state.minimizedApps.includes(appId)
+        ? state.minimizedApps
+        : [...state.minimizedApps, appId];
+      const nextHistory = state.focusHistory.filter((id) => id !== appId);
+      
+      const remaining = nextHistory.filter((id) => state.openApps.includes(id) && !nextMinimized.includes(id));
+      const nextFocused = remaining.length > 0 ? remaining[remaining.length - 1] : null;
+
+      return {
+        openApps: state.openApps,
+        minimizedApps: nextMinimized,
+        focusedApp: nextFocused,
+        focusHistory: nextHistory,
+      };
+    }
+    case "FOCUS_APP": {
+      const { appId } = action;
+      if (!state.openApps.includes(appId) || state.minimizedApps.includes(appId)) {
+        return state;
+      }
+      const nextHistory = state.focusHistory.filter((id) => id !== appId);
+      nextHistory.push(appId);
+      return {
+        ...state,
+        focusedApp: appId,
+        focusHistory: nextHistory,
+      };
+    }
+    case "RESET":
+      return initialWindowState;
+    default:
+      return state;
+  }
+}
+
 export default function FlxOSSimulator() {
+  const [windowState, dispatch] = useReducer(windowReducer, initialWindowState);
+  const { openApps, minimizedApps, focusedApp } = windowState;
+
   // General simulator states
   const [booting, setBooting] = useState(true);
   const [bootLogs, setBootLogs] = useState<string[]>([]);
-  const [openApps, setOpenApps] = useState<string[]>([]);
-  const [focusedApp, setFocusedApp] = useState<string | null>(null);
   
   // Status Bar & Settings states
   const [systemTime, setSystemTime] = useState("");
@@ -61,7 +155,6 @@ export default function FlxOSSimulator() {
   const [wifiPassword, setWifiPassword] = useState("");
   const [wifiError, setWifiError] = useState("");
   const [brightness, setBrightness] = useState(85);
-  const [minimizedApps, setMinimizedApps] = useState<string[]>([]);
   
   // Screen Rotated State
   const [isRotated, setIsRotated] = useState(false);
@@ -158,8 +251,7 @@ export default function FlxOSSimulator() {
         clearInterval(interval);
         setTimeout(() => {
           setBooting(false);
-          setOpenApps([]);
-          setFocusedApp(null);
+          dispatch({ type: "RESET" });
         }, 500);
       }
     }, 120);
@@ -209,14 +301,7 @@ export default function FlxOSSimulator() {
 
   const openApp = (appId: string) => {
     setShowLauncher(false);
-    setMinimizedApps((prev) => prev.filter((id) => id !== appId));
-    if (openApps.includes(appId)) {
-      setFocusedApp(appId);
-      return;
-    }
-
-    setOpenApps((prev) => [...prev, appId]);
-    setFocusedApp(appId);
+    dispatch({ type: "OPEN_APP", appId });
 
     if (!windowCoords[appId]) {
       const idx = openApps.length;
@@ -235,27 +320,11 @@ export default function FlxOSSimulator() {
   };
 
   const minimizeApp = (appId: string) => {
-    setMinimizedApps((prev) => {
-      const nextMinimized = prev.includes(appId) ? prev : [...prev, appId];
-      const remaining = openApps.filter((id) => id !== appId && !nextMinimized.includes(id));
-      setFocusedApp(remaining.length > 0 ? remaining[remaining.length - 1] : null);
-      return nextMinimized;
-    });
+    dispatch({ type: "MINIMIZE_APP", appId });
   };
 
   const closeApp = (appId: string) => {
-    setOpenApps((prevOpen) => {
-      const nextOpen = prevOpen.filter((id) => id !== appId);
-      setMinimizedApps((prevMin) => {
-        const nextMin = prevMin.filter((id) => id !== appId);
-        if (focusedApp === appId) {
-          const remaining = nextOpen.filter((id) => !nextMin.includes(id));
-          setFocusedApp(remaining.length > 0 ? remaining[remaining.length - 1] : null);
-        }
-        return nextMin;
-      });
-      return nextOpen;
-    });
+    dispatch({ type: "CLOSE_APP", appId });
     if (appId === "editor") {
       setKeyboardOpen(false);
     }
@@ -296,7 +365,7 @@ export default function FlxOSSimulator() {
   // Dragging event handlers
   const handleDragStart = (e: MouseEvent<HTMLDivElement>, appId: string) => {
     if (layoutMode === "tiling") return;
-    setFocusedApp(appId);
+    dispatch({ type: "FOCUS_APP", appId });
     activeDragWindow.current = appId;
     dragStartPos.current = {
       x: e.clientX - (windowCoords[appId]?.x || 0),
@@ -717,7 +786,7 @@ export default function FlxOSSimulator() {
                       style={winStyle}
                       onClick={(e) => {
                         e.stopPropagation();
-                        setFocusedApp(appId);
+                        dispatch({ type: "FOCUS_APP", appId });
                       }}
                     >
                       {/* Window Header */}
@@ -728,7 +797,7 @@ export default function FlxOSSimulator() {
                         <div className={styles.windowTitle}>
                           <span>{app.name}</span>
                         </div>
-                        <div className={styles.windowControls}>
+                        <div className={styles.windowControls} onMouseDown={(e) => e.stopPropagation()}>
                           <button 
                             className={styles.windowBtn}
                             onClick={(e) => { e.stopPropagation(); minimizeApp(appId); }}
@@ -1177,7 +1246,7 @@ export default function FlxOSSimulator() {
                                     className="ml-auto bg-red-100 hover:bg-red-200 text-red-600 text-[8px] px-2 py-0.5 rounded font-bold"
                                     onClick={() => {
                                       setBooting(true);
-                                      setOpenApps([]);
+                                      dispatch({ type: "RESET" });
                                     }}
                                   >
                                     Reboot
