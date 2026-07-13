@@ -402,6 +402,7 @@ export default function FlxOSSimulator() {
   };
 
   const toggleMaximize = (appId: string) => {
+    dispatch({ type: "FOCUS_APP", appId });
     setWindowCoords((prev) => ({
       ...prev,
       [appId]: {

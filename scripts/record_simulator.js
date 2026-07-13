@@ -23,6 +23,7 @@ async function record() {
   const browser = await chromium.launch({ headless: true });
   let recordInterval;
   let isRecording = true;
+  let isCapturing = false;
   let frameCount = 0;
 
   try {
@@ -44,13 +45,18 @@ async function record() {
 
     console.log('Starting asynchronous frame capture...');
     recordInterval = setInterval(async () => {
-      if (!isRecording) return;
-      frameCount++;
-      const framePath = path.join(FRAME_DIR, `frame_${String(frameCount).padStart(3, '0')}.png`);
+      if (!isRecording || isCapturing) return;
+      isCapturing = true;
       try {
-        await simulator.screenshot({ path: framePath });
+        const tempPath = path.join(FRAME_DIR, `temp.png`);
+        await simulator.screenshot({ path: tempPath });
+        frameCount++;
+        const framePath = path.join(FRAME_DIR, `frame_${String(frameCount).padStart(3, '0')}.png`);
+        fs.renameSync(tempPath, framePath);
       } catch (e) {
         // Ignore transient capture errors during layout changes
+      } finally {
+        isCapturing = false;
       }
     }, FRAME_DELAY);
 
@@ -117,6 +123,9 @@ async function record() {
     isRecording = false;
     if (recordInterval) {
       clearInterval(recordInterval);
+    }
+    while (isCapturing) {
+      await sleep(50);
     }
     console.log(`Captured ${frameCount} frames in total. Closing browser...`);
     await browser.close();
