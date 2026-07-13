@@ -87,6 +87,9 @@ export default function Home() {
         </div>
         <div className="max-w-md mx-auto">
           <FlxOSSimulator />
+          <p className="text-[10px] text-center text-[color:var(--muted)] mt-3">
+            ⚠️ <strong>Note:</strong> This is a browser-based web simulator demonstrating the user interface and features of FlxOS, not the actual OS running on embedded microcontrollers.
+          </p>
         </div>
       </section>
 
