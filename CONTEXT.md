@@ -2,8 +2,7 @@
 
 > **Last Updated:** 2026-06-04
 > **Active Branch:** `develop` (HEAD: `bbfd7f9`)
-> **Deployment:** [flxos-labs.github.io](https://flxos-labs.github.io) via Vercel
-> **Repository:** [github.com/flxos-labs/flxos-labs.github.io](https://github.com/flxos-labs/flxos-labs.github.io)
+> **Deployment:** [flxos-labs.vercel.app](https://flxos-labs.vercel.app) via Vercel
 
 ---
 
