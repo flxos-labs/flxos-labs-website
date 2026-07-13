@@ -1,5 +1,6 @@
 import PlatformCycler from "../components/PlatformCycler";
-import ShowcaseSwitcher from "../components/ShowcaseSwitcher";
+import DeviceSlideshow from "../components/DeviceSlideshow";
+import FlxOSSimulator from "../components/FlxOSSimulator";
 import CopyCommand from "../components/CopyCommand";
 import Image from "next/image";
 import Link from "next/link";
@@ -69,8 +70,20 @@ export default function Home() {
             </div>
           </div>
           <div className="relative w-full order-1 lg:order-2 lg:pt-10">
-            <ShowcaseSwitcher />
+            <DeviceSlideshow />
           </div>
+        </div>
+      </section>
+
+      <section id="simulator" className="mx-auto w-full max-w-6xl px-6 pb-20">
+        <div className={styles.sectionHeader}>
+          <h2 className="font-display text-3xl">Interactive Simulator</h2>
+          <p className="text-[color:var(--muted)]">
+            Experience the modular FlxOS shell, run CLI commands in the terminal, check real-time telemetry, and explore the virtual filesystem directly in your browser.
+          </p>
+        </div>
+        <div className="max-w-3xl mx-auto">
+          <FlxOSSimulator />
         </div>
       </section>
 
