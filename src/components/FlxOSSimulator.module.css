@@ -28,11 +28,28 @@
   width: 100%;
   overflow: hidden;
   border-radius: 0.75rem;
-  background: #000000;
-  font-family: var(--font-body), system-ui, sans-serif;
-  color: #111111; /* Default dark text inside windows */
   box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.9);
   user-select: none;
+  transition: transform 0.3s ease;
+  
+  /* DEFAULT THEME: Material Light Variables */
+  --app-bg: #ffffff;
+  --app-text: #111111;
+  --app-header-bg: #e4e4e6;
+  --app-border: rgba(0, 0, 0, 0.15);
+  --app-border-subtle: rgba(0, 0, 0, 0.08);
+  --app-tab-bg: #f4f4f6;
+  --app-item-bg: rgba(0, 0, 0, 0.03);
+  --app-item-hover: rgba(56, 81, 197, 0.08);
+  
+  background: #000000;
+  font-family: var(--font-body), system-ui, sans-serif;
+  color: var(--app-text);
+}
+
+/* Screen Rotation classes */
+.rotated {
+  transform: rotate(90deg) scale(0.75);
 }
 
 /* LED Indicator Light */
@@ -56,16 +73,14 @@
   animation: pulse 1s infinite alternate;
 }
 
-/* CRT Scanline Overlay for Retro Amber Theme */
-.crtOverlay {
+/* Camera Flash Overlay */
+.flashOverlay {
   position: absolute;
   inset: 0;
+  background: #ffffff;
+  z-index: 500;
   pointer-events: none;
-  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.18) 50%);
-  background-size: 100% 4px;
-  z-index: 9999;
-  opacity: 0.8;
-  animation: subtleFlicker 0.15s infinite;
+  animation: flashFade 0.3s ease-out both;
 }
 
 /* Boot Screen Styling */
@@ -106,7 +121,7 @@
 /* Status Bar */
 .statusBar {
   height: 24px;
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   border-bottom: 1px solid rgba(0, 0, 0, 0.08);
@@ -127,65 +142,216 @@
   gap: 6px;
 }
 
-/* Quick Settings Panel */
-.quickSettings {
+/* Notification Panel */
+.notificationPanel {
   position: absolute;
   top: 24px;
   left: 6px;
   right: 6px;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-  border: 1px solid rgba(0, 0, 0, 0.12);
-  border-radius: 10px;
-  padding: 12px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  background: var(--app-bg);
+  border: 1.5px solid var(--app-border);
+  border-top: none;
+  border-radius: 0 0 10px 10px;
+  padding: 10px 12px 14px 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
   z-index: 200;
-  color: #222;
+  animation: slideDownPanel 0.25s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-.quickSettingsGrid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
-  margin-bottom: 10px;
+.panelHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
 }
 
-.qsButton {
-  background: rgba(0, 0, 0, 0.05);
-  border: 1px solid rgba(0, 0, 0, 0.08);
+.panelTitle {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--app-text);
+}
+
+.clearBtn {
+  background: #3851c5;
+  color: #ffffff;
+  border: none;
+  font-size: 8px;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.clearBtn:hover {
+  background: #2e43ab;
+}
+
+.panelList {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 120px;
+  overflow-y: auto;
+}
+
+.panelItem {
+  background: var(--app-bg);
+  border: 1px solid var(--app-border-subtle);
   border-radius: 6px;
-  padding: 8px 4px;
+  padding: 6px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+}
+
+.panelItemContent {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.panelItemIcon {
+  font-size: 11px;
+}
+
+.panelItemText {
+  display: flex;
+  flex-direction: column;
+}
+
+.panelItemTitle {
+  font-size: 9.5px;
+  font-weight: 800;
+  color: var(--app-text);
+}
+
+.panelItemTime {
+  font-size: 8px;
+  color: #888888;
+  font-weight: 500;
+}
+
+.panelItemDesc {
+  font-size: 8px;
+  color: #777777;
+  font-family: var(--font-mono), monospace;
+  margin-top: 1px;
+}
+
+.panelItemClose {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #3851c5;
+  color: #ffffff;
+  border: none;
+  font-size: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.panelCloseTab {
+  display: flex;
+  justify-content: center;
+  margin-top: 8px;
+  cursor: pointer;
+  color: #888;
+}
+
+/* Control Center / Quick Access Panel (Bottom Up) */
+.quickAccessPanel {
+  position: absolute;
+  bottom: 42px;
+  left: 6px;
+  right: 6px;
+  background: var(--app-bg);
+  border: 1.5px solid var(--app-border);
+  border-bottom: none;
+  border-radius: 10px 10px 0 0;
+  padding: 12px;
+  box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.15);
+  z-index: 200;
+  animation: slideUpPanel 0.25s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.qaHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.qaTitle {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--app-text);
+}
+
+.qaSettingsBtn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 11px;
+  color: var(--app-text);
+}
+
+.qaButtonsRow {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 14px;
+}
+
+.qaButtonCol {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
-  color: #555;
-  font-size: 9px;
-  font-weight: 700;
   cursor: pointer;
-  transition: all 0.2s ease;
 }
 
-.qsButtonActive {
-  background: #3851c5;
-  color: #fff;
-  border-color: transparent;
+.qaCircleBtn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  color: #ffffff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+  transition: transform 0.15s;
+}
+
+.qaCircleBtn:hover {
+  transform: scale(1.05);
+}
+
+.circleMaterial { background: #f2ab27; }
+.circleRotation { background: #3498db; }
+.circleScreenshot { background: #3851c5; }
+
+.qaButtonLabel {
+  font-size: 9px;
+  font-weight: 800;
+  color: var(--app-text);
+  margin-top: 4px;
 }
 
 .qsSliderRow {
   display: flex;
   align-items: center;
   gap: 10px;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
   font-size: 10px;
-  color: #333;
+  color: var(--app-text);
 }
 
 .qsSlider {
   flex: 1;
-  height: 4px;
-  border-radius: 2px;
+  height: 5px;
+  border-radius: 2.5px;
   background: rgba(0, 0, 0, 0.1);
   appearance: none;
   outline: none;
@@ -194,30 +360,10 @@
 
 .qsSlider::-webkit-slider-thumb {
   appearance: none;
-  width: 10px;
-  height: 10px;
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
   background: #3851c5;
-}
-
-.notificationsList {
-  border-top: 1px solid rgba(0, 0, 0, 0.08);
-  padding-top: 8px;
-  margin-top: 8px;
-  max-height: 80px;
-  overflow-y: auto;
-}
-
-.notificationItem {
-  background: rgba(0, 0, 0, 0.03);
-  padding: 6px 8px;
-  border-radius: 4px;
-  margin-bottom: 4px;
-  font-size: 9px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  color: #444;
 }
 
 /* Window Manager Workspace */
@@ -234,16 +380,16 @@
   top: auto;
   bottom: 42px;
   left: 6px;
-  width: 180px;
-  background: #ffffff;
-  border: 1.5px solid rgba(0, 0, 0, 0.15);
+  width: 160px;
+  background: var(--app-bg);
+  border: 1.5px solid var(--app-border);
   border-radius: 10px;
   display: flex;
   flex-direction: column;
   padding: 10px;
   z-index: 190;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
-  animation: slideUpLauncher 0.2s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: slideLauncher 0.2s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 .launcherTitle {
@@ -251,9 +397,9 @@
   font-size: 11px;
   font-weight: 800;
   margin-bottom: 8px;
-  border-bottom: 1.5px solid rgba(0, 0, 0, 0.08);
+  border-bottom: 1.5px solid var(--app-border-subtle);
   padding-bottom: 4px;
-  color: #333;
+  color: var(--app-text);
 }
 
 .launcherGrid {
@@ -288,30 +434,31 @@
   flex: 1;
 }
 
-/* Window Component styling - White body, Light gray header, Yellow-orange active border */
+/* Window Component styling */
 .window {
   position: absolute;
   display: flex;
   flex-direction: column;
-  background: #ffffff;
-  border: 1.5px solid rgba(0, 0, 0, 0.15);
+  background: var(--app-bg);
+  border: 1.5px solid var(--app-border);
   border-radius: 8px;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
   overflow: hidden;
   z-index: 50;
   transition: border-color 0.2s, box-shadow 0.2s;
+  color: var(--app-text);
 }
 
 .windowActive {
   z-index: 60;
-  border: 2px solid #f2ab27; /* Focused yellow border */
+  border: 2px solid #f2ab27; /* Focused yellow border by default */
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
 }
 
 .windowHeader {
   height: 28px;
-  background: #e4e4e6;
-  border-bottom: 1.5px solid rgba(0, 0, 0, 0.08);
+  background: var(--app-header-bg);
+  border-bottom: 1.5px solid var(--app-border-subtle);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -322,7 +469,7 @@
 .windowTitle {
   font-size: 10px;
   font-weight: 800;
-  color: #111111;
+  color: var(--app-text);
   display: flex;
   align-items: center;
   gap: 4px;
@@ -337,7 +484,7 @@
 .windowBtn {
   width: 14px;
   height: 14px;
-  border-radius: 4px; /* Square rounded */
+  border-radius: 4px;
   border: none;
   background: #3851c5;
   color: #ffffff;
@@ -358,7 +505,7 @@
   flex: 1;
   overflow: hidden;
   position: relative;
-  background: #ffffff;
+  background: var(--app-bg);
 }
 
 /* Apps Core Screens */
@@ -367,7 +514,7 @@
   height: 100%;
   overflow-y: auto;
   font-size: 10px;
-  color: #111111;
+  color: var(--app-text);
 }
 
 /* System Info App */
@@ -375,13 +522,13 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-  background: #ffffff;
+  background: var(--app-bg);
 }
 
 .appTabs {
   display: flex;
-  border-bottom: 1.5px solid rgba(0, 0, 0, 0.08);
-  background: #f4f4f6;
+  border-bottom: 1.5px solid var(--app-border-subtle);
+  background: var(--app-tab-bg);
 }
 
 .tabItem {
@@ -390,7 +537,7 @@
   padding: 6px 0;
   font-size: 9px;
   font-weight: 700;
-  color: #555555;
+  color: #777777;
   cursor: pointer;
   border-bottom: 2px solid transparent;
 }
@@ -398,7 +545,7 @@
 .tabActive {
   color: #3851c5;
   border-bottom-color: #3851c5;
-  background: #ffffff;
+  background: var(--app-bg);
 }
 
 .tabContent {
@@ -408,13 +555,14 @@
 }
 
 .groupHeader {
-  background: #e4e4e6;
+  background: var(--app-header-bg);
   padding: 3px 6px;
   font-size: 9px;
   font-weight: 800;
-  color: #444;
+  color: var(--app-text);
   margin-bottom: 6px;
   border-radius: 3px;
+  opacity: 0.95;
 }
 
 .infoRow {
@@ -423,7 +571,7 @@
   gap: 8px;
   padding: 5px 6px;
   font-size: 9.5px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.03);
+  border-bottom: 1px solid var(--app-border-subtle);
 }
 
 .infoIcon {
@@ -442,7 +590,7 @@
 .progressBarBg {
   width: 100%;
   height: 5px;
-  background: #e5e7eb;
+  background: var(--app-tab-bg);
   border-radius: 2.5px;
   overflow: hidden;
   margin-bottom: 6px;
@@ -459,6 +607,7 @@
   display: flex;
   flex-direction: column;
   height: 100%;
+  background: var(--app-bg);
 }
 
 .filesToolbar {
@@ -466,8 +615,8 @@
   align-items: center;
   gap: 4px;
   padding: 5px;
-  border-bottom: 1.5px solid rgba(0, 0, 0, 0.08);
-  background: #f4f4f6;
+  border-bottom: 1.5px solid var(--app-border-subtle);
+  background: var(--app-tab-bg);
 }
 
 .filesToolbarBtn {
@@ -488,13 +637,14 @@
 .filesPath {
   font-size: 9px;
   font-weight: 800;
-  color: #333;
+  color: var(--app-text);
   margin-left: 4px;
 }
 
 .filesContent {
   flex: 1;
   overflow-y: auto;
+  background: var(--app-bg);
 }
 
 .filesList {
@@ -507,17 +657,17 @@
   align-items: center;
   justify-content: space-between;
   padding: 8px 10px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  border-bottom: 1px solid var(--app-border-subtle);
   cursor: pointer;
   transition: background 0.1s;
 }
 
 .fileRow:hover {
-  background: rgba(0, 0, 0, 0.03);
+  background: var(--app-item-bg);
 }
 
 .fileRowSelected {
-  background: rgba(56, 81, 197, 0.08) !important;
+  background: var(--app-item-hover) !important;
 }
 
 .fileMeta {
@@ -526,7 +676,7 @@
   gap: 8px;
   font-size: 10px;
   font-weight: 700;
-  color: #222;
+  color: var(--app-text);
 }
 
 .fileMenuBtn {
@@ -539,18 +689,19 @@
   background: transparent;
   cursor: pointer;
   font-size: 10px;
-  color: #666;
+  color: var(--app-text);
+  opacity: 0.6;
 }
 
 .fileMenuBtn:hover {
-  color: #000;
+  opacity: 1;
 }
 
 /* Dropdown context menu */
 .contextMenu {
   position: absolute;
-  background: #ffffff;
-  border: 1px solid rgba(0, 0, 0, 0.15);
+  background: var(--app-bg);
+  border: 1px solid var(--app-border);
   border-radius: 6px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   z-index: 120;
@@ -562,19 +713,20 @@
   padding: 5px 10px;
   font-size: 9px;
   font-weight: 700;
-  color: #333;
+  color: var(--app-text);
   cursor: pointer;
   transition: background 0.1s;
 }
 
 .contextMenuItem:hover {
-  background: #f4f4f6;
+  background: var(--app-tab-bg);
   color: #3851c5;
 }
 
-/* Tools App (Tiling Launcher / utilities) */
+/* Tools App */
 .toolsApp {
   padding: 10px;
+  background: var(--app-bg);
 }
 
 .toolsList {
@@ -588,17 +740,17 @@
   align-items: center;
   gap: 8px;
   padding: 6px 8px;
-  background: rgba(0, 0, 0, 0.03);
+  background: var(--app-item-bg);
   border-radius: 5px;
   font-size: 9.5px;
   font-weight: 700;
-  color: #222;
+  color: var(--app-text);
   cursor: pointer;
   transition: background 0.1s;
 }
 
 .toolsRow:hover {
-  background: rgba(56, 81, 197, 0.08);
+  background: var(--app-item-hover);
 }
 
 /* Text Editor App */
@@ -606,12 +758,13 @@
   display: flex;
   flex-direction: column;
   height: 100%;
+  background: var(--app-bg);
 }
 
 .editorToolbar {
   height: 26px;
-  background: #f4f4f6;
-  border-bottom: 1.5px solid rgba(0, 0, 0, 0.08);
+  background: var(--app-tab-bg);
+  border-bottom: 1.5px solid var(--app-border-subtle);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -624,7 +777,7 @@
   border: none;
   outline: none;
   padding: 8px;
-  color: #222222;
+  color: var(--app-text);
   font-family: var(--font-mono), monospace;
   font-size: 10px;
   line-height: 1.4;
@@ -636,7 +789,7 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-  background: #ffffff;
+  background: var(--app-bg);
 }
 
 .calcScreen {
@@ -644,9 +797,9 @@
   text-align: right;
   font-family: var(--font-mono), monospace;
   font-size: 16px;
-  color: #111111;
-  background: #f4f4f6;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  color: var(--app-text);
+  background: var(--app-tab-bg);
+  border-bottom: 1px solid var(--app-border-subtle);
   font-weight: 800;
 }
 
@@ -655,13 +808,13 @@
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 1px;
-  background: #e4e4e6;
+  background: var(--app-border-subtle);
 }
 
 .calcBtn {
-  background: #ffffff;
+  background: var(--app-bg);
   border: none;
-  color: #111111;
+  color: var(--app-text);
   font-size: 11px;
   font-weight: 700;
   cursor: pointer;
@@ -669,16 +822,17 @@
 }
 
 .calcBtn:hover {
-  background: #f4f4f6;
+  background: var(--app-tab-bg);
 }
 
 .calcBtnOp {
-  background: #e9ecf9;
+  background: var(--app-tab-bg);
+  opacity: 0.9;
   color: #3851c5;
 }
 
 .calcBtnOp:hover {
-  background: #dce1f4;
+  opacity: 1;
 }
 
 .calcBtnEqual {
@@ -690,94 +844,13 @@
   background: #2e43ab;
 }
 
-/* Calendar App - Match Screenshot Grid layout */
-.calendarApp {
-  padding: 8px;
-  background: #ffffff;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-}
-
-.calHeader {
-  display: flex;
-  gap: 5px;
-  margin-bottom: 6px;
-}
-
-.calSelect {
-  flex: 1;
-  background: #ffffff;
-  border: 1.5px solid rgba(0, 0, 0, 0.15);
-  border-radius: 6px;
-  padding: 3px 6px;
-  font-size: 9px;
-  font-weight: 700;
-  color: #111;
-  outline: none;
-}
-
-.calGrid {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  border: 1px solid #e4e4e6;
-  background: #e4e4e6;
-  gap: 1px;
-}
-
-.calDayLabel {
-  background: #ffffff;
-  font-size: 8px;
-  font-weight: 700;
-  color: #666;
-  padding: 4px 0;
-  text-align: center;
-}
-
-.calDayCell {
-  aspect-ratio: 1.4;
-  background: #ffffff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  font-size: 9px;
-  font-weight: 700;
-  color: #111;
-  transition: background 0.1s;
-}
-
-.calDayCell:hover {
-  background: #f4f4f6;
-}
-
-.calDayActive {
-  border: 2px solid #000000; /* Rectangular black outline */
-  background: #f0f0f4;
-}
-
-.calDayInactive {
-  color: #b1b1b6;
-}
-
-.calEventPanel {
-  margin-top: 6px;
-  border-top: 1.5px solid rgba(0, 0, 0, 0.08);
-  padding-top: 6px;
-}
-
 /* Settings App */
 .settingsApp {
   height: 100%;
-  background: #ffffff;
+  background: var(--app-bg);
 }
 
 .settingsList {
-  display: flex;
-  flex-direction: column;
-}
-
-.settingsGroup {
   display: flex;
   flex-direction: column;
 }
@@ -787,17 +860,17 @@
   align-items: center;
   gap: 10px;
   padding: 8px 10px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  border-bottom: 1px solid var(--app-border-subtle);
   font-size: 10px;
   font-weight: 700;
-  color: #222;
+  color: var(--app-text);
   cursor: pointer;
-  background: #ffffff;
+  background: var(--app-bg);
   transition: background 0.1s;
 }
 
 .settingsRow:hover {
-  background: rgba(0, 0, 0, 0.02);
+  background: var(--app-item-bg);
 }
 
 .settingsControl {
@@ -863,7 +936,7 @@
 /* Bottom App Dock */
 .dock {
   height: 42px;
-  background: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.75);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border-top: 1.5px solid rgba(0, 0, 0, 0.08);
@@ -915,52 +988,19 @@
   color: #3851c5 !important;
 }
 
-/* Custom UI Themes */
-.retroTheme {
-  --accent: #ffb000;
+/* Hyprland Dark Theme Variables Overrides */
+.hyprTheme {
+  /* Hyprland Dark Theme Variables */
+  --app-bg: #17181e;
+  --app-text: #eeeeee;
+  --app-header-bg: #23242a;
+  --app-border: rgba(255, 255, 255, 0.15);
+  --app-border-subtle: rgba(255, 255, 255, 0.06);
+  --app-tab-bg: #1f2026;
+  --app-item-bg: rgba(255, 255, 255, 0.04);
+  --app-item-hover: rgba(0, 188, 212, 0.12);
 }
 
-.retroTheme .screen {
-  background: #140d02;
-  box-shadow: inset 0 0 30px rgba(0, 0, 0, 1);
-}
-
-.retroTheme * {
-  color: #ffb000 !important;
-  border-color: rgba(255, 176, 0, 0.2) !important;
-  text-shadow: 0 0 4px rgba(255, 176, 0, 0.6) !important;
-  font-family: var(--font-mono), monospace !important;
-}
-
-.retroTheme .window,
-.retroTheme .quickSettings,
-.retroTheme .statusBar,
-.retroTheme .dock {
-  background: rgba(20, 13, 2, 0.95);
-  border: 1px solid rgba(255, 176, 0, 0.3);
-}
-
-.retroTheme .windowHeader,
-.retroTheme .filesToolbar,
-.retroTheme .appTabs {
-  background: rgba(40, 26, 4, 0.95);
-}
-
-.retroTheme .windowBtn,
-.retroTheme .dockItem,
-.retroTheme .launcherItem,
-.retroTheme .filesToolbarBtn,
-.retroTheme .tabActive {
-  background: #ffb000 !important;
-  color: #000000 !important;
-}
-
-.retroTheme .led {
-  background: #ffb000;
-  box-shadow: 0 0 8px #ffb000;
-}
-
-/* Hyprland Dark Theme overrides for status bar, dock, active states */
 .hyprTheme .statusBar {
   background: rgba(15, 16, 21, 0.7);
   border-bottom-color: rgba(255, 255, 255, 0.08);
@@ -972,76 +1012,18 @@
   border-top-color: rgba(255, 255, 255, 0.15);
 }
 
-.hyprTheme .windowHeader {
-  background: #23242a;
-  border-bottom-color: rgba(255, 255, 255, 0.06);
-}
-
-.hyprTheme .windowTitle {
-  color: #ffffff;
-}
-
-.hyprTheme .windowBody {
-  background: #17181e;
-}
-
-.hyprTheme .window {
-  background: #17181e;
-  border-color: rgba(255, 255, 255, 0.15);
-}
-
 .hyprTheme .windowActive {
-  border-color: #00bcd4; /*focused cyan */
-}
-
-.hyprTheme .appContent {
-  color: #eeeeee;
-}
-
-.hyprTheme .appTabs {
-  background: #1f2026;
-  border-bottom-color: rgba(255, 255, 255, 0.08);
-}
-
-.hyprTheme .tabItem {
-  color: #aaaaaa;
+  border-color: #00bcd4; /* Focused cyan */
 }
 
 .hyprTheme .tabActive {
   color: #00bcd4;
   border-bottom-color: #00bcd4;
-  background: #17181e;
-}
-
-.hyprTheme .filesToolbar,
-.hyprTheme .editorToolbar,
-.hyprTheme .calcScreen {
-  background: #1e1f26;
-  border-bottom-color: rgba(255, 255, 255, 0.08);
-  color: #ffffff;
-}
-
-.hyprTheme .calcScreen {
-  color: #ffffff;
-  background: #15161a;
-}
-
-.hyprTheme .calcBtn {
-  background: #1e1f26;
-  color: #ffffff;
-}
-
-.hyprTheme .calcBtn:hover {
-  background: #252730;
 }
 
 .hyprTheme .calcBtnOp {
-  background: rgba(0, 188, 212, 0.15);
   color: #00bcd4;
-}
-
-.hyprTheme .calcBtnOp:hover {
-  background: rgba(0, 188, 212, 0.25);
+  background: rgba(0, 188, 212, 0.15);
 }
 
 .hyprTheme .calcBtnEqual {
@@ -1053,113 +1035,15 @@
   background: #00acc1;
 }
 
-.hyprTheme .fileRow {
-  border-bottom-color: rgba(255, 255, 255, 0.06);
-}
-
-.hyprTheme .fileRow:hover {
-  background: rgba(255, 255, 255, 0.04);
-}
-
-.hyprTheme .fileMeta {
-  color: #eeeeee;
-}
-
-.hyprTheme .fileRowSelected {
-  background: rgba(0, 188, 212, 0.12) !important;
-}
-
-.hyprTheme .groupHeader {
-  background: #20222a;
-  color: #ccc;
-}
-
-.hyprTheme .infoRow {
-  border-bottom-color: rgba(255, 255, 255, 0.04);
-}
-
-.hyprTheme .progressBarBg {
-  background: #2a2c35;
-}
-
-.hyprTheme .progressBar {
-  background: #00bcd4;
-}
-
-.hyprTheme .settingsRow {
-  background: #17181e;
-  border-bottom-color: rgba(255, 255, 255, 0.06);
-  color: #eee;
-}
-
-.hyprTheme .settingsRow:hover {
-  background: rgba(255, 255, 255, 0.02);
-}
-
-.hyprTheme .quickSettings {
-  background: rgba(20, 22, 28, 0.95);
-  border-color: rgba(255, 255, 255, 0.12);
-  color: #fff;
-}
-
-.hyprTheme .qsSlider {
-  background: rgba(255, 255, 255, 0.1);
-}
+.hyprTheme .circleMaterial { background: #00bcd4; color: #000; }
 
 .hyprTheme .qsSlider::-webkit-slider-thumb {
   background: #00bcd4;
 }
 
-.hyprTheme .qsButton {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(255, 255, 255, 0.08);
-  color: #aaa;
-}
-
-.hyprTheme .qsButtonActive {
+.hyprTheme .panelItemClose {
   background: #00bcd4;
   color: #000;
-}
-
-.hyprTheme .notificationItem {
-  background: rgba(255, 255, 255, 0.03);
-  color: #ccc;
-}
-
-.hyprTheme .calSelect {
-  background: #17181e;
-  border-color: rgba(255, 255, 255, 0.15);
-  color: #eee;
-}
-
-.hyprTheme .calGrid {
-  border-color: #2a2c35;
-  background: #2a2c35;
-}
-
-.hyprTheme .calDayCell {
-  background: #17181e;
-  color: #eee;
-}
-
-.hyprTheme .calDayActive {
-  border-color: #ffffff;
-  background: #252730;
-}
-
-.hyprTheme .calDayCell:hover {
-  background: #252730;
-}
-
-.hyprTheme .appLauncher {
-  background: #17181e;
-  border-color: rgba(255, 255, 255, 0.15);
-  color: #eee;
-}
-
-.hyprTheme .launcherTitle {
-  color: #fff;
-  border-bottom-color: rgba(255, 255, 255, 0.08);
 }
 
 .hyprTheme .launcherItem {
@@ -1168,9 +1052,31 @@
 }
 
 /* Animations */
-@keyframes slideUpLauncher {
+@keyframes slideLauncher {
   from {
     transform: translateY(10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideDownPanel {
+  from {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideUpPanel {
+  from {
+    transform: translateY(50px);
     opacity: 0;
   }
   to {
@@ -1204,4 +1110,9 @@
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+@keyframes flashFade {
+  from { opacity: 1; }
+  to { opacity: 0; }
 }

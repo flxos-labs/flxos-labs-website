@@ -64,16 +64,29 @@ export default function FlxOSSimulator() {
   const [brightness, setBrightness] = useState(85);
   const [volume, setVolume] = useState(60);
   
-  // Themes: "material-light", "hyprland-dark", "retro-amber"
-  const [systemTheme, setSystemTheme] = useState<"material-light" | "hyprland-dark" | "retro-amber">("hyprland-dark");
+  // Screen Rotated State
+  const [isRotated, setIsRotated] = useState(false);
+  
+  // Camera screenshot flash animation state
+  const [screenshotFlash, setScreenshotFlash] = useState(false);
+  
+  // Theme state: "material-light" (Material) or "hyprland-dark" (Hyprland)
+  const [systemTheme, setSystemTheme] = useState<"material-light" | "hyprland-dark">("hyprland-dark");
   const [layoutMode, setLayoutMode] = useState<"tiling" | "floating">("tiling");
   
-  // Shell overlays
+  // Overlays (Top = Notifications, Bottom Right Up Chevron = Control Center)
   const [showLauncher, setShowLauncher] = useState(false);
-  const [showQuickSettings, setShowQuickSettings] = useState(false);
+  const [showNotifPanel, setShowNotifPanel] = useState(false);
+  const [showQuickAccess, setShowQuickAccess] = useState(false);
+  
   const [notifCount, setNotifCount] = useState(1);
-  const [notifications, setNotifications] = useState<Array<{ id: number; text: string; time: string }>>([
-    { id: 1, text: "WiFi connected to FlxOS_Labs_IoT", time: "16:16" }
+  const [notifications, setNotifications] = useState<Array<{ id: number; title: string; desc: string; time: string }>>([
+    { 
+      id: 1, 
+      title: "Screenshot Saved", 
+      desc: "/sdcard/screenshots/scr_20260312_162756.png", 
+      time: "05:41" 
+    }
   ]);
 
   // Floating windows coordinates
@@ -86,10 +99,10 @@ export default function FlxOSSimulator() {
     "/flash/readme.md": "### Features:\n- EventBus\n- Window Manager (Dwindle)\n- App Framework\n- Services orchestration",
     "/sdcard/todo.txt": "- Implement hardware watchdog\n- Add ESP-NOW mesh router\n- Optimise LovyanGFX DMA queue\n- Prepare for release",
   });
+  const [currentDir, setCurrentDir] = useState<"/flash" | "/sdcard">("/flash");
+  const [filesPath, setFilesPath] = useState("A:/");
   
   // App specific states
-  // Files App
-  const [filesPath, setFilesPath] = useState("A:/");
   const [selectedFileRow, setSelectedFileRow] = useState<string | null>(null);
   const [showFileMenu, setShowFileMenu] = useState<string | null>(null);
   const [fileMenuPos, setFileMenuPos] = useState({ x: 0, y: 0 });
@@ -99,13 +112,13 @@ export default function FlxOSSimulator() {
   const [editorContent, setEditorContent] = useState("");
   const [keyboardOpen, setKeyboardOpen] = useState(false);
   
-  // System Info App Tabs: "system" | "memory" | "network" | "tasks"
+  // System Info App
   const [activeTelemetryTab, setActiveTelemetryTab] = useState<"system" | "memory" | "network" | "tasks">("system");
   const [cpuUsage, setCpuUsage] = useState({ core0: 14, core1: 17 });
-  const [ramUsage, setRamUsage] = useState(196); // in KB
+  const [ramUsage, setRamUsage] = useState(196);
   const [uptime, setUptime] = useState(0);
 
-  // Tools App Sub-Apps: "list" | "calc" | "stopwatch" | "flashlight" | "displaytest"
+  // Tools App Sub-Apps
   const [activeTool, setActiveTool] = useState<"list" | "calc" | "stopwatch" | "flashlight" | "displaytest">("list");
   
   // Calculator App
@@ -115,11 +128,6 @@ export default function FlxOSSimulator() {
   const [stopwatchTime, setStopwatchTime] = useState(0);
   const [stopwatchRunning, setStopwatchRunning] = useState(false);
   
-  // Calendar App (inside default calendar grid)
-  const [calendarYear, setCalendarYear] = useState("2026");
-  const [calendarMonth, setCalendarMonth] = useState("03");
-  const [calendarActiveDay, setCalendarActiveDay] = useState(12);
-
   // Refs
   const dragStartPos = useRef({ x: 0, y: 0 });
   const activeDragWindow = useRef<string | null>(null);
@@ -152,7 +160,6 @@ export default function FlxOSSimulator() {
         clearInterval(interval);
         setTimeout(() => {
           setBooting(false);
-          // Auto-open apps to showcase dwindle layout
           setOpenApps(["telemetry", "settings"]);
           setFocusedApp("telemetry");
         }, 500);
@@ -185,7 +192,7 @@ export default function FlxOSSimulator() {
   useEffect(() => {
     if (stopwatchRunning) {
       stopwatchInterval.current = setInterval(() => {
-        setStopwatchTime((prev) => prev + 10); // add 10ms
+        setStopwatchTime((prev) => prev + 10);
       }, 10);
     } else {
       if (stopwatchInterval.current) clearInterval(stopwatchInterval.current);
@@ -195,7 +202,6 @@ export default function FlxOSSimulator() {
     };
   }, [stopwatchRunning]);
 
-  // Format Stopwatch time
   const formatStopwatch = (timeMs: number) => {
     const mins = Math.floor(timeMs / 60000);
     const secs = Math.floor((timeMs % 60000) / 1000);
@@ -203,7 +209,6 @@ export default function FlxOSSimulator() {
     return `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}.${String(ms).padStart(2, "0")}`;
   };
 
-  // Open an App
   const openApp = (appId: string) => {
     setShowLauncher(false);
     if (openApps.includes(appId)) {
@@ -214,7 +219,6 @@ export default function FlxOSSimulator() {
     setOpenApps((prev) => [...prev, appId]);
     setFocusedApp(appId);
 
-    // Initialize window coordinates if in floating mode
     if (!windowCoords[appId]) {
       const idx = openApps.length;
       setWindowCoords((prev) => ({
@@ -231,7 +235,6 @@ export default function FlxOSSimulator() {
     }
   };
 
-  // Close an App
   const closeApp = (appId: string) => {
     setOpenApps((prev) => prev.filter((id) => id !== appId));
     if (focusedApp === appId) {
@@ -243,7 +246,7 @@ export default function FlxOSSimulator() {
     }
   };
 
-  // Layout calculations for Tiling Dwindle layout
+  // Dwindle rect layouts
   const getDwindleRects = (count: number) => {
     const rects: Array<{ left: number; top: number; width: number; height: number }> = [];
     let left = 0;
@@ -274,7 +277,7 @@ export default function FlxOSSimulator() {
 
   const dwindleRects = getDwindleRects(openApps.length);
 
-  // Dragging handler
+  // Dragging event handlers
   const handleDragStart = (e: MouseEvent<HTMLDivElement>, appId: string) => {
     if (layoutMode === "tiling") return;
     setFocusedApp(appId);
@@ -323,7 +326,6 @@ export default function FlxOSSimulator() {
     }));
   };
 
-  // Wifi connection simulation
   const handleConnectWifi = () => {
     setWifiError("");
     if (!wifiPassword) {
@@ -337,13 +339,17 @@ export default function FlxOSSimulator() {
       setWifiPassword("");
       setNotifCount((prev) => prev + 1);
       setNotifications((prev) => [
-        { id: Date.now(), text: "Connected to FlxOS_Labs_IoT successfully.", time: systemTime },
+        { 
+          id: Date.now(), 
+          title: "WiFi Connected", 
+          desc: "Successfully connected to FlxOS_Labs_IoT.", 
+          time: systemTime 
+        },
         ...prev
       ]);
     }, 800);
   };
 
-  // Calculator logic
   const handleCalcClick = (val: string) => {
     if (val === "C") {
       setCalcInput("0");
@@ -364,7 +370,6 @@ export default function FlxOSSimulator() {
     }
   };
 
-  // Virtual keyboard click
   const handleKeyClick = (key: string) => {
     if (key === "Back") {
       setEditorContent((prev) => prev.slice(0, -1));
@@ -385,7 +390,12 @@ export default function FlxOSSimulator() {
       }));
       setNotifCount((prev) => prev + 1);
       setNotifications((prev) => [
-        { id: Date.now(), text: `Saved file: ${editorFilePath.split("/").pop()}`, time: systemTime },
+        { 
+          id: Date.now(), 
+          title: "File Saved", 
+          desc: `Saved file: ${editorFilePath.split("/").pop()}`, 
+          time: systemTime 
+        },
         ...prev
       ]);
     }
@@ -397,7 +407,6 @@ export default function FlxOSSimulator() {
     openApp("editor");
   };
 
-  // Files app path resolution
   const getFilesList = () => {
     const list: Array<{ name: string; isDir: boolean; path: string }> = [];
     if (filesPath === "A:/") {
@@ -419,33 +428,48 @@ export default function FlxOSSimulator() {
     e.stopPropagation();
     setSelectedFileRow(path);
     setShowFileMenu(path);
-    // Position menu below/beside trigger
-    const rect = e.currentTarget.getBoundingClientRect();
     setFileMenuPos({ x: 100, y: 70 });
+  };
+
+  // Simulated Screenshot Action
+  const triggerScreenshot = () => {
+    setScreenshotFlash(true);
+    setTimeout(() => setScreenshotFlash(false), 300);
+
+    const timeString = systemTime;
+    const num = Math.floor(Math.random() * 899999) + 100000;
+    const pathName = `/sdcard/screenshots/scr_20260713_${num}.png`;
+
+    setNotifCount((prev) => prev + 1);
+    setNotifications((prev) => [
+      {
+        id: Date.now(),
+        title: "Screenshot Saved",
+        desc: pathName,
+        time: timeString,
+      },
+      ...prev
+    ]);
   };
 
   return (
     <div className={styles.container}>
-      {/* Outer handheld mock bezel frame */}
+      {/* Outer physical console mockup */}
       <div className={styles.deviceFrame}>
         <div className={`${styles.led} ${booting ? styles.ledBooting : ""}`} />
         
         {/* Device screen viewport */}
         <div 
           className={`${styles.screen} ${
-            systemTheme === "retro-amber" 
-              ? styles.retroTheme 
-              : systemTheme === "hyprland-dark" 
-                ? styles.hyprTheme 
-                : ""
-          }`}
+            systemTheme === "hyprland-dark" ? styles.hyprTheme : ""
+          } ${isRotated ? styles.rotated : ""}`}
           style={{ 
             aspectRatio: "4/3",
             filter: `brightness(${50 + brightness * 0.5}%)`
           }}
         >
-          {/* CRT scanlines effect */}
-          {systemTheme === "retro-amber" && <div className={styles.crtOverlay} />}
+          {/* Camera Flash Screen Overlay */}
+          {screenshotFlash && <div className={styles.flashOverlay} />}
 
           {booting ? (
             /* BOOT SCREEN */
@@ -458,18 +482,21 @@ export default function FlxOSSimulator() {
               </div>
             </div>
           ) : (
-            /* DESKTOP OS SHELL */
+            /* DESKTOP INTERFACE */
             <div 
               className={styles.desktop}
               style={{
-                // Beautiful pixel art vector SVG Snowy Forest Campfire wallpaper matching FlxOS screenshot
+                // Snowy Forest Campfire wallpaper matching FlxOS screenshots
                 backgroundImage: `url("data:image/svg+xml;utf8,<svg viewBox='0 0 480 320' xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25' preserveAspectRatio='none'><linearGradient id='skyGrad' x1='0' y1='0' x2='0' y2='1'><stop offset='0%25' stop-color='%23141724' /><stop offset='60%25' stop-color='%23283254' /><stop offset='100%25' stop-color='%2346588a' /></linearGradient><rect width='480' height='320' fill='url(%23skyGrad)' /><circle cx='40' cy='30' r='1.5' fill='%23fff' opacity='0.8' /><circle cx='120' cy='50' r='1.5' fill='%23fff' opacity='0.6' /><circle cx='200' cy='25' r='1.5' fill='%23fff' opacity='0.9' /><circle cx='340' cy='60' r='1.5' fill='%23fff' opacity='0.5' /><circle cx='420' cy='35' r='1.5' fill='%23fff' opacity='0.8' /><circle cx='440' cy='40' r='12' fill='%23fefcbf' opacity='0.85' /><polygon points='0,220 70,130 150,220' fill='%2320253b' /><polygon points='90,220 180,120 270,220' fill='%232b314f' /><polygon points='210,220 310,110 410,220' fill='%231d2136' /><polygon points='340,220 420,140 480,220' fill='%232f375c' /><rect y='210' width='480' height='110' fill='%23e2ebf8' /><rect x='25' y='170' width='8' height='40' fill='%233a2512' /><polygon points='10,180 29,110 48,180' fill='%23142c16' /><polygon points='15,145 29,90 43,145' fill='%231b3d1f' /><rect x='115' y='160' width='10' height='50' fill='%233a2512' /><polygon points='95,170 120,95 145,170' fill='%23102512' /><polygon points='102,135 120,75 138,135' fill='%23163319' /><rect x='200' y='225' width='20' height='5' rx='1' fill='%235c4033' /><rect x='204' y='222' width='12' height='5' rx='1' fill='%238b5a2b' /><polygon points='201,222 206,202 211,222' fill='%23ff7f00' /><polygon points='206,222 210,195 214,222' fill='%23ff3300' /><polygon points='204,222 208,206 212,222' fill='%23ffcc00' /><rect x='235' y='224' width='24' height='8' rx='2' fill='%23ffffff' /><rect x='253' y='220' width='8' height='6' rx='1' fill='%23ffffff' /><circle cx='258' cy='222' r='0.6' fill='%23000' /></svg>")`
               }}
             >
-              {/* TOP STATUS BAR - EXACT MATCH TO SCREENSHOTS */}
+              {/* TOP STATUS BAR - CLICK TOGGLES NOTIFICATIONS ONLY */}
               <div 
                 className={styles.statusBar}
-                onClick={() => setShowQuickSettings(!showQuickSettings)}
+                onClick={() => {
+                  setShowNotifPanel(!showNotifPanel);
+                  setShowQuickAccess(false);
+                }}
               >
                 <div className={styles.statusBarItem}>
                   <span>📶</span>
@@ -483,51 +510,123 @@ export default function FlxOSSimulator() {
                 </div>
               </div>
 
-              {/* QUICK SETTINGS PANEL */}
-              {showQuickSettings && (
-                <div className={styles.quickSettings}>
-                  <div className={styles.quickSettingsGrid}>
+              {/* NOTIFICATION PANEL - SLIDES DOWN FROM THE TOP */}
+              {showNotifPanel && (
+                <div className={styles.notificationPanel}>
+                  <div className={styles.panelHeader}>
+                    <h4 className={styles.panelTitle}>Notifications</h4>
                     <button 
-                      className={`${styles.qsButton} ${wifiConnected ? styles.qsButtonActive : ""}`}
+                      className={styles.clearBtn}
                       onClick={() => {
-                        if (wifiConnected) {
-                          setWifiConnected(false);
-                        } else {
-                          setShowWifiModal(true);
-                        }
+                        setNotifications([]);
+                        setNotifCount(0);
                       }}
                     >
-                      <span>{wifiConnected ? "📶 Wifi On" : "📶 Wifi Off"}</span>
-                      <span>Link</span>
-                    </button>
-                    
-                    <button 
-                      className={`${styles.qsButton} ${layoutMode === "tiling" ? styles.qsButtonActive : ""}`}
-                      onClick={() => setLayoutMode(layoutMode === "tiling" ? "floating" : "tiling")}
-                    >
-                      <span>📐 Layout</span>
-                      <span>{layoutMode === "tiling" ? "Tiling" : "Floating"}</span>
-                    </button>
-
-                    <button 
-                      className={`${styles.qsButton} ${systemTheme === "retro-amber" ? styles.qsButtonActive : ""}`}
-                      onClick={() => {
-                        const themes: Array<"material-light" | "hyprland-dark" | "retro-amber"> = ["material-light", "hyprland-dark", "retro-amber"];
-                        const nextIdx = (themes.indexOf(systemTheme) + 1) % themes.length;
-                        setSystemTheme(themes[nextIdx]);
-                      }}
-                    >
-                      <span>🎨 Theme</span>
-                      <span>
-                        {systemTheme === "material-light" && "Light"}
-                        {systemTheme === "hyprland-dark" && "Dark"}
-                        {systemTheme === "retro-amber" && "Amber"}
-                      </span>
+                      Clear All
                     </button>
                   </div>
 
+                  <div className={styles.panelList}>
+                    {notifications.length === 0 ? (
+                      <p className="text-[10px] text-gray-400 italic text-center py-4">No notifications</p>
+                    ) : (
+                      notifications.map(n => (
+                        <div key={n.id} className={styles.panelItem}>
+                          <div className={styles.panelItemContent}>
+                            <span className={styles.panelItemIcon}>🖼️</span>
+                            <div className={styles.panelItemText}>
+                              <div className="flex items-center gap-1">
+                                <span className={styles.panelItemTitle}>{n.title}</span>
+                                <span className={styles.panelItemTime}>{n.time}</span>
+                              </div>
+                              <span className={styles.panelItemDesc}>{n.desc}</span>
+                            </div>
+                          </div>
+                          <button 
+                            className={styles.panelItemClose}
+                            onClick={() => {
+                              setNotifications(prev => prev.filter(item => item.id !== n.id));
+                              setNotifCount(prev => Math.max(0, prev - 1));
+                            }}
+                          >
+                            ×
+                          </button>
+                        </div>
+                      ))
+                    )}
+                  </div>
+
+                  <div 
+                    className={styles.panelCloseTab}
+                    onClick={() => setShowNotifPanel(false)}
+                  >
+                    <span>▲</span>
+                  </div>
+                </div>
+              )}
+
+              {/* CONTROL CENTER / QUICK ACCESS PANEL - BOTTOM-UP TOGGLE */}
+              {showQuickAccess && (
+                <div className={styles.quickAccessPanel}>
+                  <div className={styles.qaHeader}>
+                    <span className={styles.qaTitle}>Quick Access</span>
+                    <button 
+                      className={styles.qaSettingsBtn}
+                      onClick={() => {
+                        openApp("settings");
+                        setShowQuickAccess(false);
+                      }}
+                    >
+                      ⚙️
+                    </button>
+                  </div>
+
+                  <div className={styles.qaButtonsRow}>
+                    {/* Theme Toggler circle */}
+                    <div 
+                      className={styles.qaButtonCol}
+                      onClick={() => {
+                        setSystemTheme(systemTheme === "material-light" ? "hyprland-dark" : "material-light");
+                      }}
+                    >
+                      <div className={`${styles.qaCircleBtn} ${styles.circleMaterial}`}>
+                        ✏️
+                      </div>
+                      <span className={styles.qaButtonLabel}>
+                        {systemTheme === "material-light" ? "Material" : "Hyprland"}
+                      </span>
+                    </div>
+
+                    {/* Rotation Toggler circle */}
+                    <div 
+                      className={styles.qaButtonCol}
+                      onClick={() => setIsRotated(!isRotated)}
+                    >
+                      <div className={`${styles.qaCircleBtn} ${styles.circleRotation}`}>
+                        🔄
+                      </div>
+                      <span className={styles.qaButtonLabel}>
+                        {isRotated ? "90°" : "0°"}
+                      </span>
+                    </div>
+
+                    {/* Screenshot Toggler circle */}
+                    <div 
+                      className={styles.qaButtonCol}
+                      onClick={triggerScreenshot}
+                    >
+                      <div className={`${styles.qaCircleBtn} ${styles.circleScreenshot}`}>
+                        ✂️
+                      </div>
+                      <span className={styles.qaButtonLabel}>
+                        creenshot
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Brightness Slider */}
                   <div className={styles.qsSliderRow}>
-                    <span>☀️</span>
+                    <span className="text-[10px]">👁️</span>
                     <input 
                       type="range" 
                       min="15" 
@@ -536,18 +635,7 @@ export default function FlxOSSimulator() {
                       onChange={(e) => setBrightness(Number(e.target.value))}
                       className={styles.qsSlider}
                     />
-                    <span className="font-mono text-[9px] w-6">{brightness}%</span>
-                  </div>
-
-                  {/* Notification List inside Drawer */}
-                  <div className={styles.notificationsList}>
-                    <p className="text-[8px] text-gray-500 font-bold mb-1.5 uppercase">System Alerts</p>
-                    {notifications.map(n => (
-                      <div key={n.id} className={styles.notificationItem}>
-                        <span>{n.text}</span>
-                        <span className="text-[7px] opacity-60">{n.time}</span>
-                      </div>
-                    ))}
+                    <span className="font-mono text-[9px] w-6 text-right">{brightness}%</span>
                   </div>
                 </div>
               )}
@@ -556,8 +644,9 @@ export default function FlxOSSimulator() {
               <div 
                 className={styles.workspace}
                 onClick={() => {
-                  setShowQuickSettings(false);
                   setShowLauncher(false);
+                  setShowNotifPanel(false);
+                  setShowQuickAccess(false);
                   setShowFileMenu(null);
                 }}
               >
@@ -635,11 +724,10 @@ export default function FlxOSSimulator() {
 
                       {/* Window Body */}
                       <div className={styles.windowBody}>
-                        {/* APP RENDER SWITCH */}
                         <div className={styles.appContent}>
                           
                           {appId === "telemetry" && (
-                            /* SYSTEM INFO TABBED VIEW - EXACT MATCH TO SCREENSHOTS */
+                            /* SYSTEM INFO TABBED VIEW */
                             <div className={styles.telemetryApp}>
                               <div className={styles.appTabs}>
                                 <div 
@@ -708,7 +796,7 @@ export default function FlxOSSimulator() {
                                       <span>1.2MB / 8.0MB</span>
                                     </div>
                                     <div className={styles.progressBarBg}>
-                                      <div className={styles.progressBar} style={{ width: "15%", background: "var(--accent-2)" }} />
+                                      <div className={styles.progressBar} style={{ width: "15%" }} />
                                     </div>
                                   </div>
                                 )}
@@ -757,7 +845,7 @@ export default function FlxOSSimulator() {
                           )}
 
                           {appId === "files" && (
-                            /* FILES APP - EXACT MATCH TO FILES SCREENSHOT */
+                            /* FILES APP */
                             <div className={styles.filesApp}>
                               <div className={styles.filesToolbar}>
                                 <button 
@@ -826,7 +914,7 @@ export default function FlxOSSimulator() {
                                 </div>
                               </div>
 
-                              {/* Dropdown context menu simulation */}
+                              {/* Context menu overlay */}
                               {showFileMenu && (
                                 <div 
                                   className={styles.contextMenu}
@@ -844,8 +932,6 @@ export default function FlxOSSimulator() {
                                   >
                                     Open
                                   </div>
-                                  <div className={styles.contextMenuItem} onClick={() => setShowFileMenu(null)}>Copy</div>
-                                  <div className={styles.contextMenuItem} onClick={() => setShowFileMenu(null)}>Rename</div>
                                   <div 
                                     className={styles.contextMenuItem}
                                     onClick={() => {
@@ -868,7 +954,7 @@ export default function FlxOSSimulator() {
                           )}
 
                           {appId === "tools" && (
-                            /* TOOLS APP - LAUNCHES CALCULATOR, STOPWATCH, FLASHLIGHT, DISPLAYTEST */
+                            /* TOOLS APP */
                             <div className="w-full h-full">
                               {activeTool === "list" && (
                                 <div className={styles.toolsApp}>
@@ -954,7 +1040,6 @@ export default function FlxOSSimulator() {
                                 <div 
                                   className="w-full h-full bg-white flex flex-col items-center justify-center cursor-pointer"
                                   onClick={() => setActiveTool("list")}
-                                  title="Click to dismiss"
                                 >
                                   <span className="text-[10px] text-gray-400 animate-pulse">FLASHLIGHT ON - CLICK TO CLOSE</span>
                                 </div>
@@ -964,7 +1049,6 @@ export default function FlxOSSimulator() {
                                 <div 
                                   className="w-full h-full flex cursor-pointer"
                                   onClick={() => setActiveTool("list")}
-                                  title="Click to dismiss"
                                 >
                                   <div className="flex-1 bg-white" />
                                   <div className="flex-1 bg-yellow-400" />
@@ -1012,7 +1096,7 @@ export default function FlxOSSimulator() {
                           )}
 
                           {appId === "settings" && (
-                            /* SETTINGS - Connectivity and System sections */
+                            /* SETTINGS App */
                             <div className={styles.settingsApp}>
                               <div className={styles.settingsList}>
                                 <div className={styles.groupHeader}>Connectivity</div>
@@ -1040,9 +1124,7 @@ export default function FlxOSSimulator() {
                                   <button 
                                     className="ml-auto text-[9px] bg-gray-200 text-gray-800 px-2 py-0.5 rounded font-bold"
                                     onClick={() => {
-                                      const themes: Array<"material-light" | "hyprland-dark" | "retro-amber"> = ["material-light", "hyprland-dark", "retro-amber"];
-                                      const nextIdx = (themes.indexOf(systemTheme) + 1) % themes.length;
-                                      setSystemTheme(themes[nextIdx]);
+                                      setSystemTheme(systemTheme === "material-light" ? "hyprland-dark" : "material-light");
                                     }}
                                   >
                                     Theme
@@ -1123,7 +1205,7 @@ export default function FlxOSSimulator() {
                 </div>
               </div>
 
-              {/* VERTICAL APP LAUNCHER PANEL - MATCHES SLEEK APP LAUNCHER SCREENSHOT */}
+              {/* VERTICAL APP LAUNCHER PANEL */}
               {showLauncher && (
                 <div className={styles.appLauncher}>
                   <h3 className={styles.launcherTitle}>Applications</h3>
@@ -1142,39 +1224,46 @@ export default function FlxOSSimulator() {
                 </div>
               )}
 
-              {/* BOTTOM APP DOCK / BAR - EXACT MATCH TO SCREENSHOT BUTTON COLORS */}
+              {/* BOTTOM APP DOCK / BAR */}
               <div className={styles.dock}>
-                {/* Launcher Button on Left (blue background) */}
+                {/* Launcher Button on Left */}
                 <div 
                   className={styles.dockItem} 
-                  onClick={() => setShowLauncher(!showLauncher)}
+                  onClick={() => {
+                    setShowLauncher(!showLauncher);
+                    setShowNotifPanel(false);
+                    setShowQuickAccess(false);
+                  }}
                 >
                   <span className="text-white text-[10px]">☰</span>
                 </div>
                 
-                {/* Shortcut Apps (Files, Settings, Telemetry, Tools) */}
+                {/* Shortcut Apps */}
                 <div className={styles.dockShortcuts}>
                   {APPS.slice(0, 4).map((app) => {
                     const isOpen = openApps.includes(app.id);
                     const isFocused = focusedApp === app.id;
                     
-                    // Button color classes depending on focused / open / theme state
                     let btnClass = "";
                     if (isFocused) {
                       if (systemTheme === "hyprland-dark" && app.id === "telemetry") {
-                        btnClass = styles.dockItemActiveMagenta; // Magenta for telemetry in hyprland dark
+                        btnClass = styles.dockItemActiveMagenta;
                       } else {
-                        btnClass = styles.dockItemActive; // Yellow for focused
+                        btnClass = styles.dockItemActive;
                       }
                     } else if (isOpen) {
-                      btnClass = styles.dockItemOpen; // Lavender for open
+                      btnClass = styles.dockItemOpen;
                     }
                     
                     return (
                       <div
                         key={app.id}
                         className={`${styles.dockItem} ${btnClass}`}
-                        onClick={() => openApp(app.id)}
+                        onClick={() => {
+                          openApp(app.id);
+                          setShowNotifPanel(false);
+                          setShowQuickAccess(false);
+                        }}
                       >
                         <span className="text-white text-[11px]">{app.icon}</span>
                       </div>
@@ -1182,10 +1271,13 @@ export default function FlxOSSimulator() {
                   })}
                 </div>
 
-                {/* Quick settings Up Chevron Button on Right */}
+                {/* Control Center Up Chevron Button on Right - YELLOW WHEN ACTIVE */}
                 <div 
-                  className={styles.dockItem}
-                  onClick={() => setShowQuickSettings(!showQuickSettings)}
+                  className={`${styles.dockItem} ${showQuickAccess ? styles.dockItemActive : ""}`}
+                  onClick={() => {
+                    setShowQuickAccess(!showQuickAccess);
+                    setShowNotifPanel(false);
+                  }}
                 >
                   <span className="text-white text-[10px]">▲</span>
                 </div>
