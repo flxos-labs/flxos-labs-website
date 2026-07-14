@@ -1126,7 +1126,7 @@
   padding: 0.75rem 1rem;
   margin-bottom: 1.5rem;
   border-radius: 0.75rem;
-  background: rgba(231, 111, 81, 0.08); /* Transparent tint matching accent color */
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
   border: 1px dashed var(--accent);
   color: var(--ink);
   font-family: var(--font-body), sans-serif;
