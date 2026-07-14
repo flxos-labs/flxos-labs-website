@@ -28,11 +28,11 @@ export default function Home() {
               One repo, one CLI, many form factors.
             </p>
             <div className="flex flex-wrap gap-3">
-              <Link className={buttonStyles.primary} href="/#cta">
-                Get started
+              <Link className={buttonStyles.primary} href="/devices">
+                ⚡️ Web Flasher
               </Link>
               <Link className={buttonStyles.secondary} href="/#simulator">
-                🎮 Try OS
+                🎮 Try Simulator
               </Link>
               <a
                 className={buttonStyles.secondary}
@@ -43,7 +43,7 @@ export default function Home() {
                 View GitHub
               </a>
             </div>
-            <CopyCommand command={"git clone https://github.com/flxos-labs/flxos && cd flxos && flxos init"} />
+            <CopyCommand command={"git clone --recurse-submodules https://github.com/flxos-labs/flxos.git && cd flxos"} />
             <div className={styles.heroHighlights}>
               <div className={styles.highlightCard}>
                 <p className={styles.highlightTitle}>Profile graph</p>
@@ -278,11 +278,11 @@ export default function Home() {
             >
               Open repository
             </a>
-            <Link className={buttonStyles.ghost} href="/#features">
-              Learn the stack
+            <Link className={buttonStyles.secondary} href="/devices">
+              ⚡️ Web Flasher
             </Link>
           </div>
-            <CopyCommand command={"git clone https://github.com/flxos-labs/flxos && cd flxos"} />
+            <CopyCommand command={"git clone --recurse-submodules https://github.com/flxos-labs/flxos.git && cd flxos"} />
         </div>
       </section>
     </main>

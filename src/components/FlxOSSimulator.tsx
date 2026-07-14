@@ -554,6 +554,19 @@ export default function FlxOSSimulator() {
 
   return (
     <div className={styles.container}>
+      {/* GitHub Star Banner */}
+      <div className={styles.starBanner}>
+        <span>✨ Running FlxOS in the browser.</span>
+        <a 
+          href="https://github.com/flxos-labs/flxos" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className={styles.starLink}
+        >
+          Star us on GitHub to support the project! ⭐️
+        </a>
+      </div>
+
       {/* Outer physical console mockup */}
       <div className={styles.deviceFrame}>
         <div className={`${styles.led} ${booting ? styles.ledBooting : ""}`} />
