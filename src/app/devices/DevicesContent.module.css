@@ -497,3 +497,216 @@
   display: none;
 }
 
+/* Tab controls */
+.modalTabs {
+  display: flex;
+  gap: 1.25rem;
+  border-bottom: 1px solid var(--border-muted);
+  margin-bottom: 1.5rem;
+}
+
+.modalTab {
+  padding: 0.5rem 0.25rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--muted);
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.modalTab:hover {
+  color: var(--ink);
+}
+
+.modalTabActive {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+/* Loader & error */
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 0;
+  gap: 0.75rem;
+}
+
+.spinner {
+  width: 1.75rem;
+  height: 1.75rem;
+  border: 3px solid var(--border-faint);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.errorMessage {
+  font-size: 0.8rem;
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  border-radius: 0.75rem;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+/* Secondary Button for Manual Download */
+.downloadAllButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 0.85rem 2rem;
+  font-family: var(--font-body), sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--ink);
+  background: var(--surface-2);
+  border: 1px solid var(--border-muted);
+  border-radius: 1rem;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 12px var(--shadow);
+}
+
+.downloadAllButton:hover {
+  background: var(--surface-3);
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px var(--shadow);
+}
+
+.downloadAllButton:active {
+  transform: translateY(0);
+}
+
+/* Parts table */
+.tableContainer {
+  width: 100%;
+  overflow-x: auto;
+  border-radius: 0.85rem;
+  border: 1px solid var(--border-faint);
+  background: rgba(var(--surface-rgb), 0.3);
+  margin-top: 1rem;
+}
+
+.filesTable {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.8rem;
+}
+
+.filesTable th {
+  padding: 0.75rem 1rem;
+  font-weight: 700;
+  color: var(--muted);
+  border-bottom: 1px solid var(--border-faint);
+  background: var(--surface-2);
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  letter-spacing: 0.05em;
+}
+
+.filesTable td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border-faint);
+  color: var(--ink);
+}
+
+.filesTable tr:last-child td {
+  border-bottom: none;
+}
+
+.fileLink {
+  color: var(--accent);
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.fileLink:hover {
+  text-decoration: underline;
+}
+
+/* Command block */
+.commandContainer {
+  margin-top: 1.5rem;
+  background: var(--surface-2);
+  border: 1px solid var(--border-muted);
+  border-radius: 0.85rem;
+  padding: 1rem;
+  position: relative;
+}
+
+.commandHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.commandTitle {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.copyBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--muted);
+  background: var(--surface-3);
+  border: 1px solid var(--border-faint);
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.copyBtn:hover {
+  color: var(--ink);
+  border-color: var(--border-muted);
+}
+
+.copyBtnSuccess {
+  color: #10b981;
+  border-color: rgba(16, 185, 129, 0.3);
+  background: rgba(16, 185, 129, 0.08);
+}
+
+.commandBox {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.75rem;
+  color: var(--ink);
+  background: transparent;
+  width: 100%;
+  border: none;
+  outline: none;
+  resize: none;
+  white-space: pre-wrap;
+  word-break: break-all;
+  padding: 0;
+  margin: 0;
+}
+
+
