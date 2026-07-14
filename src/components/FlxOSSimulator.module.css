@@ -1117,3 +1117,34 @@
   from { opacity: 1; }
   to { opacity: 0; }
 }
+
+.starBanner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1.5rem;
+  border-radius: 0.75rem;
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+  border: 1px dashed var(--accent);
+  color: var(--ink);
+  font-family: var(--font-body), sans-serif;
+  font-size: 0.95rem;
+  animation: revealUp 0.8s ease both;
+  text-align: center;
+  flex-wrap: wrap;
+}
+
+.starLink {
+  color: var(--accent);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: opacity 0.2s ease;
+}
+
+.starLink:hover {
+  opacity: 0.8;
+}
+
